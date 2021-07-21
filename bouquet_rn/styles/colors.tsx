@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const colors={
-    white : '#ffffff',
+    white:'#FFFFFF',
     gray0:'#F8F8F8',
     gray1:'#EFEFEF',
     gray2:'#E8E8E8',
@@ -14,9 +14,9 @@ export const colors={
     gray9:'#303030',
     black:'#000000',
     
-    primary:'#fa7268',
-    pressed_primary:'#d75f56',
-    alpha10_primary:'#fa7268, 10%',
-    alpha20_primary:'#fa7268, 20%',
-    warning_red:'#f42111',
+    primary:'#FA7268',
+    pressed_primary:'#D75F56',
+    alpha10_primary:'#1AFA7268',
+    alpha20_primary:'#30FA7268',
+    warning_red:'#F42111',
 }

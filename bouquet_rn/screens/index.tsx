@@ -8,12 +8,16 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 // screens
 import WelcomeScreen from './WelcomeScreen';
+import RegisterScreenOne from './register/RegisterScreenOne';
+import RegisterScreenTwo from './register/RegisterScreenTwo';
+import RegisterScreenThree from './register/RegisterScreenThree';
+import RegisterScreenFour from './register/RegisterScreenFour'; 
 import LoginScreen from './LoginScreen';
-import HomeScreen from './tab/HomeScreen';
-import SearchScreen from './tab/SearchScreen';
-import CrewScreen from './tab/CrewScreen';
-import NotificationScreen from './tab/NotificationScreen';
-import ProfileScreen from './tab/ProfileScreen';
+import HomeScreen from './main/Home/HomeScreen';
+import SearchScreen from './main/Search/SearchScreen';
+import CrewScreen from './main/Crew/CrewScreen';
+import NotificationScreen from './main/Notification/NotificationScreen';
+import ProfileScreen from './main/Profile/ProfileScreen';
 
 // icons
 import HomeSvg from '../assets/Home';
@@ -144,6 +148,52 @@ function ProfileStackNavigator(){
   );
 }
 
+const RegisterStack = createStackNavigator<Types.RegisterStackParam>();
+function RegisterStackNavigator(){
+  return(
+    <RegisterStack.Navigator
+      initialRouteName="RegisterOne">
+      <RegisterStack.Screen
+        name="RegisterOne"
+        component={RegisterScreenOne}
+        options={{headerShown : false}}/>
+        <RegisterStack.Screen
+        name="RegisterTwo"
+        component={RegisterScreenTwo}
+        options={{headerShown : false}}/>
+        <RegisterStack.Screen
+        name="RegisterThree"
+        component={RegisterScreenThree}
+        options={{headerShown : false}}/>
+        <RegisterStack.Screen
+        name="RegisterFour"
+        component={RegisterScreenFour}
+        options={{headerShown : false}}/>
+    </RegisterStack.Navigator>
+  );
+}
+
+const LoginStack = createStackNavigator<Types.LoginStackParam>();
+function LoginStackNavigator(){
+  return(
+    <LoginStack.Navigator
+      initialRouteName="Login">
+      <LoginStack.Screen
+      name="Login"
+      component={LoginScreen}
+      options={{headerShown : false}}/>
+      <LoginStack.Screen
+      name="Register"
+      component={RegisterStackNavigator}
+      options={{headerShown : false}}/>
+      <LoginStack.Screen
+      name="Tab"
+      component={TabNavigator}
+      options={{headerShown : false}}/>
+    </LoginStack.Navigator>
+  );
+}
+
 const WelcomeStack = createStackNavigator<Types.WelcomeStackParam>();
 export default function AppStack(){
   return(
@@ -156,8 +206,12 @@ export default function AppStack(){
             options={{headerShown: false}}/>
           <WelcomeStack.Screen
             name="Login"
-            component={LoginScreen}
+            component={LoginStackNavigator}
             options={{headerShown: false}}/>
+          <WelcomeStack.Screen
+            name="Register"
+            component={RegisterStackNavigator}
+            options={{headerShown : false}}/>
           <WelcomeStack.Screen
             name="Tab"
             component={TabNavigator}

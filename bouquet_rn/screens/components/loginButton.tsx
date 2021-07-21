@@ -1,36 +1,18 @@
-import React, {Component, useState} from 'react';
+import React from 'react';
 import {
     View,
-    TouchableOpacity,
-    StyleSheet,
-    Image,
     Text
 } from 'react-native';
-import {colors} from '../../styles/colors'
+import * as button from '../../styles/styled-components/button';
+import * as text from '../../styles/styled-components/text';
 
 export default function LoginButton({sentence, tag, press} : {sentence:string, tag:any, press: any}){
     return(
-        <TouchableOpacity style={styles.button} onPress={()=>press}>
+        <button.SocialButton onPress={()=>press}>
             {tag}
-            <View style={styles.btnTextArea}><Text>{sentence}</Text></View>
-        </TouchableOpacity>
+            <View style={{flex:1, alignItems:'center'}}>
+              <text.SocialText>{sentence}</text.SocialText>
+            </View>
+        </button.SocialButton>
     );
 }
-
-const styles = StyleSheet.create({
-    button:{
-        backgroundColor:colors.white,
-        borderRadius:25,
-        height:45,
-        marginTop:10,
-        alignItems:'center',
-        justifyContent:"center",
-        padding:18,
-        flexDirection: 'row',
-        width: '100%'
-    },
-    btnTextArea: {
-        flex: 1,
-        alignItems: 'center',
-    },
-  });

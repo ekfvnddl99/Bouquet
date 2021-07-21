@@ -4,10 +4,25 @@ import { StackScreenProps } from '@react-navigation/stack';
 export type WelcomeStackParam = {
   Welcome : undefined,
   Login : undefined,
+  Register : undefined,
   Tab : undefined,
 }
 export type WelcomeProps = StackScreenProps<WelcomeStackParam, "Welcome">;
 
+export type LoginStackParam = {
+  Login : undefined,
+  Register : undefined,
+  Tab : undefined,
+}
+export type LoginProps = StackScreenProps<LoginStackParam, "Login">;
+
+export type RegisterStackParam = {
+  RegisterOne : undefined,
+  RegisterTwo : undefined,
+  RegisterThree : undefined,
+  RegisterFour : undefined,
+}
+export type RegisterProps = StackScreenProps<RegisterStackParam, "RegisterOne">;
 
 // TAB
 // home

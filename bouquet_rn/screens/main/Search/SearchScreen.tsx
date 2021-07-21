@@ -8,15 +8,15 @@ import {
     FlatList,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import {colors} from '../../styles/colors'
+import {colors} from '../../../styles/colors'
 
 // components
-import RecentSearchItem from '../components/RecentSearchItem';
-import CharacterItem from '../components/CharacterItem';
-import PostingItem from '../components/PostingItem';
+import RecentSearchItem from '../../components/RecentSearchItem';
+import CharacterItem from '../../components/CharacterItem';
+import PostingItem from '../../components/PostingItem';
 
 // icons
-import SearchSvg from '../../assets/Search';
+import SearchSvg from '../../../assets/Search';
 
 export default function SearchScreen(){
     // dummy data - 서버에서 불러와야 함.

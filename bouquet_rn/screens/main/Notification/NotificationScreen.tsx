@@ -7,11 +7,11 @@ import {
     FlatList,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import {colors} from '../../styles/colors'
-import NotificationItem from '../components/NotificationItem';
+import {colors} from '../../../styles/colors'
+import NotificationItem from '../../components/NotificationItem';
 
 
-import HomeSvg from '../../assets/Home';
+import HomeSvg from '../../../assets/Home';
 
 
 export default function NotificationScreen(){
