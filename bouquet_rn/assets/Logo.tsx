@@ -31,7 +31,7 @@ const logo = `
 </svg>
 `;
 
-const svg = ({w, h}) => {
+const svg = ({w, h} : {w:string, h:string}) => {
   const LogoSvg = () => <SvgXml xml={logo} width={w} height={h}/>;
   return <LogoSvg />;
 };

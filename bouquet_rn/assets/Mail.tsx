@@ -7,7 +7,7 @@ const mail = `
 </svg>
 `;
 
-const svg = ({w, h}) => {
+const svg = ({w, h} : {w:string, h:string}) => {
   const MailSvg = () => <SvgXml xml={mail} width={w} height={h}/>;
   return <MailSvg />;
 };

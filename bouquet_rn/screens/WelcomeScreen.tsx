@@ -1,16 +1,28 @@
 import * as React from 'react';
 import { SafeAreaView, TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 
-import loginButton from './components/loginButton';
 import LogoSvg from '../assets/Logo';
 import MailSvg from '../assets/Mail';
-import AppleSvg from '../assets/AppleLogo';
+import AppleSvg from '../assets/Apple';
 import GoogleSvg from '../assets/Google';
 import TitleSvg from '../assets/Title';
 
-import {colors} from './colors';
+import {colors} from '../styles/colors';
+import type {WelcomeProps} from '../utils/types';
+import GoogleSignInAsync  from './logics/GoogleLogin';
+import LoginButton from './components/LoginButton';
 
-export default function welcome() {
+export default function WelcomeScreen({navigation} : WelcomeProps) {
+
+  const goTabs =()=>{
+    navigation.navigate("Tab");
+  };
+
+  // 이렇게 함수를 만들어줘야 welcome 나오고 버튼 눌렀을 때 login이 나온다.
+  const goLogin = ()=>{
+    navigation.navigate("Login");
+  }
+
   return(
     <SafeAreaView style={styles.container}>
         <View style={{alignItems:'center', marginTop: 70}}>
@@ -20,9 +32,9 @@ export default function welcome() {
             <TitleSvg w='170' h='54'/>
         </View>
         <View style={styles.buttonArea}>
-            <loginButton sentence="메일로 가입하기" tag={<MailSvg w='15' h='15'/>}/>
-            <loginButton sentence="Google로 계속하기" tag={<GoogleSvg w='15' h='15'/>} press={googleSignInAsync}/>
-            <loginButton sentence="Apple로 계속하기" tag={<AppleSvg w='15' h='15'/>}/>
+            <LoginButton sentence="메일로 가입하기" tag={<MailSvg w='15' h='15'/>} press={GoogleSignInAsync}/>
+            <LoginButton sentence="Google로 계속하기" tag={<GoogleSvg w='15' h='15'/>} press={GoogleSignInAsync}/>
+            <LoginButton sentence="Apple로 계속하기" tag={<AppleSvg w='15' h='15'/>} press={GoogleSignInAsync}/>
         </View>
         <View style={styles.textNBtn}>
             <Text>또는 </Text>
@@ -37,7 +49,7 @@ export default function welcome() {
             </TouchableOpacity>
         </View>
     </SafeAreaView>
-);
+  );
 }
 
 const styles = StyleSheet.create({

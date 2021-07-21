@@ -6,8 +6,9 @@ import {
     Image,
     Text
 } from 'react-native';
-import {colors} from '../colors'
-export default function loginButton(sentence: string, tag: any, press: Function){
+import {colors} from '../../styles/colors'
+
+export default function LoginButton({sentence, tag, press} : {sentence:string, tag:any, press: any}){
     return(
         <TouchableOpacity style={styles.button} onPress={()=>press}>
             {tag}

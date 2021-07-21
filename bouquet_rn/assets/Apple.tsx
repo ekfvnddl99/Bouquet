@@ -7,7 +7,7 @@ const apple = `
 </svg>
 `;
 
-const svg = ({w, h}) => {
+const svg = ({w, h} : {w:string, h:string}) => {
   const AppleSvg = () => <SvgXml xml={apple} width={w} height={h}/>;
   return <AppleSvg />;
 };

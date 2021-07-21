@@ -10,7 +10,7 @@ const google = `
 </svg>
 `;
 
-const svg = ({w, h}) => {
+const svg = ({w, h} : {w:string, h:string}) => {
   const GoogleSvg = () => <SvgXml xml={google} width={w} height={h}/>;
   return <GoogleSvg />;
 };
