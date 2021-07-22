@@ -1,13 +1,15 @@
+import React, { useCallback, useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { colors } from '../styles/Colors';
 import { Button1B } from '../styles/TextStyles';
 import Icon from './Icons';
 
 import { pageState } from '../features/atoms';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 const Wrap = styled.div`
   display: flex;
@@ -63,6 +65,10 @@ const IconWrap = styled.div`
 `;
 
 const MenuFrame = styled.div<{active: boolean}>`
+  width: 100%;
+  height: 100%;
+
+  transition: 0.3s;
 
   display: flex;
   align-items: center;
@@ -73,6 +79,7 @@ const MenuFrame = styled.div<{active: boolean}>`
 
   &:hover {
     background-color: ${colors.grayscale.gray1};
+    transition: 0.3s;
   }
 
   &:active {
@@ -84,20 +91,14 @@ const MenuFrame = styled.div<{active: boolean}>`
   }
 
   @media (min-width: 320px) and (max-width: 519px) {
-    width: 20%;
-    height: 100%;
     justify-content: center;
   }
 
   @media (min-width: 520px) and (max-width: 729px) {
-    width: 100%;
-    height: 20%;
     justify-content: center;
   }
 
   @media (min-width: 730px) {
-    width: 100%;
-    height: 20%;
     justify-content: flex-start;
     padding-left: 18px;
   }
@@ -123,34 +124,76 @@ const LinkTextFrame = styled.div`
   }
 `;
 
+const CustomA = styled.a`
+  display: flex;
+  align-items: center;
+
+  @media (min-width: 320px) and (max-width: 519px) {
+    width: 20%;
+    height: 100%;
+  }
+
+  @media (min-width: 520px) and (max-width: 729px) {
+    width: 100%;
+    height: 20%;
+  }
+
+  @media (min-width: 730px) {
+    width: 100%;
+    height: 20%;
+  }
+`;
+
 
 type MenuProps = {
   name: string;
   korName: string;
 }
 
-export default function NavigationBar() {
+const Menu = function Menu({ name, korName }: MenuProps) {
   const [active, setActive] = useRecoilState(pageState);
+  const getActivated = useCallback(() => (active === name), [active]);
+  const activated = useMemo(() => getActivated(), [active]);
 
-  function Menu({ name, korName }: MenuProps) {
-    return (
-      <MenuFrame onClick={() => setActive(name)} active={active === name}>
-        
-        <IconFrame>
-          <Icon
-            name={name}
-            varient={active === name ? "filled" : "outline"}
-            width={24}
-            height={24}
-            color={active === name ? colors.primary.normal : colors.grayscale.gray5}
-          />
-        </IconFrame>
-        <LinkTextFrame>
-          <Button1B>{korName}</Button1B>
-        </LinkTextFrame>
-      </MenuFrame>
-    );
-  }
+  const getVarient = useCallback(() => {
+    console.log("b");
+    return activated ? "filled" : "outline";
+  }, [name, activated]);
+
+  const varient = useMemo(() => getVarient(), [activated]);
+
+  return (
+    <Link href={{pathname: `/${name === 'home' ? '' : name}`}} passHref>
+      <CustomA>
+        <MenuFrame onClick={() => setActive(name)} active={activated}>
+          <IconFrame>
+            <Icon
+              name={name}
+              varient={varient}
+              width={24}
+              height={24}
+              color={activated ? colors.primary.normal : colors.grayscale.gray5}
+            />
+          </IconFrame>
+          <LinkTextFrame>
+            <Button1B>{korName}</Button1B>
+          </LinkTextFrame>
+        </MenuFrame>
+      </CustomA>
+    </Link>
+  );
+};
+
+function NavigationBar() {
+  const [active, setActive] = useRecoilState(pageState);
+  const router = useRouter();
+
+  useEffect(() => {
+    console.log(router.pathname);
+    const path = router.pathname;
+    if (path === '/') setActive('home');
+    else setActive(path.slice(1));
+  }, []);
 
   return (
     <Wrap>
@@ -164,3 +207,5 @@ export default function NavigationBar() {
     </Wrap>
   )
 }
+
+export default NavigationBar;
