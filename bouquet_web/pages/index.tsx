@@ -35,24 +35,14 @@ const TitleWrap = styled.div`
   display: flex;
   justify-content: space-between;
 
-  @media (min-width: 320px) and (max-width: 459px) {
+  @media (min-width: 320px) and (max-width: 519px) {
     width: 100%;
+    max-width: 400px;
   }
 
-  @media (min-width: 460px) and (max-width: 519px) {
-    width: 400px;
-  }
-
-  @media (min-width: 520px) and (max-width: 619px) {
+  @media (min-width: 520px) {
     width: 100%;
-  }
-
-  @media (min-width: 620px) and (max-width: 729px) {
-    width: 500px;
-  }
-
-  @media (min-width: 730px) {
-    width: 500px;
+    max-width: 500px;
   }
 `;
 
@@ -62,10 +52,15 @@ type TitleProps = {
 
 function Title({ characterName }: TitleProps) {
   const [scrollPosition, setScrollPosition] = useState(0);
+  const setScroll = useCallback(() => {
+    setScrollPosition(window.scrollY || document.documentElement.scrollTop);
+  },
+  []);
   useEffect(() => {
-    window.addEventListener('scroll', () => {
-      setScrollPosition(window.scrollY || document.documentElement.scrollTop);
-    });
+    window.addEventListener('scroll', setScroll);
+    return () => {
+      window.removeEventListener('scroll', setScroll);
+    }
   }, []);
 
   const getScrolled = useCallback(() => {
@@ -134,10 +129,10 @@ export default function Home() {
 
       <LayoutWithNav>
         <Title characterName="단호좌현지" />
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
+        <p>b</p>
+        <p>b</p>
+        <p>b</p>
+        <p>b</p>
         <p>a</p>
         <p>a</p>
         <p>a</p>
