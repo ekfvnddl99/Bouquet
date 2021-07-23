@@ -1,8 +1,8 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 
 import { colors } from '../styles/Colors';
 import { Button1B } from '../styles/TextStyles';
@@ -13,8 +13,9 @@ import { useEffect } from 'react';
 
 const Wrap = styled.div`
   display: flex;
+  flex: 0 0;
 
-  background-color: ${colors.grayscale.gray0};
+  background-color: ${colors.grayscale.white};
 
   @media (min-width: 320px) and (max-width: 519px) {
     width: 100%;
@@ -22,6 +23,7 @@ const Wrap = styled.div`
 
     justify-content: center;
     align-items: center;
+    flex-basis: 60px;
   }
 
   @media (min-width: 520px) and (max-width: 729px) {
@@ -29,11 +31,14 @@ const Wrap = styled.div`
     height: 100%;
 
     justify-content: center;
+    flex-basis: 60px;
   }
 
   @media (min-width: 730px) {
     width: 170px;
     height: 100%;
+
+    flex-basis: 170px;
   }
 `;
 
@@ -152,15 +157,14 @@ type MenuProps = {
 
 const Menu = function Menu({ name, korName }: MenuProps) {
   const [active, setActive] = useRecoilState(pageState);
-  const getActivated = useCallback(() => (active === name), [active]);
-  const activated = useMemo(() => getActivated(), [active]);
+  const getActivated = useCallback(() => (active === name), [active, name]);
+  const activated = useMemo(() => getActivated(), [getActivated]);
 
   const getVarient = useCallback(() => {
-    console.log("b");
     return activated ? "filled" : "outline";
-  }, [name, activated]);
+  }, [activated]);
 
-  const varient = useMemo(() => getVarient(), [activated]);
+  const varient = useMemo(() => getVarient(), [getVarient]);
 
   return (
     <Link href={{pathname: `/${name === 'home' ? '' : name}`}} passHref>
@@ -184,16 +188,15 @@ const Menu = function Menu({ name, korName }: MenuProps) {
   );
 };
 
-function NavigationBar() {
+export default function NavigationBar() {
   const [active, setActive] = useRecoilState(pageState);
   const router = useRouter();
 
   useEffect(() => {
-    console.log(router.pathname);
     const path = router.pathname;
     if (path === '/') setActive('home');
     else setActive(path.slice(1));
-  }, []);
+  }, [router.pathname, setActive]);
 
   return (
     <Wrap>
@@ -207,5 +210,3 @@ function NavigationBar() {
     </Wrap>
   )
 }
-
-export default NavigationBar;

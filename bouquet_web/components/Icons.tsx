@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 // import icons - Sort alphabetically
@@ -50,11 +50,10 @@ const IconWrap = styled.div<IconStyleProps>`
   }
 `;
 
-const InsideIcon = React.memo(function InsideIcon({ name, varient, setFill }: InsideIconProps) {
+function InsideIcon({ name, varient, setFill }: InsideIconProps) {
   const [icon, setIcon] = useState(<HomeFilled />);
 
   const getIcon = useCallback(() => {
-    console.log(name, varient);
     switch (name) {
       case 'crew':
         if (varient === 'filled') {
@@ -107,16 +106,16 @@ const InsideIcon = React.memo(function InsideIcon({ name, varient, setFill }: In
         }
         break;
     }
-  }, [name, varient]);
+  }, [name, varient, setFill]);
 
   useEffect(() => {
     getIcon();
-  }, [name, varient]);
+  }, [getIcon]);
 
   return icon;
-});
+}
 
-function Icon({ name, varient, width, height, color }: IconProps) {
+export default function Icon({ name, varient, width, height, color }: IconProps) {
   const [fill, setFill] = useState('');
 
   return (
@@ -130,5 +129,3 @@ function Icon({ name, varient, width, height, color }: IconProps) {
     </IconWrap>
   )
 }
-
-export default React.memo(Icon);
