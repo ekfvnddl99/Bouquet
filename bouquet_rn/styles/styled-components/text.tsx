@@ -1,35 +1,85 @@
 import styled from 'styled-components/native';
-import {colors} from '../colors';
 
-export const PrimaryText = styled.Text`
-  color: ${colors.primary};
+interface TextProps{
+  color : string,
+}
+export const Title = styled.Text`
+  font-weight: bold;
+  font-size: 32px;
+  color: ${(props : TextProps) => (props.color)}
 `
-
-export const GrayBtnText = styled.Text`
-  color: ${colors.gray5};
+export const Subtitle1 = styled.Text`
+  font-weight: bold;
+  font-size: 22px;
+  color: ${(props : TextProps) => (props.color)}
 `
-
-export const SubBlackText = styled.Text`
-  color: ${colors.black};
+export const Subtitle2B = styled.Text`
+  font-weight: bold;
+  font-size: 18px;
+  color: ${(props : TextProps) => (props.color)}
 `
-
-export const SubGrayText = styled.Text`
-  color: ${colors.gray6};
+export const Subtitle2R = styled.Text`
+  font-weight: normal;
+  font-size: 18px;
+  color: ${(props : TextProps) => (props.color)}
 `
-
-export const ErrText = styled.Text`
-  color: ${colors.primary};
-  margin-top:16;
+export const Subtitle3 = styled.Text`
+  font-weight: 600;
+  font-size: 16px;
+  color: ${(props : TextProps) => (props.color)}
 `
-
-export const TitleText = styled.Text`
-  color: ${colors.black};
+export const Body1B = styled.Text`
+  font-weight: 600;
+  font-size: 16px;
+  color: ${(props : TextProps) => (props.color)}
 `
-
-export const SocialText = styled.Text`
-  color: ${colors.black};
+export const Body1R = styled.Text`
+  font-weight: normal;
+  font-size: 16px;
+  color: ${(props : TextProps) => (props.color)}
 `
-
-export const NameText = styled.Text`
-  color: ${colors.black};
+export const Body2B = styled.Text`
+  font-weight: 600;
+  font-size: 14px;
+  color: ${(props : TextProps) => (props.color)}
+`
+export const Body2R = styled.Text`
+  font-weight: normal;
+  font-size: 14px;
+  color: ${(props : TextProps) => (props.color)}
+`
+export const Body3 = styled.Text`
+  font-weight: normal;
+  font-size: 12px;
+  color: ${(props : TextProps) => (props.color)}
+`
+export const Button1B = styled.Text`
+  font-weight: 600;
+  font-size: 16px;
+  color: ${(props : TextProps) => (props.color)}
+`
+export const Button1R = styled.Text`
+  font-weight: normal;
+  font-size: 16px;
+  color: ${(props : TextProps) => (props.color)}
+`
+export const Button2B = styled.Text`
+  font-weight: 600;
+  font-size: 14px;
+  color: ${(props : TextProps) => (props.color)}
+`
+export const Button2R = styled.Text`
+  font-weight: normal;
+  font-size: 14px;
+  color: ${(props : TextProps) => (props.color)}
+`
+export const Button3 = styled.Text`
+  font-weight: normal;
+  font-size: 12px;
+  color: ${(props : TextProps) => (props.color)}
+`
+export const Caption = styled.Text`
+  font-weight: normal;
+  font-size: 12px;
+  color: ${(props : TextProps) => (props.color)}
 `

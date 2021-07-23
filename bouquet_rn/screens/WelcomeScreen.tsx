@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { 
-  TouchableOpacity, 
   View, 
 } from 'react-native';
+import {colors} from '../styles/colors';
 import * as area from '../styles/styled-components/area';
 import * as text from '../styles/styled-components/text';
 
@@ -19,6 +19,7 @@ import GoogleSignInAsync  from './logics/GoogleLogin';
 
 // components
 import LoginButton from './components/LoginButton';
+import PrimaryTextButton from './components/PrimaryTextButton';
 
 export default function WelcomeScreen({navigation} : WelcomeProps) {
 
@@ -37,7 +38,7 @@ export default function WelcomeScreen({navigation} : WelcomeProps) {
 
   return(
     <area.Container>
-      <area.ContainerBlank>
+      <area.ContainerBlank20>
         <View style={{alignItems:'center', marginTop: 70}}>
             <LogoSvg w='100' h='100'/>
         </View>
@@ -52,18 +53,14 @@ export default function WelcomeScreen({navigation} : WelcomeProps) {
         </area.BottomArea>
 
         <area.TextBtnArea>
-            <text.SubBlackText>또는 </text.SubBlackText>
-            <TouchableOpacity onPress={goLogin}>
-                <text.PrimaryText>로그인</text.PrimaryText>
-            </TouchableOpacity>
+            <text.Button2R color={colors.black}>또는 </text.Button2R>
+            <PrimaryTextButton press={goLogin} content="로그인" level={1}/>
         </area.TextBtnArea>
-      </area.ContainerBlank>
+      </area.ContainerBlank20>
 
         <area.TextBackgroundBtnArea>
-            <text.SubBlackText>우선 알아보고 싶다면? </text.SubBlackText>
-            <TouchableOpacity onPress={goTabs}>
-                <text.PrimaryText>미리보기</text.PrimaryText>
-            </TouchableOpacity>
+            <text.Button2B color={colors.black}>우선 알아보고 싶다면? </text.Button2B>
+            <PrimaryTextButton press={goTabs} content="미리보기" level={1}/>
         </area.TextBackgroundBtnArea>
     </area.Container>
   );

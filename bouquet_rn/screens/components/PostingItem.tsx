@@ -6,11 +6,13 @@ import {
     StyleSheet,
     TouchableOpacity
 } from 'react-native';
-import {colors} from '../../styles/colors'
+import {colors} from '../../styles/colors';
+import * as text from '../../styles/styled-components/text';
+import * as button from '../../styles/styled-components/button';
 
-import SunSvg from '../../assets/Sun';
-
-import HomeSvg from '../../assets/Home';
+// components
+import SunButton from './SunButton';
+import ProfileAButton from './ProfileAButton';
 
 function timeName(time : number){
   if(time<60) return time+'분';
@@ -18,56 +20,34 @@ function timeName(time : number){
   else return ((time/1440) | 0 )+'일';
 }
 
-function sunName(sun : number){
-  let ans;
-  if(sun>=1000){
-      sun=sun/1000;
-      ans = sun + 'K';
-  }
-  return ans;
-}
-
 export default function PostingItem({name, time, content, sun} : {name : string, time : number, content : string, sun : number}){
     return(
-        <TouchableOpacity style={styles.button}>
+        <button.PostButton>
             <View style={styles.aboveArea}>
                 <View style={styles.profileArea}>
-                    <HomeSvg w='15' h='15'/>
-                    <Text>{name}</Text>
+                    <ProfileAButton name={name}/>
                 </View>
-                <View style={styles.timeText}>
-                    <Text style={{color: colors.gray5}}>{timeName(time)} 전</Text>
+                <View style={styles.timeArea}>
+                    <text.Caption color={colors.gray5}>{timeName(time)} 전</text.Caption>
                 </View>
             </View>
             <View style={styles.contentArea}>
                 <Text>{content}</Text>
-            </View>
+            </View> 
             <View style={styles.sunArea}>
-                <TouchableOpacity style={styles.sunButton}>
-                    <SunSvg w='15' h='15'/>
-                    <Text>{sunName(sun)}</Text>
-                </TouchableOpacity>
+                <SunButton sun={sun}/>
             </View>
-        </TouchableOpacity>
+        </button.PostButton>
     );
 }
 
 const styles = StyleSheet.create({
-    button:{
-        flex:1,
-        width:'100%',
-        backgroundColor: colors.white,
-        borderRadius: 10,
-        marginBottom: 10,
-        paddingHorizontal:10,
-        paddingVertical: 10,
-    },
     profileArea:{
         flex:2,
         flexDirection:'row',
         alignItems:'center',
     },
-    timeText:{
+    timeArea:{
         flex:1,
         alignItems:'flex-end',
     },
@@ -83,13 +63,5 @@ const styles = StyleSheet.create({
     sunArea:{
         alignItems:'flex-start'
     },
-    sunButton:{
-        flexDirection:'row',
-        borderWidth:1,
-        borderColor:colors.primary,
-        borderRadius:10,
-        alignItems:'center',
-        paddingVertical:7,
-        paddingHorizontal:8,
-    }
+
 })

@@ -16,7 +16,7 @@ export const colors={
     
     primary:'#FA7268',
     pressed_primary:'#D75F56',
-    alpha10_primary:'#1AFA7268',
-    alpha20_primary:'#30FA7268',
+    alpha10_primary:'#FA72681A',
+    alpha20_primary:'#FA726830',
     warning_red:'#F42111',
 }

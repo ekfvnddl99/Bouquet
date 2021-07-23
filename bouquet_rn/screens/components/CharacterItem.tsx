@@ -1,38 +1,16 @@
 import React, {Component, useState} from 'react';
-import {
-    View,
-    Text,
-    Button,
-    StyleSheet,
-    TouchableOpacity
-} from 'react-native';
-import {colors} from '../../styles/colors'
-
-import HomeSvg from '../../assets/Home';
+import {colors} from '../../styles/colors';
+import * as button from '../../styles/styled-components/button';
+import * as text from '../../styles/styled-components/text';
+import * as elses from '../../styles/styled-components/elses';
 
 
 export default function CharacterItem({name, introduction} : {name: string, introduction : string}){
     return(
-        <TouchableOpacity style={styles.button}>
-            <HomeSvg w='100' h='100'/>
-            <View style={styles.text}><Text>{name}</Text></View>
-            <View style={styles.text}><Text>{introduction}</Text></View>
-        </TouchableOpacity>
+        <button.CharacterButton>
+            <elses.Circle radius={100} vertical={8}/>
+            <text.Body2B color={colors.black}>{name}</text.Body2B>
+            <text.Caption color={colors.black}>{introduction}</text.Caption>
+        </button.CharacterButton>
     );
 }
-
-const styles = StyleSheet.create({
-    button:{
-        flex:1,
-        alignItems: 'center',
-        backgroundColor: colors.white,
-        borderRadius: 10,
-        marginRight:10,
-        paddingHorizontal: 25,
-        paddingVertical: 18,
-        width:150,
-    },
-    text:{
-        marginTop:8,
-    }
-})

@@ -8,11 +8,19 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 // screens
 import WelcomeScreen from './WelcomeScreen';
+
 import RegisterScreenOne from './register/RegisterScreenOne';
 import RegisterScreenTwo from './register/RegisterScreenTwo';
 import RegisterScreenThree from './register/RegisterScreenThree';
 import RegisterScreenFour from './register/RegisterScreenFour'; 
+
+import ChaGenerationScreenOne from './characterGeneration/ChaGenerationScreenOne';
+import ChaGenerationScreenTwo from './characterGeneration/ChaGenerationScreenTwo';
+import ChaGenerationScreenThree from './characterGeneration/ChaGenerationScreenThree';
+import ChaGenerationScreenFour from './characterGeneration/ChaGenerationScreenFour';
+
 import LoginScreen from './LoginScreen';
+
 import HomeScreen from './main/Home/HomeScreen';
 import SearchScreen from './main/Search/SearchScreen';
 import CrewScreen from './main/Crew/CrewScreen';
@@ -38,6 +46,7 @@ const Tab = createBottomTabNavigator();
 function TabNavigator(){
   return(
     <Tab.Navigator
+      initialRouteName="Home"
       screenOptions={({route})=>({
         tabBarIcon: ({ focused, color, size }) => {
           let icon;
@@ -148,6 +157,31 @@ function ProfileStackNavigator(){
   );
 }
 
+const ChaGenerationStack = createStackNavigator<Types.ChaGenerationStackParam>();
+function ChaGenerationStackNavigator(){
+  return(
+    <ChaGenerationStack.Navigator
+      initialRouteName="ChaGenerationOne">
+        <ChaGenerationStack.Screen
+          name="ChaGenerationOne"
+          component={ChaGenerationScreenOne}
+          options={{headerShown : false}}/>
+        <ChaGenerationStack.Screen
+          name="ChaGenerationTwo"
+          component={ChaGenerationScreenTwo}
+          options={{headerShown : false}}/>
+        <ChaGenerationStack.Screen
+          name="ChaGenerationThree"
+          component={ChaGenerationScreenThree}
+          options={{headerShown : false}}/>
+        <ChaGenerationStack.Screen
+          name="ChaGenerationFour"
+          component={ChaGenerationScreenFour}
+          options={{headerShown : false}}/>
+      </ChaGenerationStack.Navigator>
+  );
+}
+
 const RegisterStack = createStackNavigator<Types.RegisterStackParam>();
 function RegisterStackNavigator(){
   return(
@@ -173,27 +207,6 @@ function RegisterStackNavigator(){
   );
 }
 
-const LoginStack = createStackNavigator<Types.LoginStackParam>();
-function LoginStackNavigator(){
-  return(
-    <LoginStack.Navigator
-      initialRouteName="Login">
-      <LoginStack.Screen
-      name="Login"
-      component={LoginScreen}
-      options={{headerShown : false}}/>
-      <LoginStack.Screen
-      name="Register"
-      component={RegisterStackNavigator}
-      options={{headerShown : false}}/>
-      <LoginStack.Screen
-      name="Tab"
-      component={TabNavigator}
-      options={{headerShown : false}}/>
-    </LoginStack.Navigator>
-  );
-}
-
 const WelcomeStack = createStackNavigator<Types.WelcomeStackParam>();
 export default function AppStack(){
   return(
@@ -206,7 +219,7 @@ export default function AppStack(){
             options={{headerShown: false}}/>
           <WelcomeStack.Screen
             name="Login"
-            component={LoginStackNavigator}
+            component={LoginScreen}
             options={{headerShown: false}}/>
           <WelcomeStack.Screen
             name="Register"

@@ -1,10 +1,13 @@
 import styled from 'styled-components/native';
 import {colors} from '../colors';
 
+interface FormProps{
+  height : string,
+}
 export const FormInput = styled.TextInput`
   background-color:${colors.white};
   border-radius: 10;
-  height:44;
+  height:${(props: FormProps)=> props.height};
   align-items: center;
   margin-top:16;
   padding-horizontal: 16;

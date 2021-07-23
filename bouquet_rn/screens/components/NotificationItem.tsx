@@ -6,9 +6,13 @@ import {
     StyleSheet,
     TouchableOpacity
 } from 'react-native';
-import {colors} from '../../styles/colors'
+import {colors} from '../../styles/colors';
+import * as elses from '../../styles/styled-components/elses';
+import * as text from '../../styles/styled-components/text';
+import * as button from '../../styles/styled-components/button';
 
-import HomeSvg from '../../assets/Home';
+// components
+import NameNText from './NameNText';
 
 function timeName(time : number){
   if(time<60) return time+'분';
@@ -18,29 +22,19 @@ function timeName(time : number){
 
 export default function NotificationItem({content, time} : {content : string, time : number}){
     return(
-        <TouchableOpacity style={styles.button}>
-            <HomeSvg w='15' h='15'/>
+        <button.ListButton>
+            <elses.Circle radius={20} vertical={0}/>
             <View style={styles.contentText}>
-                <Text>{content}</Text>
+                <NameNText name="" sub={content}/>
             </View>
             <View style={styles.timeText}>
-                <Text style={{color: colors.gray5}}>{timeName(time)} 전</Text>
+                <text.Caption color={colors.gray5}>{timeName(time)} 전</text.Caption>
             </View>
-        </TouchableOpacity>
+        </button.ListButton>
     );
 }
 
 const styles = StyleSheet.create({
-    button:{
-        flex:1,
-        flexDirection:'row',
-        alignItems: 'center',
-        backgroundColor: colors.white,
-        borderRadius: 10,
-        marginTop: 10,
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-    },
     contentText:{
         flex:2,
         marginLeft: 10,

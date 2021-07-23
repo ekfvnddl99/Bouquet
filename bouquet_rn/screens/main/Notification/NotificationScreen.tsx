@@ -6,13 +6,14 @@ import {
     StyleSheet,
     FlatList,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import {colors} from '../../../styles/colors'
+import {colors} from '../../../styles/colors';
+import * as area from '../../../styles/styled-components/area';
+import * as text from '../../../styles/styled-components/text';
+import * as elses from '../../../styles/styled-components/elses';
+
+// components
 import NotificationItem from '../../components/NotificationItem';
-
-
-import HomeSvg from '../../../assets/Home';
-
+import NameNText from '../../components/NameNText';
 
 export default function NotificationScreen(){
     // dummy data - 서버에서 불러와야 함
@@ -20,44 +21,23 @@ export default function NotificationScreen(){
     let data=['고광서','김현지','오태진'];
 
     return(
-        <SafeAreaView style={styles.container}>
-            <View style={{marginHorizontal: 30}}>
-                <View style={styles.title}>
-                    <View style={styles.titleText}>
-                        <Text>{name}의</Text>
-                        <Text>알림</Text>
-                    </View>
-                    <HomeSvg w='20' h='20'/>
-                </View>
-                <View>
-                    {data.length===0 ? <View style={styles.content}><Text style={styles.blankText}>이제 확인할 알림이 없어요!</Text></View> : 
-                    <FlatList data={data} renderItem={(obj)=>{
-                        return(<NotificationItem content={obj.item} time={2780}/>);}}>
-                    </FlatList>}
-                </View>
+      <area.Container>
+        <area.ContainerBlank30>
+          <area.RowArea top={30}>
+            <View style={{flex:1}}>
+              <NameNText name={name} sub="의"/>
+              <text.Subtitle2R color={colors.black}>알림</text.Subtitle2R>
             </View>
-        </SafeAreaView>
+            <elses.Circle radius={40} vertical={0}/>
+          </area.RowArea>
+            <View>
+              {data.length===0 ? 
+              <area.RowArea top={10}><text.Caption color={colors.gray6}>이제 확인할 알림이 없어요!</text.Caption></area.RowArea> : 
+              <View style={{marginTop: 30}}><FlatList data={data} renderItem={(obj)=>{
+                  return(<NotificationItem content={obj.item} time={2780}/>);}}>
+              </FlatList></View>}
+            </View>
+        </area.ContainerBlank30>
+      </area.Container>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: colors.gray0,
-    },
-    title:{
-        flexDirection : 'row',
-        marginTop:30,
-        alignItems:'center',
-    },
-    titleText:{
-        flex:1,
-    },
-    content:{
-        alignItems:'center',
-        marginTop:10,
-    },
-    blankText:{
-        color: colors.gray6,
-    }
-})

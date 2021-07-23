@@ -1,38 +1,40 @@
 import React, {Component, useState} from 'react';
 import {
   View,
+  Text,
   StyleSheet,
 } from 'react-native';
-import { colors } from '../../styles/colors';
+import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
 import * as elses from '../../styles/styled-components/elses';
 
 // props & logic
-import type {RegisterProps} from '../../utils/types';
+import type {ChaGenerationProps} from '../../utils/types';
 
 // components
 import ProgressArea from '../components/ProgressArea';
 import ConditionButton from '../components/ConditionButton';
 import NameNText from '../components/NameNText';
 
-export default function RegisterScreenFour({navigation} : RegisterProps){
+export default function ChaGenerationScreenFour({navigation} : ChaGenerationProps){
   const[name,setName]=useState('undefined');
 
   const goNext=()=>{
-    navigation.navigate("RegisterFour");
+    navigation.navigate("ChaGenerationFour");
   }
 
   return(
     <area.Container>
       <area.ContainerBlank20>
-        <ProgressArea navigation={navigation} title="회원가입 완료!" step={4}/>
+        <ProgressArea navigation={navigation} title="캐릭터 생성 완료!" step={4}/>
       </area.ContainerBlank20>
 
       <View style={styles.middleArea}>
         <elses.Circle radius={120} vertical={16}/>
         <NameNText name={name} sub="님,"/>
-        <text.Subtitle2R color={colors.black}>환영합니다!</text.Subtitle2R>
+        <text.Subtitle2R color={colors.black}>또 다른 모습으로</text.Subtitle2R>
+        <text.Subtitle2R color={colors.black}>피어날 준비가 되었어요!</text.Subtitle2R>
       </View>
 
       <area.ContainerBlank20>

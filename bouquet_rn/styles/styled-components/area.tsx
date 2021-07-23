@@ -1,6 +1,15 @@
 import styled from 'styled-components/native';
 import {colors} from '../colors';
 
+interface RowProps{
+  top: number,
+}
+export const RowArea = styled.View`
+  align-items:center;
+  margin-top:${(props: RowProps)=> props.top};
+  flex-direction:row;
+`
+
 export const TextBtnArea = styled.View`
   justify-content:center;
   margin-top:15;
@@ -21,15 +30,21 @@ export const BottomArea = styled.View`
   flex: 1;
   justify-content: flex-end;
 `
-
+interface FormProps{
+  height : string,
+}
 export const FormArea = styled.View`
   background-color:${colors.white};
   border-radius: 10;
-  height:44;
+  height:${(props: FormProps)=> props.height};
   align-items: center;
   margin-top:16;
   padding-horizontal: 16;
   flex-direction: row;
+`
+
+export const Blank = styled.View `
+  
 `
 
 export const Container = styled.SafeAreaView `
@@ -37,8 +52,14 @@ export const Container = styled.SafeAreaView `
   background-color: ${colors.gray0};
 `
 
-export const ContainerBlank = styled.SafeAreaView `
+export const ContainerBlank20 = styled.SafeAreaView `
   flex:1;
   background-color: ${colors.gray0};
   padding-horizontal:20;
+`
+
+export const ContainerBlank30 = styled.SafeAreaView `
+  flex:1;
+  background-color: ${colors.gray0};
+  padding-horizontal:30;
 `

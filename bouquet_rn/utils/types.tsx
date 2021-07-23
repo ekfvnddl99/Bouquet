@@ -9,13 +9,7 @@ export type WelcomeStackParam = {
 }
 export type WelcomeProps = StackScreenProps<WelcomeStackParam, "Welcome">;
 
-export type LoginStackParam = {
-  Login : undefined,
-  Register : undefined,
-  Tab : undefined,
-}
-export type LoginProps = StackScreenProps<LoginStackParam, "Login">;
-
+// register
 export type RegisterStackParam = {
   RegisterOne : undefined,
   RegisterTwo : undefined,
@@ -23,6 +17,15 @@ export type RegisterStackParam = {
   RegisterFour : undefined,
 }
 export type RegisterProps = StackScreenProps<RegisterStackParam, "RegisterOne">;
+
+// character generation
+export type ChaGenerationStackParam = {
+  ChaGenerationOne : undefined,
+  ChaGenerationTwo : undefined,
+  ChaGenerationThree : undefined,
+  ChaGenerationFour : undefined,
+}
+export type ChaGenerationProps = StackScreenProps<ChaGenerationStackParam, "ChaGenerationOne">;
 
 // TAB
 // home

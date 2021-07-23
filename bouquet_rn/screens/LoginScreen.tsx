@@ -4,8 +4,8 @@ import {
     TextInput,
     TouchableOpacity,
 } from 'react-native';
+import {colors} from '../styles/colors';
 import * as area from '../styles/styled-components/area';
-import * as button from '../styles/styled-components/button';
 import * as text from '../styles/styled-components/text';
 import * as input from '../styles/styled-components/input';
 
@@ -16,12 +16,14 @@ import GoogleSvg from '../assets/Google';
 import AppleSvg from '../assets/Apple';
 
 // props & logic
-import type {LoginProps} from '../utils/types'
+import type {WelcomeProps} from '../utils/types'
 import GoogleSignInAsync from './logics/GoogleLogin';
 
 // components
 import LoginButton from './components/LoginButton';
 import BackButton from './components/BackButton';
+import ConditionButton from './components/ConditionButton';
+import PrimaryTextButton from './components/PrimaryTextButton';
 
 function CheckErr(mail:string){
   if(mail==='456') return '메일이나 비밀번호가 틀렸나 봐요.';
@@ -37,7 +39,7 @@ function EyeSelect(eye : number){
   }
 }
 
-export default function LoginScreen({navigation} : LoginProps){
+export default function LoginScreen({navigation} : WelcomeProps){
     const[mail, setMail]=useState('456');
     const[eye, setEye]=useState(1);
 
@@ -51,13 +53,13 @@ export default function LoginScreen({navigation} : LoginProps){
 
     return(
     <area.Container>
-      <area.ContainerBlank>
+      <area.ContainerBlank20>
         <BackButton navigation={navigation}/>
 
-        <text.TitleText>로그인</text.TitleText>
+        <text.Subtitle1 color={colors.black}>로그인</text.Subtitle1>
 
-        <input.FormInput placeholder='메일' onChangeText={(mail)=>setMail(mail)}/>
-        <area.FormArea>
+        <input.FormInput height='44' placeholder='메일' onChangeText={(mail)=>setMail(mail)}/>
+        <area.FormArea height='44'>
           <TextInput style={{flex: 1}} placeholder='비밀번호'/>
           <TouchableOpacity onPress={()=>{setEye(eye*(-1))}}>
               {EyeSelect(eye)}
@@ -65,38 +67,31 @@ export default function LoginScreen({navigation} : LoginProps){
         </area.FormArea>
 
         <View style={{alignItems:'center'}}>
-          <View><text.ErrText>{CheckErr(mail)}</text.ErrText></View>
+          <View><text.Caption color={colors.primary}>{CheckErr(mail)}</text.Caption></View>
 
-          <button.PrimaryButton>
-              <text.PrimaryText>로그인</text.PrimaryText>
-          </button.PrimaryButton>
+          <ConditionButton active={1} press={()=>{}} content="로그인"/>
         </View>
 
         <area.TextBtnArea>
-          <text.SubBlackText>비밀번호를 잊었나요? </text.SubBlackText>
-          <TouchableOpacity>
-              <text.PrimaryText>계정 찾기</text.PrimaryText>
-          </TouchableOpacity>
+          <text.Caption color={colors.black}>비밀번호를 잊었나요? </text.Caption>
+          <PrimaryTextButton press={()=>{}} content="계정 찾기" level={2}/>
         </area.TextBtnArea>
 
-      <area.BottomArea>
+        <area.BottomArea>
           <LoginButton sentence="Google로 계속하기" tag={<GoogleSvg w='15' h='15'/>} press={GoogleSignInAsync}/>
           <LoginButton sentence="Apple로 계속하기" tag={<AppleSvg w='15' h='15'/>} press={GoogleSignInAsync}/>
-      </area.BottomArea>
+        </area.BottomArea>
 
-      <area.TextBtnArea>
-          <text.SubBlackText>계정이 없다면? </text.SubBlackText>
-          <TouchableOpacity onPress={goRegister}>
-              <text.PrimaryText>회원가입</text.PrimaryText>
-          </TouchableOpacity>
-      </area.TextBtnArea>
-      </area.ContainerBlank>
+        <area.TextBtnArea>
+          <text.Body2R color={colors.black}>계정이 없다면? </text.Body2R>
+          <PrimaryTextButton press={goRegister} content="회원가입" level={1}/>
+        </area.TextBtnArea>
+
+      </area.ContainerBlank20>
 
       <area.TextBackgroundBtnArea>
-          <text.SubBlackText>우선 알아보고 싶다면? </text.SubBlackText>
-          <TouchableOpacity onPress={goTabs}>
-              <text.PrimaryText>미리보기</text.PrimaryText>
-          </TouchableOpacity>
+        <text.Body2R color={colors.black}>우선 알아보고 싶다면? </text.Body2R>
+        <PrimaryTextButton press={goTabs} content="미리보기" level={1}/>
       </area.TextBackgroundBtnArea>
     </area.Container>
     );

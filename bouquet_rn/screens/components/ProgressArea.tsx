@@ -24,7 +24,7 @@ export default function ProgressArea({navigation, title, step} : {navigation : a
         <elses.Bar width='100%' color={colors.alpha20_primary}/>
         <elses.Bar width={CheckStep(step)} color={colors.primary}/>
       </View>
-      <text.TitleText>{title}</text.TitleText>
+      <text.Subtitle1 color={colors.black}>{title}</text.Subtitle1>
     </View>
   );
 }
