@@ -1,6 +1,122 @@
 import Head from 'next/head';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
+import { useMediaQuery } from 'react-responsive';
+
 import LayoutWithNav from '../components/LayoutWithNav';
+import { ProfilePic } from '../components/ProfilePic';
+
+import { colors } from '../styles/Colors';
+import * as Text from '../styles/TextStyles';
+
+const TopWrap = styled.div<{scrolled: boolean}>`
+  position: sticky;
+  top: 0;
+  transition: 0.5s;
+
+  display: flex;
+  justify-content: center;
+  
+  @media (min-width: 320px) and (max-width: 519px) {
+    border-radius: 0 0 15px 15px;
+    padding: ${props => props.scrolled ? 16 : 30}px 30px ${props => props.scrolled ? 16 : 20}px 30px;
+    ${props => props.scrolled ? `background-color: ${colors.grayscale.white};` : ''}
+    ${props => props.scrolled ? `height: 60px;` : ''}
+    ${props => props.scrolled ? `span { opacity: 0; transition: 0.5s }` : ''}
+  }
+
+  @media (min-width: 520px) {
+    padding: 30px 30px 20px 30px;
+    background-color: ${colors.grayscale.white};
+  }
+`;
+
+const TitleWrap = styled.div`
+  display: flex;
+  justify-content: space-between;
+
+  @media (min-width: 320px) and (max-width: 459px) {
+    width: 100%;
+  }
+
+  @media (min-width: 460px) and (max-width: 519px) {
+    width: 400px;
+  }
+
+  @media (min-width: 520px) and (max-width: 619px) {
+    width: 100%;
+  }
+
+  @media (min-width: 620px) and (max-width: 729px) {
+    width: 500px;
+  }
+
+  @media (min-width: 730px) {
+    width: 500px;
+  }
+`;
+
+type TitleProps = {
+  characterName?: string;
+}
+
+function Title({ characterName }: TitleProps) {
+  const [scrollPosition, setScrollPosition] = useState(0);
+  useEffect(() => {
+    window.addEventListener('scroll', () => {
+      setScrollPosition(window.scrollY || document.documentElement.scrollTop);
+    });
+  }, []);
+
+  const getScrolled = useCallback(() => {
+    return scrollPosition > 0;
+  }, [scrollPosition]);
+  const scrolled = useMemo(() => getScrolled(), [getScrolled]);
+
+  const isMobile = useMediaQuery({
+    query: "(min-width: 320px) and (max-width: 519px)"
+  });
+
+  if (characterName) {
+    return (
+      <TopWrap scrolled={scrolled}>
+        <TitleWrap>
+          <span>
+            <Text.Subtitle2B>
+              {characterName}
+            </Text.Subtitle2B>
+            <Text.Subtitle2R>
+              의<br />피드
+            </Text.Subtitle2R>
+          </span>
+          <ProfilePic
+            size={scrolled && isMobile ? 28 : 40}
+            image="https://images.unsplash.com/photo-1626688226927-33257a21236f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1268&q=80"
+          />
+        </TitleWrap>
+      </TopWrap>
+      )
+  }
+  else {
+    return (
+      <TopWrap scrolled={scrolled}>
+        <TitleWrap>
+          <span>
+            <Text.Subtitle2R>
+              눈길이 가는
+            </Text.Subtitle2R>
+            <Text.Subtitle2B>
+              <br />피드
+            </Text.Subtitle2B>
+          </span>
+          <ProfilePic
+            size={scrolled && isMobile ? 28 : 40}
+          />
+        </TitleWrap>
+      </TopWrap>
+    )
+  }
+}
 
 const Background = styled.div`
   width: 100%;
@@ -17,8 +133,34 @@ export default function Home() {
       </Head>
 
       <LayoutWithNav>
-        <p>Home</p>
-        <p>Test</p>
+        <Title characterName="단호좌현지" />
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>b</p>
+        <p>b</p>
+        <p>b</p>
       </LayoutWithNav>
     </Background>
   )

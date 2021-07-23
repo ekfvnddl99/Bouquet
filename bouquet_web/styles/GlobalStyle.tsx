@@ -15,6 +15,7 @@ export const GlobalStyle = createGlobalStyle`
     height: 100%;
     font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
     background-color: ${colors.grayscale.gray0};
+    line-height: 1.25;
   }
 
   #__next {

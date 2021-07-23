@@ -13,7 +13,7 @@ import { useEffect } from 'react';
 
 const Wrap = styled.div`
   display: flex;
-  flex: 0 0;
+  position: fixed;
 
   background-color: ${colors.grayscale.white};
 
@@ -23,7 +23,6 @@ const Wrap = styled.div`
 
     justify-content: center;
     align-items: center;
-    flex-basis: 60px;
   }
 
   @media (min-width: 520px) and (max-width: 729px) {
@@ -31,14 +30,11 @@ const Wrap = styled.div`
     height: 100%;
 
     justify-content: center;
-    flex-basis: 60px;
   }
 
   @media (min-width: 730px) {
     width: 170px;
     height: 100%;
-
-    flex-basis: 170px;
   }
 `;
 

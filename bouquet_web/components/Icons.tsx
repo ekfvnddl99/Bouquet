@@ -36,8 +36,8 @@ interface IconStyleProps {
 }
 
 const IconWrap = styled.div<IconStyleProps>`
-  width: ${props => props.width};
-  height: ${props => props.height};
+  width: ${props => props.width}px;
+  height: ${props => props.height}px;
 
   path {
     ${props => (props.fill !== 'stroke' ? `fill: ${props.color}` : '')};

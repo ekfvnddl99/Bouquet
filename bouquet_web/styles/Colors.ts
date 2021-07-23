@@ -8,6 +8,7 @@ export const colors = {
   'warning_red': '#f42111',
   'grayscale': {
     'white': '#ffffff',
+    'white_alpha': 'rgba(255, 255, 255, ',
     'gray0': '#f8f8f8',
     'gray1': '#efefef',
     'gray2': '#e8e8e8',
