@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
@@ -9,7 +9,6 @@ import { Button1B } from '../styles/TextStyles';
 import Icon from './Icons';
 
 import { pageState } from '../features/atoms';
-import { useEffect } from 'react';
 
 const Wrap = styled.div`
   display: flex;

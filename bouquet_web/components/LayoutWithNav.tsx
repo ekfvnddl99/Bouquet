@@ -1,10 +1,10 @@
-import React from 'react';
 import styled from 'styled-components';
 
 import NavigationBar from './NavigationBar';
 import RightBar from './RightBar';
 
 import { colors } from '../styles/Colors';
+import { motion } from 'framer-motion';
 
 const Wrap = styled.div`
   height: 100%;
@@ -136,7 +136,16 @@ export default function LayoutWithNav({ children }: Props) {
   return (
     <Wrap>
       <ContentWrap>
-        {children}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{
+            duration: 1
+          }}
+        >
+          {children}
+        </motion.div>
       </ContentWrap>
       <NavWrap>
         <NavigationBar />

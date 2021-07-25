@@ -57,7 +57,6 @@ function Title() {
   },
   []);
   useEffect(() => {
-    console.log("a");
     window.addEventListener('scroll', setScroll);
     return () => {
       window.removeEventListener('scroll', setScroll);
