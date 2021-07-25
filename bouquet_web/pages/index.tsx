@@ -1,10 +1,13 @@
 import Head from 'next/head';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { useMediaQuery } from 'react-responsive';
 
 import LayoutWithNav from '../components/LayoutWithNav';
 import { ProfilePic } from '../components/ProfilePic';
+
+import { characterState } from '../features/atoms';
 
 import { colors } from '../styles/Colors';
 import * as Text from '../styles/TextStyles';
@@ -46,22 +49,20 @@ const TitleWrap = styled.div`
   }
 `;
 
-type TitleProps = {
-  characterName?: string;
-}
-
-function Title({ characterName }: TitleProps) {
+function Title() {
+  const [character, setCharacter] = useRecoilState(characterState);
   const [scrollPosition, setScrollPosition] = useState(0);
   const setScroll = useCallback(() => {
     setScrollPosition(window.scrollY || document.documentElement.scrollTop);
   },
   []);
   useEffect(() => {
+    console.log("a");
     window.addEventListener('scroll', setScroll);
     return () => {
       window.removeEventListener('scroll', setScroll);
     }
-  }, []);
+  }, [setScroll]);
 
   const getScrolled = useCallback(() => {
     return scrollPosition > 0;
@@ -72,13 +73,13 @@ function Title({ characterName }: TitleProps) {
     query: "(min-width: 320px) and (max-width: 519px)"
   });
 
-  if (characterName) {
+  if (character.isLogined) {
     return (
       <TopWrap scrolled={scrolled}>
         <TitleWrap>
           <span>
             <Text.Subtitle2B>
-              {characterName}
+              {character.characterName}
             </Text.Subtitle2B>
             <Text.Subtitle2R>
               의<br />피드
@@ -86,7 +87,7 @@ function Title({ characterName }: TitleProps) {
           </span>
           <ProfilePic
             size={scrolled && isMobile ? 28 : 40}
-            image="https://images.unsplash.com/photo-1626688226927-33257a21236f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1268&q=80"
+            image={character.image}
           />
         </TitleWrap>
       </TopWrap>
@@ -119,6 +120,17 @@ const Background = styled.div`
 `;
 
 export default function Home() {
+  const [character, setCharacter] = useRecoilState(characterState);
+
+  useEffect(() => {
+    setCharacter({
+      isLogined: true,
+      characterName: '단호좌현지',
+      caption: '나는 나보다 약한 자의 말은 듣지 않는다',
+      image: 'https://images.unsplash.com/photo-1626688226927-33257a21236f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1268&q=80',
+    });
+  }, [setCharacter]);
+
   return (
     <Background>
       <Head>
@@ -128,7 +140,7 @@ export default function Home() {
       </Head>
 
       <LayoutWithNav>
-        <Title characterName="단호좌현지" />
+        <Title />
         <p>b</p>
         <p>b</p>
         <p>b</p>

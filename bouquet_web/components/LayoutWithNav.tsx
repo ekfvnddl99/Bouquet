@@ -29,16 +29,29 @@ const NavWrap = styled.div`
   height: 100%;
   display: flex;
   position: fixed;
-  z-index: 10;
+  
 
   align-items: flex-end;
 
-  @media (min-width: 320px) and (max-width: 1279px) {
+  @media (min-width: 320px) and (max-width: 519px) {
     width: 100%;
+    z-index: 30;
+  }
+
+  @media (min-width: 520px) and (max-width: 729px) {
+    width: 60px;
+    z-index: 10;
+  }
+
+  @media (min-width: 730px) and (max-width: 1279px) {
+    width: 170px;
+    z-index: 10;
   }
 
   @media (min-width: 1280px) {
-    width: 980px;
+    width: 170px;
+    margin-right: 810px;
+    z-index: 10;
   }
 `;
 
@@ -64,7 +77,7 @@ const RightWrap = styled.div`
 `;
 
 const ContentWrap = styled.div`
-  z-index: 5;
+  z-index: 20;
   @media (min-width: 320px) and (max-width: 519px) {
     width: 100%;
     padding-bottom: 60px;

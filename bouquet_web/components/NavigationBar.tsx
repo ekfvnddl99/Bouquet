@@ -77,6 +77,7 @@ const MenuFrame = styled.div<{active: boolean}>`
 
   span {
     color: ${props => (props.active ? colors.primary.normal : colors.grayscale.gray5)};
+    transition: 0.3s;
   }
 
   &:hover {
@@ -89,6 +90,7 @@ const MenuFrame = styled.div<{active: boolean}>`
 
     span {
       color: ${props => (props.active ? colors.primary.pressed : colors.grayscale.gray6)};
+      transition: 0.3s;
     }
   }
 
@@ -166,7 +168,7 @@ const Menu = function Menu({ name, korName }: MenuProps) {
   return (
     <Link href={{pathname: `/${name === 'home' ? '' : name}`}} passHref>
       <CustomA>
-        <MenuFrame onClick={() => setActive(name)} active={activated}>
+        <MenuFrame onClick={() => setActive(name)} active={activated} className="menu-frame">
           <IconFrame>
             <Icon
               name={name}
