@@ -138,8 +138,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <LayoutWithNav>
-        <Title />
+      <LayoutWithNav topElement={<Title />}>
         <p>b</p>
         <p>b</p>
         <p>b</p>

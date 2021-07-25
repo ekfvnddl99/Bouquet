@@ -129,19 +129,23 @@ const Gray0 = styled.div`
 `;
 
 type Props = {
+  topElement?: React.ReactNode;
   children?: React.ReactNode;
 }
 
-export default function LayoutWithNav({ children }: Props) {
+export default function LayoutWithNav({ topElement, children }: Props) {
   return (
     <Wrap>
       <ContentWrap>
+        {topElement}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 50 }}
           transition={{
-            duration: 1
+            duration: 0.3,
+            type: "spring",
+            stiffness: 100,
           }}
         >
           {children}
