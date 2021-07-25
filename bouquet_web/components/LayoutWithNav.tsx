@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 import NavigationBar from './NavigationBar';
 import RightBar from './RightBar';
+import TopBar from './TopBar';
 
 import { colors } from '../styles/Colors';
 import { motion } from 'framer-motion';
@@ -129,21 +130,22 @@ const Gray0 = styled.div`
 `;
 
 type Props = {
+  setScrolled?: Function;
   topElement?: React.ReactNode;
   children?: React.ReactNode;
 }
 
-export default function LayoutWithNav({ topElement, children }: Props) {
+export default function LayoutWithNav({ setScrolled, topElement, children }: Props) {
   return (
     <Wrap>
       <ContentWrap>
-        {topElement}
+        <TopBar setScrolled={setScrolled}>
+          {topElement}
+        </TopBar>
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 50 }}
           transition={{
-            duration: 0.3,
             type: "spring",
             stiffness: 100,
           }}
