@@ -27,30 +27,33 @@ const Wrap = styled.div`
 `;
 
 const NavWrap = styled.div`
-  height: 100%;
   display: flex;
   position: fixed;
-  
 
   align-items: flex-end;
 
   @media (min-width: 320px) and (max-width: 519px) {
     width: 100%;
+    height: 60px;
+    bottom: 0;
     z-index: 30;
   }
 
   @media (min-width: 520px) and (max-width: 729px) {
     width: 60px;
+    height: 100%;
     z-index: 10;
   }
 
   @media (min-width: 730px) and (max-width: 1279px) {
     width: 170px;
+    height: 100%;
     z-index: 10;
   }
 
   @media (min-width: 1280px) {
     width: 980px;
+    height: 100%;
     padding-right: 810px;
     z-index: 10;
   }
