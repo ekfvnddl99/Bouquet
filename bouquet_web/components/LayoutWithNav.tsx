@@ -133,6 +133,8 @@ const Gray0 = styled.div`
 `;
 
 const InWrap = styled.div`
+  transition: 0.3s;
+
   @media (min-width: 320px) and (max-width: 519px) {
     width: 100%;
     max-width: 400px;
@@ -141,6 +143,7 @@ const InWrap = styled.div`
   @media (min-width: 520px) {
     width: 100%;
     max-width: 500px;
+    padding-top: 20px;
   }
 `;
 
@@ -165,7 +168,7 @@ export default function LayoutWithNav({ setScrolled, topElement, children }: Pro
             stiffness: 100,
           }}
           style={{
-            padding: "20px 30px 20px 30px",
+            padding: "0 30px 20px 30px",
             display: "flex",
             justifyContent: "center",
           }}

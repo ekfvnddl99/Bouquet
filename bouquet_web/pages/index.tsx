@@ -88,7 +88,7 @@ export default function Home() {
   const exampleData = [
     {
       character: character,
-      text: 'Lorem ipsum dolor sit amet',
+      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam consectetur a arcu vitae vehicula. Curabitur tempus eros vitae neque placerat hendrerit. Cras interdum tellus sit amet eleifend varius. Praesent vitae nisi magna. Nunc fringilla porttitor sagittis. Nunc fringilla egestas sodales. Aenean finibus ipsum quis nibh rutrum suscipit. Integer varius mi ac arcu scelerisque, vitae tempus eros consectetur. Cras accumsan justo non eros consequat viverra. Vivamus mauris augue, vestibulum in iaculis vitae, condimentum eu erat. Morbi vitae dictum nulla, eu euismod nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Proin tristique nisl augue, quis accumsan magna consectetur ut. Ut molestie volutpat faucibus. Etiam et velit commodo, consequat urna ac, semper felis. Sed non sapien lorem.',
       sunshine: 2500,
     },
     {
