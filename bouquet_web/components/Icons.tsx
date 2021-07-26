@@ -51,68 +51,60 @@ const IconWrap = styled.div<IconStyleProps>`
 `;
 
 function InsideIcon({ name, varient, setFill }: InsideIconProps) {
-  const [icon, setIcon] = useState(<HomeFilled />);
-
-  const getIcon = useCallback(() => {
-    switch (name) {
-      case 'crew':
-        if (varient === 'filled') {
-          setFill('fill');
-          setIcon(<CrewFilled />);
-        }
-        else {
-          setFill('stroke');
-          setIcon(<CrewOutline />);
-        }
-        break;
-      case 'home':
-        if (varient === 'filled') {
-          setFill('fill');
-          setIcon(<HomeFilled />);
-        }
-        else {
-          setFill('fill');
-          setIcon(<HomeOutline />);
-        }
-        break;
-      case 'notifications':
-        if (varient === 'filled') {
-          setFill('fill');
-          setIcon(<NotificationFilled />);
-        }
-        else {
-          setFill('fill');
-          setIcon(<NotificationOutline />);
-        }
-        break;
-      case 'profile':
-        if (varient === 'filled') {
-          setFill('fill');
-          setIcon(<ProfileFilled />);
-        }
-        else {
-          setFill('stroke');
-          setIcon(<ProfileOutline />);
-        }
-        break;
-      case 'search':
-        if (varient === 'filled') {
-          setFill('fill');
-          setIcon(<SearchFilled />);
-        }
-        else {
-          setFill('fill');
-          setIcon(<SearchOutline />);
-        }
-        break;
-    }
-  }, [name, varient, setFill]);
-
-  useEffect(() => {
-    getIcon();
-  }, [getIcon]);
-
-  return icon;
+  switch (name) {
+    case 'crew':
+      if (varient === 'filled') {
+        setFill('fill');
+        return (<CrewFilled />);
+      }
+      else {
+        setFill('stroke');
+        return (<CrewOutline />);
+      }
+      break;
+    case 'home':
+      if (varient === 'filled') {
+        setFill('fill');
+        return (<HomeFilled />);
+      }
+      else {
+        setFill('fill');
+        return (<HomeOutline />);
+      }
+      break;
+    case 'notifications':
+      if (varient === 'filled') {
+        setFill('fill');
+        return (<NotificationFilled />);
+      }
+      else {
+        setFill('fill');
+        return (<NotificationOutline />);
+      }
+      break;
+    case 'profile':
+      if (varient === 'filled') {
+        setFill('fill');
+        return (<ProfileFilled />);
+      }
+      else {
+        setFill('stroke');
+        return (<ProfileOutline />);
+      }
+      break;
+    case 'search':
+      if (varient === 'filled') {
+        setFill('fill');
+        return (<SearchFilled />);
+      }
+      else {
+        setFill('fill');
+        return (<SearchOutline />);
+      }
+      break;
+    default:
+      return (<p>?</p>)
+  }
 }
 
 export default function Icon({ name, varient, width, height, color }: IconProps) {
