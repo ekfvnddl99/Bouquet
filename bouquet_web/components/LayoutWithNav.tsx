@@ -50,8 +50,8 @@ const NavWrap = styled.div`
   }
 
   @media (min-width: 1280px) {
-    width: 170px;
-    margin-right: 810px;
+    width: 980px;
+    padding-right: 810px;
     z-index: 10;
   }
 `;
