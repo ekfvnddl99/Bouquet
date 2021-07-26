@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 // import icons - Sort alphabetically
@@ -22,23 +21,22 @@ type IconProps = {
   color?: string;
 }
 
-type InsideIconProps = {
-  name: string;
-  varient: string;
-  setFill: Function;
+interface IconWrapProps {
+  width: number;
+  height: number;
 }
+
+const IconWrap = styled.div<IconWrapProps>`
+  width: ${props => props.width}px;
+  height: ${props => props.height}px;
+`;
 
 interface IconStyleProps {
   fill: string;
-  width: number;
-  height: number;
   color: string;
 }
 
-const IconWrap = styled.div<IconStyleProps>`
-  width: ${props => props.width}px;
-  height: ${props => props.height}px;
-
+const InsideIconWrap = styled.div<IconStyleProps>`
   path {
     ${props => (props.fill !== 'stroke' ? `fill: ${props.color}` : '')};
     ${props => (props.fill !== 'fill' ? `stroke: ${props.color}` : '')};
@@ -50,74 +48,87 @@ const IconWrap = styled.div<IconStyleProps>`
   }
 `;
 
-function InsideIcon({ name, varient, setFill }: InsideIconProps) {
+type InsideIconProps = {
+  name: string;
+  varient: string;
+  color: string;
+}
+
+function InsideIcon({ name, varient, color }: InsideIconProps) {
+  let icon = <p>?</p>;
+  let fill = 'fill';
   switch (name) {
     case 'crew':
       if (varient === 'filled') {
-        setFill('fill');
-        return (<CrewFilled />);
+        fill = 'fill';
+        icon = <CrewFilled />;
       }
       else {
-        setFill('stroke');
-        return (<CrewOutline />);
+        fill = 'stroke';
+        icon = <CrewOutline />;
       }
       break;
     case 'home':
       if (varient === 'filled') {
-        setFill('fill');
-        return (<HomeFilled />);
+        fill = 'fill';
+        icon = <HomeFilled />;
       }
       else {
-        setFill('fill');
-        return (<HomeOutline />);
+        fill = 'fill';
+        icon = <HomeOutline />;
       }
       break;
     case 'notifications':
       if (varient === 'filled') {
-        setFill('fill');
-        return (<NotificationFilled />);
+        fill = 'fill';
+        icon = <NotificationFilled />;
       }
       else {
-        setFill('fill');
-        return (<NotificationOutline />);
+        fill = 'fill';
+        icon = <NotificationOutline />;
       }
       break;
     case 'profile':
       if (varient === 'filled') {
-        setFill('fill');
-        return (<ProfileFilled />);
+        fill = 'fill';
+        icon = <ProfileFilled />;
       }
       else {
-        setFill('stroke');
-        return (<ProfileOutline />);
+        fill = 'stroke';
+        icon = <ProfileOutline />;
       }
       break;
     case 'search':
       if (varient === 'filled') {
-        setFill('fill');
-        return (<SearchFilled />);
+        fill = 'fill';
+        icon = <SearchFilled />;
       }
       else {
-        setFill('fill');
-        return (<SearchOutline />);
+        fill = 'fill';
+        icon = <SearchOutline />;
       }
       break;
-    default:
-      return (<p>?</p>)
   }
+
+  const Icon = () => icon;
+  
+  return (
+    <InsideIconWrap fill={fill} color={color}>
+      <Icon />
+    </InsideIconWrap>
+  )
 }
 
 export default function Icon({ name, varient, width, height, color }: IconProps) {
-  const [fill, setFill] = useState('');
-
   return (
     <IconWrap
-      fill={fill}
       width={width ? width : 24}
       height={height ? height: 24}
-      color={color ? color : colors.grayscale.black}
     >
-      <InsideIcon name={name} varient={varient ? varient : ''} setFill={setFill} />
+      <InsideIcon
+        name={name}
+        varient={varient ? varient : ''}
+        color={color ? color : colors.grayscale.black}/>
     </IconWrap>
   )
 }
