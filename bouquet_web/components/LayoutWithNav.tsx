@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 
 import NavigationBar from './NavigationBar';
@@ -8,8 +9,6 @@ import { colors } from '../styles/Colors';
 import { motion } from 'framer-motion';
 
 const Wrap = styled.div`
-  height: 100%;
-
   display: flex;
   @media (min-width: 320px) and (max-width: 519px) {
     flex-direction: column;
@@ -133,6 +132,18 @@ const Gray0 = styled.div`
   background-color: ${colors.grayscale.gray0};
 `;
 
+const InWrap = styled.div`
+  @media (min-width: 320px) and (max-width: 519px) {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  @media (min-width: 520px) {
+    width: 100%;
+    max-width: 500px;
+  }
+`;
+
 type Props = {
   setScrolled?: Function;
   topElement?: React.ReactNode;
@@ -153,9 +164,15 @@ export default function LayoutWithNav({ setScrolled, topElement, children }: Pro
             type: "spring",
             stiffness: 100,
           }}
-          style={{ padding: "20px 30px 20px 30px" }}
+          style={{
+            padding: "20px 30px 20px 30px",
+            display: "flex",
+            justifyContent: "center",
+          }}
         >
-          {children}
+          <InWrap>
+            {children}
+          </InWrap>
         </motion.div>
       </ContentWrap>
       <NavWrap>

@@ -26,4 +26,10 @@ export const GlobalStyle = createGlobalStyle`
   span, p {
     color: ${colors.grayscale.black};
   }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
 `;
