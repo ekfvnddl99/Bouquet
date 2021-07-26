@@ -11,6 +11,8 @@ import ProfileFilled from '../public/icons/Profile_Filled.svg';
 import ProfileOutline from '../public/icons/Profile_Outline.svg';
 import SearchFilled from '../public/icons/Search_Filled.svg';
 import SearchOutline from '../public/icons/Search_Outline.svg';
+import SunshineFilled from '../public/icons/Sunshine_Filled.svg';
+import SunshineOutline from '../public/icons/Sunshine_Outline.svg';
 import { colors } from '../styles/Colors';
 
 type IconProps = {
@@ -21,40 +23,33 @@ type IconProps = {
   color?: string;
 }
 
-interface IconWrapProps {
+interface IconStyleProps {
   width: number;
   height: number;
-}
-
-const IconWrap = styled.div<IconWrapProps>`
-  width: ${props => props.width}px;
-  height: ${props => props.height}px;
-`;
-
-interface IconStyleProps {
   fill: string;
   color: string;
 }
 
-const InsideIconWrap = styled.div<IconStyleProps>`
+const IconWrap = styled.div<IconStyleProps>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: ${props => props.width}px;
+  height: ${props => props.height}px;
+
   path {
     ${props => (props.fill !== 'stroke' ? `fill: ${props.color}` : '')};
     ${props => (props.fill !== 'fill' ? `stroke: ${props.color}` : '')};
   }
 
   svg {
-    width: 100%;
-    height: 100%;
+    width: ${props => props.width}px;
+    height: ${props => props.height}px;
   }
 `;
 
-type InsideIconProps = {
-  name: string;
-  varient: string;
-  color: string;
-}
-
-function InsideIcon({ name, varient, color }: InsideIconProps) {
+export default function Icon({ name, varient, width, height, color }: IconProps) {
   let icon = <p>?</p>;
   let fill = 'fill';
   switch (name) {
@@ -108,27 +103,26 @@ function InsideIcon({ name, varient, color }: InsideIconProps) {
         icon = <SearchOutline />;
       }
       break;
+    case 'sunshine':
+      if (varient === 'filled') {
+        fill = 'fill';
+        icon = <SunshineFilled viewBox="0 0 24 24"/>;
+      }
+      else {
+        fill = 'stroke';
+        icon = <SunshineOutline viewBox="0 0 24 24" />;
+      }
   }
 
   const Icon = () => icon;
   
   return (
-    <InsideIconWrap fill={fill} color={color}>
-      <Icon />
-    </InsideIconWrap>
-  )
-}
-
-export default function Icon({ name, varient, width, height, color }: IconProps) {
-  return (
     <IconWrap
+      fill={fill}
+      color={color ? color : colors.grayscale.black}
       width={width ? width : 24}
-      height={height ? height: 24}
-    >
-      <InsideIcon
-        name={name}
-        varient={varient ? varient : ''}
-        color={color ? color : colors.grayscale.black}/>
+      height={height ? height : 24}>
+      <Icon />
     </IconWrap>
   )
 }

@@ -6,6 +6,7 @@ import { useMediaQuery } from 'react-responsive';
 
 import LayoutWithNav from '../components/LayoutWithNav';
 import { ProfilePic } from '../components/ProfilePic';
+import PostMini from '../components/PostMini';
 
 import { characterState } from '../features/atoms';
 
@@ -84,6 +85,64 @@ export default function Home() {
     });
   }, [setCharacter]);
 
+  const exampleData = [
+    {
+      character: character,
+      text: 'Lorem ipsum dolor sit amet',
+      sunshine: 2500,
+    },
+    {
+      character: character,
+      text: 'Lorem ipsum dolor sit amet',
+      sunshine: 2500,
+    },
+    {
+      character: character,
+      text: 'Lorem ipsum dolor sit amet',
+      sunshine: 2500,
+    },
+    {
+      character: character,
+      text: 'Lorem ipsum dolor sit amet',
+      sunshine: 2500,
+    },
+    {
+      character: character,
+      text: 'Lorem ipsum dolor sit amet',
+      sunshine: 2500,
+    },
+    {
+      character: character,
+      text: 'Lorem ipsum dolor sit amet',
+      sunshine: 2500,
+    },
+    {
+      character: character,
+      text: 'Lorem ipsum dolor sit amet',
+      sunshine: 2500,
+    },
+    {
+      character: character,
+      text: 'Lorem ipsum dolor sit amet',
+      sunshine: 2500,
+    },
+    {
+      character: character,
+      text: 'Lorem ipsum dolor sit amet',
+      sunshine: 2500,
+    },
+    {
+      character: character,
+      text: 'Lorem ipsum dolor sit amet',
+      sunshine: 2500,
+    },
+    {
+      character: character,
+      text: 'Lorem ipsum dolor sit amet',
+      sunshine: 2500,
+    },
+  ]
+
   return (
     <Background>
       <Head>
@@ -96,33 +155,14 @@ export default function Home() {
         topElement={<Title scrolled={scrolled} />}
         setScrolled={setScrolled}
       >
-        <p>b</p>
-        <p>b</p>
-        <p>b</p>
-        <p>b</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>b</p>
-        <p>b</p>
-        <p>b</p>
+        {exampleData.map((data, idx) => (
+          <PostMini
+            character={data.character}
+            text={data.text}
+            sunshine={data.sunshine}
+            key={idx}
+          />
+        ))}
       </LayoutWithNav>
     </Background>
   )

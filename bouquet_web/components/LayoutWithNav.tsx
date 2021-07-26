@@ -79,6 +79,7 @@ const RightWrap = styled.div`
 
 const ContentWrap = styled.div`
   z-index: 20;
+
   @media (min-width: 320px) and (max-width: 519px) {
     width: 100%;
     padding-bottom: 60px;
@@ -149,6 +150,7 @@ export default function LayoutWithNav({ setScrolled, topElement, children }: Pro
             type: "spring",
             stiffness: 100,
           }}
+          style={{ padding: "20px 30px 20px 30px" }}
         >
           {children}
         </motion.div>
