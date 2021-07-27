@@ -7,19 +7,19 @@ import * as text from '../../styles/styled-components/text';
 import CommentSvg from '../../assets/Comment';
 
 
-function commentName(sun : number){
+function commentName(comment : number){
   let ans;
-  if(sun>=1000){
-      sun=sun/1000;
-      ans = sun + 'K';
+  if(comment>=1000){
+    comment/=1000;
+    ans = comment + 'K';
   }
-  else ans=sun;
+  else ans=comment;
   return ans;
 }
 
 export default function CommentButton({comment} : {comment : number}){
   return(
-    <area.RowArea top={0}>
+    <area.RowArea>
       <CommentSvg w='20' h='20'/>
       <text.Body3 color={colors.primary}>{commentName(comment)}</text.Body3>
     </area.RowArea>

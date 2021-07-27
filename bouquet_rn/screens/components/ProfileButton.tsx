@@ -5,12 +5,12 @@ import * as area from '../../styles/styled-components/area';
 import * as elses from '../../styles/styled-components/elses';
 import * as text from '../../styles/styled-components/text';
 
-export default function ProfileAButton({name} : {name : string}){
+export default function ProfileButton({diameter} : {diameter:number}){
   return(
-    <area.RowArea top={0}>
-      <elses.Circle radius={30} vertical={0}/>
+    <area.RowArea>
+      <elses.CircleImg diameter={diameter} source={require('../../assets/img.jpg')}/>
       <View style={{marginLeft:8}}/>
-      <text.Body2B color={colors.black}>{name}</text.Body2B>
+      <text.Body2B color={colors.black}>현지</text.Body2B>
     </area.RowArea>
   );
 }

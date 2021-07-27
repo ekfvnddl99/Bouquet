@@ -22,10 +22,17 @@ import ChaGenerationScreenFour from './characterGeneration/ChaGenerationScreenFo
 import LoginScreen from './LoginScreen';
 
 import HomeScreen from './main/Home/HomeScreen';
+
 import SearchScreen from './main/Search/SearchScreen';
+import EpisodeScreen from './common/EpisodeScreen';
+
 import CrewScreen from './main/Crew/CrewScreen';
+
 import NotificationScreen from './main/Notification/NotificationScreen';
-import ProfileScreen from './main/Profile/ProfileScreen';
+
+import ProfileOverviewScreen from './main/Profile/ProfileOverviewScreen';
+import ProfileDetailScreen from './main/Profile/ProfileDetailScreen';
+
 
 // icons
 import HomeSvg from '../assets/Home';
@@ -114,6 +121,10 @@ function SearchStackNavigator(){
         name="Search" 
         component={SearchScreen}
         options={{headerShown : false}}/>
+      <SearchStack.Screen 
+        name="Episode" 
+        component={EpisodeScreen}
+        options={{headerShown : false}}/>
     </SearchStack.Navigator>
   );
 }
@@ -148,10 +159,14 @@ const ProfileStack = createStackNavigator<Types.ProfileStackParam>();
 function ProfileStackNavigator(){
   return(
     <ProfileStack.Navigator
-      initialRouteName="Profile">
+      initialRouteName="ProfileOverview">
       <ProfileStack.Screen 
-        name="Profile"
-        component={ProfileScreen}
+        name="ProfileOverview"
+        component={ProfileOverviewScreen}
+        options={{headerShown : false}}/>
+        <ProfileStack.Screen 
+        name="ProfileDetail"
+        component={ProfileDetailScreen}
         options={{headerShown : false}}/>
     </ProfileStack.Navigator>
   );

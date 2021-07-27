@@ -1,7 +1,4 @@
 import React from 'react';
-import {
-    View,
-} from 'react-native';
 import { colors } from '../../styles/colors';
 import * as elses from '../../styles/styled-components/elses';
 import * as text from '../../styles/styled-components/text';

@@ -40,13 +40,13 @@ export default function RegisterScreenOne({navigation} : RegisterProps){
   return(
     <area.Container>
       <area.ContainerBlank20>
-        <ProgressArea navigation={navigation} title="메일로 회원가입" step={1}/>
+        <ProgressArea navigation={navigation} title="메일로 회원가입" step={1} intro={null}/>
 
         <area.FormArea height='44'>
           <TextInput style={{flex: 1}} placeholder='메일'/>
-          <button.BlackButton onPress={()=>setCh(1)}>
+          <button.LineButton color={colors.black} height={22} paddingH={12} paddingV={4} onPress={()=>setCh(1)}>
             <text.Button3 color={colors.black}>메일 인증</text.Button3>
-          </button.BlackButton>
+          </button.LineButton>
         </area.FormArea>
         
         {CheckForm(ch, setNum)}
@@ -56,9 +56,11 @@ export default function RegisterScreenOne({navigation} : RegisterProps){
             <text.Caption color={colors.gray6}>이전 페이지로 돌아가면 소셜 계정으로도 가입할 수 있어요!</text.Caption>
           </View>
 
-          <ConditionButton active={1} press={goNext} content="메일로 계속하기"/>
+          <View style={{marginVertical:16}}>
+            <ConditionButton active={1} press={goNext} content="메일로 계속하기" paddingH={0} paddingV={14}/>
+          </View>
 
-          <area.TextBtnArea>
+          <area.TextBtnArea style={{marginBottom:16}}>
               <text.Body2R color={colors.black}>계정이 이미 있다면? </text.Body2R>
               <PrimaryTextButton press={goLogin} content="로그인" level={3}/>
           </area.TextBtnArea>

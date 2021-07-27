@@ -52,7 +52,7 @@ export default function WelcomeScreen({navigation} : WelcomeProps) {
             <LoginButton sentence="Apple로 계속하기" tag={<AppleSvg w='15' h='15'/>} press={GoogleSignInAsync}/>
         </area.BottomArea>
 
-        <area.TextBtnArea>
+        <area.TextBtnArea style={{marginTop:15}}>
             <text.Button2R color={colors.black}>또는 </text.Button2R>
             <PrimaryTextButton press={goLogin} content="로그인" level={1}/>
         </area.TextBtnArea>

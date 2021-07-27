@@ -11,6 +11,9 @@ import {colors} from '../../../styles/colors'
 import * as area from '../../../styles/styled-components/area';
 import * as text from '../../../styles/styled-components/text';
 
+// props & logic
+import type {SearchProps} from '../../../utils/types';
+
 // components
 import RecentSearchItem from '../../components/RecentSearchItem';
 import CharacterItem from '../../components/CharacterItem';
@@ -20,12 +23,10 @@ import EpisodeMiniItem from '../../components/EpisodeMiniItem';
 // icons
 import SearchSvg from '../../../assets/Search';
 
-export default function SearchScreen(){
+export default function SearchScreen({navigation} : SearchProps){
     // dummy data - 서버에서 불러와야 함.
-    let oneData=['김', '현', '지'];
-    let twoData=[{name:'김', introduction:'a'},{name:'김', introduction:'b'},{name:'김', introduction:'c'}];
-    let threeData=[{name:'김', time:30,content:'배', sun:1400},{name:'현', time:60,content:'고', sun:14000},{name:'지', time:2657,content:'파', sun:400}];
-    let fourData=[{name:'김', title:'배'},{name:'현', title:'고'},{name:'지', title:'파'}]
+    let oneData=['김guswlej', '현', '지', '현', '지', '현', '지', '현', '지', '현', '지', '현', '지'];
+    let Data=[1,2,3,4,5,6,7,8,9];
 
     return(
         <area.Container>
@@ -34,18 +35,17 @@ export default function SearchScreen(){
 
           <area.ContainerBlank30>
             <View style={styles.searchView}>
-              <View style={{marginHorizontal: 10}}><SearchSvg w='15' h='15'/></View>
-              <View style={{flex:1}}>
-                <TextInput placeholder="무엇이 궁금한가요?"/>
-              </View>
+              <View style={{marginLeft: 18, marginRight:10}}><SearchSvg w='15' h='15'/></View>
+              <View style={{flex:1}}><TextInput placeholder="무엇이 궁금한가요?"/></View>
             </View>
           </area.ContainerBlank30>
 
           <View style={{marginLeft : 30}}>
 
-              <View style={{marginVertical:20}}>
+              <View style={{marginTop:30}}>
                 <text.Subtitle3 color={colors.black}>최근 검색어</text.Subtitle3>
                 <FlatList
+                  style={{marginTop:12}}
                   data={oneData}
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
@@ -57,42 +57,45 @@ export default function SearchScreen(){
                 </FlatList>
               </View>
 
-              <View style={{marginVertical:20}}>
+              <View style={{marginTop:40}}>
                 <text.Subtitle3 color={colors.black}>인기 부캐</text.Subtitle3>
                 <FlatList
-                  data={twoData}
+                  style={{marginTop:12}}
+                  data={Data}
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
                   renderItem={(obj)=>{
                     return(
-                      <CharacterItem name={obj.item.name} introduction={obj.item.introduction}/>
+                      <CharacterItem/>
                     ); 
                   }}></FlatList>
               </View>
 
-              <View style={{marginVertical:20}}>
+              <View style={{marginTop:40}}>
                 <text.Subtitle3 color={colors.black}>인기 에피소드</text.Subtitle3>
                 <FlatList
-                  data={fourData}
+                  style={{marginTop:12}}
+                  data={Data}
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
                   renderItem={(obj)=>{
                     return(
-                      <EpisodeMiniItem name={obj.item.name} title={obj.item.title}/>
+                      <EpisodeMiniItem navigation={navigation}/>
                     ); 
                   }}></FlatList>
               </View>
 
           </View>
 
-          <area.ContainerBlank30>
+          <area.ContainerBlank30 style={{marginTop:10}}>
             <text.Subtitle3 color={colors.black}>인기 게시물</text.Subtitle3>
             <FlatList
-              data={threeData}
+              style={{marginTop:12}}
+              data={Data}
               showsVerticalScrollIndicator={false}
               renderItem={(obj)=>{
                 return(
-                  <PostingItem name={obj.item.name} time={obj.item.time} content={obj.item.content} sun={obj.item.sun}/>
+                  <PostingItem/>
                 ); 
               }}></FlatList>
           </area.ContainerBlank30>
@@ -103,7 +106,8 @@ export default function SearchScreen(){
 
 const styles = StyleSheet.create({
     searchView: {
-        height:50,
+        height:40,
+        paddingVertical:10,
         backgroundColor: colors.white,
         flexDirection:'row',
         alignItems:'center',

@@ -27,19 +27,19 @@ export default function ChaGenerationScreenFour({navigation} : ChaGenerationProp
   return(
     <area.Container>
       <area.ContainerBlank20>
-        <ProgressArea navigation={navigation} title="캐릭터 생성 완료!" step={4}/>
+        <ProgressArea navigation={navigation} title="캐릭터 생성 완료!" step={4} intro={null}/>
       </area.ContainerBlank20>
 
       <View style={styles.middleArea}>
-        <elses.Circle radius={120} vertical={16}/>
+        <elses.CircleImg diameter={120} source={require('../../assets/img.jpg')} style={{marginBottom:16}}/>
         <NameNText name={name} sub="님,"/>
         <text.Subtitle2R color={colors.black}>또 다른 모습으로</text.Subtitle2R>
         <text.Subtitle2R color={colors.black}>피어날 준비가 되었어요!</text.Subtitle2R>
       </View>
 
       <area.ContainerBlank20>
-        <area.BottomArea>
-          <ConditionButton active={1} press={goNext} content="시작"/>
+        <area.BottomArea style={{marginBottom:16}}>
+          <ConditionButton active={1} press={goNext} content="시작" paddingH={0} paddingV={14}/>
         </area.BottomArea>
       </area.ContainerBlank20>
     </area.Container>

@@ -32,19 +32,18 @@ export default function ChaGenerationScreenTwo({navigation} : ChaGenerationProps
   return(
     <area.Container>
       <area.ContainerBlank20>
-        <ProgressArea navigation={navigation} title="이 캐릭터는 누구인가요?" step={2}/>
-        <text.Caption color={colors.gray6}>이름, 직업 등 이 캐릭터의 기본 정보를 정해 보아요.</text.Caption>
+        <ProgressArea navigation={navigation} title="이 캐릭터는 누구인가요?" step={2} intro="이름, 직업 등 이 캐릭터의 기본 정보를 정해 보아요."/>
 
         <input.FormInput height='44' placeholder='캐릭터 이름 (필수)' onChangeText={()=>{}}/>
-        <ConditionText condition=" 한글 10글자, 알파벳 20글자 이하" active={PWCheck(pw)}/>
-        <ConditionText condition=" 특수문자는 _(언더바), -(하이픈), 띄어쓰기만 사용" active={PWCheck(pw)}/>
-        <ConditionText condition=" 중복되지 않는 이름" active={PWCheck(pw)}/>
-        <input.FormInput height='44' placeholder='생년월일' onChangeText={()=>{}}/>
-        <input.FormInput height='44' placeholder='직업' onChangeText={()=>{}}/>
-        <input.FormInput height='44' placeholder='국적' onChangeText={()=>{}}/>
+        <ConditionText content=" 한글 10글자, 알파벳 20글자 이하" active={PWCheck(pw)}/>
+        <ConditionText content=" 특수문자는 _(언더바), -(하이픈), 띄어쓰기만 사용" active={PWCheck(pw)}/>
+        <ConditionText content=" 중복되지 않는 이름" active={PWCheck(pw)}/>
+        <input.FormInput height='44' placeholder='생년월일' onChangeText={()=>{}} style={{marginTop:16}}/>
+        <input.FormInput height='44' placeholder='직업' onChangeText={()=>{}} style={{marginTop:16}}/>
+        <input.FormInput height='44' placeholder='국적' onChangeText={()=>{}} style={{marginTop:16}}/>
 
-        <area.BottomArea>
-          <ConditionButton active={1} press={goNext} content="세부 소개 입력"/>
+        <area.BottomArea style={{marginBottom:16}}>
+          <ConditionButton active={1} press={goNext} content="세부 소개 입력" paddingH={0} paddingV={14}/>
         </area.BottomArea>
       </area.ContainerBlank20>
     </area.Container>

@@ -1,10 +1,11 @@
-import React, {Component, useState} from 'react';
+import React, {useRef} from 'react';
 import {
     View,
-    Text,
-    Button,
-    StyleSheet,
+    Animated,
     FlatList,
+    ScrollView,
+    Platform,
+    StyleSheet
 } from 'react-native';
 import {colors} from '../../../styles/colors';
 import * as area from '../../../styles/styled-components/area';
@@ -15,29 +16,110 @@ import * as elses from '../../../styles/styled-components/elses';
 import NotificationItem from '../../components/NotificationItem';
 import NameNText from '../../components/NameNText';
 
+const HEADER_MAX_HEIGHT = 94;
+const HEADER_MIN_HEIGHT = 60;
+const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
+
 export default function NotificationScreen(){
     // dummy data - 서버에서 불러와야 함
-    const [name, setName] = useState('단호좌현지');
-    let data=['고광서','김현지','오태진'];
+    let data=[1,2,3,4,5,6,7,8,9, 10];
+
+    const scroll = useRef(new Animated.Value(0)).current;
+    const ScaleImg = scroll.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE],
+      outputRange: [1, 0.8],
+      extrapolate: 'clamp',
+    });
+    const TranslateImg = scroll.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE],
+      outputRange: [0, -10],
+      extrapolate: 'clamp',
+    });
+    const OpacityTitle = scroll.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE / 2,HEADER_SCROLL_DISTANCE],
+      outputRange: [1, 0, -3],
+      extrapolate: 'clamp',
+    });
+    const OpacityHeader=scroll.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE/2, HEADER_SCROLL_DISTANCE],
+      outputRange: [0, 0.5, 1],
+      extrapolate: 'clamp',
+    });
 
     return(
       <area.Container>
-        <area.ContainerBlank30>
-          <area.RowArea top={30}>
-            <View style={{flex:1}}>
-              <NameNText name={name} sub="의"/>
-              <text.Subtitle2R color={colors.black}>알림</text.Subtitle2R>
-            </View>
-            <elses.Circle radius={40} vertical={0}/>
-          </area.RowArea>
-            <View>
-              {data.length===0 ? 
-              <area.RowArea top={10}><text.Caption color={colors.gray6}>이제 확인할 알림이 없어요!</text.Caption></area.RowArea> : 
-              <View style={{marginTop: 30}}><FlatList data={data} renderItem={(obj)=>{
-                  return(<NotificationItem content={obj.item} time={2780}/>);}}>
-              </FlatList></View>}
-            </View>
-        </area.ContainerBlank30>
+        <Animated.View
+          pointerEvents="none"
+          style={[styles.header,{ opacity: OpacityHeader }]}>
+        </Animated.View>
+        <area.RowArea style={{marginHorizontal:30, marginTop:30}}>
+          <Animated.View style={[styles.a, {opacity : OpacityTitle}]}>
+            <NameNText name="eksghwhk" sub="의"/>
+            <text.Subtitle2R color={colors.black}>알림</text.Subtitle2R>
+          </Animated.View>
+          <Animated.View style={[styles.b, {transform:[{scale:ScaleImg}, {translateY: TranslateImg}]}]}>
+            <elses.CircleImg diameter={40} source={require('../../../assets/img.jpg')}/>
+          </Animated.View>
+        </area.RowArea>
+        <Animated.ScrollView
+          style={{marginTop: HEADER_MIN_HEIGHT, marginHorizontal:30}}
+          showsVerticalScrollIndicator={false}
+          scrollEventThrottle={1}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { y: scroll } } }],
+            { useNativeDriver: true })}>
+          <View style={{paddingTop:20}}/>
+          {data.length===0 ? 
+          <View style={{alignItems:'center'}}><text.Caption color={colors.gray6}>이제 확인할 알림이 없어요!</text.Caption></View> : 
+          <FlatList data={data} renderItem={(obj)=>{
+            return(<NotificationItem/>);}}>
+        </FlatList>}
+        </Animated.ScrollView>
       </area.Container>
     )
 }
+
+const styles=StyleSheet.create({
+  a:{
+    position:'absolute',
+    resizeMode:'cover',
+    backgroundColor:'transparent',
+    borderRadius:15,
+    alignItems:'flex-start',
+    justifyContent:'flex-start',
+    top:0,
+    left:0,
+  },
+  b:{
+    position:'absolute',
+    resizeMode:'cover',
+    backgroundColor:'transparent',
+    borderRadius:15,
+    alignItems:'center',
+    justifyContent:'flex-start',
+    right:0,
+    top:0,
+  },
+  c: {
+    position:'absolute',
+    resizeMode:'cover',
+    backgroundColor:colors.gray0,
+    borderRadius:15,
+    alignItems:'center',
+    justifyContent:'flex-start',
+    right:0,
+    top:0,
+    left: 0,
+    height: HEADER_MAX_HEIGHT,
+  },
+  header: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top:0,
+    backgroundColor: colors.white,
+    overflow: 'hidden',
+    height: HEADER_MIN_HEIGHT+(Platform.OS === 'ios' ? 38 : 28)+30,
+    borderRadius:15
+  },
+})

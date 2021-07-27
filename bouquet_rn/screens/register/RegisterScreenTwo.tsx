@@ -1,7 +1,8 @@
 import React, {Component, useState} from 'react';
 import {
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  View
 } from 'react-native';
 import * as area from '../../styles/styled-components/area';
 
@@ -39,7 +40,7 @@ export default function RegisterScreenTwo({navigation} : RegisterProps){
   return(
     <area.Container>
       <area.ContainerBlank20>
-        <ProgressArea navigation={navigation} title="비밀번호 설정" step={2}/>
+        <ProgressArea navigation={navigation} title="비밀번호 설정" step={2} intro={null}/>
 
         <area.FormArea height='44'>
           <TextInput style={{flex: 1}} placeholder='비밀번호' onChangeText={(pw)=>setPW(pw)}/>
@@ -48,10 +49,10 @@ export default function RegisterScreenTwo({navigation} : RegisterProps){
           </TouchableOpacity>
         </area.FormArea>
 
-        <ConditionText condition=" 8글자 이상, 32글자 이하" active={PWCheck(pw)}/>
+        <ConditionText content=" 8글자 이상, 32글자 이하" active={PWCheck(pw)}/>
 
-        <area.BottomArea>
-          <ConditionButton active={1} press={goNext} content="계정 정보 입력"/>
+        <area.BottomArea style={{marginBottom:16}}>
+          <ConditionButton active={1} press={goNext} content="계정 정보 입력" paddingH={0} paddingV={14}/>
         </area.BottomArea>
       </area.ContainerBlank20>
     </area.Container>

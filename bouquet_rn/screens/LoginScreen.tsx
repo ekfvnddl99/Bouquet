@@ -18,6 +18,7 @@ import AppleSvg from '../assets/Apple';
 // props & logic
 import type {WelcomeProps} from '../utils/types'
 import GoogleSignInAsync from './logics/GoogleLogin';
+import AppleSignInAsync from './logics/AppleLogin';
 
 // components
 import LoginButton from './components/LoginButton';
@@ -55,21 +56,21 @@ export default function LoginScreen({navigation} : WelcomeProps){
     <area.Container>
       <area.ContainerBlank20>
         <BackButton navigation={navigation}/>
-
+        <View style={{marginTop:30}}/>
         <text.Subtitle1 color={colors.black}>로그인</text.Subtitle1>
-
+        <View style={{marginTop:32}}/>
         <input.FormInput height='44' placeholder='메일' onChangeText={(mail)=>setMail(mail)}/>
-        <area.FormArea height='44'>
+        <area.FormArea height='44' style={{marginTop:16}}>
           <TextInput style={{flex: 1}} placeholder='비밀번호'/>
           <TouchableOpacity onPress={()=>{setEye(eye*(-1))}}>
               {EyeSelect(eye)}
           </TouchableOpacity>
         </area.FormArea>
 
-        <View style={{alignItems:'center'}}>
-          <View><text.Caption color={colors.primary}>{CheckErr(mail)}</text.Caption></View>
+        <View style={{alignItems:'center', marginVertical:16}}>
+          <View style={{marginBottom:16}}><text.Caption color={colors.primary}>{CheckErr(mail)}</text.Caption></View>
 
-          <ConditionButton active={1} press={()=>{}} content="로그인"/>
+          <ConditionButton active={1} press={()=>{}} content="로그인" paddingH={40} paddingV={14}/>
         </View>
 
         <area.TextBtnArea>
@@ -79,10 +80,10 @@ export default function LoginScreen({navigation} : WelcomeProps){
 
         <area.BottomArea>
           <LoginButton sentence="Google로 계속하기" tag={<GoogleSvg w='15' h='15'/>} press={GoogleSignInAsync}/>
-          <LoginButton sentence="Apple로 계속하기" tag={<AppleSvg w='15' h='15'/>} press={GoogleSignInAsync}/>
+          <LoginButton sentence="Apple로 계속하기" tag={<AppleSvg w='15' h='15'/>} press={()=>{}}/>
         </area.BottomArea>
 
-        <area.TextBtnArea>
+        <area.TextBtnArea style={{marginTop:15}}>
           <text.Body2R color={colors.black}>계정이 없다면? </text.Body2R>
           <PrimaryTextButton press={goRegister} content="회원가입" level={1}/>
         </area.TextBtnArea>

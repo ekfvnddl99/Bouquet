@@ -11,7 +11,7 @@ import XSvg from '../../assets/X'
 
 export default function RecentSearchItem({content} : {content : string}){
     return(
-        <button.RecentSearchButton>
+        <button.RecentSearchButton activeOpacity={1}>
             <text.Caption color={colors.black}>{content}</text.Caption>
             <TouchableOpacity><XSvg w='25' h='25'/></TouchableOpacity>
         </button.RecentSearchButton>

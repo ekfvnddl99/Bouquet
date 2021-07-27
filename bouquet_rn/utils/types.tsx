@@ -37,6 +37,7 @@ export type HomeProps = StackScreenProps<HomeStackParam, "Home">;
 // search
 export type SearchStackParam = {
   Search : undefined,
+  Episode : undefined,
 }
 export type SearchProps = StackScreenProps<SearchStackParam, "Search">;
 
@@ -54,6 +55,7 @@ export type NotificationProps = StackScreenProps<NotificationStackParam, "Notifi
 
 // profile
 export type ProfileStackParam = {
-  Profile : undefined,
+  ProfileOverview : undefined,
+  ProfileDetail : undefined,
 }
-export type ProfileProps = StackScreenProps<ProfileStackParam, "Profile">;
+export type ProfileProps = StackScreenProps<ProfileStackParam, "ProfileOverview">;
