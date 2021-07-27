@@ -12,7 +12,7 @@ import { pickCharacter } from '../main/Profile/ProfileOverviewScreen';
 
 export default function ProfileChaItem({name, introduction, idx} : {name: string, introduction : string, idx:number}){
   return(
-    <button.MiniListButton color={colors.white} paddingH={18} paddingV={18} activeOpacity={1}>
+    <button.MiniListButton height={238} color={colors.white} paddingH={18} paddingV={18} style={{alignItems:'center'}} activeOpacity={1}>
         <elses.Circle diameter={100}/>
         <text.Body2B color={colors.black}>{name}</text.Body2B>
         <text.Caption color={colors.black}>{introduction}</text.Caption>

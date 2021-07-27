@@ -41,7 +41,8 @@ export const SocialButton =styled.TouchableOpacity`
   width: 100%;
 `
 
-interface ListBtnProps{
+interface MiniListBtnProps{
+  height:number,
   color : string,
   paddingH:number,
   paddingV:number,
@@ -49,19 +50,24 @@ interface ListBtnProps{
 export const MiniListButton = styled.TouchableOpacity`
   flex:1;
   width:150;
-  background-color: ${(props : ListBtnProps)=>props.color};
+  height: ${(props : MiniListBtnProps)=>props.height};
+  background-color: ${(props : MiniListBtnProps)=>props.color};
   border-radius: 10;
-  padding-horizontal: ${(props : ListBtnProps)=>props.paddingH};
-  padding-vertical: ${(props : ListBtnProps)=>props.paddingV};
+  padding-horizontal: ${(props : MiniListBtnProps)=>props.paddingH};
+  padding-vertical: ${(props : MiniListBtnProps)=>props.paddingV};
 `
-
+interface BigListBtnProps{
+  color : string,
+  paddingH:number,
+  paddingV:number,
+}
 export const BigListButton = styled.TouchableOpacity`
   flex:1;
   width:100%;
-  background-color: ${(props : ListBtnProps)=>props.color};
+  background-color: ${(props : BigListBtnProps)=>props.color};
   border-radius: 10;
-  padding-horizontal:${(props : ListBtnProps)=>props.paddingH};
-  padding-vertical: ${(props : ListBtnProps)=>props.paddingV};
+  padding-horizontal:${(props : BigListBtnProps)=>props.paddingH};
+  padding-vertical: ${(props : BigListBtnProps)=>props.paddingV};
   margin-bottom: 10;
 `
 
@@ -102,6 +108,7 @@ export const SunButton = styled.TouchableOpacity`
 
 export const ProfileDetailButton = styled.TouchableOpacity`
   width:100%;
+  border-radius:10;
   background-color: ${colors.white};
   padding-horizontal:20;
   padding-vertical:20;

@@ -8,10 +8,10 @@ import * as elses from '../../styles/styled-components/elses';
 
 export default function CharacterItem(){
     return(
-      <button.MiniListButton color={colors.white} paddingH={18} paddingV={18} style={{alignItems:'center', marginRight:10}} activeOpacity={1}>
-          <elses.CircleImg diameter={100} source={require('../../assets/img.jpg')}/>
-          <View style={{marginVertical:8}}><text.Body2B color={colors.black}>eksghgo</text.Body2B></View>
-          <text.Caption color={colors.black}>ws</text.Caption>
+      <button.MiniListButton height={200} color={colors.white} paddingH={18} paddingV={18} style={{alignItems:'center', marginRight:10}} activeOpacity={1}>
+        <elses.CircleImg diameter={100} source={require('../../assets/img.jpg')}/>
+        <View style={{marginVertical:8}}><text.Body2B color={colors.black}>eksghgo</text.Body2B></View>
+        <text.Caption color={colors.black} numberOfLines={2}>qwerqpjkgj;elkadfsdfaadfadsffatjdfasggeto</text.Caption>
       </button.MiniListButton>
     );
 }

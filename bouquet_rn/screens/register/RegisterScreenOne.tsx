@@ -20,7 +20,7 @@ import PrimaryTextButton from '../components/PrimaryTextButton';
 function CheckForm(ch : number, setter : any){
   if(ch===1){
     return(
-      <input.FormInput height='44' placeholder="메일 인증 번호" onChangeText={(num)=>setter(num)}/>
+      <input.FormInput height='44' placeholder="메일 인증 번호" onChangeText={(num)=>setter(num)} keyboardType='numeric'/>
     );
   }
 }
@@ -43,7 +43,7 @@ export default function RegisterScreenOne({navigation} : RegisterProps){
         <ProgressArea navigation={navigation} title="메일로 회원가입" step={1} intro={null}/>
 
         <area.FormArea height='44'>
-          <TextInput style={{flex: 1}} placeholder='메일'/>
+          <TextInput style={{flex: 1}} placeholder='메일' keyboardType='email-address'/>
           <button.LineButton color={colors.black} height={22} paddingH={12} paddingV={4} onPress={()=>setCh(1)}>
             <text.Button3 color={colors.black}>메일 인증</text.Button3>
           </button.LineButton>

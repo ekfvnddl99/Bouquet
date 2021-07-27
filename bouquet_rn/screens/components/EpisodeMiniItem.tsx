@@ -13,9 +13,9 @@ export default function EpisodeMiniItem({navigation} : {navigation : any}){
       navigation.navigate("Episode");
     }
     return(
-        <button.MiniListButton color={colors.white} paddingH={16} paddingV={16} style={{marginRight:10}} onPress={goEpisode} activeOpacity={1}>
+        <button.MiniListButton height={270} color={colors.white} paddingH={16} paddingV={16} style={{marginRight:10, justifyContent:'center'}} onPress={goEpisode} activeOpacity={1}>
           <View style={{alignItems:'center'}}><elses.RectangleImg width={118} height={153} source={require('../../assets/img.jpg')}/></View>
-          <View style={{marginTop:16, marginBottom:8}}><text.Subtitle3 color={colors.black}>Ejrwjs</text.Subtitle3></View>
+          <View style={{marginTop:16, marginBottom:8}}><text.Subtitle3 color={colors.black} numberOfLines={2}>Ejrwafsfsdfasdfadasfaafasdfdasfasjs</text.Subtitle3></View>
           <ProfileButton diameter={20}/>
         </button.MiniListButton>
     );

@@ -12,6 +12,9 @@ import * as area from '../../../styles/styled-components/area';
 import * as text from '../../../styles/styled-components/text';
 import * as elses from '../../../styles/styled-components/elses';
 
+// props & logic
+import { StatusBarHeight } from '../../logics/StatusbarHeight';
+
 // components
 import NotificationItem from '../../components/NotificationItem';
 import NameNText from '../../components/NameNText';
@@ -27,12 +30,18 @@ export default function NotificationScreen(){
     const scroll = useRef(new Animated.Value(0)).current;
     const ScaleImg = scroll.interpolate({
       inputRange: [0, HEADER_SCROLL_DISTANCE],
-      outputRange: [1, 0.8],
+      outputRange: [1, 0.7],
       extrapolate: 'clamp',
     });
-    const TranslateImg = scroll.interpolate({
+    const TranslateImgX = scroll.interpolate({
       inputRange: [0, HEADER_SCROLL_DISTANCE],
-      outputRange: [0, -10],
+      outputRange: [0, 14],
+      extrapolate: 'clamp',
+    });
+    const TranslateImgY = scroll.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE],
+      // 왜 -14-16이 되는 건지 잘 설명을 못하겠음...
+      outputRange: [0, -14-16],
       extrapolate: 'clamp',
     });
     const OpacityTitle = scroll.interpolate({
@@ -42,7 +51,7 @@ export default function NotificationScreen(){
     });
     const OpacityHeader=scroll.interpolate({
       inputRange: [0, HEADER_SCROLL_DISTANCE/2, HEADER_SCROLL_DISTANCE],
-      outputRange: [0, 0.5, 1],
+      outputRange: [0, 0, 1],
       extrapolate: 'clamp',
     });
 
@@ -52,23 +61,25 @@ export default function NotificationScreen(){
           pointerEvents="none"
           style={[styles.header,{ opacity: OpacityHeader }]}>
         </Animated.View>
+
         <area.RowArea style={{marginHorizontal:30, marginTop:30}}>
-          <Animated.View style={[styles.a, {opacity : OpacityTitle}]}>
+          <Animated.View style={[styles.a, {opacity : OpacityTitle}, {transform:[{translateY: TranslateImgY}]}]}>
             <NameNText name="eksghwhk" sub="의"/>
-            <text.Subtitle2R color={colors.black}>알림</text.Subtitle2R>
+            <text.Subtitle2R color={colors.black}>피드</text.Subtitle2R>
           </Animated.View>
-          <Animated.View style={[styles.b, {transform:[{scale:ScaleImg}, {translateY: TranslateImg}]}]}>
+          <Animated.View style={[styles.b, {transform:[{scale: ScaleImg},{translateY: TranslateImgY}, {translateX:TranslateImgX}]}]}>
             <elses.CircleImg diameter={40} source={require('../../../assets/img.jpg')}/>
           </Animated.View>
         </area.RowArea>
+
         <Animated.ScrollView
-          style={{marginTop: HEADER_MIN_HEIGHT, marginHorizontal:30}}
+          style={{marginTop: HEADER_MIN_HEIGHT-30, marginHorizontal:30}}
           showsVerticalScrollIndicator={false}
           scrollEventThrottle={1}
           onScroll={Animated.event(
             [{ nativeEvent: { contentOffset: { y: scroll } } }],
             { useNativeDriver: true })}>
-          <View style={{paddingTop:20}}/>
+          <View style={{paddingTop: 30+14}}/>
           {data.length===0 ? 
           <View style={{alignItems:'center'}}><text.Caption color={colors.gray6}>이제 확인할 알림이 없어요!</text.Caption></View> : 
           <FlatList data={data} renderItem={(obj)=>{
@@ -100,18 +111,6 @@ const styles=StyleSheet.create({
     right:0,
     top:0,
   },
-  c: {
-    position:'absolute',
-    resizeMode:'cover',
-    backgroundColor:colors.gray0,
-    borderRadius:15,
-    alignItems:'center',
-    justifyContent:'flex-start',
-    right:0,
-    top:0,
-    left: 0,
-    height: HEADER_MAX_HEIGHT,
-  },
   header: {
     position: 'absolute',
     left: 0,
@@ -119,7 +118,7 @@ const styles=StyleSheet.create({
     top:0,
     backgroundColor: colors.white,
     overflow: 'hidden',
-    height: HEADER_MIN_HEIGHT+(Platform.OS === 'ios' ? 38 : 28)+30,
+    height: HEADER_MIN_HEIGHT+StatusBarHeight,
     borderRadius:15
   },
 })

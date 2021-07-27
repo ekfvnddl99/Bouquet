@@ -1,5 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 // navigation tools
 import { NavigationContainer } from '@react-navigation/native';
@@ -84,14 +85,13 @@ function TabNavigator(){
         showLabel : false,
         safeAreaInsets : {bottom : 20},
         style : {
-          height : 60,
+          paddingVertical:18,
           borderColor : "#ffffff",
           borderTopWidth : 0,
         }
       }}>
       <Tab.Screen name="Home" component={HomeStackNavigator}/>
       <Tab.Screen name="Search" component={SearchStackNavigator}/>
-      <Tab.Screen name="Crew" component={CrewStackNavigator}/>
       <Tab.Screen name="Notification" component={NotificationStackNavigator}/>
       <Tab.Screen name="Profile" component={ProfileStackNavigator}/>
     </Tab.Navigator>
@@ -164,7 +164,7 @@ function ProfileStackNavigator(){
         name="ProfileOverview"
         component={ProfileOverviewScreen}
         options={{headerShown : false}}/>
-        <ProfileStack.Screen 
+      <ProfileStack.Screen 
         name="ProfileDetail"
         component={ProfileDetailScreen}
         options={{headerShown : false}}/>

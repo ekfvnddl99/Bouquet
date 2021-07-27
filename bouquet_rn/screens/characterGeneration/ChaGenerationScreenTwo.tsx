@@ -38,7 +38,7 @@ export default function ChaGenerationScreenTwo({navigation} : ChaGenerationProps
         <ConditionText content=" 한글 10글자, 알파벳 20글자 이하" active={PWCheck(pw)}/>
         <ConditionText content=" 특수문자는 _(언더바), -(하이픈), 띄어쓰기만 사용" active={PWCheck(pw)}/>
         <ConditionText content=" 중복되지 않는 이름" active={PWCheck(pw)}/>
-        <input.FormInput height='44' placeholder='생년월일' onChangeText={()=>{}} style={{marginTop:16}}/>
+        <input.FormInput height='44' placeholder='생년월일' onChangeText={()=>{}} style={{marginTop:16}} keyboardType='numeric'/>
         <input.FormInput height='44' placeholder='직업' onChangeText={()=>{}} style={{marginTop:16}}/>
         <input.FormInput height='44' placeholder='국적' onChangeText={()=>{}} style={{marginTop:16}}/>
 

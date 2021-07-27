@@ -59,9 +59,9 @@ export default function LoginScreen({navigation} : WelcomeProps){
         <View style={{marginTop:30}}/>
         <text.Subtitle1 color={colors.black}>로그인</text.Subtitle1>
         <View style={{marginTop:32}}/>
-        <input.FormInput height='44' placeholder='메일' onChangeText={(mail)=>setMail(mail)}/>
+        <input.FormInput height='44' placeholder='메일' onChangeText={(mail)=>setMail(mail)} keyboardType='email-address'/>
         <area.FormArea height='44' style={{marginTop:16}}>
-          <TextInput style={{flex: 1}} placeholder='비밀번호'/>
+          <TextInput style={{flex: 1}} placeholder='비밀번호' secureTextEntry={eye===1? true : false}/>
           <TouchableOpacity onPress={()=>{setEye(eye*(-1))}}>
               {EyeSelect(eye)}
           </TouchableOpacity>

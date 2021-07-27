@@ -18,8 +18,8 @@ function Inner(mini:number){
       <View style={{marginLeft:16}}>
         <text.Subtitle3 color={colors.black}>EjrqhRdl wjswod</text.Subtitle3>
         <area.RowArea style={{marginVertical:8}}>
-          <TagItem content="크루참여"/>
-          <TagItem content="전체공개"/>
+          <TagItem content="크루참여" active={1}/>
+          <TagItem content="전체공개" active={1}/>
         </area.RowArea>
         <ProfileButton diameter={30}/>
       </View>

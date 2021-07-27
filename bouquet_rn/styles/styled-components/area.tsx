@@ -2,6 +2,9 @@ import { Platform, StatusBar, StatusBarIOS } from 'react-native';
 import styled from 'styled-components/native';
 import {colors} from '../colors';
 
+// props & logic
+import { StatusBarHeight } from '../../screens/logics/StatusbarHeight';
+
 export const RowArea = styled.View`
   align-items:center;
   flex-direction:row;
@@ -49,7 +52,7 @@ export const FormArea = styled.View`
 export const Container = styled.SafeAreaView `
   flex:1;
   background-color: ${colors.gray0};
-  padding-top: ${Platform.OS === 'ios' ? 28. : StatusBar.currentHeight};
+  padding-top: ${StatusBarHeight};
 `
 
 export const ContainerBlank20 = styled.SafeAreaView `

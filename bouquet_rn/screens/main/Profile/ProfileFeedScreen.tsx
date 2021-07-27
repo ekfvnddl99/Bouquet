@@ -19,13 +19,12 @@ import PostingItem from '../../components/PostingItem';
 
 export default function NotificationScreen(){
   // dummy data - 서버에서 불러와야 함
-  const [name, setName] = useState('단호좌현지');
-  let threeData=[{name:'김', time:30,content:'배', sun:1400},{name:'현', time:60,content:'고', sun:14000},{name:'지', time:2657,content:'파', sun:400},{name:'김', time:30,content:'배', sun:1400},{name:'현', time:60,content:'고', sun:14000},{name:'지', time:2657,content:'파', sun:400},{name:'김', time:30,content:'배', sun:1400},{name:'현', time:60,content:'고', sun:14000},{name:'지', time:2657,content:'파', sun:400},{name:'김', time:30,content:'배', sun:1400},{name:'현', time:60,content:'고', sun:14000},{name:'지', time:2657,content:'파', sun:400}];
+  let threeData=[1,2,3,4,5,6,7,8,9];
 
   return(
-      <area.Container>
-        <area.RowArea>
-          <text.Body2R color={colors.black}>총</text.Body2R>
+      <View style={{marginTop:16}}>
+        <area.RowArea style={{marginBottom:12}}>
+          <text.Body2R color={colors.black}>총 </text.Body2R>
           <text.Body2B color={colors.black}>{threeData.length}</text.Body2B>
           <text.Body2R color={colors.black}>개</text.Body2R>
         </area.RowArea>
@@ -38,6 +37,6 @@ export default function NotificationScreen(){
               <PostingItem/>
             ); 
           }}></FlatList>
-      </area.Container>
+      </View>
   );
 }
