@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import LayoutWithNav from '../components/LayoutWithNav';
 import ProfileMini from '../components/ProfileMini';
 import SearchInput from '../components/SearchInput';
+import EpisodeMini from '../components/EpisodeMini';
 
 const Background = styled.div`
   width: 100%;
@@ -27,6 +28,7 @@ export default function Search() {
         topElement={<SearchInput scrolled={scrolled} />}
       >
         <ProfileMini varient="vertical" />
+        <EpisodeMini varient="vertical" />
         <p>a</p>
         <p>a</p>
         <p>a</p>
