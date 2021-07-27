@@ -7,7 +7,7 @@ import { colors } from '../styles/Colors';
 const TopWrap = styled.div<{scrolled: boolean}>`
   position: sticky;
   top: 0;
-  transition: 0.5s;
+  transition: 0.3s;
 
   display: flex;
   justify-content: center;

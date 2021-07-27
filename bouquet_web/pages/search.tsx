@@ -1,6 +1,10 @@
+import { useState } from 'react';
 import Head from 'next/head';
 import styled from 'styled-components';
+
 import LayoutWithNav from '../components/LayoutWithNav';
+import ProfileMini from '../components/ProfileMini';
+import SearchInput from '../components/SearchInput';
 
 const Background = styled.div`
   width: 100%;
@@ -8,6 +12,8 @@ const Background = styled.div`
 `;
 
 export default function Search() {
+  const [scrolled, setScrolled] = useState(false);
+
   return (
     <Background>
       <Head>
@@ -16,9 +22,32 @@ export default function Search() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <LayoutWithNav>
-        <p>Search</p>
-        <p>Test</p>
+      <LayoutWithNav
+        setScrolled={setScrolled}
+        topElement={<SearchInput scrolled={scrolled} />}
+      >
+        <ProfileMini varient="vertical" />
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
+        <p>a</p>
       </LayoutWithNav>
     </Background>
   )

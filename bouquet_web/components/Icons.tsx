@@ -96,11 +96,11 @@ export default function Icon({ name, varient, width, height, color }: IconProps)
     case 'search':
       if (varient === 'filled') {
         fill = 'fill';
-        icon = <SearchFilled />;
+        icon = <SearchFilled viewBox="0 0 24 24" />;
       }
       else {
         fill = 'fill';
-        icon = <SearchOutline />;
+        icon = <SearchOutline viewBox="0 0 24 24" />;
       }
       break;
     case 'sunshine':

@@ -4,6 +4,7 @@ import { colors } from '../styles/Colors';
 interface CircleProps {
   size: number;
   image?: string;
+  mediaQuery?: string;
 }
 
 const Circle = styled.div<CircleProps>`
@@ -18,15 +19,18 @@ const Circle = styled.div<CircleProps>`
   border-radius: ${props => props.size / 2}px;
 
   transition: 0.5s;
+
+  ${props => props.mediaQuery ? props.mediaQuery : ''}
 `;
 
 type ProfilePicProps = {
   size: number;
   image?: string;
+  mediaQuery?: string;
 }
 
-export function ProfilePic({ size, image }: ProfilePicProps) {
+export function ProfilePic({ size, image, mediaQuery }: ProfilePicProps) {
   return (
-    <Circle size={size} image={image}/>
+    <Circle size={size} image={image} mediaQuery={mediaQuery} />
   )
 }
