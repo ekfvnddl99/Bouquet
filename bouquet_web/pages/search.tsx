@@ -6,14 +6,80 @@ import LayoutWithNav from '../components/LayoutWithNav';
 import ProfileMini from '../components/ProfileMini';
 import SearchInput from '../components/SearchInput';
 import EpisodeMini from '../components/EpisodeMini';
+import Icon from '../components/Icons';
+import PostMini from '../components/PostMini';
+
+import { colors } from '../styles/Colors';
+import * as Text from '../styles/TextStyles';
 
 const Background = styled.div`
   width: 100%;
   height: 100%;
 `;
 
+const RecentTagWrap = styled.div`
+  height: 28px;
+  background-color: ${colors.grayscale.white};
+  padding: 2px 2px 2px 10px;
+  border-radius: 10px;
+
+  display: flex;
+  align-items: center;
+`;
+
+const TagText = styled(Text.Caption)`
+  white-space: nowrap;
+`;
+
+type RecentTagProps = {
+  content: string;
+}
+
+function RecentTag({ content }: RecentTagProps) {
+  return (
+    <RecentTagWrap>
+      <TagText>
+        {content}
+      </TagText>
+      <Icon name="X" width={24} height={24} />
+    </RecentTagWrap>
+  )
+}
+
+const Wrap = styled.div`
+  display: grid;
+  grid-template-columns: 100%;
+  grid-auto-flow: row;
+  gap: 40px;
+  padding-top: 10px;
+`;
+
+const TabWrap = styled.div`
+`;
+
+const HorizontalWrap = styled.div<{gap: number}>`
+  margin-top: 12px;
+  display: grid;
+  grid-auto-flow: column;
+  gap: ${props => props.gap}px;
+  overflow-x: scroll;
+`;
+
+const VerticalWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 12px;
+`;
+
 export default function Search() {
   const [scrolled, setScrolled] = useState(false);
+
+  const exampleCharacter = {
+    isLogined: true,
+    characterName: '단호좌현지',
+    caption: '나는 나보다 약한 자의 말은 듣지 않는다',
+    image: 'https://images.unsplash.com/photo-1626688226927-33257a21236f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1268&q=80',
+  };
 
   return (
     <Background>
@@ -27,29 +93,58 @@ export default function Search() {
         setScrolled={setScrolled}
         topElement={<SearchInput scrolled={scrolled} />}
       >
-        <ProfileMini varient="vertical" />
-        <EpisodeMini varient="vertical" />
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
-        <p>a</p>
+        <Wrap>
+          <TabWrap>
+            <Text.Subtitle3>최근 검색어</Text.Subtitle3>
+            <HorizontalWrap gap={4}>
+              <RecentTag content="asdf" />
+              <RecentTag content="asdf" />
+              <RecentTag content="asdf" />
+              <RecentTag content="asdf" />
+              <RecentTag content="asdf" />
+              <RecentTag content="asdf" />
+              <RecentTag content="asdf" />
+              <RecentTag content="asdf" />
+              <RecentTag content="asdf" />
+              <RecentTag content="asdf" />
+              <RecentTag content="asdf" />
+              <RecentTag content="asdf" />
+            </HorizontalWrap>
+          </TabWrap>
+          <TabWrap>
+            <Text.Subtitle3>인기 부캐</Text.Subtitle3>
+            <HorizontalWrap gap={10}>
+              <ProfileMini varient="vertical" />
+              <ProfileMini varient="vertical" />
+              <ProfileMini varient="vertical" />
+              <ProfileMini varient="vertical" />
+              <ProfileMini varient="vertical" />
+              <ProfileMini varient="vertical" />
+            </HorizontalWrap>
+          </TabWrap>
+          <TabWrap>
+            <Text.Subtitle3>인기 에피소드</Text.Subtitle3>
+            <HorizontalWrap gap={10}>
+              <EpisodeMini varient="vertical" />
+              <EpisodeMini varient="vertical" />
+              <EpisodeMini varient="vertical" />
+              <EpisodeMini varient="vertical" />
+              <EpisodeMini varient="vertical" />
+              <EpisodeMini varient="vertical" />
+            </HorizontalWrap>
+          </TabWrap>
+          <TabWrap>
+            <Text.Subtitle3>인기 게시물</Text.Subtitle3>
+            <VerticalWrap>
+              <PostMini character={exampleCharacter} text="Lorem ipsum dolor sit amet" sunshine={2500} />
+              <PostMini character={exampleCharacter} text="Lorem ipsum dolor sit amet" sunshine={2500} />
+              <PostMini character={exampleCharacter} text="Lorem ipsum dolor sit amet" sunshine={2500} />
+              <PostMini character={exampleCharacter} text="Lorem ipsum dolor sit amet" sunshine={2500} />
+              <PostMini character={exampleCharacter} text="Lorem ipsum dolor sit amet" sunshine={2500} />
+              <PostMini character={exampleCharacter} text="Lorem ipsum dolor sit amet" sunshine={2500} />
+            </VerticalWrap>
+          </TabWrap>
+        </Wrap>
       </LayoutWithNav>
     </Background>
   )

@@ -12,7 +12,6 @@ import { pageState } from '../features/atoms';
 
 const Wrap = styled.div`
   display: flex;
-  position: fixed;
 
   background-color: ${colors.grayscale.white};
 

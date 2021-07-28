@@ -13,6 +13,7 @@ import SearchFilled from '../public/icons/Search_Filled.svg';
 import SearchOutline from '../public/icons/Search_Outline.svg';
 import SunshineFilled from '../public/icons/Sunshine_Filled.svg';
 import SunshineOutline from '../public/icons/Sunshine_Outline.svg';
+import X from '../public/icons/X.svg';
 import { colors } from '../styles/Colors';
 
 type IconProps = {
@@ -112,6 +113,10 @@ export default function Icon({ name, varient, width, height, color }: IconProps)
         fill = 'stroke';
         icon = <SunshineOutline viewBox="0 0 24 24" />;
       }
+      break;
+    case 'X':
+      fill = 'stroke';
+      icon = <X viewBox="0 0 24 24" />;
   }
 
   const Icon = () => icon;

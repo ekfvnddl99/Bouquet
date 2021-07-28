@@ -7,7 +7,6 @@ import { colors } from '../styles/Colors';
 import * as Text from '../styles/TextStyles';
 
 const Wrap = styled.div<{scrolled: boolean}>`
-  width: 100%;
   height: 35px;
   padding: 6px 18px 6px 18px;
   border-radius: 10px;
@@ -27,6 +26,7 @@ const Wrap = styled.div<{scrolled: boolean}>`
 `;
 
 const Input = styled.input`
+  width: 100%;
   border: 0;
   padding: 0;
   background-color: transparent;
