@@ -1,4 +1,5 @@
 import React, {Component, useState} from 'react';
+import {View} from 'react-native';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as input from '../../styles/styled-components/input';
@@ -15,6 +16,8 @@ import type {ChaGenerationProps} from '../../utils/types';
 import ProgressArea from '../components/ProgressArea';
 import ConditionText from '../components/ConditionText';
 import ConditionButton from '../components/ConditionButton';
+import ConditionTextInput from '../components/ConditionTextInput';
+import WarningText from '../components/WarningText';
 
 function PWCheck(pw : string){
   if(pw.length>=8 && pw.length<=32) return 1;
@@ -22,6 +25,7 @@ function PWCheck(pw : string){
 }
 
 export default function ChaGenerationScreenTwo({navigation} : ChaGenerationProps){
+  const[err, setErr] =useState(1);
   const[eye, setEye]=useState(1);
   const[pw,setPW]=useState('');
 
@@ -34,7 +38,8 @@ export default function ChaGenerationScreenTwo({navigation} : ChaGenerationProps
       <area.ContainerBlank20>
         <ProgressArea navigation={navigation} title="이 캐릭터는 누구인가요?" step={2} intro="이름, 직업 등 이 캐릭터의 기본 정보를 정해 보아요."/>
 
-        <input.FormInput height='44' placeholder='캐릭터 이름 (필수)' onChangeText={()=>{}}/>
+        <ConditionTextInput height={44} placeholder="캐릭터 이름 (필수)" onChange={()=>{}} keyboard={'default'} active={1}/>
+        <View>{err===1 ? <WarningText content="무야호" marginTop={8}/> : null}</View>
         <ConditionText content=" 한글 10글자, 알파벳 20글자 이하" active={PWCheck(pw)}/>
         <ConditionText content=" 특수문자는 _(언더바), -(하이픈), 띄어쓰기만 사용" active={PWCheck(pw)}/>
         <ConditionText content=" 중복되지 않는 이름" active={PWCheck(pw)}/>

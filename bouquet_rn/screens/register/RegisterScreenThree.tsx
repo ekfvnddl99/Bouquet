@@ -20,8 +20,11 @@ import ProgressArea from '../components/ProgressArea';
 import ConditionText from '../components/ConditionText';
 import ConditionButton from '../components/ConditionButton';
 import PrimaryTextButton from '../components/PrimaryTextButton';
+import ConditionTextInput from '../components/ConditionTextInput';
+import WarningText from '../components/WarningText';
 
 export default function RegisterScreenThree({navigation} : RegisterProps){
+  const[err, setErr] = useState(1);
 
   const goNext=()=>{
     navigation.navigate("RegisterFour");
@@ -35,12 +38,14 @@ export default function RegisterScreenThree({navigation} : RegisterProps){
         <View style={{alignItems:'center', marginBottom:32}}>
           <TouchableOpacity>
             <elses.CircleImg diameter={120} source={require('../../assets/img.jpg')}/>
-            {/* <elses.Circle diameter={120}/> */}
-              {/* <GallerySvg w='24' h='24'/> */}
+            {/* <elses.Circle diameter={120}>
+              <GallerySvg w='24' h='24'/>
+            </elses.Circle> */}
           </TouchableOpacity>
         </View>
 
-        <input.FormInput height='44' placeholder="별명"/>
+        <ConditionTextInput height={44} placeholder="별명" onChange={()=>{}} keyboard={'default'} active={1}/>
+        <View>{err===1 ? <WarningText content="무야호" marginTop={8}/> : null}</View>
         <ConditionText content=" 8글자 이상, 32글자 이하" active={0}/>
         <ConditionText content=" 특수문자는 _(언더바), -(하이픈)만 사용" active={0}/>
         <ConditionText content=" 중복되지 않는 별명" active={0}/>

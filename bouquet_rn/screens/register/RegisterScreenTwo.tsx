@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 
 // icons
@@ -30,6 +31,7 @@ function PWCheck(pw : string){
 }
 
 export default function RegisterScreenTwo({navigation} : RegisterProps){
+  const [err, setErr] = useState(1);
   const[eye, setEye]=useState(1);
   const[pw,setPW]=useState('');
 
@@ -42,7 +44,7 @@ export default function RegisterScreenTwo({navigation} : RegisterProps){
       <area.ContainerBlank20>
         <ProgressArea navigation={navigation} title="비밀번호 설정" step={2} intro={null}/>
 
-        <area.FormArea height='44'>
+        <area.FormArea height='44' style={err===1 ? {borderWidth:1, borderColor:colors.warning_red} : null}>
           <TextInput style={{flex: 1}} placeholder='비밀번호' onChangeText={(pw)=>setPW(pw)}/>
           <TouchableOpacity onPress={()=>{setEye(eye*(-1))}}>
               {EyeSelect(eye)}

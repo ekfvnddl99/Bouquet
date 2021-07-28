@@ -25,9 +25,11 @@ import LoginButton from './components/LoginButton';
 import BackButton from './components/BackButton';
 import ConditionButton from './components/ConditionButton';
 import PrimaryTextButton from './components/PrimaryTextButton';
+import WarningText from './components/WarningText';
 
-function CheckErr(mail:string){
+function CheckErr(mail:string) : string | undefined{
   if(mail==='456') return '메일이나 비밀번호가 틀렸나 봐요.';
+  else null;
 }
 
 
@@ -42,6 +44,7 @@ function EyeSelect(eye : number){
 
 export default function LoginScreen({navigation} : WelcomeProps){
     const[mail, setMail]=useState('456');
+    const[err, setErr] = useState(1);
     const[eye, setEye]=useState(1);
 
     const goTabs =()=>{
@@ -67,13 +70,12 @@ export default function LoginScreen({navigation} : WelcomeProps){
           </TouchableOpacity>
         </area.FormArea>
 
-        <View style={{alignItems:'center', marginVertical:16}}>
-          <View style={{marginBottom:16}}><text.Caption color={colors.primary}>{CheckErr(mail)}</text.Caption></View>
-
-          <ConditionButton active={1} press={()=>{}} content="로그인" paddingH={40} paddingV={14}/>
+        <View style={{alignItems:'center'}}>
+          {err===1 ? <WarningText content={CheckErr(mail)} marginTop={16}/> : null}
+          <View style={{marginTop:16}}><ConditionButton active={1} press={()=>{}} content="로그인" paddingH={40} paddingV={14}/></View>
         </View>
 
-        <area.TextBtnArea>
+        <area.TextBtnArea style={{marginTop:16}}>
           <text.Caption color={colors.black}>비밀번호를 잊었나요? </text.Caption>
           <PrimaryTextButton press={()=>{}} content="계정 찾기" level={2}/>
         </area.TextBtnArea>

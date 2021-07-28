@@ -1,4 +1,3 @@
-import { Platform, StatusBar, StatusBarIOS } from 'react-native';
 import styled from 'styled-components/native';
 import {colors} from '../colors';
 
@@ -34,6 +33,14 @@ export const TextBackgroundBtnArea = styled.View`
 export const BottomArea = styled.View`
   flex: 1;
   justify-content: flex-end;
+`
+
+export const TabBarArea = styled.View`
+  flex-direction: row;
+  background-color:${colors.white};
+  padding-vertical:18;
+  justify-content:center;
+  align-items:center;
 `
 
 interface FormProps{

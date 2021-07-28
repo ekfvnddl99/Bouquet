@@ -16,11 +16,16 @@ import type {RegisterProps} from '../../utils/types';
 import ProgressArea from '../components/ProgressArea';
 import ConditionButton from '../components/ConditionButton';
 import PrimaryTextButton from '../components/PrimaryTextButton';
+import WarningText from '../components/WarningText';
+import ConditionTextInput from '../components/ConditionTextInput';
 
 function CheckForm(ch : number, setter : any){
   if(ch===1){
     return(
-      <input.FormInput height='44' placeholder="메일 인증 번호" onChangeText={(num)=>setter(num)} keyboardType='numeric'/>
+      <View style={{marginTop:16}}>
+        <ConditionTextInput height={44} placeholder="메일 인증 번호" onChange={setter} keyboard={'numeric'} active={1}/>
+        <WarningText content="무야호" marginTop={8}/>
+      </View>
     );
   }
 }
@@ -28,6 +33,7 @@ function CheckForm(ch : number, setter : any){
 
 export default function RegisterScreenOne({navigation} : RegisterProps){
   const [ch, setCh] = useState(0);
+  const [err, setErr] = useState(1);
   const [num, setNum] = useState('undefined');
 
   const goLogin=()=>{
@@ -42,12 +48,13 @@ export default function RegisterScreenOne({navigation} : RegisterProps){
       <area.ContainerBlank20>
         <ProgressArea navigation={navigation} title="메일로 회원가입" step={1} intro={null}/>
 
-        <area.FormArea height='44'>
+        <area.FormArea height='44' style={err===1 ? {borderWidth:1, borderColor:colors.warning_red} : null}>
           <TextInput style={{flex: 1}} placeholder='메일' keyboardType='email-address'/>
           <button.LineButton color={colors.black} height={22} paddingH={12} paddingV={4} onPress={()=>setCh(1)}>
             <text.Button3 color={colors.black}>메일 인증</text.Button3>
           </button.LineButton>
         </area.FormArea>
+        <WarningText content="무야호" marginTop={8}/>
         
         {CheckForm(ch, setNum)}
 

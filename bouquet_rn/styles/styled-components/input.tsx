@@ -2,7 +2,7 @@ import styled from 'styled-components/native';
 import {colors} from '../colors';
 
 interface FormProps{
-  height : string,
+  height : string|number,
 }
 export const FormInput = styled.TextInput`
   background-color:${colors.white};

@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {
     View,
     Animated,
@@ -18,6 +18,7 @@ import { StatusBarHeight } from '../../logics/StatusbarHeight';
 // components
 import NotificationItem from '../../components/NotificationItem';
 import NameNText from '../../components/NameNText';
+import NotLoginPrimaryButton from '../../components/NotLoginPrimaryButton';
 
 const HEADER_MAX_HEIGHT = 94;
 const HEADER_MIN_HEIGHT = 60;
@@ -25,6 +26,7 @@ const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 export default function NotificationScreen(){
     // dummy data - 서버에서 불러와야 함
+    const [login, setLogin]=useState(1);
     let data=[1,2,3,4,5,6,7,8,9, 10];
 
     const scroll = useRef(new Animated.Value(0)).current;
@@ -61,17 +63,15 @@ export default function NotificationScreen(){
           pointerEvents="none"
           style={[styles.header,{ opacity: OpacityHeader }]}>
         </Animated.View>
-
         <area.RowArea style={{marginHorizontal:30, marginTop:30}}>
           <Animated.View style={[styles.a, {opacity : OpacityTitle}, {transform:[{translateY: TranslateImgY}]}]}>
-            <NameNText name="eksghwhk" sub="의"/>
-            <text.Subtitle2R color={colors.black}>피드</text.Subtitle2R>
+            < NameNText name="eksghwhk" sub="의"/>
+            <text.Subtitle2R color={colors.black}>알림</text.Subtitle2R>
           </Animated.View>
           <Animated.View style={[styles.b, {transform:[{scale: ScaleImg},{translateY: TranslateImgY}, {translateX:TranslateImgX}]}]}>
             <elses.CircleImg diameter={40} source={require('../../../assets/img.jpg')}/>
           </Animated.View>
         </area.RowArea>
-
         <Animated.ScrollView
           style={{marginTop: HEADER_MIN_HEIGHT-30, marginHorizontal:30}}
           showsVerticalScrollIndicator={false}
@@ -81,10 +81,10 @@ export default function NotificationScreen(){
             { useNativeDriver: true })}>
           <View style={{paddingTop: 30+14}}/>
           {data.length===0 ? 
-          <View style={{alignItems:'center'}}><text.Caption color={colors.gray6}>이제 확인할 알림이 없어요!</text.Caption></View> : 
-          <FlatList data={data} renderItem={(obj)=>{
-            return(<NotificationItem/>);}}>
-        </FlatList>}
+            <View style={{alignItems:'center'}}><text.Caption color={colors.gray6}>이제 확인할 알림이 없어요!</text.Caption></View> : 
+            <FlatList data={data} renderItem={(obj)=>{
+              return(<NotificationItem/>);}}>
+            </FlatList>}
         </Animated.ScrollView>
       </area.Container>
     )

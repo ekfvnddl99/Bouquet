@@ -1,6 +1,7 @@
 import React from 'react';
-import { View } from 'react-native';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { View, TouchableOpacity } from 'react-native';
+import { SafeAreaProvider} from 'react-native-safe-area-context';
+import { TabBarArea } from '../styles/styled-components/area';
 
 // navigation tools
 import { NavigationContainer } from '@react-navigation/native';
@@ -51,44 +52,56 @@ import * as Types from '../utils/types';
 
 
 const Tab = createBottomTabNavigator();
-function TabNavigator(){
+function CustomTabBar({ state, navigation } : {state:any, navigation:any}){
   return(
-    <Tab.Navigator
-      initialRouteName="Home"
-      screenOptions={({route})=>({
-        tabBarIcon: ({ focused, color, size }) => {
-          let icon;
+    <TabBarArea>
+      {state.routes.map((route : any, index: number) => {
+        const isFocused = state.index === index;
 
+        const setIcon=()=>{
+          let icon;
+          let len = String(24);
           if (route.name === "Home") {
-            if(focused) icon = <HomeFocusSvg w='30' h='30'/>;
-            else icon = <HomeSvg w='30' h='30'/>;
+            if(isFocused) icon = <HomeFocusSvg w={len} h={len}/>;
+            else icon = <HomeSvg w={len} h={len}/>;
           } else if (route.name === "Search") {
-            if(focused) icon = <SearchFocusSvg w='30' h='30'/>;
-            else icon = <SearchSvg w='30' h='30'/>;
+            if(isFocused) icon = <SearchFocusSvg w={len} h={len}/>;
+            else icon = <SearchSvg w={len} h={len}/>;
           }else if (route.name === "Crew") {
-            if(focused) icon = <CrewFocusSvg w='30' h='30'/>;
-            else icon = <CrewSvg w='30' h='30'/>;
+            if(isFocused) icon = <CrewFocusSvg w={len} h={len}/>;
+            else icon = <CrewSvg w={len} h={len}/>;
           }else if (route.name === "Notification") {
-            if(focused) icon = <NotificationFocusSvg w='30' h='30'/>;
-            else icon = <NotificationSvg w='30' h='30'/>;
+            if(isFocused) icon = <NotificationFocusSvg w={len} h={len}/>;
+            else icon = <NotificationSvg w={len} h={len}/>;
           }else if (route.name === "Profile") {
-            if(focused) icon = <ProfileFocusSvg w='30' h='30'/>;
-            else icon = <ProfileSvg w='30' h='30'/>;
+            if(isFocused) icon = <ProfileFocusSvg w={len} h={len}/>;
+            else icon = <ProfileSvg w={len} h={len}/>;
           }
 
           // You can return any component that you like here!
           return <View>{icon}</View>;
-        },
+        }
+
+        return (
+          <TouchableOpacity 
+            onPress={()=>navigation.navigate(route.name)}
+            style={{paddingHorizontal:20}}>
+            {setIcon()}
+          </TouchableOpacity>
+        );
       })}
+    </TabBarArea>
+  );
+}
+function TabNavigator(){
+  return(
+    <Tab.Navigator
+      initialRouteName="Home"
+      tabBar={({state, navigation})=>CustomTabBar({state, navigation})}
       lazy = {false}
       tabBarOptions={{
         showLabel : false,
-        safeAreaInsets : {bottom : 20},
-        style : {
-          paddingVertical:18,
-          borderColor : "#ffffff",
-          borderTopWidth : 0,
-        }
+        keyboardHidesTabBar: true,
       }}>
       <Tab.Screen name="Home" component={HomeStackNavigator}/>
       <Tab.Screen name="Search" component={SearchStackNavigator}/>
@@ -225,26 +238,28 @@ function RegisterStackNavigator(){
 const WelcomeStack = createStackNavigator<Types.WelcomeStackParam>();
 export default function AppStack(){
   return(
-    <NavigationContainer>
-      <WelcomeStack.Navigator
-        initialRouteName="Welcome">
-          <WelcomeStack.Screen
-            name="Welcome"
-            component={WelcomeScreen}
-            options={{headerShown: false}}/>
-          <WelcomeStack.Screen
-            name="Login"
-            component={LoginScreen}
-            options={{headerShown: false}}/>
-          <WelcomeStack.Screen
-            name="Register"
-            component={RegisterStackNavigator}
-            options={{headerShown : false}}/>
-          <WelcomeStack.Screen
-            name="Tab"
-            component={TabNavigator}
-            options={{headerShown : false}}/>
-      </WelcomeStack.Navigator>
-  </NavigationContainer>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <WelcomeStack.Navigator
+          initialRouteName="Welcome">
+            <WelcomeStack.Screen
+              name="Welcome"
+              component={WelcomeScreen}
+              options={{headerShown: false}}/>
+            <WelcomeStack.Screen
+              name="Login"
+              component={LoginScreen}
+              options={{headerShown: false}}/>
+            <WelcomeStack.Screen
+              name="Register"
+              component={RegisterStackNavigator}
+              options={{headerShown : false}}/>
+            <WelcomeStack.Screen
+              name="Tab"
+              component={TabNavigator}
+              options={{headerShown : false}}/>
+        </WelcomeStack.Navigator>
+    </NavigationContainer>
+  </SafeAreaProvider>
   );
 }
