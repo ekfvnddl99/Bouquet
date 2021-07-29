@@ -1,13 +1,98 @@
 import Head from 'next/head';
 import styled from 'styled-components';
+import { useRecoilState } from 'recoil';
+import { useCallback, useMemo, useState } from 'react';
+
 import LayoutWithNav from '../components/LayoutWithNav';
+import { ProfilePic } from '../components/ProfilePic';
+import Notification from '../components/Notification';
+
+import * as Text from '../styles/TextStyles';
+
+import { characterState } from '../features/atoms';
+
+const TitleWrap = styled.div`
+  display: flex;
+  justify-content: space-between;
+
+  width: 100%;
+`;
+
+type TitleProps = {
+  scrolled: boolean;
+}
+
+function Title({ scrolled }: TitleProps) {
+  const [character, setCharacter] = useRecoilState(characterState);
+
+  const getProfilePicMediaQuery = useCallback(() => `
+    @media (min-width: 320px) and (max-width: 519px) {
+      width: ${scrolled ? 28 : 40}px;
+      height: ${scrolled ? 28 : 40}px;
+    }
+
+    @media (min-width: 520px) {
+      width: 40px;
+      height: 40px;
+    }
+  `, [scrolled]);
+  const profilePicMediaQuery = useMemo(() => getProfilePicMediaQuery(), [getProfilePicMediaQuery]);
+
+  if (character.isLogined) {
+    return (
+      <TitleWrap>
+        <span>
+          <Text.Subtitle2B>
+            {character.characterName}
+          </Text.Subtitle2B>
+          <Text.Subtitle2R>
+            의<br />알림
+          </Text.Subtitle2R>
+        </span>
+        <ProfilePic
+          image={character.image}
+          size={40}
+          mediaQuery={profilePicMediaQuery}
+        />
+      </TitleWrap>
+      )
+  }
+  else {
+    return (
+      <TitleWrap>
+        <span>
+          <Text.Subtitle2R>
+            당신의
+          </Text.Subtitle2R>
+          <Text.Subtitle2B>
+            <br />알림
+          </Text.Subtitle2B>
+        </span>
+        <ProfilePic
+          size={40}
+          mediaQuery={profilePicMediaQuery}
+        />
+      </TitleWrap>
+    )
+  }
+}
 
 const Background = styled.div`
   width: 100%;
   height: 100%;
 `;
 
+const NotiWrap = styled.div`
+  display: grid;
+  grid-template-columns: 100%;
+  grid-auto-flow: row;
+  gap: 10px;
+  padding-top: 10px;
+`;
+
 export default function Notifications() {
+  const [scrolled, setScrolled] = useState(false);
+
   return (
     <Background>
       <Head>
@@ -16,9 +101,48 @@ export default function Notifications() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <LayoutWithNav>
-        <p>Notifications</p>
-        <p>Test</p>
+      <LayoutWithNav
+        topElement={<Title scrolled={scrolled} />}
+        setScrolled={setScrolled}
+      >
+        <NotiWrap>
+          <Notification
+            message="님이 당신의 게시글을 좋아해요."
+            character={{
+              isLogined: true,
+              characterName: '단호좌현지',
+              caption: '나는 나보다 약한 자의 말은 듣지 않는다',
+              image: 'https://images.unsplash.com/photo-1626688226927-33257a21236f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1268&q=80',
+            }}
+          />
+          <Notification
+            message="님이 당신의 게시글을 좋아해요."
+            character={{
+              isLogined: true,
+              characterName: '단호좌현지',
+              caption: '나는 나보다 약한 자의 말은 듣지 않는다',
+              image: 'https://images.unsplash.com/photo-1626688226927-33257a21236f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1268&q=80',
+            }}
+          />
+          <Notification
+            message="님이 당신의 게시글을 좋아해요."
+            character={{
+              isLogined: true,
+              characterName: '단호좌현지',
+              caption: '나는 나보다 약한 자의 말은 듣지 않는다',
+              image: 'https://images.unsplash.com/photo-1626688226927-33257a21236f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1268&q=80',
+            }}
+          />
+          <Notification
+            message="님이 당신의 게시글을 좋아해요."
+            character={{
+              isLogined: true,
+              characterName: '단호좌현지',
+              caption: '나는 나보다 약한 자의 말은 듣지 않는다',
+              image: 'https://images.unsplash.com/photo-1626688226927-33257a21236f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1268&q=80',
+            }}
+          />
+        </NotiWrap>
       </LayoutWithNav>
     </Background>
   )

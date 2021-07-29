@@ -10,6 +10,7 @@ import { motion } from 'framer-motion';
 
 const Wrap = styled.div`
   display: flex;
+  min-height: 100%;
   @media (min-width: 320px) and (max-width: 519px) {
     flex-direction: column;
     width: 100%;
@@ -149,6 +150,7 @@ export default function LayoutWithNav({ setScrolled, topElement, children }: Pro
             padding: "0 30px 20px 30px",
             display: "flex",
             justifyContent: "center",
+            overflowX: 'hidden',
           }}
         >
           <InWrap>

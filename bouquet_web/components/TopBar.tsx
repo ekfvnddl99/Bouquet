@@ -11,6 +11,8 @@ const TopWrap = styled.div<{scrolled: boolean}>`
 
   display: flex;
   justify-content: center;
+
+  z-index: 50;
   
   @media (min-width: 320px) and (max-width: 519px) {
     border-radius: 0 0 15px 15px;

@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
 // import icons - Sort alphabetically
+import BinFilled from '../public/icons/Bin_Filled.svg';
+import BinOutline from '../public/icons/Bin_Outline.svg';
 import CrewFilled from '../public/icons/Crew_Filled.svg';
 import CrewOutline from '../public/icons/Crew_Outline.svg';
 import HomeFilled from '../public/icons/Home_Filled.svg';
@@ -29,6 +31,7 @@ interface IconStyleProps {
   height: number;
   fill: string;
   color: string;
+  additional?: string;
 }
 
 const IconWrap = styled.div<IconStyleProps>`
@@ -48,12 +51,30 @@ const IconWrap = styled.div<IconStyleProps>`
     width: ${props => props.width}px;
     height: ${props => props.height}px;
   }
+
+  ${props => props.additional ? props.additional : ''}
 `;
 
 export default function Icon({ name, varient, width, height, color }: IconProps) {
   let icon = <p>?</p>;
   let fill = 'fill';
+  let additional = '';
   switch (name) {
+    case 'bin':
+      if (varient === 'filled') {
+        fill = 'fill';
+        icon = <BinFilled viewBox="0 0 24 24" />;
+      }
+      else {
+        fill = 'fill';
+        icon = <BinOutline viewBox="0 0 24 24"/>;
+        additional = `
+          path:nth-child(2) {
+            stroke: ${color};
+          }
+        `;
+      }
+      break;
     case 'crew':
       if (varient === 'filled') {
         fill = 'fill';
@@ -126,7 +147,9 @@ export default function Icon({ name, varient, width, height, color }: IconProps)
       fill={fill}
       color={color ? color : colors.grayscale.black}
       width={width ? width : 24}
-      height={height ? height : 24}>
+      height={height ? height : 24}
+      additional={additional}
+    >
       <Icon />
     </IconWrap>
   )
