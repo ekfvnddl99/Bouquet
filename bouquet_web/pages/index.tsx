@@ -1,8 +1,7 @@
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { useMediaQuery } from 'react-responsive';
 
 import LayoutWithNav from '../components/LayoutWithNav';
 import { ProfilePic } from '../components/ProfilePic';
@@ -26,9 +25,18 @@ type TitleProps = {
 function Title({ scrolled }: TitleProps) {
   const [character, setCharacter] = useRecoilState(characterState);
 
-  const isMobile = useMediaQuery({
-    query: "(min-width: 320px) and (max-width: 519px)"
-  });
+  const getProfilePicMediaQuery = useCallback(() => `
+    @media (min-width: 320px) and (max-width: 519px) {
+      width: ${scrolled ? 28 : 40}px;
+      height: ${scrolled ? 28 : 40}px;
+    }
+
+    @media (min-width: 520px) {
+      width: 40px;
+      height: 40px;
+    }
+  `, [scrolled]);
+  const profilePicMediaQuery = useMemo(() => getProfilePicMediaQuery(), [getProfilePicMediaQuery]);
 
   if (character.isLogined) {
     return (
@@ -42,8 +50,9 @@ function Title({ scrolled }: TitleProps) {
           </Text.Subtitle2R>
         </span>
         <ProfilePic
-          size={scrolled && isMobile ? 28 : 40}
           image={character.image}
+          size={40}
+          mediaQuery={profilePicMediaQuery}
         />
       </TitleWrap>
       )
@@ -60,7 +69,8 @@ function Title({ scrolled }: TitleProps) {
           </Text.Subtitle2B>
         </span>
         <ProfilePic
-          size={scrolled && isMobile ? 28 : 40}
+          size={40}
+          mediaQuery={profilePicMediaQuery}
         />
       </TitleWrap>
     )
