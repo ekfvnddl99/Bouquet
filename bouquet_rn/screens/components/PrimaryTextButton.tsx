@@ -1,7 +1,8 @@
 import React from 'react';
-import {
-    TouchableOpacity
-} from 'react-native';
+// import {
+//     TouchableOpacity
+// } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import {colors} from '../../styles/colors';
 import * as text from '../../styles/styled-components/text';
 

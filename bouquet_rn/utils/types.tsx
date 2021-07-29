@@ -38,6 +38,7 @@ export type HomeProps = StackScreenProps<HomeStackParam, "Home">;
 export type SearchStackParam = {
   Search : undefined,
   Episode : undefined,
+  Posting  :undefined
 }
 export type SearchProps = StackScreenProps<SearchStackParam, "Search">;
 

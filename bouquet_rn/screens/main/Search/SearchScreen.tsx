@@ -1,4 +1,4 @@
-import React, {Component, useRef} from 'react';
+import React, {Component, useRef,useState} from 'react';
 import {
     View,
     Animated,
@@ -11,6 +11,10 @@ import {colors} from '../../../styles/colors'
 import * as area from '../../../styles/styled-components/area';
 import * as text from '../../../styles/styled-components/text';
 
+// icons
+import SearchViewSvg from '../../../assets/SearchView';
+import SearchViewFocusSvg from '../../../assets/SearchViewFocus';
+
 // props & logic
 import type {SearchProps} from '../../../utils/types';
 import { StatusBarHeight } from '../../logics/StatusbarHeight';
@@ -21,10 +25,6 @@ import CharacterItem from '../../components/CharacterItem';
 import PostingItem from '../../components/PostingItem';
 import EpisodeMiniItem from '../../components/EpisodeMiniItem';
 
-// icons
-import SearchSvg from '../../../assets/Search';
-import { color } from 'react-native-reanimated';
-
 const HEADER_MAX_HEIGHT = 95;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
@@ -33,6 +33,8 @@ export default function SearchScreen({navigation} : SearchProps){
     // dummy data - 서버에서 불러와야 함.
     let oneData=['김guswlej', '현', '지', '현', '지', '현', '지', '현', '지', '현', '지', '현', '지'];
     let Data=[1,2,3,4,5,6,7,8,9];
+
+    const[focus, setFocus]=useState(0);
 
     const scroll = useRef(new Animated.Value(0)).current;
     const OpacityHeader=scroll.interpolate({
@@ -62,8 +64,10 @@ export default function SearchScreen({navigation} : SearchProps){
           </Animated.View>
           <View style={{marginTop:30, marginHorizontal:30}}>
             <Animated.View style={[styles.searchView, searchColor, {transform:[{translateY: TranslateInput}]}]}>
-              <View style={{marginLeft: 18, marginRight:10}}><SearchSvg w='15' h='15'/></View>
-              <View style={{flex:1}}><TextInput placeholder="무엇이 궁금한가요?"/></View>
+              <View style={{marginLeft: 18, marginRight:10}}>
+                {focus===1 ? <SearchViewFocusSvg w='15' h='15'/> : <SearchViewSvg w='15' h='15'/>}
+              </View>
+              <View style={{flex:1}}><TextInput placeholder="무엇이 궁금한가요?" onFocus={()=>setFocus(1)} onBlur={()=>setFocus(0)}/></View>
             </Animated.View>
           </View>
           <Animated.ScrollView 
@@ -129,7 +133,7 @@ export default function SearchScreen({navigation} : SearchProps){
               showsVerticalScrollIndicator={false}
               renderItem={(obj)=>{
                 return(
-                  <PostingItem/>
+                  <PostingItem navigation={navigation}/>
                 ); 
               }}></FlatList>
           </area.ContainerBlank30>

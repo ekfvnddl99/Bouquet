@@ -84,7 +84,7 @@ export default function EpisodeScreen(){
                 data={threeData}
                 showsVerticalScrollIndicator={false}
                 renderItem={(obj)=>{
-                  return(<PostingItem/>);}}></FlatList>
+                  return(<PostingItem navigation={null}/>);}}></FlatList>
           </Animated.ScrollView>
         </area.Container>
     )

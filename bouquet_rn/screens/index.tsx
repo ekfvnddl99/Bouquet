@@ -1,6 +1,6 @@
-import React from 'react';
-import { View, TouchableOpacity } from 'react-native';
-import { SafeAreaProvider} from 'react-native-safe-area-context';
+import React, {Component} from 'react';
+import { View, Platform, TouchableOpacity} from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { TabBarArea } from '../styles/styled-components/area';
 
 // navigation tools
@@ -27,6 +27,7 @@ import HomeScreen from './main/Home/HomeScreen';
 
 import SearchScreen from './main/Search/SearchScreen';
 import EpisodeScreen from './common/EpisodeScreen';
+import PostDetailScreen from './common/PostDetailScreen';
 
 import CrewScreen from './main/Crew/CrewScreen';
 
@@ -49,12 +50,12 @@ import ProfileSvg from '../assets/Profile';
 import ProfileFocusSvg from '../assets/ProfileFocus';
 
 import * as Types from '../utils/types';
-
+import { colors } from '../styles/colors';
 
 const Tab = createBottomTabNavigator();
-function CustomTabBar({ state, navigation } : {state:any, navigation:any}){
+function CustomTabBar({ state, navigation} : {state:any, navigation:any}){
   return(
-    <TabBarArea>
+    <TabBarArea style={{height : Platform.OS==='ios' ? 60+18: 60}}>
       {state.routes.map((route : any, index: number) => {
         const isFocused = state.index === index;
 
@@ -81,13 +82,12 @@ function CustomTabBar({ state, navigation } : {state:any, navigation:any}){
           // You can return any component that you like here!
           return <View>{icon}</View>;
         }
-
         return (
           <TouchableOpacity 
-            onPress={()=>navigation.navigate(route.name)}
-            style={{paddingHorizontal:20}}>
-            {setIcon()}
-          </TouchableOpacity>
+              onPress={()=>navigation.navigate(route.name)}
+              style={{paddingHorizontal:20}}>
+              {setIcon()}
+            </TouchableOpacity>
         );
       })}
     </TabBarArea>
@@ -137,6 +137,10 @@ function SearchStackNavigator(){
       <SearchStack.Screen 
         name="Episode" 
         component={EpisodeScreen}
+        options={{headerShown : false}}/>
+      <SearchStack.Screen 
+        name="Posting" 
+        component={PostDetailScreen}
         options={{headerShown : false}}/>
     </SearchStack.Navigator>
   );
@@ -259,7 +263,7 @@ export default function AppStack(){
               component={TabNavigator}
               options={{headerShown : false}}/>
         </WelcomeStack.Navigator>
-    </NavigationContainer>
-  </SafeAreaProvider>
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }

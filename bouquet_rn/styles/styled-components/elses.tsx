@@ -37,7 +37,7 @@ export const CircleImg = styled.Image`
 
 interface RecProps{
   width : number | string,
-  height : number | string | undefined,
+  height : number | string | null,
   color: string,
 }
 export const Rectangle = styled.View`

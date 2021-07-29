@@ -32,11 +32,6 @@ export default function EpisodeScreen(){
   const [press, setPress] = useState(1);
 
   const scroll = useRef(new Animated.Value(0)).current;
-  const OpacityTitle = scroll.interpolate({
-    inputRange: [0, HEADER_SCROLL_DISTANCE / 2,HEADER_SCROLL_DISTANCE],
-    outputRange: [-3, 0, 1],
-    extrapolate: 'clamp',
-  });
   const OpacityHeader=scroll.interpolate({
     inputRange: [0, HEADER_SCROLL_DISTANCE/2, HEADER_SCROLL_DISTANCE],
     outputRange: [0, 0.5, 1],
@@ -74,6 +69,9 @@ export default function EpisodeScreen(){
               <View style={{marginRight:16}}/>
               <TouchableOpacity onPress={()=>setPress(0)}>
                 <text.Subtitle3 color={press===0 ? colors.black : colors.gray5}>에피소드</text.Subtitle3>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={()=>setPress(0)}>
+                <text.Subtitle3 color={press===0 ? colors.black : colors.gray5}>질문</text.Subtitle3>
               </TouchableOpacity>
             </area.RowArea>
             {press===1 ? <ProfileFeedScreen/> : <ProfileEpisodeScreen/>}

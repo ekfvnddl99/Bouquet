@@ -12,11 +12,8 @@ import * as elses from '../../styles/styled-components/elses';
 import * as text from '../../styles/styled-components/text';
 import * as button from '../../styles/styled-components/button';
 
-function timeName(time : number){
-  if(time<60) return time+'분';
-  else if(time/60 < 24) return ((time/60) | 0) + '시간';
-  else return ((time/1440) | 0 )+'일';
-}
+// props & logic
+import * as cal from '../logics/Calculation';
 
 export default function NotificationItem(){
     return(
@@ -30,7 +27,7 @@ export default function NotificationItem(){
             </area.RowArea>
           </View>
           <View style={styles.timeText}>
-              <text.Caption color={colors.gray5}>{timeName(57)} 전</text.Caption>
+              <text.Caption color={colors.gray5}>{cal.timeName(57)} 전</text.Caption>
           </View>
       </button.NotificationButton>
     );

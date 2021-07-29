@@ -92,6 +92,20 @@ export const RecentSearchButton = styled.TouchableOpacity`
   padding-left: 10;
 `
 
+interface noHeightProps{
+  marBottom: number,
+  paddingH: number,
+  paddingV: number,
+}
+export const NoHeightButton = styled.TouchableOpacity`
+  width: 100%;
+  background-color: ${colors.white};
+  border-radius: 10;
+  margin-bottom: ${(props:noHeightProps)=> props.marBottom};
+  padding-horizontal: ${(props:noHeightProps)=> props.paddingH};
+  padding-vertical:${(props:noHeightProps)=> props.paddingV};
+`
+
 interface sunProps{
   color:string
 }

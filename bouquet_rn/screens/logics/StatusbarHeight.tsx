@@ -1,4 +1,5 @@
 import { Dimensions, Platform, StatusBar } from 'react-native';
+import { useSafeAreaInsets, } from 'react-native-safe-area-context';
 
 const X_WIDTH = 375;
 const X_HEIGHT = 812;
