@@ -91,6 +91,7 @@ function Horizontal({ gap, wrap, children }: HorizontalProps) {
   const inside = useRef(null);
 
   useEffect(() => {
+    // TODO: inside의 width가 변할 때도 setWidth가 작동해야 함
     const setWidth = () => {
       setWrapWidth(wrap.current.offsetWidth);
       setInsideWidth(inside.current.offsetWidth);
