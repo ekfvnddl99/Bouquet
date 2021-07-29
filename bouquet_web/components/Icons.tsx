@@ -5,6 +5,8 @@ import BinFilled from '../public/icons/Bin_Filled.svg';
 import BinOutline from '../public/icons/Bin_Outline.svg';
 import CrewFilled from '../public/icons/Crew_Filled.svg';
 import CrewOutline from '../public/icons/Crew_Outline.svg';
+import GridMenuFilled from '../public/icons/GridMenu_Filled.svg';
+import GridMenuOutline from '../public/icons/GridMenu_Outline.svg';
 import HomeFilled from '../public/icons/Home_Filled.svg';
 import HomeOutline from '../public/icons/Home_Outline.svg';
 import NotificationFilled from '../public/icons/Notification_Filled.svg';
@@ -15,6 +17,9 @@ import SearchFilled from '../public/icons/Search_Filled.svg';
 import SearchOutline from '../public/icons/Search_Outline.svg';
 import SunshineFilled from '../public/icons/Sunshine_Filled.svg';
 import SunshineOutline from '../public/icons/Sunshine_Outline.svg';
+import SwipeFilled from '../public/icons/Swipe_Filled.svg';
+import SwipeOutline from '../public/icons/Swipe_Outline.svg';
+import XOutline from '../public/icons/X_Outline.svg';
 import X from '../public/icons/X.svg';
 import { colors } from '../styles/Colors';
 
@@ -85,6 +90,16 @@ export default function Icon({ name, varient, width, height, color }: IconProps)
         icon = <CrewOutline />;
       }
       break;
+    case 'gridmenu':
+      if (varient === 'filled') {
+        fill = 'fill';
+        icon = <GridMenuFilled viewBox="0 0 24 24" />;
+      }
+      else {
+        fill = 'stroke';
+        icon = <GridMenuOutline viewBox="0 0 24 24" />;
+      }
+      break;
     case 'home':
       if (varient === 'filled') {
         fill = 'fill';
@@ -135,9 +150,26 @@ export default function Icon({ name, varient, width, height, color }: IconProps)
         icon = <SunshineOutline viewBox="0 0 24 24" />;
       }
       break;
+    case 'swipe':
+      if (varient === 'filled') {
+        fill = 'fill';
+        icon = <SwipeFilled viewBox="0 0 24 24" />;
+      }
+      else {
+        fill = 'fill';
+        icon = <SwipeOutline viewBox="0 0 24 24" />;
+      }
+      break;
     case 'X':
-      fill = 'stroke';
-      icon = <X viewBox="0 0 24 24" />;
+      if (varient === 'outline') {
+        fill = 'stroke'
+        icon = <XOutline viewBox="0 0 24 24" />;
+      }
+      else {
+        fill = 'stroke';
+        icon = <X viewBox="0 0 24 24" />;
+      }
+      break;
   }
 
   const Icon = () => icon;
