@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useSafeAreaInsets, SafeAreaProvider } from 'react-native-safe-area-context';
 import { 
   View, 
 } from 'react-native';
@@ -21,7 +22,25 @@ import GoogleSignInAsync  from './logics/GoogleLogin';
 import LoginButton from './components/LoginButton';
 import PrimaryTextButton from './components/PrimaryTextButton';
 
+import {atom, useRecoilState} from 'recoil';
+import { useEffect } from 'react';
+export const viewTop=atom({
+  key: 'top',
+  default: 0
+});
+export const viewBottom=atom({
+  key: 'bottom',
+  default: 0
+});
+
 export default function WelcomeScreen({navigation} : WelcomeProps) {
+  const insets = useSafeAreaInsets();
+  const[top, setTop]=useRecoilState(viewTop);
+  const[bottom, setBottom]=useRecoilState(viewBottom);
+  useEffect(()=>{
+    setTop(insets.top);
+    setBottom(insets.bottom);
+  })
 
   const goTabs =()=>{
     navigation.navigate("Tab");
@@ -37,7 +56,7 @@ export default function WelcomeScreen({navigation} : WelcomeProps) {
   }
 
   return(
-    <area.Container>
+    <View style={{flex:1, backgroundColor:colors.gray0, paddingTop:top}}>
       <area.ContainerBlank20>
         <View style={{alignItems:'center', marginTop: 70}}>
             <LogoSvg w='100' h='100'/>
@@ -62,6 +81,7 @@ export default function WelcomeScreen({navigation} : WelcomeProps) {
             <text.Button2B color={colors.black}>우선 알아보고 싶다면? </text.Button2B>
             <PrimaryTextButton press={goTabs} content="미리보기" level={1}/>
         </area.TextBackgroundBtnArea>
-    </area.Container>
+        <View style={{height:bottom, backgroundColor:colors.white}}/>
+    </View>
   );
 }

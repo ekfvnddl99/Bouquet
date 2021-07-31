@@ -1,5 +1,9 @@
 import React, {Component, useState} from 'react';
-import {View, ScrollView} from 'react-native';
+import {
+  View,
+  ScrollView, 
+  TouchableWithoutFeedback,
+  Keyboard} from 'react-native';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as input from '../../styles/styled-components/input';
@@ -34,6 +38,7 @@ export default function ChaGenerationScreenTwo({navigation} : ChaGenerationProps
   }
 
   return(
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <area.Container>
       <View style={{marginBottom:16, position:'absolute', bottom:0, left:0, right:0, flex:1}}>
         <ConditionButton active={1} press={goNext} content="세부 소개 입력" paddingH={0} paddingV={14}/>
@@ -52,5 +57,6 @@ export default function ChaGenerationScreenTwo({navigation} : ChaGenerationProps
         </area.ContainerBlank20>
       </ScrollView>
     </area.Container>
+    </TouchableWithoutFeedback>
   );
 }

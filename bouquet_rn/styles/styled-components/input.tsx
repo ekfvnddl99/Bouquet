@@ -23,3 +23,11 @@ export const FormInputErr = styled.TextInput`
   padding-horizontal: 16;
   flex-direction: row;
 `
+
+export const TextTemplate = styled.TextInput`
+  background-color:${colors.white};
+  border-radius: 10;
+  justify-content:center;
+  padding-horizontal: 10;
+  padding-vertical:10;
+`

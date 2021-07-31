@@ -1,6 +1,9 @@
 import React, {Component, useState} from 'react';
 import {
-  View, ScrollView
+  View, 
+  ScrollView,
+  TouchableWithoutFeedback,
+  Keyboard
 } from 'react-native';
 import * as area from '../../styles/styled-components/area';
 import * as input from '../../styles/styled-components/input';
@@ -23,6 +26,7 @@ export default function ChaGenerationScreenThree({navigation} : ChaGenerationPro
   }
 
   return(
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <area.Container>
       <View style={{marginBottom:16, position:'absolute', bottom:0, left:0, right:0, flex:1}}>
         <ConditionButton active={1} press={goNext} content="캐릭터 생성 완료" paddingH={0} paddingV={14}/>
@@ -40,5 +44,6 @@ export default function ChaGenerationScreenThree({navigation} : ChaGenerationPro
         </area.ContainerBlank20>
       </ScrollView>
     </area.Container>
+    </TouchableWithoutFeedback>
   );
 }

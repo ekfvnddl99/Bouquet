@@ -99,7 +99,7 @@ function InHomeScreen(){
           showsVerticalScrollIndicator={false}
           renderItem={(obj)=>{
             return(
-              <PostingItem/>
+              <PostingItem navigation={()=>{}}/>
             ); 
           }}></FlatList>
       </Animated.ScrollView>
@@ -155,7 +155,7 @@ function OutHomeScreen(){
           data={threeData}
           showsVerticalScrollIndicator={false}
           renderItem={(obj)=>{
-            return(<PostingItem/>);}}></FlatList>
+            return(<PostingItem navigation={()=>{}}/>);}}></FlatList>
       </Animated.ScrollView>
       <View style={{justifyContent:'flex-end'}}>
         <NotLoginPrimaryButton/>

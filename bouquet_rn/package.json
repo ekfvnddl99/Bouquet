@@ -15,8 +15,10 @@
     "@react-navigation/stack": "^5.14.5",
     "@types/styled-components-react-native": "^5.1.1",
     "expo": "~42.0.1",
+    "expo-apple-authentication": "~3.2.1",
     "expo-google-app-auth": "^8.2.2",
     "expo-status-bar": "~1.0.4",
+    "lodash": "^4.17.21",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
@@ -29,7 +31,7 @@
     "react-native-web": "~0.13.12",
     "recoil": "^0.3.1",
     "styled-components": "^5.3.0",
-    "expo-apple-authentication": "~3.2.1"
+    "react-native-pager-view": "5.0.12"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",

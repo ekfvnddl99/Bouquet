@@ -14,7 +14,6 @@ import ProfileInfoText from '../components/ProfileInfoText';
 
 export default function ProfileDetailItem({mini} : {mini:number}){
   return(
-    <View>
       <button.ProfileDetailButton activeOpacity={1}>
         <View style={{alignItems:'center', justifyContent:'center'}}>
           <elses.Circle diameter={120}/>
@@ -49,6 +48,5 @@ export default function ProfileDetailItem({mini} : {mini:number}){
         <View style={{marginTop:16}}/>
         <ProfileInfoText bold="특이사항" regular="231" color={colors.black} center={0}/>
       </button.ProfileDetailButton>
-    </View>
   );
 }

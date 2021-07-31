@@ -6,11 +6,14 @@ import {
     Animated,
     TouchableOpacity,
     Platform,
-    StyleSheet
+    StyleSheet,
+    TouchableWithoutFeedback,
+  Keyboard
 } from 'react-native';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
+import * as button from '../../styles/styled-components/button';
 import * as elses from '../../styles/styled-components/elses';
 
 // props & logic
@@ -35,6 +38,7 @@ export default function PostDetailScreen(){
     let Data=[1,2,3,4,5,6,7,8,9];
 
     const[press, setPress]=useState(-1);
+    const[owner, setOwner]=useState(1);
 
     const scroll = useRef(new Animated.Value(0)).current;
     const OpacityHeader=scroll.interpolate({
@@ -44,6 +48,7 @@ export default function PostDetailScreen(){
     });
 
     return(
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <area.Container>
           <Animated.View
             pointerEvents="none"
@@ -64,7 +69,13 @@ export default function PostDetailScreen(){
             [{ nativeEvent: { contentOffset: { y: scroll } } }],
             { useNativeDriver: true })}>
             <View style={{paddingTop: 20}}/>
-            <ProfileButton diameter={30}/>
+            <area.RowArea>
+            <View style={{flex:1}}><ProfileButton diameter={30}/></View>
+            {owner===1 ? 
+            <button.LineButton color={colors.black} height={22} paddingH={12} paddingV={4}>
+              <text.Button3 color={colors.black}>수정</text.Button3>
+            </button.LineButton> : null}
+            </area.RowArea>
             <View style={{marginBottom: 12}}/>
             <TextTemplate/>
             <View style={{alignItems:'flex-start'}}><SunButton sun={24} active={0}/></View>
@@ -87,6 +98,7 @@ export default function PostDetailScreen(){
           </Animated.ScrollView>
           {press===1 ? <CommentInputBar/> : null}
         </area.Container>
+      </TouchableWithoutFeedback>
     )
 }
 

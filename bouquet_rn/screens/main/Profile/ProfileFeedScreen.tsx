@@ -34,7 +34,7 @@ export default function NotificationScreen(){
           showsVerticalScrollIndicator={false}
           renderItem={(obj)=>{
             return(
-              <PostingItem/>
+              <PostingItem navigation={()=>{}}/>
             ); 
           }}></FlatList>
       </View>

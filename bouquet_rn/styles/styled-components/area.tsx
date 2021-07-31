@@ -1,5 +1,4 @@
 import styled from 'styled-components/native';
-import { Platform } from 'react-native';
 import {colors} from '../colors';
 
 // props & logic
@@ -40,7 +39,7 @@ export const TabBarArea = styled.SafeAreaView`
   flex-direction: row;
   background-color:${colors.white};
   justify-content:center;
-  align-items:flex-end;
+  align-items:center;
 `
 
 interface noHeightProps{
@@ -73,17 +72,17 @@ export const FormArea = styled.View`
 export const Container = styled.SafeAreaView `
   flex:1;
   background-color: ${colors.gray0};
-  padding-top: ${StatusBarHeight};
+  padding-top: ${StatusBarHeight}
 `
 
-export const ContainerBlank20 = styled.SafeAreaView `
+export const ContainerBlank20 = styled.View `
   flex:1;
   background-color: ${colors.gray0};
   padding-horizontal:20;
   padding-top:20;
 `
 
-export const ContainerBlank30 = styled.SafeAreaView `
+export const ContainerBlank30 = styled.View `
   flex:1;
   background-color: ${colors.gray0};
   padding-horizontal:30;

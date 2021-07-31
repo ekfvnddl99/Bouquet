@@ -11,12 +11,6 @@ import SendSvg from '../../assets/Send';
 import CommetnInputSvg from '../../assets/CommentInput';
 import RoundXSvg from '../../assets/RoundX';
 
-// props & logic
-import * as cal from '../logics/Calculation';
-
-// components
-import ProfileButton from './ProfileButton';
-
 
 export default function CommentInputBar(){
   return(
@@ -29,9 +23,9 @@ export default function CommentInputBar(){
         <RoundXSvg w='18' h='18'/>
       </area.RowArea>
       <area.RowArea style={styles.commentLower}>
-        <elses.CircleImg diameter={30} source={require('../../assets/img.jpg')}/>
+      <elses.CircleImg diameter={30} source={require('../../assets/img.jpg')}/>
         <View style={{flex:1}}>
-          <TextInput placeholder="어떤 반응을 남기고 싶나요?" style={styles.commentInput} multiline={true}/>
+          <TextInput placeholder="어떤 반응을 남기고 싶나요?" placeholderTextColor={colors.gray5} style={styles.commentInput} multiline={true}/>
         </View>
         <SendSvg w='30' h='30'/>
       </area.RowArea>
@@ -51,13 +45,13 @@ const styles = StyleSheet.create({
     backgroundColor:colors.white,
     paddingHorizontal:18,
     paddingVertical:8,
+    justifyContent:'center',
     alignItems:'flex-end'
   },
   commentInput:{
     backgroundColor:colors.gray0,
     borderRadius:10,
     paddingHorizontal:18,
-    paddingVertical:8,
     marginHorizontal:12
   },
 })

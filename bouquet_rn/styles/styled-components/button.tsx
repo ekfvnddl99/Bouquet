@@ -46,10 +46,11 @@ interface MiniListBtnProps{
   color : string,
   paddingH:number,
   paddingV:number,
+  isWidth : boolean,
 }
 export const MiniListButton = styled.TouchableOpacity`
   flex:1;
-  width:150;
+  ${(props : MiniListBtnProps)=>props.isWidth ? `width: 150;` : ''};
   height: ${(props : MiniListBtnProps)=>props.height};
   background-color: ${(props : MiniListBtnProps)=>props.color};
   border-radius: 10;
@@ -92,6 +93,16 @@ export const RecentSearchButton = styled.TouchableOpacity`
   padding-left: 10;
 `
 
+export const AddTemplate = styled.TouchableOpacity`
+  background-color: 'transparent';
+  border-radius: 10;
+  border-color:${colors.black};
+  border-style: dashed;
+  margin-vertical: 12;
+  align-items:center;
+  justify-content:center;
+`
+
 interface noHeightProps{
   marBottom: number,
   paddingH: number,
@@ -121,7 +132,6 @@ export const SunButton = styled.TouchableOpacity`
 `
 
 export const ProfileDetailButton = styled.TouchableOpacity`
-  width:100%;
   border-radius:10;
   background-color: ${colors.white};
   padding-horizontal:20;

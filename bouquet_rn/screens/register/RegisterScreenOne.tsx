@@ -2,6 +2,8 @@ import React, {Component, useState} from 'react';
 import {
     View,
     TextInput,
+    TouchableWithoutFeedback,
+    Keyboard
 } from 'react-native';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
@@ -44,6 +46,7 @@ export default function RegisterScreenOne({navigation} : RegisterProps){
     navigation.navigate("RegisterTwo");
   }
   return(
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <area.Container>
       <area.ContainerBlank20>
         <ProgressArea navigation={navigation} title="메일로 회원가입" step={1} intro={null}/>
@@ -64,7 +67,7 @@ export default function RegisterScreenOne({navigation} : RegisterProps){
           </View>
 
           <View style={{marginVertical:16}}>
-            <ConditionButton active={1} press={goNext} content="메일로 계속하기" paddingH={0} paddingV={14}/>
+            <ConditionButton active={1} press={goNext} content="메일로 계속하기" paddingH={0} paddingV={14} height={45}/>
           </View>
 
           <area.TextBtnArea style={{marginBottom:16}}>
@@ -75,5 +78,6 @@ export default function RegisterScreenOne({navigation} : RegisterProps){
         </area.BottomArea>
       </area.ContainerBlank20>
     </area.Container>
+    </TouchableWithoutFeedback>
   );
 }

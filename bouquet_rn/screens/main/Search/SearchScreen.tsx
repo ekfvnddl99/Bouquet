@@ -1,4 +1,4 @@
-import React, {Component, useRef,useState} from 'react';
+import React, {Component, useRef,useState, useCallback} from 'react';
 import {
     View,
     Animated,
@@ -6,6 +6,8 @@ import {
     StyleSheet,
     TextInput,
     FlatList,
+    TouchableWithoutFeedback,
+  Keyboard
 } from 'react-native';
 import {colors} from '../../../styles/colors'
 import * as area from '../../../styles/styled-components/area';
@@ -24,6 +26,7 @@ import RecentSearchItem from '../../components/RecentSearchItem';
 import CharacterItem from '../../components/CharacterItem';
 import PostingItem from '../../components/PostingItem';
 import EpisodeMiniItem from '../../components/EpisodeMiniItem';
+import { onChange } from 'react-native-reanimated';
 
 const HEADER_MAX_HEIGHT = 95;
 const HEADER_MIN_HEIGHT = 60;
@@ -57,6 +60,7 @@ export default function SearchScreen({navigation} : SearchProps){
     }
 
     return(
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <area.Container>
           <Animated.View
             pointerEvents="none"
@@ -67,7 +71,9 @@ export default function SearchScreen({navigation} : SearchProps){
               <View style={{marginLeft: 18, marginRight:10}}>
                 {focus===1 ? <SearchViewFocusSvg w='15' h='15'/> : <SearchViewSvg w='15' h='15'/>}
               </View>
-              <View style={{flex:1}}><TextInput placeholder="무엇이 궁금한가요?" onFocus={()=>setFocus(1)} onBlur={()=>setFocus(0)}/></View>
+              <View style={{flex:1}}>
+                <TextInput placeholder="무엇이 궁금한가요?" onFocus={()=>setFocus(1)}/>
+              </View>
             </Animated.View>
           </View>
           <Animated.ScrollView 
@@ -109,7 +115,7 @@ export default function SearchScreen({navigation} : SearchProps){
                   }}></FlatList>
               </View>
 
-              <View style={{marginTop:40}}>
+              <Animated.View style={{marginTop:40}}>
                 <text.Subtitle3 color={colors.black}>인기 에피소드</text.Subtitle3>
                 <FlatList
                   style={{marginTop:12}}
@@ -121,7 +127,7 @@ export default function SearchScreen({navigation} : SearchProps){
                       <EpisodeMiniItem navigation={navigation}/>
                     ); 
                   }}></FlatList>
-              </View>
+              </Animated.View>
 
           </View>
 
@@ -139,6 +145,7 @@ export default function SearchScreen({navigation} : SearchProps){
           </area.ContainerBlank30>
           </Animated.ScrollView>
         </area.Container>
+      </TouchableWithoutFeedback>
     )
 }
 

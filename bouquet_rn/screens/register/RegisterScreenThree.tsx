@@ -1,7 +1,9 @@
 import React, {Component, useState} from 'react';
 import {
   View,
-  TouchableOpacity
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard
 } from 'react-native';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
@@ -31,6 +33,7 @@ export default function RegisterScreenThree({navigation} : RegisterProps){
   }
 
   return(
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <area.Container>
       <area.ContainerBlank20>
         <ProgressArea navigation={navigation} title="계정 정보 입력" step={3} intro={null}/>
@@ -57,9 +60,10 @@ export default function RegisterScreenThree({navigation} : RegisterProps){
             <PrimaryTextButton press={()=>{}} content="개인정보 취급 방침" level={2}/>
             <text.Caption color={colors.gray6}>에 모두 동의하시나요?</text.Caption>
           </area.TextBtnArea>
-          <ConditionButton active={1} press={goNext} content="필수 약관 동의 & 가입 완료" paddingH={0} paddingV={14}/>
+          <ConditionButton active={1} press={goNext} content="필수 약관 동의 & 가입 완료" paddingH={0} paddingV={14} height={45}/>
         </area.BottomArea>
       </area.ContainerBlank20>
     </area.Container>
+    </TouchableWithoutFeedback>
   );
 }

@@ -37,7 +37,7 @@ export default function RegisterScreenFour({navigation} : RegisterProps){
 
       <area.ContainerBlank20>
         <area.BottomArea style={{marginBottom:16}}>
-          <ConditionButton active={1} press={goNext} content="시작" paddingH={0} paddingV={14}/>
+          <ConditionButton active={1} press={goNext} content="시작" paddingH={0} paddingV={14} height={45}/>
         </area.BottomArea>
       </area.ContainerBlank20>
     </area.Container>
