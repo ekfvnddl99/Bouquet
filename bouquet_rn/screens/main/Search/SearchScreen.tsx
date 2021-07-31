@@ -26,7 +26,6 @@ import RecentSearchItem from '../../components/RecentSearchItem';
 import CharacterItem from '../../components/CharacterItem';
 import PostingItem from '../../components/PostingItem';
 import EpisodeMiniItem from '../../components/EpisodeMiniItem';
-import { onChange } from 'react-native-reanimated';
 
 const HEADER_MAX_HEIGHT = 95;
 const HEADER_MIN_HEIGHT = 60;
@@ -34,9 +33,12 @@ const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 export default function SearchScreen({navigation} : SearchProps){
     // dummy data - 서버에서 불러와야 함.
-    let oneData=['김guswlej', '현', '지', '현', '지', '현', '지', '현', '지', '현', '지', '현', '지'];
-    let Data=[1,2,3,4,5,6,7,8,9];
+    let Data=[{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9}];
 
+    const[selectIdCha, setSelectIdCha]=useState(-1);
+    const[selectIdEpi, setSelectIdEpi]=useState(-1);
+    const[selectIdPost, setSelectIdPost]=useState(-1);
+    const[selectIdRecent, setSelectIdRecent]=useState(-1);
     const[focus, setFocus]=useState(0);
 
     const scroll = useRef(new Animated.Value(0)).current;
@@ -90,12 +92,15 @@ export default function SearchScreen({navigation} : SearchProps){
                 <text.Subtitle3 color={colors.black}>최근 검색어</text.Subtitle3>
                 <FlatList
                   style={{marginTop:12}}
-                  data={oneData}
+                  data={Data}
+                  keyExtractor={(item) => item.id.toString()}
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
                   renderItem={(obj)=>{
                     return(
-                      <RecentSearchItem content={obj.item}/>
+                      <TouchableWithoutFeedback onPress={()=>{selectIdRecent===obj.index ? setSelectIdRecent(-1) : setSelectIdRecent(obj.index)}}>
+                        <RecentSearchItem content={obj.item.id.toString()} press={selectIdEpi} id={obj.index}/>
+                      </TouchableWithoutFeedback>
                     ); 
                   }}>
                 </FlatList>
@@ -106,11 +111,14 @@ export default function SearchScreen({navigation} : SearchProps){
                 <FlatList
                   style={{marginTop:12}}
                   data={Data}
+                  keyExtractor={(item) => item.id.toString()}
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
                   renderItem={(obj)=>{
                     return(
-                      <CharacterItem/>
+                    <TouchableWithoutFeedback onPress={()=>{selectIdCha===obj.index ? setSelectIdCha(-1) : setSelectIdCha(obj.index)}}>
+                      <CharacterItem press={selectIdEpi} id={obj.index}/>
+                    </TouchableWithoutFeedback>
                     ); 
                   }}></FlatList>
               </View>
@@ -120,11 +128,14 @@ export default function SearchScreen({navigation} : SearchProps){
                 <FlatList
                   style={{marginTop:12}}
                   data={Data}
+                  keyExtractor={(item) => item.id.toString()}
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
                   renderItem={(obj)=>{
                     return(
-                      <EpisodeMiniItem navigation={navigation}/>
+                      <TouchableWithoutFeedback onPress={()=>{selectIdEpi===obj.index ? setSelectIdEpi(-1) : setSelectIdEpi(obj.index)}}>
+                        <EpisodeMiniItem navigation={navigation} press={selectIdEpi} id={obj.index}/>
+                      </TouchableWithoutFeedback>
                     ); 
                   }}></FlatList>
               </Animated.View>
@@ -136,10 +147,13 @@ export default function SearchScreen({navigation} : SearchProps){
             <FlatList
               style={{marginTop:12}}
               data={Data}
+              keyExtractor={(item) => item.id.toString()}
               showsVerticalScrollIndicator={false}
               renderItem={(obj)=>{
                 return(
-                  <PostingItem navigation={navigation}/>
+                  <TouchableWithoutFeedback onPress={()=>{selectIdPost===obj.index ? setSelectIdPost(-1) : setSelectIdPost(obj.index)}}>
+                    <PostingItem navigation={navigation} press={selectIdPost} id={obj.index}/>
+                  </TouchableWithoutFeedback>
                 ); 
               }}></FlatList>
           </area.ContainerBlank30>

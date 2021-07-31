@@ -5,7 +5,8 @@ import {
     FlatList,
     ScrollView,
     Platform,
-    StyleSheet
+    StyleSheet,
+    TouchableWithoutFeedback
 } from 'react-native';
 import {colors} from '../../../styles/colors';
 import * as area from '../../../styles/styled-components/area';
@@ -25,7 +26,9 @@ const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 function InNotificationScreen(){
-  let data=[1,2,3,4,5,6,7,8,9, 10];
+  let Data=[{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9}];
+
+  const[selectId, setSelectId]=useState(-1);
 
   const scroll = useRef(new Animated.Value(0)).current;
   const ScaleImg = scroll.interpolate({
@@ -78,10 +81,17 @@ function InNotificationScreen(){
           [{ nativeEvent: { contentOffset: { y: scroll } } }],
           { useNativeDriver: true })}>
         <View style={{paddingTop: 30+14}}/>
-        {data.length===0 ? 
-          <View style={{alignItems:'center'}}><text.Caption color={colors.gray6}>이제 확인할 알림이 없어요!</text.Caption></View> : 
-          <FlatList data={data} renderItem={(obj)=>{
-            return(<NotificationItem/>);}}>
+        {Data.length===0 ? 
+          <View style={{alignItems:'center'}}><text.Caption color={colors.gray6}>이제 확인할 알림이 없어요!</text.Caption></View>
+          :<FlatList 
+          data={Data} 
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={(obj)=>{
+            return(
+              <TouchableWithoutFeedback onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
+                <NotificationItem press={selectId} id={obj.index}/>
+              </TouchableWithoutFeedback>
+            );}}>
           </FlatList>}
       </Animated.ScrollView>
     </area.Container>
@@ -89,6 +99,10 @@ function InNotificationScreen(){
 }
 
 function OutNotificationScreen(){
+  let Data=[{id:1}];
+
+  const[selectId, setSelectId]=useState(-1);
+
   return(
     <area.Container>
       <area.RowArea style={{marginHorizontal:30, marginTop:30}}>
@@ -98,9 +112,14 @@ function OutNotificationScreen(){
         </View>
       </area.RowArea>
       <View style={{marginTop:30, marginHorizontal:30}}>
-        <FlatList data={[0]} renderItem={(obj)=>{
-          return(<NotificationItem/>);}}>
-        </FlatList>
+      <FlatList 
+          data={Data} 
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={(obj)=>{
+            return(
+              <NotificationItem press={selectId} id={obj.index}/>
+            );}}>
+          </FlatList>
       </View>
       <View style={{flex:1, justifyContent:'flex-end'}}>
         <NotLoginPrimaryButton/>

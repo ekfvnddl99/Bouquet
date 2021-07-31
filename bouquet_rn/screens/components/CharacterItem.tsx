@@ -6,7 +6,7 @@ import * as text from '../../styles/styled-components/text';
 import * as elses from '../../styles/styled-components/elses';
 
 
-export default function CharacterItem(){
+export default function CharacterItem({press, id}  :{press:number, id:number}){
     return(
       <button.MiniListButton isWidth={true} height={200} color={colors.white} paddingH={18} paddingV={18} style={{alignItems:'center', marginRight:10}} activeOpacity={1}>
         <elses.CircleImg diameter={100} source={require('../../assets/img.jpg')}/>

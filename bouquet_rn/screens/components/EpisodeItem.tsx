@@ -10,7 +10,7 @@ import * as elses from '../../styles/styled-components/elses';
 import ProfileButton from './ProfileButton';
 import TagItem from './TagItem';
 
-function Inner(mini:number){
+function Inner(mini:number,){
   return(
     <View style={{flexDirection:'row'}}>
       {mini===1 ? <elses.RectangleImg width={90} height={117} source={require('../../assets/img.jpg')}/>
@@ -27,7 +27,7 @@ function Inner(mini:number){
   );
 }
 
-export default function EpisodeItem({color, mini} : {color:string, mini:number}){
+export default function EpisodeItem({color, mini, press, id} : {color:string, mini:number, press:number, id:number}){
   return(
     <View>
       {color===colors.white 

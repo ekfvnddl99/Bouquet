@@ -35,9 +35,9 @@ const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 export default function PostDetailScreen(){
     // dummy data - 서버에서 불러와야 함
-    let Data=[1,2,3,4,5,6,7,8,9];
+    let Data=[{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9}];
 
-    const[press, setPress]=useState(-1);
+    const[selectId, setSelectId]=useState(-1);
     const[owner, setOwner]=useState(1);
 
     const scroll = useRef(new Animated.Value(0)).current;
@@ -86,17 +86,17 @@ export default function PostDetailScreen(){
             <FlatList
               data={Data}
               showsHorizontalScrollIndicator={false}
-              keyExtractor={(item, index) => index.toString()}
+              keyExtractor={(item) => item.id.toString()}
               renderItem={(obj)=>{
                 return(
-                  <TouchableOpacity onPress={()=>{setPress(press*(-1)), console.log(press)}}>
-                    <CommentItem press={press}/>
-                  </TouchableOpacity>
+                  <TouchableWithoutFeedback onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
+                    <CommentItem press={selectId} id={obj.index}/>
+                  </TouchableWithoutFeedback>
                 ); 
               }}>
             </FlatList>
           </Animated.ScrollView>
-          {press===1 ? <CommentInputBar/> : null}
+          {selectId!==-1 ? <CommentInputBar/> : null}
         </area.Container>
       </TouchableWithoutFeedback>
     )

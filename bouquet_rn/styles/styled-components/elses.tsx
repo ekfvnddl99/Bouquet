@@ -2,6 +2,9 @@ import {Animated} from 'react-native';
 import styled from 'styled-components/native';
 import {colors} from '../colors';
 
+// props & logic
+import { StatusBarHeight } from '../../screens/logics/StatusbarHeight';
+
 interface BarProps{
   width : string,
   color : string,

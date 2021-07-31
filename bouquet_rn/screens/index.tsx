@@ -97,6 +97,7 @@ function TabNavigator(){
   return(
     <Tab.Navigator
       initialRouteName="Home"
+      backBehavior='none'
       tabBar={({state, navigation})=>CustomTabBar({state, navigation})}
       lazy = {false}
       tabBarOptions={{
@@ -216,9 +217,25 @@ function ChaGenerationStackNavigator(){
 
 const RegisterStack = createStackNavigator<Types.RegisterStackParam>();
 function RegisterStackNavigator(){
+  const config = {
+    animation: 'spring',
+    config: {
+      stiffness: 1000,
+      damping: 500,
+      mass: 3,
+      overshootClamping: true,
+      restDisplacementThreshold: 0.01,
+      restSpeedThreshold: 0.01,
+    },
+  };
   return(
     <RegisterStack.Navigator
-      initialRouteName="RegisterOne">
+      initialRouteName="RegisterOne"
+      screenOptions={
+        {
+          cardOverlayEnabled:false
+        }
+      }>
       <RegisterStack.Screen
         name="RegisterOne"
         component={RegisterScreenOne}

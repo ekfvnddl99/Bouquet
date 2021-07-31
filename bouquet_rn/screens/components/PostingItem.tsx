@@ -18,7 +18,7 @@ import * as cal from '../logics/Calculation';
 import SunButton from './SunButton';
 import ProfileButton from './ProfileButton';
 
-export default function PostingItem({navigation} : {navigation:any}){
+export default function PostingItem({navigation, press, id}  :{navigation:any, press:number, id:number}){
   const goPosting=()=>{
     navigation.navigate("Posting");
   }

@@ -3,7 +3,7 @@ import {
     View,
     FlatList,
     Animated,
-    Platform,
+    TouchableWithoutFeedback,
     StyleSheet,
     StatusBar
 } from 'react-native';
@@ -27,7 +27,10 @@ const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 function InHomeScreen(){
   // dummy data - 서버에서 불러와야 함
-  let threeData=[1,2,3,4,5,6,7,8,9];
+  let Data=[{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9}];
+
+  const[selectId, setSelectId]=useState(-1);
+
   const scroll = useRef(new Animated.Value(0)).current;
   const ScaleImg = scroll.interpolate({
     inputRange: [0, HEADER_SCROLL_DISTANCE],
@@ -62,7 +65,7 @@ function InHomeScreen(){
     <area.Container>
       <Animated.View
         pointerEvents="none"
-        style={[styles.header,{ opacity: OpacityHeader }]}>
+        style={[styles.header, { opacity: OpacityHeader }]}>
       </Animated.View>
 
       <area.RowArea style={{marginHorizontal:30, marginTop:30}}>
@@ -95,11 +98,14 @@ function InHomeScreen(){
           { useNativeDriver: true })}>
         <View style={{paddingTop: 20+14}}/>
         <FlatList
-          data={threeData}
+          data={Data}
           showsVerticalScrollIndicator={false}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={(obj)=>{
             return(
-              <PostingItem navigation={()=>{}}/>
+              <TouchableWithoutFeedback onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
+                <PostingItem navigation={()=>{}} press={selectId} id={obj.index}/>
+              </TouchableWithoutFeedback>
             ); 
           }}></FlatList>
       </Animated.ScrollView>
@@ -109,7 +115,9 @@ function InHomeScreen(){
 
 function OutHomeScreen(){
   // dummy data - 서버에서 불러와야 함
-  let threeData=[1,2,3,4,5,6,7,8,9];
+  let Data=[{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9}];
+
+  const[selectId, setSelectId]=useState(-1);
   const scroll = useRef(new Animated.Value(0)).current;
   const TranslateImgY = scroll.interpolate({
     inputRange: [0, HEADER_SCROLL_DISTANCE],
@@ -152,10 +160,16 @@ function OutHomeScreen(){
           { useNativeDriver: true })}>
         <View style={{paddingTop: 20+14}}/>
         <FlatList
-          data={threeData}
+          data={Data}
           showsVerticalScrollIndicator={false}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={(obj)=>{
-            return(<PostingItem navigation={()=>{}}/>);}}></FlatList>
+            return(
+              <TouchableWithoutFeedback onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
+                <PostingItem navigation={()=>{}} press={selectId} id={obj.index}/>
+              </TouchableWithoutFeedback>
+            ); 
+          }}></FlatList>
       </Animated.ScrollView>
       <View style={{justifyContent:'flex-end'}}>
         <NotLoginPrimaryButton/>

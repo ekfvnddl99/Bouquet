@@ -8,7 +8,7 @@ import * as elses from '../../styles/styled-components/elses';
 // components
 import ProfileButton from './ProfileButton';
 
-export default function EpisodeMiniItem({navigation} : {navigation : any}){
+export default function EpisodeMiniItem({navigation, press, id}  :{navigation:any, press:number, id:number}){
     const goEpisode=()=>{
       navigation.navigate("Episode");
     }

@@ -12,7 +12,7 @@ import * as elses from '../../styles/styled-components/elses';
 import ProfileInfoText from '../components/ProfileInfoText';
 
 
-export default function ProfileDetailItem({mini} : {mini:number}){
+export default function ProfileDetailItem({mini, press, id} : {mini:number, press:number, id:number}){
   return(
       <button.ProfileDetailButton activeOpacity={1}>
         <View style={{alignItems:'center', justifyContent:'center'}}>

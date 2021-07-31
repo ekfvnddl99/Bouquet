@@ -2,7 +2,8 @@ import React, {Component, useState} from 'react';
 import {
     View,
     FlatList,
-    StyleSheet
+    StyleSheet,
+    TouchableWithoutFeedback
 } from 'react-native';
 import { colors } from '../../styles/colors';
 
@@ -10,13 +11,14 @@ import { colors } from '../../styles/colors';
 import ProfileDetailItem from '../components/ProfileDetailItem';
 
 interface carouselProps{
-  pages:number[],
+  pages:any[],
   offset:number,
   gap:number,
   pageWidth:number
 }
 
-export default function Carousel({pages, offset, gap, pageWidth} : carouselProps){
+export default function  Carousel({pages, offset, gap, pageWidth} : carouselProps){
+  const[selectId, setSelectId]=useState(-1);
   const[page, setPage]=useState(0);
   const onScroll = (e: any) => {
     const newPage = Math.round(
@@ -27,17 +29,22 @@ export default function Carousel({pages, offset, gap, pageWidth} : carouselProps
   return(
     <View style={{justifyContent:'center', alignItems:'center'}}>
       <FlatList
-        contentContainerStyle={{paddingHorizontal: offset + gap / 2, backgroundColor:colors.black}}
+        contentContainerStyle={{paddingHorizontal: offset + gap / 2}}
         data={pages}
-        decelerationRate="fast"
+        onScroll={onScroll}
+        decelerationRate="fast" 
         horizontal
         pagingEnabled
         snapToInterval={pageWidth + gap}
         snapToAlignment='center'
         showsHorizontalScrollIndicator={false}
-        renderItem={()=>{
+        renderItem={(obj)=>{
           return(
-            <View style={{width: pageWidth, marginHorizontal: gap / 2}}><ProfileDetailItem mini={0}/></View>
+            <TouchableWithoutFeedback onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
+              <View style={{width: pageWidth, marginHorizontal: gap / 2}}>
+                <ProfileDetailItem mini={0} press={selectId} id={obj.index}/>
+              </View>
+            </TouchableWithoutFeedback>
           );
         }}/>
     </View>

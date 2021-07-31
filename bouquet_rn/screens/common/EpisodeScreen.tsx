@@ -1,10 +1,10 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {
     ScrollView,
     FlatList,
     View,
     Animated,
-    TouchableHighlight,
+    TouchableWithoutFeedback,
     Platform,
     StyleSheet
 } from 'react-native';
@@ -30,7 +30,9 @@ const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 export default function EpisodeScreen(){
     // dummy data - 서버에서 불러와야 함
-    let threeData=[1,2,3,4,5,6,7,8,9];
+    let Data=[{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9}];
+
+    const[selectId, setSelectId]=useState(-1);
 
     const scroll = useRef(new Animated.Value(0)).current;
     const OpacityTitle = scroll.interpolate({
@@ -81,10 +83,15 @@ export default function EpisodeScreen(){
             </area.RowArea>
 
             <FlatList
-                data={threeData}
+                data={Data}
                 showsVerticalScrollIndicator={false}
+                keyExtractor={(item) => item.id.toString()}
                 renderItem={(obj)=>{
-                  return(<PostingItem navigation={null}/>);}}></FlatList>
+                  return(
+                  <TouchableWithoutFeedback onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
+                    <PostingItem navigation={()=>{}}/>
+                  </TouchableWithoutFeedback>
+                );}}></FlatList>
           </Animated.ScrollView>
         </area.Container>
     )

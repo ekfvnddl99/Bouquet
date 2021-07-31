@@ -15,9 +15,9 @@ import * as button from '../../styles/styled-components/button';
 // props & logic
 import * as cal from '../logics/Calculation';
 
-export default function NotificationItem(){
+export default function NotificationItem({press, id}  :{press:number, id:number}){
     return(
-      <button.NotificationButton activeOpacity={1}>
+      <button.NotificationButton activeOpacity={0}>
           <elses.CircleImg diameter={20} source={require('../../assets/img.jpg')}/>
           <View style={styles.contentText}>
             <area.RowArea>

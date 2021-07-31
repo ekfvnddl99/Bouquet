@@ -19,11 +19,11 @@ import * as cal from '../logics/Calculation';
 import ProfileButton from './ProfileButton';
 
 
-export default function CommentItem({press}  :{press:number}){
+export default function CommentItem({press, id}  :{press:number, id:number}){
   const[multi, setMulti]=useState(1);
   const[more, setMore]=useState(0);
   return(
-    <area.NoHeightArea marBottom={8} paddingH={16} paddingV={12} style={{backgroundColor: press==1 ? colors.alpha10_primary : colors.white}}>
+    <area.NoHeightArea marBottom={8} paddingH={16} paddingV={12} style={{backgroundColor: press===id ? colors.alpha10_primary : colors.white}}>
       <area.RowArea style={{alignItems:'flex-start', marginBottom:8}}>
         <View style={styles.contentText}>
           <text.Body2R color={colors.black}>qmffkqfmffkwkdskskdlsjfka; jf;asjdfasjficwfmqwe</text.Body2R>
@@ -37,7 +37,7 @@ export default function CommentItem({press}  :{press:number}){
         <ProfileButton diameter={20}/>
         <View style={{flex:1}}/>
         <area.RowArea>
-          {press===1 ? <TouchableOpacity style={{marginRight:8}}><BinSvg w='18' h='18'/></TouchableOpacity> : null}
+          {press===id ? <TouchableOpacity style={{marginRight:8}}><BinSvg w='18' h='18'/></TouchableOpacity> : null}
           {multi===1 ? 
           <View>{more===1 ?<TouchableOpacity onPress={()=>setMore(-1)}><CommentDownArrowSvg w='18' h='18'/></TouchableOpacity> 
           : <TouchableOpacity onPress={()=>setMore(1)}><CommentUpArrowSvg w='18' h='18'/></TouchableOpacity>}</View>
