@@ -17,6 +17,7 @@ import * as elses from '../../../styles/styled-components/elses';
 import PlusSvg from '../../../assets/Plus';
 import GridSvg from '../../../assets/Grid';
 import SwipeSvg from '../../../assets/Swipe';
+import SettingSvg from '../../../assets/Setting';
 
 // props & logic
 import { StatusBarHeight } from '../../logics/StatusbarHeight';
@@ -26,6 +27,7 @@ import BgButton from '../../components/BackgroundButton';
 import ProfileSwipeScreen from './ProfileSwipeScreen';
 import ProfileGridScreen from './ProfileGridScreen';
 import { useState } from 'react';
+import FloatingButton from '../../components/FloatingButton';
 
 const HEADER_MAX_HEIGHT = 90;
 const HEADER_MIN_HEIGHT = 60;
@@ -52,7 +54,7 @@ export default function EpisodeScreen(){
 
           <area.RowArea style={{paddingHorizontal:30, paddingVertical:16}}>
             <View style={{flex:1}}><elses.CircleImg diameter={24} source={require('../../../assets/img.jpg')}/></View>
-            <View style={{marginRight:16}}><PlusSvg w='24' h='24'/></View>
+            <TouchableOpacity style={{marginRight:16}}><PlusSvg w='24' h='24'/></TouchableOpacity>
             {swipe===1 ? 
             <TouchableOpacity onPress={()=>setSwipe(0)}>
               <GridSvg w='24' h='24'/>
@@ -60,9 +62,11 @@ export default function EpisodeScreen(){
             <TouchableOpacity onPress={()=>setSwipe(1)}>
               <SwipeSvg w='24' h='24'/>
             </TouchableOpacity>}
+            <TouchableOpacity style={{marginLeft:16}}><SettingSvg w='24' h='24'/></TouchableOpacity>
           </area.RowArea>
           
           {swipe===1 ? <ProfileSwipeScreen/> : <ProfileGridScreen scroll={scroll}/>}
+          <FloatingButton/>
         </area.Container>
     )
 }

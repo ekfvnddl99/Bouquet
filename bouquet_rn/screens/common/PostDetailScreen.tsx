@@ -25,6 +25,8 @@ import BackButton from '../components/BackButton';
 import SunButton from '../components/SunButton';
 import CommentItem from '../components/CommentItem';
 import CommentInputBar from '../components/CommentInputBar';
+import BlackLineButton from '../components/BlackLineButton';
+import ConditionButton from '../components/ConditionButton';
 
 // template
 import TextTemplate from '../template/TextTemplate';
@@ -70,15 +72,18 @@ export default function PostDetailScreen(){
             { useNativeDriver: true })}>
             <View style={{paddingTop: 20}}/>
             <area.RowArea>
-            <View style={{flex:1}}><ProfileButton diameter={30}/></View>
-            {owner===1 ? 
-            <button.LineButton color={colors.black} height={22} paddingH={12} paddingV={4}>
-              <text.Button3 color={colors.black}>수정</text.Button3>
-            </button.LineButton> : null}
+              <View style={{flex:1}}><ProfileButton diameter={30}/></View>
+              {owner===1 ? 
+              <area.RowArea>
+                <BlackLineButton press={()=>{}} content="수정"/>
+                <button.LineButton color={colors.warning_red} height={22} paddingH={12} paddingV={4} style={{marginLeft:4}}>
+                  <text.Button3 color={colors.warning_red}>삭제</text.Button3>
+                </button.LineButton>
+              </area.RowArea> : null}
             </area.RowArea>
             <View style={{marginBottom: 12}}/>
             <TextTemplate/>
-            <View style={{alignItems:'flex-start'}}><SunButton sun={24} active={0}/></View>
+            <View style={{alignItems:'flex-start'}}><SunButton sun={24}/></View>
             <View style={{marginTop:36}}>
               <text.Subtitle3 color={colors.black}>반응</text.Subtitle3>
               <View style={{marginBottom: 12}}/>
@@ -89,9 +94,9 @@ export default function PostDetailScreen(){
               keyExtractor={(item) => item.id.toString()}
               renderItem={(obj)=>{
                 return(
-                  <TouchableWithoutFeedback onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
+                  <TouchableOpacity activeOpacity={1} onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
                     <CommentItem press={selectId} id={obj.index}/>
-                  </TouchableWithoutFeedback>
+                  </TouchableOpacity>
                 ); 
               }}>
             </FlatList>

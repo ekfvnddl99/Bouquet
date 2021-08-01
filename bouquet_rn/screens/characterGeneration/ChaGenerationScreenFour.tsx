@@ -39,7 +39,7 @@ export default function ChaGenerationScreenFour({navigation} : ChaGenerationProp
 
       <area.ContainerBlank20>
         <area.BottomArea style={{marginBottom:16}}>
-          <ConditionButton active={1} press={goNext} content="시작" paddingH={0} paddingV={14}/>
+          <ConditionButton height={44} active={1} press={goNext} content="시작" paddingH={0} paddingV={14}/>
         </area.BottomArea>
       </area.ContainerBlank20>
     </area.Container>

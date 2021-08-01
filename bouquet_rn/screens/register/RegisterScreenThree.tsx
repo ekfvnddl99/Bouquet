@@ -16,6 +16,7 @@ import GallerySvg from '../../assets/Gallery';
 
 // props & logic
 import type {RegisterProps} from '../../utils/types';
+import {getByte} from '../logics/Calculation';
 
 // components
 import ProgressArea from '../components/ProgressArea';
@@ -27,6 +28,8 @@ import WarningText from '../components/WarningText';
 
 export default function RegisterScreenThree({navigation} : RegisterProps){
   const[err, setErr] = useState(1);
+  const[byte, setByte]=useState(0);
+  const[nickname, setNickname]=useState('');
 
   const goNext=()=>{
     navigation.navigate("RegisterFour");
@@ -47,10 +50,12 @@ export default function RegisterScreenThree({navigation} : RegisterProps){
           </TouchableOpacity>
         </View>
 
-        <ConditionTextInput height={44} placeholder="별명" onChange={()=>{}} keyboard={'default'} active={1}/>
-        <View>{err===1 ? <WarningText content="무야호" marginTop={8}/> : null}</View>
-        <ConditionText content=" 8글자 이상, 32글자 이하" active={0}/>
-        <ConditionText content=" 특수문자는 _(언더바), -(하이픈)만 사용" active={0}/>
+        <ConditionTextInput height={44} placeholder="별명" onChange={setNickname} keyboard={'default'} active={1}/>
+        <area.RowArea style={{marginTop:8}}>
+          <View style={{flex:1}}>{err===1 ? <WarningText content="무야호" marginTop={0}/> : null}</View>
+          <text.Caption color={colors.gray6}>{getByte(nickname)} / 20 byte</text.Caption>
+        </area.RowArea>
+        <ConditionText content=" 20 byte 이하" active={0}/>
         <ConditionText content=" 중복되지 않는 별명" active={0}/>
 
         <area.BottomArea style={{marginBottom:16}}>

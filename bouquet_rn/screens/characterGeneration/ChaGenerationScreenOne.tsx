@@ -21,7 +21,7 @@ export default function ChaGenerationScreenOne({navigation} : ChaGenerationProps
         <ProgressArea navigation={navigation} title="어떤 모습인가요?" step={1} intro="이 캐릭터의 겉모습을 생각해 보아요."/>
 
         <area.BottomArea style={{marginBottom:16}}>
-          <ConditionButton active={1} press={goNext} content="기본 정보 입력" paddingH={0} paddingV={14}/>
+          <ConditionButton height={44} active={1} press={goNext} content="기본 정보 입력" paddingH={0} paddingV={14}/>
         </area.BottomArea>
       </area.ContainerBlank20>
     </area.Container>

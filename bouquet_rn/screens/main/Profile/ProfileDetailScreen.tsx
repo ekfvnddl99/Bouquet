@@ -59,7 +59,7 @@ export default function EpisodeScreen(){
           [{ nativeEvent: { contentOffset: { y: scroll } } }],
           { useNativeDriver: true })}>
           <View style={{paddingTop: 20}}/>
-          <ProfileDetailItem mini={0}/>
+          <ProfileDetailItem mini={0} press={0} id={-1}/>
 
           <View style={{marginTop:30}}>
             <area.RowArea>

@@ -20,6 +20,7 @@ import { StatusBarHeight } from '../../logics/StatusbarHeight';
 import PostingItem from '../../components/PostingItem';
 import NameNText from '../../components/NameNText';
 import NotLoginPrimaryButton from '../../components/NotLoginPrimaryButton';
+import FloatingButton from '../../components/FloatingButton';
 
 const HEADER_MAX_HEIGHT = 94;
 const HEADER_MIN_HEIGHT = 60;
@@ -109,6 +110,7 @@ function InHomeScreen(){
             ); 
           }}></FlatList>
       </Animated.ScrollView>
+      <FloatingButton/>
     </area.Container>      
   )
 }

@@ -83,9 +83,12 @@ export const NotificationButton = styled.TouchableOpacity`
   margin-bottom: 10;
 `
 
-export const RecentSearchButton = styled.TouchableOpacity`
+interface colorProps{
+  color:string
+}
+export const TagModifyButton = styled.TouchableOpacity`
   height: 28;
-  background-color: ${colors.white};
+  background-color: ${(props:colorProps)=> props.color};
   border-radius: 10;
   margin-right: 4;
   flex-direction:row;
@@ -117,15 +120,12 @@ export const NoHeightButton = styled.TouchableOpacity`
   padding-vertical:${(props:noHeightProps)=> props.paddingV};
 `
 
-interface sunProps{
-  color:string
-}
 export const SunButton = styled.TouchableOpacity`
   flex-direction:row;
   border-width:1;
   border-color:${colors.primary};
   border-radius:10;
-  background-color:${(props:sunProps)=> props.color};
+  background-color:${(props:colorProps)=> props.color};
   align-items:center;
   padding-vertical:4;
   padding-horizontal:8;

@@ -22,6 +22,7 @@ import { StatusBarHeight } from '../logics/StatusbarHeight';
 import ConditionButton from '../components/ConditionButton';
 import ProfileButton from '../components/ProfileButton';
 import BackButton from '../components/BackButton';
+import BlackLineButton from '../components/BlackLineButton';
 
 export default function PostWritingScreen(){
   const[select, setSelect]=useState(1);
@@ -40,9 +41,7 @@ export default function PostWritingScreen(){
               <area.RowArea>
                 <View style={{flex:1}}><ProfileButton diameter={30}/></View>
                 {select===1 ? 
-                <button.LineButton color={colors.black} height={22} paddingH={12} paddingV={4}>
-                  <text.Button3 color={colors.black}>템플릿 변경</text.Button3>
-                </button.LineButton> : null}
+                <BlackLineButton press={()=>{}} content="템플릿 변경"/> : null}
               </area.RowArea>
               <button.AddTemplate/>
               <input.TextTemplate/>

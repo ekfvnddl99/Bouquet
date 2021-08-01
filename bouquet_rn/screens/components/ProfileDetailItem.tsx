@@ -10,7 +10,8 @@ import * as elses from '../../styles/styled-components/elses';
 
 // components
 import ProfileInfoText from '../components/ProfileInfoText';
-
+import ProfileButton from './ProfileButton';
+import ProfileInfoTag from './ProfileInfoTag';
 
 export default function ProfileDetailItem({mini, press, id} : {mini:number, press:number, id:number}){
   return(
@@ -33,6 +34,10 @@ export default function ProfileDetailItem({mini, press, id} : {mini:number, pres
             <View style={{marginRight:32}}/>
             <ProfileInfoText bold="321" regular="게시글" color={colors.primary} center={1}/>
           </area.RowArea>
+          <area.RowArea style={{marginBottom:24}}>
+            <ProfileButton diameter={20}/>
+            <text.Body2R color={colors.black}>의 캐릭터</text.Body2R>
+          </area.RowArea>
         </View>
         }
 
@@ -42,9 +47,9 @@ export default function ProfileDetailItem({mini, press, id} : {mini:number, pres
           <ProfileInfoText bold="국적" regular="123" color={colors.black} center={1}/>
         </area.RowArea>
         <View style={{marginTop:16}}/>
-        <ProfileInfoText bold="좋아하는 것" regular="231" color={colors.black} center={0}/>
+        <ProfileInfoTag title="좋아하는 것" tags={['1','2']}/>
         <View style={{marginTop:16}}/>
-        <ProfileInfoText bold="싫어하는 것" regular="231" color={colors.black} center={0}/>
+        <ProfileInfoTag title="싫어하는 것" tags={['1','2']}/>
         <View style={{marginTop:16}}/>
         <ProfileInfoText bold="특이사항" regular="231" color={colors.black} center={0}/>
       </button.ProfileDetailButton>

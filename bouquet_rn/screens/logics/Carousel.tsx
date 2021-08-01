@@ -32,7 +32,7 @@ export default function  Carousel({pages, offset, gap, pageWidth} : carouselProp
         contentContainerStyle={{paddingHorizontal: offset + gap / 2}}
         data={pages}
         onScroll={onScroll}
-        decelerationRate="fast" 
+        decelerationRate='fast'
         horizontal
         pagingEnabled
         snapToInterval={pageWidth + gap}
@@ -42,7 +42,7 @@ export default function  Carousel({pages, offset, gap, pageWidth} : carouselProp
           return(
             <TouchableWithoutFeedback onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
               <View style={{width: pageWidth, marginHorizontal: gap / 2}}>
-                <ProfileDetailItem mini={0} press={selectId} id={obj.index}/>
+                <ProfileDetailItem mini={1} press={selectId} id={obj.index}/>
               </View>
             </TouchableWithoutFeedback>
           );

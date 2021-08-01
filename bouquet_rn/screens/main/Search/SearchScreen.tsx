@@ -22,10 +22,11 @@ import type {SearchProps} from '../../../utils/types';
 import { StatusBarHeight } from '../../logics/StatusbarHeight';
 
 // components
-import RecentSearchItem from '../../components/RecentSearchItem';
+import TagModifyItem from '../../components/TagModifyItem';
 import CharacterItem from '../../components/CharacterItem';
 import PostingItem from '../../components/PostingItem';
 import EpisodeMiniItem from '../../components/EpisodeMiniItem';
+import FloatingButton from '../../components/FloatingButton';
 
 const HEADER_MAX_HEIGHT = 95;
 const HEADER_MIN_HEIGHT = 60;
@@ -40,6 +41,7 @@ export default function SearchScreen({navigation} : SearchProps){
     const[selectIdPost, setSelectIdPost]=useState(-1);
     const[selectIdRecent, setSelectIdRecent]=useState(-1);
     const[focus, setFocus]=useState(0);
+    const[searchText, setSearchText]=useState('');
 
     const scroll = useRef(new Animated.Value(0)).current;
     const OpacityHeader=scroll.interpolate({
@@ -68,16 +70,18 @@ export default function SearchScreen({navigation} : SearchProps){
             pointerEvents="none"
             style={[styles.header,{ opacity: OpacityHeader }]}>
           </Animated.View>
+
           <View style={{marginTop:30, marginHorizontal:30}}>
             <Animated.View style={[styles.searchView, searchColor, {transform:[{translateY: TranslateInput}]}]}>
               <View style={{marginLeft: 18, marginRight:10}}>
-                {focus===1 ? <SearchViewFocusSvg w='15' h='15'/> : <SearchViewSvg w='15' h='15'/>}
+                {focus===1 || searchText.length>0 ? <SearchViewFocusSvg w='15' h='15'/> : <SearchViewSvg w='15' h='15'/>}
               </View>
               <View style={{flex:1}}>
-                <TextInput placeholder="무엇이 궁금한가요?" onFocus={()=>setFocus(1)}/>
+                <TextInput placeholder="무엇이 궁금한가요?" onFocus={()=>setFocus(1)} onBlur={()=>setFocus(0)} onChangeText={(str)=>setSearchText(str)}/>
               </View>
             </Animated.View>
           </View>
+
           <Animated.ScrollView 
             style={{marginTop:HEADER_MIN_HEIGHT-30}}
             showsVerticalScrollIndicator={false}
@@ -99,7 +103,7 @@ export default function SearchScreen({navigation} : SearchProps){
                   renderItem={(obj)=>{
                     return(
                       <TouchableWithoutFeedback onPress={()=>{selectIdRecent===obj.index ? setSelectIdRecent(-1) : setSelectIdRecent(obj.index)}}>
-                        <RecentSearchItem content={obj.item.id.toString()} press={selectIdEpi} id={obj.index}/>
+                        <TagModifyItem content={obj.item.id.toString()} press={selectIdEpi} id={obj.index} search={1}/>
                       </TouchableWithoutFeedback>
                     ); 
                   }}>
@@ -158,6 +162,7 @@ export default function SearchScreen({navigation} : SearchProps){
               }}></FlatList>
           </area.ContainerBlank30>
           </Animated.ScrollView>
+          <FloatingButton/>
         </area.Container>
       </TouchableWithoutFeedback>
     )

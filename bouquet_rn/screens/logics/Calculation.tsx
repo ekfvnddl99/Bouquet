@@ -13,3 +13,7 @@ export function timeName(time : number){
   else if(time/60 < 24) return ((time/60) | 0) + '시간';
   else return ((time/1440) | 0 )+'일';
 }
+
+export function getByte(str : string){
+  return (new Blob([str])).size;
+}

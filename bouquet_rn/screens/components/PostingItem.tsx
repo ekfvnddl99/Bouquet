@@ -19,6 +19,7 @@ import SunButton from './SunButton';
 import ProfileButton from './ProfileButton';
 
 export default function PostingItem({navigation, press, id}  :{navigation:any, press:number, id:number}){
+  const[isPress, setIsPress]=useState(-1);
   const goPosting=()=>{
     navigation.navigate("Posting");
   }
@@ -36,7 +37,7 @@ export default function PostingItem({navigation, press, id}  :{navigation:any, p
             <Text>Nothing</Text>
         </View> 
         <View style={styles.sunArea}>
-            <SunButton sun={100} active={0}/>
+          <SunButton sun={100}/>
         </View>
       </button.BigListButton>
     );
