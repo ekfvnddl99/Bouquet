@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     backgroundColor:colors.warning_red,
     width:70,
-    borderRadius: 10,
+    borderRadius: 11,
     position:'absolute',
     right:0,
     bottom:0,

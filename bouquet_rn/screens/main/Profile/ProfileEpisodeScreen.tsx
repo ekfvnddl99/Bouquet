@@ -14,7 +14,7 @@ import * as elses from '../../../styles/styled-components/elses';
 import EpisodeItem from '../../components/EpisodeItem';
 import TagItem from '../../components/TagItem';
 
-export default function NotificationScreen(){
+export default function ProfileEpisodeScreen(){
   // dummy data - 서버에서 불러와야 함
   let Data=[{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9}];
 

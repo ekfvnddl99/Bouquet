@@ -8,12 +8,17 @@ import * as text from '../../styles/styled-components/text';
 import * as button from '../../styles/styled-components/button';
 import * as elses from '../../styles/styled-components/elses';
 
+// props & logic
+import * as cal from '../logics/Calculation';
+
 // components
 import ProfileInfoText from '../components/ProfileInfoText';
 import ProfileButton from './ProfileButton';
 import ProfileInfoTag from './ProfileInfoTag';
+import LineButton from './LineButton';
 
 export default function ProfileDetailItem({mini, press, id} : {mini:number, press:number, id:number}){
+  const[owner, setOwner]=useState(1);
   return(
       <button.ProfileDetailButton activeOpacity={1}>
         <View style={{alignItems:'center', justifyContent:'center'}}>
@@ -26,11 +31,15 @@ export default function ProfileDetailItem({mini, press, id} : {mini:number, pres
 
         {mini===1 ? <View style={{marginTop:34}}/> :
         <View style={{marginTop:8, alignItems:'center'}}>
-          <button.LineButton color={colors.primary} height={22} paddingH={12} paddingV={4}>
-            <text.Button3 color={colors.primary}>팔로우</text.Button3>
-          </button.LineButton>
+          {owner===1 ?
+          <area.RowArea>
+            <LineButton press={()=>{}} content="정보 수정" color={colors.primary} incolor={colors.alpha20_primary} outcolor={'transparent'}/>
+            <View style={{marginLeft:8}}/>
+            <LineButton press={()=>{}} content="삭제" color={colors.warning_red} incolor={colors.alpha20_primary} outcolor={'transparent'}/>
+          </area.RowArea>:
+          <LineButton press={()=>{}} content="팔로우" color={colors.primary} incolor={colors.alpha20_primary} outcolor={'transparent'}/>}
           <area.RowArea style={{justifyContent:'center', marginTop:8, marginBottom:24}}>
-            <ProfileInfoText bold="321" regular="팔로워" color={colors.primary} center={1}/>
+            <ProfileInfoText bold={cal.numName(1200).toString()} regular="팔로워" color={colors.primary} center={1}/>
             <View style={{marginRight:32}}/>
             <ProfileInfoText bold="321" regular="게시글" color={colors.primary} center={1}/>
           </area.RowArea>

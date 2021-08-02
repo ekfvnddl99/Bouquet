@@ -20,7 +20,7 @@ import ConditionButton from '../components/ConditionButton';
 import PrimaryTextButton from '../components/PrimaryTextButton';
 import WarningText from '../components/WarningText';
 import ConditionTextInput from '../components/ConditionTextInput';
-import BlackLineButton from '../components/BlackLineButton';
+import LineButton from '../components/LineButton';
 
 function CheckForm(ch : number, setter : any){
   if(ch===1){
@@ -54,7 +54,7 @@ export default function RegisterScreenOne({navigation} : RegisterProps){
 
         <area.FormArea height='44' style={err===1 ? {borderWidth:1, borderColor:colors.warning_red} : null}>
           <TextInput style={{flex: 1}} placeholder='메일' keyboardType='email-address'/>
-          <BlackLineButton press={()=>setCh(1)} content="메일 인증"/>
+          <LineButton press={()=>setCh(1)} content="메일 인증" color={colors.black} incolor={colors.gray2} outcolor={'transparent'}/>
         </area.FormArea>
         <WarningText content="무야호" marginTop={8}/>
         

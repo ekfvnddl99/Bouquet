@@ -15,6 +15,7 @@ import * as button from '../../../styles/styled-components/button';
 
 import ProfileFeedScreen from './ProfileFeedScreen';
 import ProfileEpisodeScreen from './ProfileEpisodeScreen';
+import ProfileQnAScreen from './ProfileQnAScreen';
 
 // props & logic
 import { StatusBarHeight } from '../../logics/StatusbarHeight';
@@ -28,8 +29,8 @@ const HEADER_MAX_HEIGHT = 80;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
-export default function EpisodeScreen(){
-  const [press, setPress] = useState(1);
+export default function ProfileDetailScreen(){
+  const [press, setPress] = useState(0);
 
   const scroll = useRef(new Animated.Value(0)).current;
   const OpacityHeader=scroll.interpolate({
@@ -63,18 +64,19 @@ export default function EpisodeScreen(){
 
           <View style={{marginTop:30}}>
             <area.RowArea>
-              <TouchableOpacity onPress={()=>setPress(1)}>
-                <text.Subtitle3 color={press===1 ? colors.black : colors.gray5}>게시글</text.Subtitle3>
+              <TouchableOpacity onPress={()=>setPress(0)}>
+                <text.Subtitle3 color={press===0 ? colors.black : colors.gray5}>게시글</text.Subtitle3>
               </TouchableOpacity>
               <View style={{marginRight:16}}/>
-              <TouchableOpacity onPress={()=>setPress(0)}>
-                <text.Subtitle3 color={press===0 ? colors.black : colors.gray5}>에피소드</text.Subtitle3>
+              <TouchableOpacity onPress={()=>setPress(1)}>
+                <text.Subtitle3 color={press===1 ? colors.black : colors.gray5}>에피소드</text.Subtitle3>
               </TouchableOpacity>
-              <TouchableOpacity onPress={()=>setPress(0)}>
-                <text.Subtitle3 color={press===0 ? colors.black : colors.gray5}>질문</text.Subtitle3>
+              <View style={{marginRight:16}}/>
+              <TouchableOpacity onPress={()=>setPress(2)}>
+                <text.Subtitle3 color={press===2 ? colors.black : colors.gray5}>질문</text.Subtitle3>
               </TouchableOpacity>
             </area.RowArea>
-            {press===1 ? <ProfileFeedScreen/> : <ProfileEpisodeScreen/>}
+            {press===0 ? <ProfileFeedScreen/> : press===1 ? <ProfileEpisodeScreen/> : <ProfileQnAScreen/>}
           </View>
         </Animated.ScrollView>
       </area.Container>

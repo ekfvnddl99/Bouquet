@@ -29,7 +29,7 @@ function PWCheck(pw : string){
   return 0;
 }
 
-export default function ChaGenerationScreenTwo({navigation} : ChaGenerationProps){
+export default function ChaGenerationScreenTwo({navigation} : ChaGenerationProps, {modify} : {modify : number}){
   const[err, setErr] =useState(1);
   const[eye, setEye]=useState(1);
   const[pw,setPW]=useState('');
@@ -43,7 +43,7 @@ export default function ChaGenerationScreenTwo({navigation} : ChaGenerationProps
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <area.Container>
       <View style={{marginBottom:16, position:'absolute', bottom:0, left:0, right:0, flex:1}}>
-        <ConditionButton height={44} active={1} press={goNext} content="세부 소개 입력" paddingH={0} paddingV={14}/>
+        <ConditionButton height={44} active={1} press={goNext} content={modify===1 ? "세부 소개 수정" : "세부 소개 입력"} paddingH={0} paddingV={14}/>
       </View>
       <ScrollView>
         <area.ContainerBlank20>

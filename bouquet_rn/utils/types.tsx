@@ -58,5 +58,6 @@ export type NotificationProps = StackScreenProps<NotificationStackParam, "Notifi
 export type ProfileStackParam = {
   ProfileOverview : undefined,
   ProfileDetail : undefined,
+  Account : undefined,
 }
 export type ProfileProps = StackScreenProps<ProfileStackParam, "ProfileOverview">;

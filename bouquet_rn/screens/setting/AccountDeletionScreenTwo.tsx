@@ -13,33 +13,28 @@ import * as elses from '../../styles/styled-components/elses';
 import type {ChaGenerationProps} from '../../utils/types';
 
 // components
-import ProgressArea from '../components/ProgressArea';
 import ConditionButton from '../components/ConditionButton';
 import NameNText from '../components/NameNText';
+import BackButton from '../components/BackButton';
 
-export default function ChaGenerationScreenFour({navigation} : ChaGenerationProps){
+export default function AccountDeletionScreenTwo(){
   const[name,setName]=useState('undefined');
-
-  const goNext=()=>{
-    navigation.navigate("ChaGenerationFour");
-  }
 
   return(
     <area.Container>
-      <area.ContainerBlank20>
-        <ProgressArea navigation={navigation} title="캐릭터 생성 완료!" step={4} intro={null}/>
-      </area.ContainerBlank20>
+      <text.Subtitle1 color={colors.black} style={{marginBottom:32, marginTop:30}}>계정 삭제 완료</text.Subtitle1>
 
       <View style={styles.middleArea}>
         <elses.CircleImg diameter={120} source={require('../../assets/img.jpg')} style={{marginBottom:16}}/>
         <NameNText name={name} sub="님,"/>
-        <text.Subtitle2R color={colors.black}>또 다른 모습으로</text.Subtitle2R>
-        <text.Subtitle2R color={colors.black}>피어날 준비가 되었어요!</text.Subtitle2R>
+        <text.Subtitle2R color={colors.black}>Bouquet에서 피어난</text.Subtitle2R>
+        <text.Subtitle2R color={colors.black}>새로운 모습이</text.Subtitle2R>
+        <text.Subtitle2R color={colors.black}>아름다웠습니다.</text.Subtitle2R>
       </View>
 
       <area.ContainerBlank20>
         <area.BottomArea style={{marginBottom:16}}>
-          <ConditionButton height={44} active={1} press={goNext} content="시작" paddingH={0} paddingV={14}/>
+          <ConditionButton height={44} active={1} press={()=>{}} content="완료" paddingH={0} paddingV={14}/>
         </area.BottomArea>
       </area.ContainerBlank20>
     </area.Container>

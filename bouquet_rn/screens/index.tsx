@@ -16,10 +16,10 @@ import RegisterScreenTwo from './register/RegisterScreenTwo';
 import RegisterScreenThree from './register/RegisterScreenThree';
 import RegisterScreenFour from './register/RegisterScreenFour'; 
 
-import ChaGenerationScreenOne from './characterGeneration/ChaGenerationScreenOne';
-import ChaGenerationScreenTwo from './characterGeneration/ChaGenerationScreenTwo';
-import ChaGenerationScreenThree from './characterGeneration/ChaGenerationScreenThree';
-import ChaGenerationScreenFour from './characterGeneration/ChaGenerationScreenFour';
+import ChaGenerationScreenOne from './character/ChaGenerationScreenOne';
+import ChaGenerationScreenTwo from './character/ChaGenerationScreenTwo';
+import ChaGenerationScreenThree from './character/ChaGenerationScreenThree';
+import ChaGenerationScreenFour from './character/ChaGenerationScreenFour';
 
 import LoginScreen from './LoginScreen';
 
@@ -35,7 +35,9 @@ import NotificationScreen from './main/Notification/NotificationScreen';
 
 import ProfileOverviewScreen from './main/Profile/ProfileOverviewScreen';
 import ProfileDetailScreen from './main/Profile/ProfileDetailScreen';
+import AccountScreen from './common/AccountScreen';
 
+import SettingAlarmFollowingScreen from './setting/SettingAlarmFollowingScreen';
 
 // icons
 import HomeSvg from '../assets/Home';
@@ -186,6 +188,10 @@ function ProfileStackNavigator(){
         name="ProfileDetail"
         component={ProfileDetailScreen}
         options={{headerShown : false}}/>
+      <ProfileStack.Screen 
+        name="Account"
+        component={AccountScreen}
+        options={{headerShown : false}}/>
     </ProfileStack.Navigator>
   );
 }
@@ -219,15 +225,10 @@ const RegisterStack = createStackNavigator<Types.RegisterStackParam>();
 function RegisterStackNavigator(){
   return(
     <RegisterStack.Navigator
-      initialRouteName="RegisterOne"
-      screenOptions={
-        {
-          cardOverlayEnabled:false
-        }
-      }>
+      initialRouteName="RegisterOne">
       <RegisterStack.Screen
         name="RegisterOne"
-        component={ChaGenerationScreenThree}
+        component={RegisterScreenOne}
         options={{headerShown : false}}/>
         <RegisterStack.Screen
         name="RegisterTwo"

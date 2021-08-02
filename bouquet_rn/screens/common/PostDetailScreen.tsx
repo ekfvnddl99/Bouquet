@@ -25,7 +25,7 @@ import BackButton from '../components/BackButton';
 import SunButton from '../components/SunButton';
 import CommentItem from '../components/CommentItem';
 import CommentInputBar from '../components/CommentInputBar';
-import BlackLineButton from '../components/BlackLineButton';
+import LineButton from '../components/LineButton';
 import ConditionButton from '../components/ConditionButton';
 
 // template
@@ -75,10 +75,9 @@ export default function PostDetailScreen(){
               <View style={{flex:1}}><ProfileButton diameter={30}/></View>
               {owner===1 ? 
               <area.RowArea>
-                <BlackLineButton press={()=>{}} content="수정"/>
-                <button.LineButton color={colors.warning_red} height={22} paddingH={12} paddingV={4} style={{marginLeft:4}}>
-                  <text.Button3 color={colors.warning_red}>삭제</text.Button3>
-                </button.LineButton>
+                <LineButton press={()=>{}} content="수정" color={colors.black} incolor={colors.gray2} outcolor={'transparent'}/>
+                <View style={{marginLeft:4}}/>
+                <LineButton press={()=>{}} content="삭제" color={colors.warning_red} incolor={colors.alpha20_primary} outcolor={'transparent'}/>
               </area.RowArea> : null}
             </area.RowArea>
             <View style={{marginBottom: 12}}/>

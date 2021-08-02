@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useSafeAreaInsets, SafeAreaProvider } from 'react-native-safe-area-context';
 import { 
-  View, 
+  View, Platform
 } from 'react-native';
 import {colors} from '../styles/colors';
 import * as area from '../styles/styled-components/area';
@@ -68,7 +68,7 @@ export default function WelcomeScreen({navigation} : WelcomeProps) {
         <area.BottomArea>
             <LoginButton sentence="메일로 가입하기" tag={<MailSvg w='15' h='15'/>} press={goRegister}/>
             <LoginButton sentence="Google로 계속하기" tag={<GoogleSvg w='15' h='15'/>} press={GoogleSignInAsync}/>
-            <LoginButton sentence="Apple로 계속하기" tag={<AppleSvg w='15' h='15'/>} press={GoogleSignInAsync}/>
+            {Platform.OS==='ios' ? <LoginButton sentence="Apple로 계속하기" tag={<AppleSvg w='15' h='15'/>} press={GoogleSignInAsync}/> : null}
         </area.BottomArea>
 
         <area.TextBtnArea style={{marginTop:15}}>

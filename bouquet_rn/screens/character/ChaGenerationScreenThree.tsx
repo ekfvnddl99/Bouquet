@@ -20,7 +20,7 @@ import TagModifyItem from '../components/TagModifyItem';
 import { colors } from '../../styles/colors';
 
 
-export default function ChaGenerationScreenThree({navigation} : ChaGenerationProps){
+export default function ChaGenerationScreenThree({navigation} : ChaGenerationProps, {modify} : {modify : number}){
   const[err,setErr]=useState(1);
   const[likeList, setLikeList] : any=useState([]);
   const[dislikeList, setDisLikeList] : any=useState([]);
@@ -51,7 +51,7 @@ export default function ChaGenerationScreenThree({navigation} : ChaGenerationPro
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <area.Container>
       <View style={{marginBottom:16, position:'absolute', bottom:0, left:0, right:0, flex:1}}>
-        <ConditionButton height={44} active={1} press={goNext} content="캐릭터 생성 완료" paddingH={0} paddingV={14}/>
+        <ConditionButton height={44} active={1} press={goNext} content={modify===1 ? "캐릭터 정보 수정 완료" : "캐릭터 생성 완료"} paddingH={0} paddingV={14}/>
       </View>
       <ScrollView>
         <area.ContainerBlank20>
