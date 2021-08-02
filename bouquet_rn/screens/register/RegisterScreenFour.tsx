@@ -26,18 +26,18 @@ export default function RegisterScreenFour({navigation} : RegisterProps){
   return(
     <area.Container>
       <area.ContainerBlank20>
-        <ProgressArea navigation={navigation} title="회원가입 완료!" step={4}/>
+        <ProgressArea navigation={navigation} title="회원가입 완료!" step={4} intro={null}/>
       </area.ContainerBlank20>
 
       <View style={styles.middleArea}>
-        <elses.Circle radius={120} vertical={16}/>
+        <elses.CircleImg diameter={120} source={require('../../assets/img.jpg')} style={{marginBottom:16}}/>
         <NameNText name={name} sub="님,"/>
         <text.Subtitle2R color={colors.black}>환영합니다!</text.Subtitle2R>
       </View>
 
       <area.ContainerBlank20>
-        <area.BottomArea>
-          <ConditionButton active={1} press={goNext} content="시작"/>
+        <area.BottomArea style={{marginBottom:16}}>
+          <ConditionButton active={1} press={goNext} content="시작" paddingH={0} paddingV={14} height={45}/>
         </area.BottomArea>
       </area.ContainerBlank20>
     </area.Container>

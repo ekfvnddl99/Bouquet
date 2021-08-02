@@ -16,15 +16,16 @@ function CheckStep(step : number){
   else return '100%';
 }
 
-export default function ProgressArea({navigation, title, step} : {navigation : any, title : string, step : number}){
+export default function ProgressArea({navigation, title, step, intro} : {navigation : any, title : string, step : number, intro:string|null}){
   return(
-    <View>
+    <View style={{marginBottom:32}}>
       <BackButton navigation={navigation}/>
-      <View style={{marginTop:20, marginBottom: 24}}>
+      <View style={{marginTop:20, marginBottom:24}}>
         <elses.Bar width='100%' color={colors.alpha20_primary}/>
         <elses.Bar width={CheckStep(step)} color={colors.primary}/>
       </View>
       <text.Subtitle1 color={colors.black}>{title}</text.Subtitle1>
+      {intro===null ? null : <View style={{marginTop:8}}><text.Caption color={colors.gray6}>{intro}</text.Caption></View>}
     </View>
   );
 }

@@ -7,25 +7,32 @@ import * as text from '../../styles/styled-components/text';
 import * as elses from '../../styles/styled-components/elses';
 
 // components
-import ProfileAButton from './ProfileAButton';
+import ProfileButton from './ProfileButton';
 import TagItem from './TagItem';
 
-export default function EpisodeItem({name, title, mini} : {name: string, title : string, mini: number}){
-    let data=['크루 참여', '전체 공개'];
-    return(
-        <button.EpisodeButton color={mini===1 ? colors.white : colors.gray0}>
-          <area.RowArea top={0}>
-            {mini===1 ? <elses.Rectangle width={90} height={117}/>
-            : <elses.Rectangle width={110} height={143}/>}
-            <View>
-              <text.Subtitle3 color={colors.black}>{title}</text.Subtitle3>
-              <area.RowArea top={0}>
-                <TagItem content={data[0]}/>
-                <TagItem content={data[1]}/>
-              </area.RowArea>
-              <ProfileAButton name={name}/>
-            </View>
-          </area.RowArea>
-        </button.EpisodeButton>
-    );
+function Inner(mini:number,){
+  return(
+    <View style={{flexDirection:'row'}}>
+      {mini===1 ? <elses.RectangleImg width={90} height={117} source={require('../../assets/img.jpg')}/>
+      : <elses.RectangleImg width={110} height={143} source={require('../../assets/img.jpg')}/>}
+      <View style={{marginLeft:16}}>
+        <text.Subtitle3 color={colors.black}>EjrqhRdl wjswod</text.Subtitle3>
+        <area.RowArea style={{marginVertical:8}}>
+          <TagItem content="크루참여" active={1}/>
+          <TagItem content="전체공개" active={1}/>
+        </area.RowArea>
+        <ProfileButton diameter={30}/>
+      </View>
+    </View>
+  );
+}
+
+export default function EpisodeItem({color, mini, press, id} : {color:string, mini:number, press:number, id:number}){
+  return(
+    <View>
+      {color===colors.white 
+      ? <button.BigListButton color={color} paddingH={16} paddingV={16}>{Inner(mini)}</button.BigListButton>
+      : <View>{Inner(mini)}</View>}
+    </View>
+  );
 }

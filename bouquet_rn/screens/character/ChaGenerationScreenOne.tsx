@@ -10,7 +10,7 @@ import type {ChaGenerationProps} from '../../utils/types';
 import ProgressArea from '../components/ProgressArea';
 import ConditionButton from '../components/ConditionButton';
 
-export default function ChaGenerationScreenOne({navigation} : ChaGenerationProps){
+export default function ChaGenerationScreenOne({navigation} : ChaGenerationProps, {modify} : {modify : number}){
   const goNext=()=>{
     navigation.navigate("ChaGenerationTwo");
   }
@@ -18,11 +18,10 @@ export default function ChaGenerationScreenOne({navigation} : ChaGenerationProps
   return(
     <area.Container>
       <area.ContainerBlank20>
-        <ProgressArea navigation={navigation} title="어떤 모습인가요?" step={1}/>
-        <text.Caption color={colors.gray6}>이 캐릭터의 겉모습을 생각해 보아요.</text.Caption>
+        <ProgressArea navigation={navigation} title="어떤 모습인가요?" step={1} intro="이 캐릭터의 겉모습을 생각해 보아요."/>
 
-        <area.BottomArea>
-          <ConditionButton active={1} press={goNext} content="기본 정보 입력"/>
+        <area.BottomArea style={{marginBottom:16}}>
+          <ConditionButton height={44} active={1} press={goNext} content={modify===1 ? "기본 정보 수정" : "기본 정보 입력"} paddingH={0} paddingV={14}/>
         </area.BottomArea>
       </area.ContainerBlank20>
     </area.Container>

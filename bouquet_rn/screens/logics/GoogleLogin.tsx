@@ -9,7 +9,6 @@ const config : Google.GoogleLogInConfig = {
 
 export default async function GoogleSignInAsync() {
   try {
-    console.log('adsf');
     // user에다가 GoogleUser 정보가 들어간다.
     const result = await Google.logInAsync(config);
 

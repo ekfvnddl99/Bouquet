@@ -7,37 +7,39 @@ import {
     TouchableOpacity
 } from 'react-native';
 import {colors} from '../../styles/colors';
+import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
 import * as button from '../../styles/styled-components/button';
 
+// props & logic
+import * as cal from '../logics/Calculation';
+
 // components
 import SunButton from './SunButton';
-import ProfileAButton from './ProfileAButton';
+import ProfileButton from './ProfileButton';
 
-function timeName(time : number){
-  if(time<60) return time+'분';
-  else if(time/60 < 24) return ((time/60) | 0) + '시간';
-  else return ((time/1440) | 0 )+'일';
-}
-
-export default function PostingItem({name, time, content, sun} : {name : string, time : number, content : string, sun : number}){
+export default function PostingItem({navigation, press, id}  :{navigation:any, press:number, id:number}){
+  const[isPress, setIsPress]=useState(-1);
+  const goPosting=()=>{
+    navigation.navigate("Posting");
+  }
     return(
-        <button.PostButton>
-            <View style={styles.aboveArea}>
-                <View style={styles.profileArea}>
-                    <ProfileAButton name={name}/>
-                </View>
-                <View style={styles.timeArea}>
-                    <text.Caption color={colors.gray5}>{timeName(time)} 전</text.Caption>
-                </View>
-            </View>
-            <View style={styles.contentArea}>
-                <Text>{content}</Text>
-            </View> 
-            <View style={styles.sunArea}>
-                <SunButton sun={sun}/>
-            </View>
-        </button.PostButton>
+      <button.BigListButton color={colors.white} paddingH={10} paddingV={10} onPress={goPosting} activeOpacity={1}>
+        <area.RowArea>
+          <View style={styles.profileArea}>
+              <ProfileButton diameter={30}/>
+          </View>
+          <View style={styles.timeArea}>
+              <text.Caption color={colors.gray5}>{cal.timeName(57)} 전</text.Caption>
+          </View>
+        </area.RowArea>
+        <View style={{marginVertical:10}}>
+            <Text>Nothing</Text>
+        </View> 
+        <View style={styles.sunArea}>
+          <SunButton sun={100}/>
+        </View>
+      </button.BigListButton>
     );
 }
 
@@ -51,17 +53,7 @@ const styles = StyleSheet.create({
         flex:1,
         alignItems:'flex-end',
     },
-    aboveArea:{
-        flexDirection:'row',
-        alignItems:'center',
-    },
-    contentArea:{
-        marginVertical:10,
-        paddingHorizontal:10,
-        paddingVertical:10,
-    },
     sunArea:{
         alignItems:'flex-start'
     },
-
 })
