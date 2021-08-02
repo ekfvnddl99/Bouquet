@@ -59,7 +59,7 @@ export default function RegisterScreenOne({navigation} : RegisterProps){
         <WarningText content="무야호" marginTop={8}/>
         
         {CheckForm(ch, setNum)}
-
+        
         <area.BottomArea>
           <View style={{alignItems: 'center'}}>
             <text.Caption color={colors.gray6}>이전 페이지로 돌아가면 소셜 계정으로도 가입할 수 있어요!</text.Caption>

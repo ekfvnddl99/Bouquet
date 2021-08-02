@@ -27,6 +27,12 @@ export type ChaGenerationStackParam = {
 }
 export type ChaGenerationProps = StackScreenProps<ChaGenerationStackParam, "ChaGenerationOne">;
 
+export type WritingStackParam = {
+  PostWriting : undefined,
+}
+export type WritingProps = StackScreenProps<WritingStackParam, "PostWriting">;
+
+
 // TAB
 // home
 export type HomeStackParam = {

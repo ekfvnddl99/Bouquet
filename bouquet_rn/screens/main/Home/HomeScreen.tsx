@@ -7,6 +7,7 @@ import {
     StyleSheet,
     StatusBar
 } from 'react-native';
+import i18n from 'i18n-js';
 import Constants from 'expo-constants';
 import {colors} from '../../../styles/colors';
 import * as area from '../../../styles/styled-components/area';
@@ -62,7 +63,6 @@ function InHomeScreen(){
     outputRange: [0, 0, 1],
     extrapolate: 'clamp',
   });
-
   return(
     <area.Container>
       <Animated.View

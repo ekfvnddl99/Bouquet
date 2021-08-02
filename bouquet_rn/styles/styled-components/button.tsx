@@ -91,6 +91,7 @@ export const TagModifyButton = styled.TouchableOpacity`
   background-color: ${(props:colorProps)=> props.color};
   border-radius: 10;
   margin-right: 4;
+  margin-bottom : 2;
   flex-direction:row;
   align-items:center;
   padding-left: 10;

@@ -64,7 +64,6 @@ export default function SearchScreen({navigation} : SearchProps){
     }
 
     return(
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <area.Container>
           <Animated.View
             pointerEvents="none"
@@ -82,17 +81,17 @@ export default function SearchScreen({navigation} : SearchProps){
             </Animated.View>
           </View>
 
-          <Animated.ScrollView 
-            style={{marginTop:HEADER_MIN_HEIGHT-30}}
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ScrollView 
+            style={{marginTop:HEADER_MIN_HEIGHT-30, flex:1}}
             showsVerticalScrollIndicator={false}
-            scrollEventThrottle={1}
             onScroll={Animated.event(
             [{ nativeEvent: { contentOffset: { y: scroll } } }],
             { useNativeDriver: false })}>
-          <View style={{paddingTop:30+12}}/>
-          <View style={{marginLeft : 30}}>
+            <View style={{paddingTop:30+12}}/>
+            <Animated.View style={{marginLeft : 30}}>
 
-              <View>
+              <Animated.View>
                 <text.Subtitle3 color={colors.black}>최근 검색어</text.Subtitle3>
                 <FlatList
                   style={{marginTop:12}}
@@ -108,9 +107,9 @@ export default function SearchScreen({navigation} : SearchProps){
                     ); 
                   }}>
                 </FlatList>
-              </View>
+              </Animated.View>
 
-              <View style={{marginTop:40}}>
+              <Animated.View style={{marginTop:40}}>
                 <text.Subtitle3 color={colors.black}>인기 부캐</text.Subtitle3>
                 <FlatList
                   style={{marginTop:12}}
@@ -125,7 +124,7 @@ export default function SearchScreen({navigation} : SearchProps){
                     </TouchableWithoutFeedback>
                     ); 
                   }}></FlatList>
-              </View>
+              </Animated.View>
 
               <Animated.View style={{marginTop:40}}>
                 <text.Subtitle3 color={colors.black}>인기 에피소드</text.Subtitle3>
@@ -144,7 +143,7 @@ export default function SearchScreen({navigation} : SearchProps){
                   }}></FlatList>
               </Animated.View>
 
-          </View>
+          </Animated.View>
 
           <area.ContainerBlank30 style={{marginTop:10}}>
             <text.Subtitle3 color={colors.black}>인기 게시물</text.Subtitle3>
@@ -159,12 +158,12 @@ export default function SearchScreen({navigation} : SearchProps){
                     <PostingItem navigation={navigation} press={selectIdPost} id={obj.index}/>
                   </TouchableWithoutFeedback>
                 ); 
-              }}></FlatList>
+              }}/>
           </area.ContainerBlank30>
-          </Animated.ScrollView>
+          </ScrollView>
+          </TouchableWithoutFeedback>
           <FloatingButton/>
         </area.Container>
-      </TouchableWithoutFeedback>
     )
 }
 

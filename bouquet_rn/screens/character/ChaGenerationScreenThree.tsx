@@ -3,7 +3,8 @@ import {
   View, 
   ScrollView,
   TouchableWithoutFeedback,
-  Keyboard
+  Keyboard,
+  TextInput
 } from 'react-native';
 import * as area from '../../styles/styled-components/area';
 import * as input from '../../styles/styled-components/input';
@@ -18,6 +19,7 @@ import ConditionTextInput from '../components/ConditionTextInput';
 import WarningText from '../components/WarningText';
 import TagModifyItem from '../components/TagModifyItem';
 import { colors } from '../../styles/colors';
+import { template } from 'lodash';
 
 
 export default function ChaGenerationScreenThree({navigation} : ChaGenerationProps, {modify} : {modify : number}){
@@ -27,32 +29,29 @@ export default function ChaGenerationScreenThree({navigation} : ChaGenerationPro
   const[likeInput, setLikeInput] = useState('');
   const[dislikeInput, setDisLikeInput] = useState('');
 
-  const goNext=()=>{
-    navigation.navigate("ChaGenerationFour");
-  }
-
   useEffect(()=>{
     let tmpLikes = likeInput.slice(0, likeInput.length-1).trim();
     if(likeInput[likeInput.length-1]===' ' && tmpLikes.length>0){
-      likeList.unshift(<TagModifyItem content={tmpLikes} press={()=>likeList.pop()} id={-1} search={0}/>)
+      likeList.push(<TagModifyItem content={tmpLikes} press={()=>{}} id={-1} search={0}/>)
       setLikeInput('')
       setLikeList(likeList);
     }
 
     let tmpDisLikes = dislikeInput.slice(0, dislikeInput.length-1).trim();
     if(dislikeInput[dislikeInput.length-1]===' ' && tmpDisLikes.length>0){
-      dislikeList.unshift(<TagModifyItem content={tmpDisLikes} press={()=>dislikeList.pop()} id={-1} search={0}/>)
+      dislikeList.push(<TagModifyItem content={tmpDisLikes} press={()=>{}} id={-1} search={0}/>)
       setDisLikeInput('')
       setDisLikeList(dislikeList);
     }
   })
 
+  const goNext=()=>{
+    navigation.navigate("ChaGenerationFour");
+  }
+
   return(
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <area.Container>
-      <View style={{marginBottom:16, position:'absolute', bottom:0, left:0, right:0, flex:1}}>
-        <ConditionButton height={44} active={1} press={goNext} content={modify===1 ? "캐릭터 정보 수정 완료" : "캐릭터 생성 완료"} paddingH={0} paddingV={14}/>
-      </View>
       <ScrollView>
         <area.ContainerBlank20>
           <ProgressArea navigation={navigation} title="어떤 캐릭터인가요?" step={3} intro="캐릭터의 특징을 생각해 보아요."/>
@@ -62,26 +61,29 @@ export default function ChaGenerationScreenThree({navigation} : ChaGenerationPro
             {err===1 ? <WarningText content="무야호" marginTop={8}/> : null}
           </View>
 
-          <area.FormArea height='44' style={{marginBottom:16, paddingHorizontal:0}}>
-            <input.FormInput height='44' placeholder={likeList.length===0 ? '좋아하는 것' : ''}
-            onChangeText={(input)=>setLikeInput(input)} value={likeInput}/>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{marginRight:16, flex:1}}>
-              <area.RowArea>{likeList}</area.RowArea>
-            </ScrollView>
-          </area.FormArea>
+          <area.NoHeightArea marBottom={16} paddingH={16} paddingV={8}>
+            <View style={{flexDirection:'row', flexWrap:'wrap'}}>
+              {likeList.map((data : any)=>{return(<View>{data}</View>)})}
+              <TextInput placeholder={likeList.length===0 ? '좋아하는 것' : ''} onChangeText={(input)=>setLikeInput(input)} value={likeInput}/>
+            </View>
+          </area.NoHeightArea>
 
-          <area.FormArea height='44' style={{marginBottom:16, paddingHorizontal:0}}>
-            <input.FormInput height='44' placeholder={dislikeList.length===0 ? '싫어하는 것' : ''}
-            onChangeText={(input)=>setDisLikeInput(input)} value={dislikeInput}/>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{marginRight:16, flex:1}}>
-              <area.RowArea>{dislikeList}</area.RowArea>
-            </ScrollView>
-          </area.FormArea>
+          <area.NoHeightArea marBottom={16} paddingH={16} paddingV={8}>
+            <View style={{flexDirection:'row', flexWrap:'wrap'}}>
+              {dislikeList.map((data : any)=>{return(<View>{data}</View>)})}
+              <TextInput placeholder={dislikeList.length===0 ? '싫어하는 것' : ''} onChangeText={(input)=>setDisLikeInput(input)} value={dislikeInput}/>
+            </View>
+          </area.NoHeightArea>
 
           <input.FormInput height='148' placeholder='이외에도 캐릭터에 대해서 자유롭게 알려 주세요!&#13;&#10;예시: 난 고민따위 하지 않는다' onChangeText={()=>{}} multiline={true}
           style={{textAlignVertical: 'top', paddingTop:16}}/>
+
+          
         </area.ContainerBlank20>
       </ScrollView>
+      <area.BottomArea style={{marginBottom:16, overflow:'hidden'}}>
+        <ConditionButton height={44} active={1} press={goNext} content={modify===1 ? "캐릭터 정보 수정 완료" : "캐릭터 생성 완료"} paddingH={0} paddingV={14}/>
+      </area.BottomArea>
     </area.Container>
     </TouchableWithoutFeedback>
   );

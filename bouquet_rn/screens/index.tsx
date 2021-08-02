@@ -37,6 +37,8 @@ import ProfileOverviewScreen from './main/Profile/ProfileOverviewScreen';
 import ProfileDetailScreen from './main/Profile/ProfileDetailScreen';
 import AccountScreen from './common/AccountScreen';
 
+import PostWritingScreen from './common/PostWritingScreen';
+
 import SettingAlarmFollowingScreen from './setting/SettingAlarmFollowingScreen';
 
 // icons
