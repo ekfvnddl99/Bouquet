@@ -16,19 +16,16 @@ import ProgressArea from '../components/ProgressArea';
 import ConditionButton from '../components/ConditionButton';
 import NameNText from '../components/NameNText';
 
-export default function RegisterScreenFour({navigation} : RegisterProps){
+export default function RegisterScreenFour({navigation} : {navigation : any}){
   const[name,setName]=useState('undefined');
 
   const goNext=()=>{
-    navigation.navigate("RegisterFour");
+    navigation.navigate("Tab");
   }
 
   return(
-    <area.Container>
-      <area.ContainerBlank20>
-        <ProgressArea navigation={navigation} title="회원가입 완료!" step={4} intro={null}/>
-      </area.ContainerBlank20>
-
+    <View style={{flex:1}}>
+      
       <View style={styles.middleArea}>
         <elses.CircleImg diameter={120} source={require('../../assets/img.jpg')} style={{marginBottom:16}}/>
         <NameNText name={name} sub="님,"/>
@@ -40,7 +37,7 @@ export default function RegisterScreenFour({navigation} : RegisterProps){
           <ConditionButton active={1} press={goNext} content="시작" paddingH={0} paddingV={14} height={45}/>
         </area.BottomArea>
       </area.ContainerBlank20>
-    </area.Container>
+    </View>
   );
 }
 

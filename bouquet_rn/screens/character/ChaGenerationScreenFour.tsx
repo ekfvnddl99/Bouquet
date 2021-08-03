@@ -17,7 +17,7 @@ import ProgressArea from '../components/ProgressArea';
 import ConditionButton from '../components/ConditionButton';
 import NameNText from '../components/NameNText';
 
-export default function ChaGenerationScreenFour({navigation} : ChaGenerationProps, {modify} : {modify : number}){
+export default function ChaGenerationScreenFour({modify, navigation} : {modify : number, navigation:any}){
   const[name,setName]=useState('undefined');
 
   const goNext=()=>{
@@ -25,11 +25,7 @@ export default function ChaGenerationScreenFour({navigation} : ChaGenerationProp
   }
 
   return(
-    <area.Container>
-      <area.ContainerBlank20>
-        <ProgressArea navigation={navigation} title={modify===1 ?  "캐릭터 정보 수정 완료!" : "캐릭터 생성 완료!"} step={4} intro={null}/>
-      </area.ContainerBlank20>
-
+    <View style={{flex:1}}>
       <View style={styles.middleArea}>
         <elses.CircleImg diameter={120} source={require('../../assets/img.jpg')} style={{marginBottom:16}}/>
         <NameNText name={name} sub="님,"/>
@@ -42,7 +38,7 @@ export default function ChaGenerationScreenFour({navigation} : ChaGenerationProp
           <ConditionButton height={44} active={1} press={goNext} content="시작" paddingH={0} paddingV={14}/>
         </area.BottomArea>
       </area.ContainerBlank20>
-    </area.Container>
+    </View>
   );
 }
 

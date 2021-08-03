@@ -29,25 +29,16 @@ function PWCheck(pw : string){
   return 0;
 }
 
-export default function ChaGenerationScreenTwo({navigation} : ChaGenerationProps, {modify} : {modify : number}){
+export default function ChaGenerationScreenTwo({modify, onChange} : {modify : number, onChange:any}){
   const[err, setErr] =useState(1);
   const[eye, setEye]=useState(1);
   const[pw,setPW]=useState('');
   const[name, setName]=useState('');
 
-  const goNext=()=>{
-    navigation.navigate("ChaGenerationThree");
-  }
-
   return(
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-    <area.Container>
-      <View style={{marginBottom:16, position:'absolute', bottom:0, left:0, right:0, flex:1}}>
-        <ConditionButton height={44} active={1} press={goNext} content={modify===1 ? "세부 소개 수정" : "세부 소개 입력"} paddingH={0} paddingV={14}/>
-      </View>
-      <ScrollView>
+      
         <area.ContainerBlank20>
-          <ProgressArea navigation={navigation} title="이 캐릭터는 누구인가요?" step={2} intro="이름, 직업 등 이 캐릭터의 기본 정보를 정해 보아요."/>
+        <ScrollView>
           <ConditionTextInput height={44} placeholder="캐릭터 이름 (필수)" onChange={setName} keyboard={'default'} active={1}/>
           <area.RowArea style={{marginTop:8}}>
             <View style={{flex:1}}>{err===1 ? <WarningText content="무야호" marginTop={0}/> : null}</View>
@@ -58,9 +49,13 @@ export default function ChaGenerationScreenTwo({navigation} : ChaGenerationProps
           <input.FormInput height='44' placeholder='생년월일' onChangeText={()=>{}} style={{marginTop:16}} keyboardType='numeric'/>
           <input.FormInput height='44' placeholder='직업' onChangeText={()=>{}} style={{marginTop:16}}/>
           <input.FormInput height='44' placeholder='국적' onChangeText={()=>{}} style={{marginTop:16}}/>
-        </area.ContainerBlank20>
+
+          <area.BottomArea>
+          </area.BottomArea>
       </ScrollView>
-    </area.Container>
-    </TouchableWithoutFeedback>
+      <area.BottomArea style={{marginBottom:16, overflow:'hidden'}}>
+        <ConditionButton height={44} active={1} press={onChange} content={modify===1 ? "세부 소개 수정 완료" : "세부 소개 완료"} paddingH={0} paddingV={14}/>
+      </area.BottomArea>
+        </area.ContainerBlank20>
   );
 }

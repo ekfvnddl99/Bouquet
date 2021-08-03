@@ -1,31 +1,41 @@
-import React from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import {
-    View,
+    View, Animated, TouchableOpacity
 } from 'react-native';
 import {colors} from '../../styles/colors';
 import * as text from '../../styles/styled-components/text';
 import * as elses from '../../styles/styled-components/elses';
 
-// components
-import BackButton from '../components/BackButton';
+// icons
+import ArrowLeftSvg from '../../assets/ArrowLeft';
 
-function CheckStep(step : number){
-  if(step===1) return '25%';
-  else if(step===2) return '50%';
-  else if(step===3) return '75%';
-  else return '100%';
-}
-
-export default function ProgressArea({navigation, title, step, intro} : {navigation : any, title : string, step : number, intro:string|null}){
+export default function ProgressArea({back, step, title, intro, navigation} : {back : any, step:number, title : string, intro:string|null, navigation : any}){
+  const[curr, setCurr]=useState(step*25);
+  const progress = useRef(new Animated.Value(0)).current;
+  const TranslateX = progress.interpolate({
+    inputRange: [0, 100],
+    outputRange: ['0%', '100%'],
+    extrapolate: 'clamp',
+  });
+  useEffect(() => {
+    setCurr(25*step);
+    Animated.timing(progress, {
+      duration: 1000,
+      toValue: curr,
+      useNativeDriver: false
+    }).start();
+  })
   return(
-    <View style={{marginBottom:32}}>
-      <BackButton navigation={navigation}/>
+    <View style={{marginBottom:12}}>
+      <TouchableOpacity onPress={step===1 ? ()=>navigation.navigate('Login') : back}>
+        <ArrowLeftSvg w='24' h='24'/>
+      </TouchableOpacity>
       <View style={{marginTop:20, marginBottom:24}}>
         <elses.Bar width='100%' color={colors.alpha20_primary}/>
-        <elses.Bar width={CheckStep(step)} color={colors.primary}/>
+        <Animated.View style={[{width :TranslateX ,height:8, borderRadius:10, position:'absolute', backgroundColor:colors.primary},]}/>
       </View>
       <text.Subtitle1 color={colors.black}>{title}</text.Subtitle1>
       {intro===null ? null : <View style={{marginTop:8}}><text.Caption color={colors.gray6}>{intro}</text.Caption></View>}
     </View>
   );
-}
+}1

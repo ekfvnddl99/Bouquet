@@ -34,49 +34,39 @@ function CheckForm(ch : number, setter : any){
 }
 
 
-export default function RegisterScreenOne({navigation} : RegisterProps){
+export default function RegisterScreenOne({onChange, navigation} : {onChange : any, navigation : any}){
   const [ch, setCh] = useState(0);
   const [err, setErr] = useState(1);
   const [num, setNum] = useState('undefined');
 
-  const goLogin=()=>{
-    navigation.goBack();
+  const goBack=()=>{
+    navigation.navigate("Login");
   }
 
-  const goNext=()=>{
-    navigation.navigate("RegisterTwo");
-  }
   return(
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-    <area.Container>
-      <area.ContainerBlank20>
-        <ProgressArea navigation={navigation} title="메일로 회원가입" step={1} intro={null}/>
-
-        <area.FormArea height='44' style={err===1 ? {borderWidth:1, borderColor:colors.warning_red} : null}>
-          <TextInput style={{flex: 1}} placeholder='메일' keyboardType='email-address'/>
-          <LineButton press={()=>setCh(1)} content="메일 인증" color={colors.black} incolor={colors.gray2} outcolor={'transparent'}/>
-        </area.FormArea>
-        <WarningText content="무야호" marginTop={8}/>
+    <area.ContainerBlank20>
+      <area.FormArea height='44' style={err===1 ? {borderWidth:1, borderColor:colors.warning_red} : null}>
+        <TextInput style={{flex: 1}} placeholder='메일' keyboardType='email-address'/>
+        <LineButton press={()=>setCh(1)} content="메일 인증" color={colors.black} incolor={colors.gray2} outcolor={'transparent'}/>
+      </area.FormArea>
+      <WarningText content="무야호" marginTop={8}/>
         
-        {CheckForm(ch, setNum)}
-        
-        <area.BottomArea>
-          <View style={{alignItems: 'center'}}>
-            <text.Caption color={colors.gray6}>이전 페이지로 돌아가면 소셜 계정으로도 가입할 수 있어요!</text.Caption>
-          </View>
+      {CheckForm(ch, setNum)}
+      
+      <area.BottomArea>
+        <View style={{alignItems: 'center'}}>
+          <text.Caption color={colors.gray6}>이전 페이지로 돌아가면 소셜 계정으로도 가입할 수 있어요!</text.Caption>
+        </View>
 
-          <View style={{marginVertical:16}}>
-            <ConditionButton active={1} press={goNext} content="메일로 계속하기" paddingH={0} paddingV={14} height={45}/>
-          </View>
+        <View style={{marginVertical:16}}>
+          <ConditionButton active={1} press={onChange} content="메일로 계속하기" paddingH={0} paddingV={14} height={45}/>
+        </View>
 
-          <area.TextBtnArea style={{marginBottom:16}}>
-              <text.Body2R color={colors.black}>계정이 이미 있다면? </text.Body2R>
-              <PrimaryTextButton press={goLogin} content="로그인" level={3}/>
-          </area.TextBtnArea>
-
-        </area.BottomArea>
-      </area.ContainerBlank20>
-    </area.Container>
-    </TouchableWithoutFeedback>
+        <area.TextBtnArea style={{marginBottom:16}}>
+          <text.Body2R color={colors.black}>계정이 이미 있다면? </text.Body2R>
+          <PrimaryTextButton press={goBack} content="로그인" level={3}/>
+        </area.TextBtnArea>
+      </area.BottomArea>
+    </area.ContainerBlank20>
   );
 }

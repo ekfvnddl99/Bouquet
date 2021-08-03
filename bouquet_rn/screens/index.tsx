@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, Platform, TouchableOpacity} from 'react-native';
+import { View, Platform, TouchableOpacity, ScrollView} from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { TabBarArea } from '../styles/styled-components/area';
 
@@ -11,11 +11,13 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // screens
 import WelcomeScreen from './WelcomeScreen';
 
+import RegisterScreen from './register/RegisterScreen';
 import RegisterScreenOne from './register/RegisterScreenOne';
 import RegisterScreenTwo from './register/RegisterScreenTwo';
 import RegisterScreenThree from './register/RegisterScreenThree';
 import RegisterScreenFour from './register/RegisterScreenFour'; 
 
+import ChaGenerationScreen from './character/ChaGenerationScreen';
 import ChaGenerationScreenOne from './character/ChaGenerationScreenOne';
 import ChaGenerationScreenTwo from './character/ChaGenerationScreenTwo';
 import ChaGenerationScreenThree from './character/ChaGenerationScreenThree';
@@ -39,7 +41,6 @@ import AccountScreen from './common/AccountScreen';
 
 import PostWritingScreen from './common/PostWritingScreen';
 
-import SettingAlarmFollowingScreen from './setting/SettingAlarmFollowingScreen';
 
 // icons
 import HomeSvg from '../assets/Home';
@@ -265,7 +266,7 @@ export default function AppStack(){
               options={{headerShown: false}}/>
             <WelcomeStack.Screen
               name="Register"
-              component={RegisterStackNavigator}
+              component={RegisterScreen}
               options={{headerShown : false}}/>
             <WelcomeStack.Screen
               name="Tab"

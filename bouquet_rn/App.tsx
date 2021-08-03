@@ -22,6 +22,7 @@ const translationGetters = {
 }
 
 const setI18nConfig = () => {
+  i18n.defaultLocale = 'en';
   i18n.translations = translationGetters;
   i18n.locale = Localization.locale;
   i18n.fallbacks = true;
