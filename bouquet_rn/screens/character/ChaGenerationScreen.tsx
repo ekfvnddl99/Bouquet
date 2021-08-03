@@ -13,7 +13,7 @@ import * as text from '../../styles/styled-components/text';
 import * as input from '../../styles/styled-components/input';
 
 // props & logic
-import type {RegisterProps} from '../../utils/types';
+import type {ChaGenerationProps} from '../../utils/types';
 
 // components
 import ProgressArea from '../components/ProgressArea';
@@ -43,8 +43,9 @@ function setIntro(step:number){
   else return null;
 }
 
-export default function ChaGenerationScreen({navigation} : RegisterProps){
+export default function ChaGenerationScreen({route, navigation} : ChaGenerationProps){
   const[step, setStep]=useState(1);
+  const param = route.params;
 
   return(
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

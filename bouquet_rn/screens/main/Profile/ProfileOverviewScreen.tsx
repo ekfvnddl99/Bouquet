@@ -28,12 +28,13 @@ import ProfileSwipeScreen from './ProfileSwipeScreen';
 import ProfileGridScreen from './ProfileGridScreen';
 import { useState } from 'react';
 import FloatingButton from '../../components/FloatingButton';
+import { ProfileProps } from '../../../utils/types';
 
 const HEADER_MAX_HEIGHT = 90;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
-export default function EpisodeScreen(){
+export default function ProfileOverviewScreen({navigation} : ProfileProps){
   const[swipe, setSwipe]=useState(1);
     // dummy data - 서버에서 불러와야 함
     let threeData=[1,2,3,4,5,6,7,8,9];
@@ -62,7 +63,7 @@ export default function EpisodeScreen(){
             <TouchableOpacity onPress={()=>setSwipe(1)}>
               <SwipeSvg w='24' h='24'/>
             </TouchableOpacity>}
-            <TouchableOpacity style={{marginLeft:16}}><SettingSvg w='24' h='24'/></TouchableOpacity>
+            <TouchableOpacity style={{marginLeft:16}} onPress={()=>navigation.navigate('Setting')}><SettingSvg w='24' h='24'/></TouchableOpacity>
           </area.RowArea>
           
           {swipe===1 ? <ProfileSwipeScreen/> : <ProfileGridScreen scroll={scroll}/>}

@@ -12,7 +12,7 @@ import * as text from '../../styles/styled-components/text';
 import * as elses from '../../styles/styled-components/elses';
 
 // props & logic
-import type {ChaGenerationProps} from '../../utils/types';
+import type {ChaGenerationProps, SettingProps} from '../../utils/types';
 
 // components
 import SettingItem from '../components/SettingItem';
@@ -28,7 +28,7 @@ function setTitle(idx:number){
   return title;
 }
 
-export default function SettingAlarmCustomScreen({idx}: {idx: number}){
+export default function SettingAlarmCustomScreen({props}: {props : SettingProps}){
   let Data=[{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9}];
 
   const[selectId, setSelectId]=useState(-1);
@@ -36,13 +36,13 @@ export default function SettingAlarmCustomScreen({idx}: {idx: number}){
   return(
     <area.Container>
       <area.RowArea style={{paddingHorizontal:30, paddingVertical:16, marginBottom:20}}>
-        <BackButton navigation={()=>{}}/>
+        <BackButton navigation={props.navigation}/>
         <View style={{flex:1}}/>
         <elses.CircleImg diameter={28} source={require('../../assets/img.jpg')}/>
       </area.RowArea>
       
       <View style={{paddingHorizontal:30}}>
-        <text.Subtitle2B color={colors.black} style={{marginBottom:11}}>{setTitle(idx)}</text.Subtitle2B>
+        <text.Subtitle2B color={colors.black} style={{marginBottom:11}}>{setTitle(1)}</text.Subtitle2B>
         <area.NoHeightArea marBottom={0} paddingH={8} paddingV={8}>
           <FlatList
             data={Data}
