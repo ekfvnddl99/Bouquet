@@ -19,4 +19,5 @@ export const colors={
     alpha10_primary:'#FA72681A',
     alpha20_primary:'#FA726830',
     warning_red:'#F42111',
+    diary: '#D3BD98',
 }
