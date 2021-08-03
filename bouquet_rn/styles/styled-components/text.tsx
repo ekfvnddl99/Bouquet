@@ -83,3 +83,9 @@ export const Caption = styled.Text`
   font-size: 12px;
   color: ${(props : TextProps) => (props.color)}
 `
+
+export const DiarySubtitle3 = styled(Subtitle3)`
+`;
+
+export const DiaryBody2R = styled(Body2R)`
+`;
