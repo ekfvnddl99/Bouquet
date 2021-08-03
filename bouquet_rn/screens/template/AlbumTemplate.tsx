@@ -13,6 +13,7 @@ import PlaySvg from '../../assets/Play';
 import PlayFocusSvg from '../../assets/PlayFocus';
 import WriteSvg from '../../assets/Write';
 import XSvg from '../../assets/X';
+import GallerySvg from '../../assets/Gallery';
 
 const AlbumInfoWrap = styled.View`
   flex: 1;
@@ -20,6 +21,15 @@ const AlbumInfoWrap = styled.View`
 `;
 
 const AlbumPic = styled(elses.RectangleImg)`
+`;
+
+const AlbumBlankPic = styled.View`
+  background-color: ${colors.gray0};
+  border-radius: 5;
+  justify-content: center;
+  align-items: center;
+  width: 100;
+  height: 100;
 `;
 
 const AlbumTextInfoWrap = styled.View`
@@ -66,11 +76,20 @@ function Album({ isMini, isEditMode, title, artist, date, description, songs }: 
       paddingV={15}
     >
       <AlbumInfoWrap>
+        {isEditMode ?
+        <AlbumBlankPic>
+          <GallerySvg
+            w="24"
+            h="24"
+          />
+        </AlbumBlankPic>
+        :
         <AlbumPic
           width={isMini ? 80 : 100}
           height={isMini ? 80 : 100}
           source={require('../../assets/img.jpg')}
         />
+        }
         <AlbumTextInfoWrap>
           <AlbumTitleWrap>
             {isEditMode ?
@@ -151,19 +170,26 @@ function Album({ isMini, isEditMode, title, artist, date, description, songs }: 
             </View>
           </SongWrap>
         </SongsWrap>
-        <LineButton
-          press={()=>{}}
-          content="곡 추가"
-          color={colors.black}
-          incolor="transparent"
-          outcolor="transparent"
-        />
+        <View style={{alignItems:'flex-start', marginTop: 10}}>
+          <LineButton
+            press={()=>{}}
+            content="곡 추가"
+            color={colors.black}
+            incolor="transparent"
+            outcolor="transparent"
+          />
+        </View>
       </>
       :
       <SongsWrap>
       {songsState.map((song, idx) => (
-        <SongWrap>
-          <text.Body2B color={colors.black} style={{ width: 20 }}>{idx + 1 <= 9 ? "0" + (idx + 1) : idx + 1}</text.Body2B>
+        <SongWrap key={idx}>
+          <text.Body2B
+            color={colors.black}
+            style={{ width: 20 }}
+          >
+            {idx + 1 <= 9 ? "0" + (idx + 1) : idx + 1}
+          </text.Body2B>
           <text.Body2R color={colors.black} style={{ flex: 1, marginLeft: 5, marginRight: 12 }}>{song.title}</text.Body2R>
           {isMini ? null : <PlaySvg w="15" h="15" />}
         </SongWrap>
