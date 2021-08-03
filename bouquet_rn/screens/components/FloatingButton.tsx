@@ -6,10 +6,12 @@ import {colors} from '../../styles/colors';
 // icons
 import WriteWhiteSvg from '../../assets/WriteWhite';
 
+// props & logic
+import type {WritingProps} from '../../utils/types';
 
 export default function FloatingButton(){
   return(
-    <TouchableOpacity style={styles.floating}>
+    <TouchableOpacity style={styles.floating} onPress={()=>{}}>
       <elses.Circle diameter={50} style={{backgroundColor:colors.primary}}>
         <WriteWhiteSvg w='24' h='24'/>
       </elses.Circle>

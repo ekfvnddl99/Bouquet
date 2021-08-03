@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, Platform, TouchableOpacity} from 'react-native';
+import { View, Platform, TouchableOpacity, ScrollView} from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { TabBarArea } from '../styles/styled-components/area';
 
@@ -11,15 +11,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // screens
 import WelcomeScreen from './WelcomeScreen';
 
-import RegisterScreenOne from './register/RegisterScreenOne';
-import RegisterScreenTwo from './register/RegisterScreenTwo';
-import RegisterScreenThree from './register/RegisterScreenThree';
-import RegisterScreenFour from './register/RegisterScreenFour'; 
+import RegisterScreen from './register/RegisterScreen';
 
-import ChaGenerationScreenOne from './character/ChaGenerationScreenOne';
-import ChaGenerationScreenTwo from './character/ChaGenerationScreenTwo';
-import ChaGenerationScreenThree from './character/ChaGenerationScreenThree';
-import ChaGenerationScreenFour from './character/ChaGenerationScreenFour';
+import ChaGenerationScreen from './character/ChaGenerationScreen';
 
 import LoginScreen from './LoginScreen';
 
@@ -36,8 +30,18 @@ import NotificationScreen from './main/Notification/NotificationScreen';
 import ProfileOverviewScreen from './main/Profile/ProfileOverviewScreen';
 import ProfileDetailScreen from './main/Profile/ProfileDetailScreen';
 import AccountScreen from './common/AccountScreen';
+import ChaDeletionScreen from './character/ChaDeletionScreen';
 
-import SettingAlarmFollowingScreen from './setting/SettingAlarmFollowingScreen';
+import PostWritingScreen from './common/PostWritingScreen';
+
+import SettingScreen from './setting/SettingScreen';
+import SettingAlarmScreen from './setting/SettingAlarmScreen';
+import SettingAlarmCustomScreen from './setting/SettingAlarmCustomScreen';
+import SettingProfileScreen from './setting/SettingProfileScreen';
+import AccountDeletionScreenOne from './setting/AccountDeletionScreenOne';
+import AccountDeletionScreenTwo from './setting/AccountDeletionScreenTwo';
+
+import FloatingButton from './components/FloatingButton';
 
 // icons
 import HomeSvg from '../assets/Home';
@@ -97,6 +101,7 @@ function CustomTabBar({ state, navigation} : {state:any, navigation:any}){
 }
 function TabNavigator(){
   return(
+    <>
     <Tab.Navigator
       initialRouteName="Home"
       backBehavior='none'
@@ -111,6 +116,24 @@ function TabNavigator(){
       <Tab.Screen name="Notification" component={NotificationStackNavigator}/>
       <Tab.Screen name="Profile" component={ProfileStackNavigator}/>
     </Tab.Navigator>
+    </>
+  );
+}
+
+const ChaGenerationStack = createStackNavigator<Types.ChaGenerationStackParam>();
+function ChaGenerationStackNavigator(){
+  return(
+    <ChaGenerationStack.Navigator
+      initialRouteName="ChaGeneration">
+      <ChaGenerationStack.Screen 
+        name="ChaGeneration" 
+        component={ChaGenerationScreen}
+        options={{headerShown : false}}/>
+      <ChaGenerationStack.Screen 
+        name="Profile" 
+        component={ProfileStackNavigator}
+        options={{headerShown : false}}/>
+    </ChaGenerationStack.Navigator>
   );
 }
 
@@ -122,6 +145,10 @@ function HomeStackNavigator(){
       <HomeStack.Screen 
         name="Home" 
         component={HomeScreen}
+        options={{headerShown : false}}/>
+      <HomeStack.Screen 
+        name="Generation" 
+        component={ChaGenerationStackNavigator}
         options={{headerShown : false}}/>
     </HomeStack.Navigator>
   );
@@ -171,6 +198,11 @@ function NotificationStackNavigator(){
         name="Notification" 
         component={NotificationScreen}
         options={{headerShown : false}}/>
+      <NotificationStack.Screen 
+        name="Generation" 
+        component={ChaGenerationStackNavigator}
+        initialParams={{modify : 0}}
+        options={{headerShown : false}}/>
     </NotificationStack.Navigator>
   );
 }
@@ -189,60 +221,68 @@ function ProfileStackNavigator(){
         component={ProfileDetailScreen}
         options={{headerShown : false}}/>
       <ProfileStack.Screen 
+        name="ProfileDeletion"
+        component={ChaDeletionScreen}
+        options={{headerShown : false}}/>
+      <ProfileStack.Screen 
+        name="ProfileModification"
+        component={ChaGenerationScreen}
+        options={{headerShown : false}}/>
+      <ProfileStack.Screen 
         name="Account"
         component={AccountScreen}
+        options={{headerShown : false}}/>
+      <ProfileStack.Screen 
+        name="Setting"
+        component={SettingnStackNavigator}
         options={{headerShown : false}}/>
     </ProfileStack.Navigator>
   );
 }
 
-const ChaGenerationStack = createStackNavigator<Types.ChaGenerationStackParam>();
-function ChaGenerationStackNavigator(){
+const SettingStack = createStackNavigator<Types.SettingStackParam>();
+function SettingnStackNavigator(){
   return(
-    <ChaGenerationStack.Navigator
-      initialRouteName="ChaGenerationOne">
-        <ChaGenerationStack.Screen
-          name="ChaGenerationOne"
-          component={ChaGenerationScreenOne}
-          options={{headerShown : false}}/>
-        <ChaGenerationStack.Screen
-          name="ChaGenerationTwo"
-          component={ChaGenerationScreenTwo}
-          options={{headerShown : false}}/>
-        <ChaGenerationStack.Screen
-          name="ChaGenerationThree"
-          component={ChaGenerationScreenThree}
-          options={{headerShown : false}}/>
-        <ChaGenerationStack.Screen
-          name="ChaGenerationFour"
-          component={ChaGenerationScreenFour}
-          options={{headerShown : false}}/>
-      </ChaGenerationStack.Navigator>
+    <SettingStack.Navigator
+      initialRouteName="Setting">
+      <SettingStack.Screen 
+        name="Setting" 
+        component={SettingScreen}
+        options={{headerShown : false}}/>
+      <SettingStack.Screen 
+        name="SettingAlarm" 
+        component={SettingAlarmScreen}
+        options={{headerShown : false}}/>
+      <SettingStack.Screen 
+        name="SettingAlarmCustom" 
+        component={SettingAlarmCustomScreen}
+        options={{headerShown : false}}/>
+      <SettingStack.Screen 
+        name="SettingProfile" 
+        component={SettingProfileScreen}
+        options={{headerShown : false}}/>
+      <SettingStack.Screen 
+        name="SettingAccountDeletionOne" 
+        component={AccountDeletionScreenOne}
+        options={{headerShown : false}}/>
+      <SettingStack.Screen 
+        name="SettingAccountDeletionTwo" 
+        component={AccountDeletionScreenTwo}
+        options={{headerShown : false}}/>
+    </SettingStack.Navigator>
   );
 }
 
-const RegisterStack = createStackNavigator<Types.RegisterStackParam>();
-function RegisterStackNavigator(){
+const WritingStack = createStackNavigator<Types.WritingStackParam>();
+function WritingStackNavigator(){
   return(
-    <RegisterStack.Navigator
-      initialRouteName="RegisterOne">
-      <RegisterStack.Screen
-        name="RegisterOne"
-        component={RegisterScreenOne}
+    <WritingStack.Navigator
+      initialRouteName="PostWriting">
+      <WritingStack.Screen 
+        name="PostWriting"
+        component={ProfileOverviewScreen}
         options={{headerShown : false}}/>
-        <RegisterStack.Screen
-        name="RegisterTwo"
-        component={RegisterScreenTwo}
-        options={{headerShown : false}}/>
-        <RegisterStack.Screen
-        name="RegisterThree"
-        component={RegisterScreenThree}
-        options={{headerShown : false}}/>
-        <RegisterStack.Screen
-        name="RegisterFour"
-        component={RegisterScreenFour}
-        options={{headerShown : false}}/>
-    </RegisterStack.Navigator>
+    </WritingStack.Navigator>
   );
 }
 
@@ -263,7 +303,7 @@ export default function AppStack(){
               options={{headerShown: false}}/>
             <WelcomeStack.Screen
               name="Register"
-              component={RegisterStackNavigator}
+              component={RegisterScreen}
               options={{headerShown : false}}/>
             <WelcomeStack.Screen
               name="Tab"

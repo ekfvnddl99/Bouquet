@@ -4,7 +4,8 @@ import {
     TextInput,
     TouchableOpacity,
     TouchableWithoutFeedback,
-    Keyboard
+    Keyboard,
+    ScrollView
 } from 'react-native';
 import { useRecoilValue } from 'recoil';
 import { viewBottom, viewTop } from './WelcomeScreen';
@@ -65,6 +66,7 @@ export default function LoginScreen({navigation} : WelcomeProps){
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={{flex:1, backgroundColor:colors.gray0, paddingTop:top}}>
           <area.ContainerBlank20>
+            <ScrollView>
             <BackButton navigation={navigation}/>
             <View style={{marginTop:30}}/>
             <text.Subtitle1 color={colors.black}>로그인</text.Subtitle1>
@@ -86,20 +88,23 @@ export default function LoginScreen({navigation} : WelcomeProps){
               <text.Caption color={colors.black}>비밀번호를 잊었나요? </text.Caption>
               <PrimaryTextButton press={()=>{}} content="계정 찾기" level={2}/>
             </area.TextBtnArea>
+            </ScrollView>
 
-            <area.BottomArea>
+            <area.BottomArea style={{overflow:'hidden'}}>
               <LoginButton sentence="Google로 계속하기" tag={<GoogleSvg w='15' h='15'/>} press={GoogleSignInAsync}/>
               <LoginButton sentence="Apple로 계속하기" tag={<AppleSvg w='15' h='15'/>} press={()=>{}}/>
-            </area.BottomArea>
 
-            <area.TextBtnArea style={{marginTop:15}}>
+              <area.TextBtnArea style={{marginTop:15, overflow:'hidden'}}>
               <text.Body2R color={colors.black}>계정이 없다면? </text.Body2R>
               <PrimaryTextButton press={goRegister} content="회원가입" level={1}/>
             </area.TextBtnArea>
+            </area.BottomArea>
+
+
 
           </area.ContainerBlank20>
 
-          <area.TextBackgroundBtnArea>
+          <area.TextBackgroundBtnArea style={{overflow:'hidden'}}>
             <text.Body2R color={colors.black}>우선 알아보고 싶다면? </text.Body2R>
             <PrimaryTextButton press={goTabs} content="미리보기" level={1}/>
           </area.TextBackgroundBtnArea>

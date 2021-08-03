@@ -7,6 +7,7 @@ import {
     StyleSheet,
     StatusBar
 } from 'react-native';
+import i18n from 'i18n-js';
 import Constants from 'expo-constants';
 import {colors} from '../../../styles/colors';
 import * as area from '../../../styles/styled-components/area';
@@ -15,6 +16,7 @@ import * as elses from '../../../styles/styled-components/elses';
 
 // props & logic
 import { StatusBarHeight } from '../../logics/StatusbarHeight';
+import type {HomeProps} from '../../../utils/types';
 
 // components
 import PostingItem from '../../components/PostingItem';
@@ -62,7 +64,6 @@ function InHomeScreen(){
     outputRange: [0, 0, 1],
     extrapolate: 'clamp',
   });
-
   return(
     <area.Container>
       <Animated.View
@@ -173,16 +174,16 @@ function OutHomeScreen(){
                 <PostingItem navigation={()=>{}} press={selectId} id={obj.index}/>
               </TouchableWithoutFeedback>
             ); 
-          }}></FlatList>
+          }}/>
       </Animated.ScrollView>
       <View style={{justifyContent:'flex-end'}}>
-        <NotLoginPrimaryButton/>
+        <NotLoginPrimaryButton onPress={()=>{}}/>
       </View>
     </area.Container>
   )
 }
 
-export default function HomeScreen(){
+export default function HomeScreen({navigation} : HomeProps){
   // dummy data - 서버에서 불러와야 함
   const [login, setLogin]=useState(1);
   return(

@@ -17,14 +17,18 @@ import ConditionButton from '../components/ConditionButton';
 import NameNText from '../components/NameNText';
 import BackButton from '../components/BackButton';
 
-export default function ChaDeletionScreenTwo(){
+export default function ChaDeletionScreenTwo({navigation}:{navigation:any}){
   const[name,setName]=useState('undefined');
+
+  const goOverview = ()=>{
+    navigation.navigate('ProfileOverview');
+  }
 
   return(
     <area.Container>
       <area.RowArea style={{paddingHorizontal:30, paddingVertical:16, marginBottom:20}}>
         <View style={{flex:1}}/>
-        <elses.CircleImg diameter={28} source={require('../../../assets/img.jpg')}/>
+        <elses.CircleImg diameter={28} source={require('../../assets/img.jpg')}/>
       </area.RowArea>
       <text.Subtitle1 color={colors.black} style={{marginBottom:32}}>캐릭터 삭제 완료</text.Subtitle1>
 
@@ -37,7 +41,7 @@ export default function ChaDeletionScreenTwo(){
 
       <area.ContainerBlank20>
         <area.BottomArea style={{marginBottom:16}}>
-          <ConditionButton height={44} active={1} press={()=>{}} content="캐릭터 목록으로 돌아가기" paddingH={0} paddingV={14}/>
+          <ConditionButton height={44} active={1} press={goOverview} content="캐릭터 목록으로 돌아가기" paddingH={0} paddingV={14}/>
         </area.BottomArea>
       </area.ContainerBlank20>
     </area.Container>

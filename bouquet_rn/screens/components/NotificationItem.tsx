@@ -22,12 +22,18 @@ import BinWhiteSvg from '../../assets/BinWhite';
 // props & logic
 import * as cal from '../logics/Calculation';
 
-const SWIPE_LEFT = -50;
+const SWIPE = 50
 export default function NotificationItem({press, id}  :{press:number, id:number}){
+  const[swipe, setSwipe]=useState(-1);
   const drag = useRef(new Animated.Value(0)).current;
-  const TranslateX = drag.interpolate({
-    inputRange: [SWIPE_LEFT, 0],
-    outputRange: [SWIPE_LEFT, 0],
+  const TranslateXa = drag.interpolate({
+    inputRange: [0, SWIPE],
+    outputRange: [-SWIPE, 0],
+    extrapolate: 'clamp',
+  });
+  const TranslateXb = drag.interpolate({
+    inputRange: [-SWIPE, 0],
+    outputRange: [-SWIPE, 0],
     extrapolate: 'clamp',
   });
 
@@ -35,19 +41,8 @@ export default function NotificationItem({press, id}  :{press:number, id:number}
     onMoveShouldSetPanResponderCapture: () => true,
     onPanResponderMove: Animated.event([null, {dx: drag}]),
     onPanResponderRelease: (e, {vx, dx}) => {
-      if (Math.abs(dx) <= SWIPE_LEFT) {
-        Animated.timing(drag, {
-          toValue: dx<0 ? 0 : SWIPE_LEFT,
-          duration: 200,
-          useNativeDriver :true
-        }).start();
-      } else {
-        Animated.spring(drag, {
-          toValue: 0,
-          bounciness: 10,
-          useNativeDriver:true
-        }).start();
-      }
+      drag.flattenOffset();
+      setSwipe(swipe*(-1));
     }
   })).current;
 
@@ -56,7 +51,8 @@ export default function NotificationItem({press, id}  :{press:number, id:number}
         <View style={styles.bin}>
           <View style={{alignItems:'center'}}><BinWhiteSvg w='24' h='24'/></View>
         </View>
-        <Animated.View style={[{width: '100%'}, {transform : [{translateX: TranslateX}]}]} {..._panResponder.panHandlers}>
+        <Animated.View style={[{width: '100%'}, 
+        {transform : [{translateX: swipe===1 ? TranslateXa : TranslateXb}]}]} {..._panResponder.panHandlers}>
           <button.NotificationButton activeOpacity={1}>
             <elses.CircleImg diameter={20} source={require('../../assets/img.jpg')}/>
             <View style={styles.contentText}>

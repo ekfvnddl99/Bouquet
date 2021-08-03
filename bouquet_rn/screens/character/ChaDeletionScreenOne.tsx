@@ -17,7 +17,7 @@ import ConditionButton from '../components/ConditionButton';
 import NameNText from '../components/NameNText';
 import BackButton from '../components/BackButton';
 
-export default function ChaDeletionScreenOne(){
+export default function ChaDeletionScreenOne({onChange}:{onChange:any}){
   const[name,setName]=useState('undefined');
 
   return(
@@ -25,7 +25,7 @@ export default function ChaDeletionScreenOne(){
       <area.RowArea style={{paddingHorizontal:30, paddingVertical:16, marginBottom:20}}>
         <BackButton navigation={()=>{}}/>
         <View style={{flex:1}}/>
-        <elses.CircleImg diameter={28} source={require('../../../assets/img.jpg')}/>
+        <elses.CircleImg diameter={28} source={require('../../assets/img.jpg')}/>
       </area.RowArea>
       <text.Subtitle1 color={colors.black} style={{marginBottom:32}}>캐릭터 삭제</text.Subtitle1>
       <View style={{alignItems:'center'}}>
@@ -40,7 +40,7 @@ export default function ChaDeletionScreenOne(){
           <View style={{alignItems: 'center'}}>
             <text.Caption color={colors.gray6}>아쉽지만 캐릭터는 삭제하면 복구하지 못해요.</text.Caption>
           </View>
-          <ConditionButton height={44} active={1} press={()=>{}} content="캐릭터 삭제" paddingH={0} paddingV={14}/>
+          <ConditionButton height={44} active={1} press={onChange} content="캐릭터 삭제" paddingH={0} paddingV={14}/>
         </area.BottomArea>
       </area.ContainerBlank20>
     </area.Container>

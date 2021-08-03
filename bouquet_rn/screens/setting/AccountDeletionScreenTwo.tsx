@@ -22,7 +22,9 @@ export default function AccountDeletionScreenTwo(){
 
   return(
     <area.Container>
-      <text.Subtitle1 color={colors.black} style={{marginBottom:32, marginTop:30}}>계정 삭제 완료</text.Subtitle1>
+      <area.ContainerBlank20>
+      
+      <text.Subtitle1 color={colors.black} style={{marginBottom:32, marginTop:10}}>계정 삭제 완료</text.Subtitle1>
 
       <View style={styles.middleArea}>
         <elses.CircleImg diameter={120} source={require('../../assets/img.jpg')} style={{marginBottom:16}}/>
@@ -36,6 +38,7 @@ export default function AccountDeletionScreenTwo(){
         <area.BottomArea style={{marginBottom:16}}>
           <ConditionButton height={44} active={1} press={()=>{}} content="완료" paddingH={0} paddingV={14}/>
         </area.BottomArea>
+      </area.ContainerBlank20>
       </area.ContainerBlank20>
     </area.Container>
   );

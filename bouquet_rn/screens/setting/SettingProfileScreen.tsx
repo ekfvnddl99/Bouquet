@@ -15,7 +15,6 @@ import * as elses from '../../styles/styled-components/elses';
 import GallerySvg from '../../assets/Gallery';
 
 // props & logic
-import type {RegisterProps} from '../../utils/types';
 import {getByte} from '../logics/Calculation';
 
 // components
@@ -25,8 +24,10 @@ import ConditionButton from '../components/ConditionButton';
 import PrimaryTextButton from '../components/PrimaryTextButton';
 import ConditionTextInput from '../components/ConditionTextInput';
 import WarningText from '../components/WarningText';
+import BackButton from '../components/BackButton';
+import { SettingProps } from '../../utils/types';
 
-export default function SettingProfileScreen(){
+export default function SettingProfileScreen({navigation} : SettingProps){
   const[err, setErr] = useState(1);
   const[byte, setByte]=useState(0);
   const[nickname, setNickname]=useState('');
@@ -34,6 +35,12 @@ export default function SettingProfileScreen(){
   return(
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <area.Container>
+    <area.RowArea style={{paddingHorizontal:30, paddingVertical:16}}>
+        <BackButton navigation={navigation}/>
+        <View style={{flex:1}}/>
+        <elses.CircleImg diameter={28} source={require('../../assets/img.jpg')}/>
+      </area.RowArea>
+
       <area.ContainerBlank20>
         <text.Subtitle1 color={colors.black} style={{marginBottom:32}}>계정 프로필 수정</text.Subtitle1>
 
@@ -55,8 +62,8 @@ export default function SettingProfileScreen(){
         <ConditionText content=" 중복되지 않는 별명" active={0}/>
 
         <area.BottomArea style={{marginBottom:16}}>
-          <TouchableOpacity style={{alignItems:'center'}}>
-            <text.Button3 color={colors.warning_red}>계정 삭제</text.Button3>
+          <TouchableOpacity style={{alignItems:'center'}} onPress={()=>navigation.navigate('SettingAccountDeletionOne')}>
+            <text.Button3 color={colors.warning_red} style={{marginBottom:16}}>계정 삭제</text.Button3>
           </TouchableOpacity>
           <ConditionButton active={1} press={()=>{}} content="계정 프로필 수정 완료" paddingH={0} paddingV={14} height={45}/>
         </area.BottomArea>
