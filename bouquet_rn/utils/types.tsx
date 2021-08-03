@@ -69,3 +69,13 @@ export type ProfileStackParam = {
   Setting : undefined
 }
 export type ProfileProps = StackScreenProps<ProfileStackParam, "ProfileOverview">;
+
+// infos
+export type User = {
+  isLogined: boolean;
+  id: number;
+  email: string;
+  name: string;
+  profileImg: string;
+  snsType: string;
+}
