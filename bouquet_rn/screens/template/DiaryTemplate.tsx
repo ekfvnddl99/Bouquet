@@ -196,7 +196,7 @@ function Diary({ isMini, isEditMode, diary }: DiaryProps) {
           />
           :
           <text.DiaryBody2R
-            color={colors.diary}
+            color={colors.black}
             style={{ lineHeight: 20, zIndex: 1 }}
             onLayout={onLayout}
             numberOfLines={isMini ? 3 : undefined}
