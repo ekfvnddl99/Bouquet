@@ -20,6 +20,12 @@ export type WritingStackParam = {
 }
 export type WritingProps = StackScreenProps<WritingStackParam, "PostWriting">;
 
+export type PostingStackParam = {
+  Posting : undefined,
+  ProfileDetail : undefined,
+}
+export type PostingProps = StackScreenProps<PostingStackParam, "Posting">;
+
 export type SettingStackParam = {
   Setting : undefined,
   SettingAlarm : undefined,
@@ -34,7 +40,8 @@ export type SettingProps = StackScreenProps<SettingStackParam, "Setting">;
 // home
 export type HomeStackParam = {
   Home : undefined,
-  Generation? : undefined,
+  Generation : {id : number},
+  PostingItem : undefined,
 }
 export type HomeProps = StackScreenProps<HomeStackParam, "Home">;
 
@@ -42,15 +49,9 @@ export type HomeProps = StackScreenProps<HomeStackParam, "Home">;
 export type SearchStackParam = {
   Search : undefined,
   Episode : undefined,
-  Posting  :undefined
+  PostingItem  :undefined
 }
 export type SearchProps = StackScreenProps<SearchStackParam, "Search">;
-
-// crew
-export type CrewStackParam = {
-  Crew : undefined,
-}
-export type CrewProps = StackScreenProps<CrewStackParam, "Crew">;
 
 // notification
 export type NotificationStackParam = {
@@ -69,6 +70,12 @@ export type ProfileStackParam = {
   Setting : undefined
 }
 export type ProfileProps = StackScreenProps<ProfileStackParam, "ProfileOverview">;
+
+// crew
+export type CrewStackParam = {
+  Crew : undefined,
+}
+export type CrewProps = StackScreenProps<CrewStackParam, "Crew">;
 
 // infos
 export type User = {

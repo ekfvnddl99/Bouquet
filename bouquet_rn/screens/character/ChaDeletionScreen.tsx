@@ -6,6 +6,7 @@ import {
     Keyboard,
     BackHandler
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as button from '../../styles/styled-components/button';
@@ -33,12 +34,12 @@ function setTitle(step:number){
 
 export default function ChaDeletionScreen(){
   const[step, setStep]=useState(1);
-
+  const navigation = useNavigation();
   return(
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <area.Container>
         <area.RowArea style={{paddingHorizontal:30, paddingVertical:16, marginBottom:20}}>
-          <BackButton navigation={()=>{}}/>
+          <BackButton/>
           <View style={{flex:1}}/>
           <elses.CircleImg diameter={28} source={require('../../assets/img.jpg')}/>
         </area.RowArea>

@@ -68,7 +68,7 @@ export default function LoginScreen({navigation} : WelcomeProps){
         <View style={{flex:1, backgroundColor:colors.gray0, paddingTop:top}}>
           <area.ContainerBlank20>
             <ScrollView>
-            <BackButton navigation={navigation}/>
+            <BackButton/>
             <View style={{marginTop:30}}/>
             <text.Subtitle1 color={colors.black}>로그인</text.Subtitle1>
             <View style={{marginTop:32}}/>

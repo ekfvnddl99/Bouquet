@@ -36,7 +36,7 @@ export default function SettingAlarmCustomScreen({props}: {props : SettingProps}
   return(
     <area.Container>
       <area.RowArea style={{paddingHorizontal:30, paddingVertical:16, marginBottom:20}}>
-        <BackButton navigation={props.navigation}/>
+        <BackButton/>
         <View style={{flex:1}}/>
         <elses.CircleImg diameter={28} source={require('../../assets/img.jpg')}/>
       </area.RowArea>

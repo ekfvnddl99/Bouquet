@@ -3,6 +3,7 @@ import { useSafeAreaInsets, SafeAreaProvider } from 'react-native-safe-area-cont
 import { 
   View, Platform
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import {colors} from '../styles/colors';
 import * as area from '../styles/styled-components/area';
 import * as text from '../styles/styled-components/text';
@@ -33,10 +34,11 @@ export const viewBottom=atom({
   default: 0
 });
 
-export default function WelcomeScreen({navigation} : WelcomeProps) {
+export default function WelcomeScreen() {
   const insets = useSafeAreaInsets();
   const[top, setTop]=useRecoilState(viewTop);
   const[bottom, setBottom]=useRecoilState(viewBottom);
+  const navigation = useNavigation();
   useEffect(()=>{
     setTop(insets.top);
     setBottom(insets.bottom);

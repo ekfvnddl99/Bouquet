@@ -5,10 +5,10 @@ import {
     Animated,
     TouchableWithoutFeedback,
     StyleSheet,
-    StatusBar
+    StatusBar,
+    TouchableOpacity
 } from 'react-native';
-import i18n from 'i18n-js';
-import Constants from 'expo-constants';
+import { useNavigation } from '@react-navigation/native';
 import {colors} from '../../../styles/colors';
 import * as area from '../../../styles/styled-components/area';
 import * as text from '../../../styles/styled-components/text';
@@ -109,7 +109,7 @@ function InHomeScreen(){
           renderItem={(obj)=>{
             return(
               <TouchableWithoutFeedback onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
-                <PostingItem navigation={()=>{}} press={selectId} id={obj.index}/>
+                <PostingItem press={selectId} id={obj.index}/>
               </TouchableWithoutFeedback>
             ); 
           }}></FlatList>
@@ -123,7 +123,13 @@ function OutHomeScreen(){
   // dummy data - 서버에서 불러와야 함
   let Data=[{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9}];
 
+  const navigation = useNavigation();
+  const goGeneration=()=>{
+    navigation.navigate('Generation');
+  }
+
   const[selectId, setSelectId]=useState(-1);
+
   const scroll = useRef(new Animated.Value(0)).current;
   const TranslateImgY = scroll.interpolate({
     inputRange: [0, HEADER_SCROLL_DISTANCE],
@@ -172,19 +178,19 @@ function OutHomeScreen(){
           renderItem={(obj)=>{
             return(
               <TouchableWithoutFeedback onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
-                <PostingItem navigation={()=>{}} press={selectId} id={obj.index}/>
+                <PostingItem press={selectId} id={obj.index}/>
               </TouchableWithoutFeedback>
             ); 
           }}/>
       </Animated.ScrollView>
       <View style={{justifyContent:'flex-end'}}>
-        <NotLoginPrimaryButton onPress={()=>{}}/>
+        <NotLoginPrimaryButton press={goGeneration}/>
       </View>
     </area.Container>
   )
 }
 
-export default function HomeScreen({navigation} : HomeProps){
+export default function HomeScreen(){
   // dummy data - 서버에서 불러와야 함
   const [user, setUser] = useUser();
   return(

@@ -15,7 +15,6 @@ import * as elses from '../../styles/styled-components/elses';
 import GallerySvg from '../../assets/Gallery';
 
 // props & logic
-import type {RegisterProps} from '../../utils/types';
 import {getByte} from '../logics/Calculation';
 
 // components
