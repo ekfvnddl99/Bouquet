@@ -29,6 +29,8 @@ import RegisterScreenTwo from './RegisterScreenTwo';
 import RegisterScreenThree from './RegisterScreenThree';
 import RegisterScreenFour from './RegisterScreenFour';
 
+import { EmailRegisterAsync } from '../logics/EmailLogin';
+
 function setTitle(step:number){
   if(step===1) return "메일로 회원가입";
   else if(step===2) return "비밀번호 설정";
@@ -39,6 +41,20 @@ function setTitle(step:number){
 export default function RegisterScreen(){
   const[step, setStep]=useState(1);
   const navigation = useNavigation();
+  const [email, setEmail] = useState('');
+  const [pw, setPw] = useState('');
+  const [name, setName] = useState('');
+  const [profilePic, setProfilePic] = useState('https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg');
+
+  const register = async () => {
+    const result = await EmailRegisterAsync(email, pw, name, profilePic);
+    if (!result) {
+      setStep(step+1);
+    }
+    else {
+      alert(result);
+    }
+  }
   
   return(
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -46,9 +62,9 @@ export default function RegisterScreen(){
         <View style={{paddingHorizontal:20, paddingTop:20}}>
           <ProgressArea back={()=>setStep(step-1)} step={step} title={setTitle(step)} intro={null} navigation={navigation}/>
         </View>
-        {step===1 ? <RegisterScreenOne onChange={()=>setStep(step+1)} navigation={navigation}/> :
-        step===2 ? <RegisterScreenTwo onChange={()=>setStep(step+1)}/> :
-        step===3 ? <RegisterScreenThree onChange={()=>setStep(step+1)}/> : 
+        {step===1 ? <RegisterScreenOne onChange={()=>setStep(step+1)} navigation={navigation} setEmail={setEmail} /> :
+        step===2 ? <RegisterScreenTwo onChange={()=>setStep(step+1)} pw={pw} setPw={setPw} /> :
+        step===3 ? <RegisterScreenThree onChange={register} name={name} setName={setName} setProfilePic={setProfilePic} /> : 
         <RegisterScreenFour navigation={navigation}/>}
       </area.Container>
     </TouchableWithoutFeedback>

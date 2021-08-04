@@ -34,7 +34,7 @@ function CheckForm(ch : number, setter : any){
 }
 
 
-export default function RegisterScreenOne({onChange, navigation} : {onChange : any, navigation : any}){
+export default function RegisterScreenOne({onChange, navigation, setEmail} : {onChange : any, navigation : any, setEmail : Function}){
   const [ch, setCh] = useState(0);
   const [err, setErr] = useState(1);
   const [num, setNum] = useState('undefined');
@@ -46,7 +46,7 @@ export default function RegisterScreenOne({onChange, navigation} : {onChange : a
   return(
     <area.ContainerBlank20>
       <area.FormArea height='44' style={err===1 ? {borderWidth:1, borderColor:colors.warning_red} : null}>
-        <TextInput style={{flex: 1}} placeholder='메일' keyboardType='email-address'/>
+        <TextInput style={{flex: 1}} placeholder='메일' keyboardType='email-address' onChangeText={text => setEmail(text)} />
         <LineButton press={()=>setCh(1)} content="메일 인증" color={colors.black} incolor={colors.gray2} outcolor={'transparent'}/>
       </area.FormArea>
       <WarningText content="무야호" marginTop={8}/>
