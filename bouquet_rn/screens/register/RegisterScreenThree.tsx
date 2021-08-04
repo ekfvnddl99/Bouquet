@@ -25,10 +25,9 @@ import PrimaryTextButton from '../components/PrimaryTextButton';
 import ConditionTextInput from '../components/ConditionTextInput';
 import WarningText from '../components/WarningText';
 
-export default function RegisterScreenThree({onChange} : {onChange : any}){
+export default function RegisterScreenThree({onChange, name, setName, setProfilePic} : {onChange : any, name: string, setName: Function, setProfilePic: Function}){
   const[err, setErr] = useState(1);
   const[byte, setByte]=useState(0);
-  const[nickname, setNickname]=useState('');
 
   return(
     <area.ContainerBlank20>
@@ -41,10 +40,10 @@ export default function RegisterScreenThree({onChange} : {onChange : any}){
         </TouchableOpacity>
       </View>
 
-      <ConditionTextInput height={44} placeholder="별명" onChange={setNickname} keyboard={'default'} active={1}/>
+      <ConditionTextInput height={44} placeholder="별명" onChange={setName} keyboard={'default'} active={1}/>
       <area.RowArea style={{marginTop:8}}>
         <View style={{flex:1}}>{err===1 ? <WarningText content="무야호" marginTop={0}/> : null}</View>
-        <text.Caption color={colors.gray6}>{getByte(nickname)} / 20 byte</text.Caption>
+        <text.Caption color={colors.gray6}>{getByte(name)} / 20 byte</text.Caption>
       </area.RowArea>
       <ConditionText content=" 20 byte 이하" active={0}/>
       <ConditionText content=" 중복되지 않는 별명" active={0}/>
