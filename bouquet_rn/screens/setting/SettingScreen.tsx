@@ -4,6 +4,8 @@ import {
   Text,
   StyleSheet,
 } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
+
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
@@ -14,8 +16,21 @@ import SettingItem from '../components/SettingItem';
 import BackButton from '../components/BackButton';
 import { SettingProps } from '../../utils/types';
 
+import { guest } from '../logics/atoms';
+import useUser from '../logics/useUser';
+
 export default function SettingScreen({navigation} : SettingProps){
   const[name,setName]=useState('undefined');
+  const [user, setUser] = useUser();
+
+  const logOut = async () => {
+    const auth = await SecureStore.getItemAsync('auth');
+    if (auth) {
+      await SecureStore.deleteItemAsync('auth');
+    }
+    setUser(guest);
+    alert('로그아웃했습니다.');
+  }
 
   return(
     <area.Container>
@@ -30,7 +45,7 @@ export default function SettingScreen({navigation} : SettingProps){
         <area.NoHeightArea marBottom={0} paddingH={8} paddingV={8}>
           <SettingItem content="계정 프로필 수정" press={()=>navigation.navigate('SettingProfile')}/>
           <SettingItem content="캐릭터별 알림 설정" press={()=>navigation.navigate('SettingAlarm')}/>
-          <SettingItem content="로그아웃" press={()=>{}}/>
+          <SettingItem content="로그아웃" press={logOut}/>
         </area.NoHeightArea>
       </View>
 

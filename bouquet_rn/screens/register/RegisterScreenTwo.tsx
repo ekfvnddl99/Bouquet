@@ -30,16 +30,15 @@ function PWCheck(pw : string){
   return 0;
 }
 
-export default function RegisterScreenTwo({onChange} : {onChange : any}){
+export default function RegisterScreenTwo({onChange, pw, setPw} : {onChange : any, pw: string, setPw : Function}){
   const [err, setErr] = useState(1);
   const[eye, setEye]=useState(1);
-  const[pw,setPW]=useState('');
 
   return(
     <area.ContainerBlank20>
       <ScrollView style={{flex:1}}>
       <area.FormArea height='44' style={err===1 ? {borderWidth:1, borderColor:colors.warning_red} : null}>
-        <TextInput style={{flex: 1}} placeholder='비밀번호' onChangeText={(pw)=>setPW(pw)}/>
+        <TextInput style={{flex: 1}} placeholder='비밀번호' onChangeText={(pw)=>setPw(pw)}/>
         <TouchableOpacity onPress={()=>{setEye(eye*(-1))}}>
           {EyeSelect(eye)}
         </TouchableOpacity>

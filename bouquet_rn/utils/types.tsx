@@ -90,4 +90,18 @@ export type WelcomeStackParam = {
 }
 export type WelcomeProps = StackScreenProps<WelcomeStackParam, "Welcome">;
 
+// crew
+export type CrewStackParam = {
+  Crew : undefined,
+}
+export type CrewProps = StackScreenProps<CrewStackParam, "Crew">;
 
+// infos
+export type User = {
+  isLogined: boolean;
+  id: number;
+  email: string;
+  name: string;
+  profileImg: string;
+  snsType: string;
+}

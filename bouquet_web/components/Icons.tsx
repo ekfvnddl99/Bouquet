@@ -1,8 +1,12 @@
 import styled from 'styled-components';
 
 // import icons - Sort alphabetically
+import BinFilled from '../public/icons/Bin_Filled.svg';
+import BinOutline from '../public/icons/Bin_Outline.svg';
 import CrewFilled from '../public/icons/Crew_Filled.svg';
 import CrewOutline from '../public/icons/Crew_Outline.svg';
+import GridMenuFilled from '../public/icons/GridMenu_Filled.svg';
+import GridMenuOutline from '../public/icons/GridMenu_Outline.svg';
 import HomeFilled from '../public/icons/Home_Filled.svg';
 import HomeOutline from '../public/icons/Home_Outline.svg';
 import NotificationFilled from '../public/icons/Notification_Filled.svg';
@@ -13,6 +17,10 @@ import SearchFilled from '../public/icons/Search_Filled.svg';
 import SearchOutline from '../public/icons/Search_Outline.svg';
 import SunshineFilled from '../public/icons/Sunshine_Filled.svg';
 import SunshineOutline from '../public/icons/Sunshine_Outline.svg';
+import SwipeFilled from '../public/icons/Swipe_Filled.svg';
+import SwipeOutline from '../public/icons/Swipe_Outline.svg';
+import XOutline from '../public/icons/X_Outline.svg';
+import X from '../public/icons/X.svg';
 import { colors } from '../styles/Colors';
 
 type IconProps = {
@@ -28,6 +36,7 @@ interface IconStyleProps {
   height: number;
   fill: string;
   color: string;
+  additional?: string;
 }
 
 const IconWrap = styled.div<IconStyleProps>`
@@ -47,12 +56,30 @@ const IconWrap = styled.div<IconStyleProps>`
     width: ${props => props.width}px;
     height: ${props => props.height}px;
   }
+
+  ${props => props.additional ? props.additional : ''}
 `;
 
 export default function Icon({ name, varient, width, height, color }: IconProps) {
   let icon = <p>?</p>;
   let fill = 'fill';
+  let additional = '';
   switch (name) {
+    case 'bin':
+      if (varient === 'filled') {
+        fill = 'fill';
+        icon = <BinFilled viewBox="0 0 24 24" />;
+      }
+      else {
+        fill = 'fill';
+        icon = <BinOutline viewBox="0 0 24 24"/>;
+        additional = `
+          path:nth-child(2) {
+            stroke: ${color};
+          }
+        `;
+      }
+      break;
     case 'crew':
       if (varient === 'filled') {
         fill = 'fill';
@@ -61,6 +88,16 @@ export default function Icon({ name, varient, width, height, color }: IconProps)
       else {
         fill = 'stroke';
         icon = <CrewOutline />;
+      }
+      break;
+    case 'gridmenu':
+      if (varient === 'filled') {
+        fill = 'fill';
+        icon = <GridMenuFilled viewBox="0 0 24 24" />;
+      }
+      else {
+        fill = 'stroke';
+        icon = <GridMenuOutline viewBox="0 0 24 24" />;
       }
       break;
     case 'home':
@@ -96,11 +133,11 @@ export default function Icon({ name, varient, width, height, color }: IconProps)
     case 'search':
       if (varient === 'filled') {
         fill = 'fill';
-        icon = <SearchFilled />;
+        icon = <SearchFilled viewBox="0 0 24 24" />;
       }
       else {
         fill = 'fill';
-        icon = <SearchOutline />;
+        icon = <SearchOutline viewBox="0 0 24 24" />;
       }
       break;
     case 'sunshine':
@@ -112,6 +149,27 @@ export default function Icon({ name, varient, width, height, color }: IconProps)
         fill = 'stroke';
         icon = <SunshineOutline viewBox="0 0 24 24" />;
       }
+      break;
+    case 'swipe':
+      if (varient === 'filled') {
+        fill = 'fill';
+        icon = <SwipeFilled viewBox="0 0 24 24" />;
+      }
+      else {
+        fill = 'fill';
+        icon = <SwipeOutline viewBox="0 0 24 24" />;
+      }
+      break;
+    case 'X':
+      if (varient === 'outline') {
+        fill = 'stroke'
+        icon = <XOutline viewBox="0 0 24 24" />;
+      }
+      else {
+        fill = 'stroke';
+        icon = <X viewBox="0 0 24 24" />;
+      }
+      break;
   }
 
   const Icon = () => icon;
@@ -121,7 +179,9 @@ export default function Icon({ name, varient, width, height, color }: IconProps)
       fill={fill}
       color={color ? color : colors.grayscale.black}
       width={width ? width : 24}
-      height={height ? height : 24}>
+      height={height ? height : 24}
+      additional={additional}
+    >
       <Icon />
     </IconWrap>
   )
