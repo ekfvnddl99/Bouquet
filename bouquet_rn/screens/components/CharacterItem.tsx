@@ -10,7 +10,7 @@ import * as elses from '../../styles/styled-components/elses';
 export default function CharacterItem({press, id}  :{press:number, id:number}){
   const navigation = useNavigation();
   const goProfileDetail=()=>{
-    navigation.navigate('ProfileDetail');
+    navigation.navigate('ProfileItem');
   }
   return(
     <button.MiniListButton isWidth={true} height={200} color={colors.white} paddingH={18} paddingV={18} 

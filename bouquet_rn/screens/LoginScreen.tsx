@@ -7,6 +7,7 @@ import {
     Keyboard,
     ScrollView
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import { useRecoilValue } from 'recoil';
 import { viewBottom, viewTop } from './WelcomeScreen';
 import {colors} from '../styles/colors';
@@ -21,7 +22,7 @@ import GoogleSvg from '../assets/Google';
 import AppleSvg from '../assets/Apple';
 
 // props & logic
-import type {WelcomeProps} from '../utils/types'
+import type {WelcomeProps, WelcomeStackParam} from '../utils/types'
 import GoogleSignInAsync from './logics/GoogleLogin';
 import AppleSignInAsync from './logics/AppleLogin';
 
@@ -31,6 +32,7 @@ import BackButton from './components/BackButton';
 import ConditionButton from './components/ConditionButton';
 import PrimaryTextButton from './components/PrimaryTextButton';
 import WarningText from './components/WarningText';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 function CheckErr(mail:string) : string | undefined{
   if(mail==='456') return '메일이나 비밀번호가 틀렸나 봐요.';
@@ -47,12 +49,13 @@ function EyeSelect(eye : number){
   }
 }
 
-export default function LoginScreen({navigation} : WelcomeProps){
+export default function LoginScreen(){
     const[mail, setMail]=useState('456');
     const[err, setErr] = useState(1);
     const[eye, setEye]=useState(1);
     const top=useRecoilValue(viewTop);
     const bottom = useRecoilValue(viewBottom);
+    const navigation = useNavigation<StackNavigationProp<WelcomeStackParam>>();
 
     const goTabs =()=>{
       navigation.replace("Tab");

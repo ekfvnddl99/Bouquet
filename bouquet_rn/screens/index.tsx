@@ -7,41 +7,7 @@ import { TabBarArea } from '../styles/styled-components/area';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-// screens
-import WelcomeScreen from './WelcomeScreen';
-
-import RegisterScreen from './register/RegisterScreen';
-
-import ChaGenerationScreen from './character/ChaGenerationScreen';
-
-import LoginScreen from './LoginScreen';
-
-import HomeScreen from './main/Home/HomeScreen';
-
-import SearchScreen from './main/Search/SearchScreen';
-import EpisodeScreen from './common/EpisodeScreen';
-import PostDetailScreen from './common/PostDetailScreen';
-
-import CrewScreen from './main/Crew/CrewScreen';
-
-import NotificationScreen from './main/Notification/NotificationScreen';
-
-import ProfileOverviewScreen from './main/Profile/ProfileOverviewScreen';
-import ProfileDetailScreen from './main/Profile/ProfileDetailScreen';
-import AccountScreen from './common/AccountScreen';
-import ChaDeletionScreen from './character/ChaDeletionScreen';
-
-import PostWritingScreen from './common/PostWritingScreen';
-
-import SettingScreen from './setting/SettingScreen';
-import SettingAlarmScreen from './setting/SettingAlarmScreen';
-import SettingAlarmCustomScreen from './setting/SettingAlarmCustomScreen';
-import SettingProfileScreen from './setting/SettingProfileScreen';
-import AccountDeletionScreenOne from './setting/AccountDeletionScreenOne';
-import AccountDeletionScreenTwo from './setting/AccountDeletionScreenTwo';
-
-import FloatingButton from './components/FloatingButton';
+import * as Types from '../utils/types';
 
 // icons
 import HomeSvg from '../assets/Home';
@@ -55,10 +21,282 @@ import NotificationFocusSvg from '../assets/NotificationFocus';
 import ProfileSvg from '../assets/Profile';
 import ProfileFocusSvg from '../assets/ProfileFocus';
 
-import * as Types from '../utils/types';
-import { colors } from '../styles/colors';
+//// basics
+// writing - fab
+const WritingStack = createStackNavigator<Types.WritingStackParam>();
+function WritingStackNavigator(){
+  return(
+    <WritingStack.Navigator
+      initialRouteName="PostWriting">
+      <WritingStack.Screen 
+        name="PostWriting"
+        component={PostWritingScreen}
+        options={{headerShown : false}}/>
+      <WritingStack.Screen 
+        name="PostItem"
+        component={PostItemStackNavigator}
+        options={{headerShown : false}}/>
+    </WritingStack.Navigator>
+  );
+}
+// post item
+const PostItemStack = createStackNavigator<Types.PostItemStackParam>();
+function PostItemStackNavigator(){
+  return(
+    <PostItemStack.Navigator
+      initialRouteName="PostDetail">
+      <PostItemStack.Screen 
+        name="PostDetail"
+        component={PostDetailScreen}
+        options={{headerShown : false}}/>
+      <PostItemStack.Screen 
+        name="ProfileItem"
+        component={ProfileItemStackNavigator}
+        options={{headerShown : false}}/>
+    </PostItemStack.Navigator>
+  );
+}
+// profile item - profileoverview, character item
+const ProfileItemStack = createStackNavigator<Types.ProfileItemStackParam>();
+function ProfileItemStackNavigator(){
+  return(
+    <ProfileItemStack.Navigator
+      initialRouteName="ProfileDetail">
+      <ProfileItemStack.Screen 
+        name="ProfileDetail"
+        component={ProfileDetailScreen}
+        options={{headerShown : false}}/>
+      <ProfileItemStack.Screen 
+        name="ProfileModification"
+        component={ProfileDetailScreen}
+        options={{headerShown : false}}/>
+      <ProfileItemStack.Screen 
+        name="ProfileDeletion"
+        component={ChaDeletionScreen}
+        options={{headerShown : false}}/>
+      <ProfileItemStack.Screen 
+        name="PostItem"
+        component={PostItemStackNavigator}
+        options={{headerShown : false}}/>
+    </ProfileItemStack.Navigator>
+  );
+}
+// setting
+const SettingStack = createStackNavigator<Types.SettingStackParam>();
+function SettingnStackNavigator(){
+  return(
+    <SettingStack.Navigator
+      initialRouteName="Setting">
+      <SettingStack.Screen 
+        name="Setting" 
+        component={SettingScreen}
+        options={{headerShown : false}}/>
+      <SettingStack.Screen 
+        name="SettingAlarm" 
+        component={SettingAlarmScreen}
+        options={{headerShown : false}}/>
+      <SettingStack.Screen 
+        name="SettingAlarmCustom" 
+        component={SettingAlarmCustomScreen}
+        options={{headerShown : false}}/>
+      <SettingStack.Screen 
+        name="SettingProfile" 
+        component={SettingProfileScreen}
+        options={{headerShown : false}}/>
+      <SettingStack.Screen 
+        name="SettingAccountDeletionOne" 
+        component={AccountDeletionScreenOne}
+        options={{headerShown : false}}/>
+      <SettingStack.Screen 
+        name="SettingAccountDeletionTwo" 
+        component={AccountDeletionScreenTwo}
+        options={{headerShown : false}}/>
+    </SettingStack.Navigator>
+  );
+}
+// character generation
+const ChaGenerationStack = createStackNavigator<Types.ChaGenerationStackParam>();
+function ChaGenerationStackNavigator(){
+  return(
+    <ChaGenerationStack.Navigator
+      initialRouteName="ChaGeneration">
+      <ChaGenerationStack.Screen 
+        name="ChaGeneration"
+        component={ChaGenerationScreen}
+        options={{headerShown : false}}/>
+    </ChaGenerationStack.Navigator>
+  );
+}
 
-const Tab = createBottomTabNavigator();
+
+
+
+//// tab screens
+// home
+const HomeStack = createStackNavigator<Types.HomeStackParam>();
+function HomeStackNavigator(){
+  return(
+    <HomeStack.Navigator
+      initialRouteName="Home">
+      <HomeStack.Screen 
+        name="Home" 
+        component={HomeScreen}
+        options={{headerShown : false}}/>
+      <HomeStack.Screen 
+        name="PostItem" 
+        component={PostItemStackNavigator}
+        options={{headerShown : false}}/>
+      <HomeStack.Screen 
+        name="Floating" 
+        component={WritingStackNavigator}
+        options={{headerShown : false}}/>
+      <HomeStack.Screen 
+        name="ChaGeneration" 
+        component={ChaGenerationStackNavigator}
+        options={{headerShown : false}}/>
+    </HomeStack.Navigator>
+  );
+}
+// search
+const SearchStack = createStackNavigator<Types.SearchStackParam>();
+function SearchStackNavigator(){
+  return(
+    <SearchStack.Navigator
+      initialRouteName="Search">
+      <SearchStack.Screen 
+        name="Search" 
+        component={SearchScreen}
+        options={{headerShown : false}}/>
+      <SearchStack.Screen 
+        name="ProfileItem" 
+        component={ProfileItemStackNavigator}
+        options={{headerShown : false}}/>
+      <SearchStack.Screen 
+        name="PostItem" 
+        component={PostItemStackNavigator}
+        options={{headerShown : false}}/>
+      <SearchStack.Screen 
+        name="Floating" 
+        component={WritingStackNavigator}
+        options={{headerShown : false}}/>
+    </SearchStack.Navigator>
+  );
+}
+// noti
+const NotificationStack = createStackNavigator<Types.NotificationStackParam>();
+function NotificationStackNavigator(){
+  return(
+    <NotificationStack.Navigator
+      initialRouteName="Notification">
+      <NotificationStack.Screen 
+        name="Notification" 
+        component={NotificationScreen}
+        options={{headerShown : false}}/>
+      <NotificationStack.Screen 
+        name="ProfileItem" 
+        component={ProfileItemStackNavigator}
+        options={{headerShown : false}}/>
+      <NotificationStack.Screen 
+        name="ChaGeneration" 
+        component={ChaGenerationStackNavigator}
+        options={{headerShown : false}}/>
+    </NotificationStack.Navigator>
+  );
+}
+// profile
+const ProfileStack = createStackNavigator<Types.ProfileStackParam>();
+function ProfileStackNavigator(){
+  return(
+    <ProfileStack.Navigator
+      initialRouteName="ProfileOverview">
+      <ProfileStack.Screen 
+        name="ProfileOverview"
+        component={ProfileOverviewScreen}
+        options={{headerShown : false}}/>
+      <ProfileStack.Screen 
+        name="ProfileItem"
+        component={ProfileItemStackNavigator}
+        options={{headerShown : false}}/>
+      <ProfileStack.Screen 
+        name="Account"
+        component={AccountScreen}
+        options={{headerShown : false}}/>
+      <ProfileStack.Screen 
+        name="Setting"
+        component={SettingnStackNavigator}
+        options={{headerShown : false}}/>
+      <ProfileStack.Screen 
+        name="Floating" 
+        component={WritingStackNavigator}
+        options={{headerShown : false}}/>
+    </ProfileStack.Navigator>
+  );
+}
+
+
+const WelcomeStack = createStackNavigator<Types.WelcomeStackParam>();
+function WelcomeStackNavigator(){
+  return(
+    <WelcomeStack.Navigator
+    initialRouteName="Welcome">
+      <WelcomeStack.Screen
+        name="Welcome"
+        component={WelcomeScreen}
+        options={{headerShown: false}}/>
+      <WelcomeStack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{headerShown: false}}/>
+      <WelcomeStack.Screen
+        name="Register"
+        component={RegisterScreen}
+        options={{headerShown : false}}/>
+      <WelcomeStack.Screen
+        name="Tab"
+        component={TabNavigator}
+        options={{headerShown : false}}/>
+    </WelcomeStack.Navigator>
+  );
+}
+
+export default function AppStack(){
+  return(
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <WelcomeStackNavigator/>
+      </NavigationContainer>
+    </SafeAreaProvider>
+  )
+}
+
+
+// screens
+import WelcomeScreen from './WelcomeScreen';
+import LoginScreen from './LoginScreen';
+import RegisterScreen from './register/RegisterScreen';
+
+import HomeScreen from './main/Home/HomeScreen';
+import SearchScreen from './main/Search/SearchScreen';
+import NotificationScreen from './main/Notification/NotificationScreen';
+import ProfileOverviewScreen from './main/Profile/ProfileOverviewScreen';
+import ProfileDetailScreen from './main/Profile/ProfileDetailScreen';
+import AccountScreen from './common/AccountScreen';
+
+import SettingScreen from './setting/SettingScreen';
+import SettingProfileScreen from './setting/SettingProfileScreen';
+import SettingAlarmScreen from './setting/SettingAlarmScreen';
+import SettingAlarmCustomScreen from './setting/SettingAlarmCustomScreen';
+import AccountDeletionScreenOne from './setting/AccountDeletionScreenOne';
+import AccountDeletionScreenTwo from './setting/AccountDeletionScreenTwo';
+
+import PostWritingScreen from './common/PostWritingScreen';
+import PostDetailScreen from './common/PostDetailScreen';
+
+import ChaGenerationScreen from './character/ChaGenerationScreen';
+import ChaDeletionScreen from './character/ChaDeletionScreen';
+
+
+//// tab
 function CustomTabBar({ state, navigation} : {state:any, navigation:any}){
   return(
     <TabBarArea style={{height : Platform.OS==='ios' ? 60+18: 60}}>
@@ -99,6 +337,7 @@ function CustomTabBar({ state, navigation} : {state:any, navigation:any}){
     </TabBarArea>
   );
 }
+const Tab = createBottomTabNavigator<Types.TabParam>();
 function TabNavigator(){
   return(
     <>
@@ -117,221 +356,5 @@ function TabNavigator(){
       <Tab.Screen name="Profile" component={ProfileStackNavigator}/>
     </Tab.Navigator>
     </>
-  );
-}
-
-const ChaGenerationStack = createStackNavigator<Types.ChaGenerationStackParam>();
-function ChaGenerationStackNavigator(){
-  return(
-    <ChaGenerationStack.Navigator
-      initialRouteName="ChaGeneration">
-      <ChaGenerationStack.Screen 
-        name="ChaGeneration" 
-        component={ChaGenerationScreen}
-        options={{headerShown : false}}/>
-      <ChaGenerationStack.Screen 
-        name="Profile" 
-        component={ProfileStackNavigator}
-        options={{headerShown : false}}/>
-    </ChaGenerationStack.Navigator>
-  );
-}
-
-const HomeStack = createStackNavigator<Types.HomeStackParam>();
-function HomeStackNavigator(){
-  return(
-    <HomeStack.Navigator
-      initialRouteName="Home">
-      <HomeStack.Screen 
-        name="Home" 
-        component={HomeScreen}
-        options={{headerShown : false}}/>
-      <HomeStack.Screen 
-        name="Generation" 
-        component={ChaGenerationStackNavigator}
-        options={{headerShown : false}}/>
-      <HomeStack.Screen 
-        name="PostingItem" 
-        component={PostingStackNavigator}
-        options={{headerShown : false}}/>
-    </HomeStack.Navigator>
-  );
-}
-
-
-const SearchStack = createStackNavigator<Types.SearchStackParam>();
-function SearchStackNavigator(){
-  return(
-    <SearchStack.Navigator
-      initialRouteName="Search">
-      <SearchStack.Screen 
-        name="Search" 
-        component={SearchScreen}
-        options={{headerShown : false}}/>
-      <SearchStack.Screen 
-        name="Episode" 
-        component={EpisodeScreen}
-        options={{headerShown : false}}/>
-      <SearchStack.Screen 
-        name="PostingItem" 
-        component={PostingStackNavigator}
-        options={{headerShown : false}}/>
-    </SearchStack.Navigator>
-  );
-}
-
-const CrewStack = createStackNavigator<Types.CrewStackParam>();
-function CrewStackNavigator(){
-  return(
-    <CrewStack.Navigator
-      initialRouteName="Crew">
-      <CrewStack.Screen 
-        name="Crew" 
-        component={CrewScreen}
-        options={{headerShown : false}}/>
-    </CrewStack.Navigator>
-  );
-}
-
-const NotificationStack = createStackNavigator<Types.NotificationStackParam>();
-function NotificationStackNavigator(){
-  return(
-    <NotificationStack.Navigator
-      initialRouteName="Notification">
-      <NotificationStack.Screen 
-        name="Notification" 
-        component={NotificationScreen}
-        options={{headerShown : false}}/>
-      <NotificationStack.Screen 
-        name="Generation" 
-        component={ChaGenerationStackNavigator}
-        initialParams={{modify : 0}}
-        options={{headerShown : false}}/>
-    </NotificationStack.Navigator>
-  );
-}
-
-const ProfileStack = createStackNavigator<Types.ProfileStackParam>();
-function ProfileStackNavigator(){
-  return(
-    <ProfileStack.Navigator
-      initialRouteName="ProfileOverview">
-      <ProfileStack.Screen 
-        name="ProfileOverview"
-        component={ProfileOverviewScreen}
-        options={{headerShown : false}}/>
-      <ProfileStack.Screen 
-        name="ProfileDetail"
-        component={ProfileDetailScreen}
-        options={{headerShown : false}}/>
-      <ProfileStack.Screen 
-        name="ProfileDeletion"
-        component={ChaDeletionScreen}
-        options={{headerShown : false}}/>
-      <ProfileStack.Screen 
-        name="ProfileModification"
-        component={ChaGenerationScreen}
-        options={{headerShown : false}}/>
-      <ProfileStack.Screen 
-        name="Account"
-        component={AccountScreen}
-        options={{headerShown : false}}/>
-      <ProfileStack.Screen 
-        name="Setting"
-        component={SettingnStackNavigator}
-        options={{headerShown : false}}/>
-    </ProfileStack.Navigator>
-  );
-}
-
-const SettingStack = createStackNavigator<Types.SettingStackParam>();
-function SettingnStackNavigator(){
-  return(
-    <SettingStack.Navigator
-      initialRouteName="Setting">
-      <SettingStack.Screen 
-        name="Setting" 
-        component={SettingScreen}
-        options={{headerShown : false}}/>
-      <SettingStack.Screen 
-        name="SettingAlarm" 
-        component={SettingAlarmScreen}
-        options={{headerShown : false}}/>
-      <SettingStack.Screen 
-        name="SettingAlarmCustom" 
-        component={SettingAlarmCustomScreen}
-        options={{headerShown : false}}/>
-      <SettingStack.Screen 
-        name="SettingProfile" 
-        component={SettingProfileScreen}
-        options={{headerShown : false}}/>
-      <SettingStack.Screen 
-        name="SettingAccountDeletionOne" 
-        component={AccountDeletionScreenOne}
-        options={{headerShown : false}}/>
-      <SettingStack.Screen 
-        name="SettingAccountDeletionTwo" 
-        component={AccountDeletionScreenTwo}
-        options={{headerShown : false}}/>
-    </SettingStack.Navigator>
-  );
-}
-
-const WritingStack = createStackNavigator<Types.WritingStackParam>();
-function WritingStackNavigator(){
-  return(
-    <WritingStack.Navigator
-      initialRouteName="PostWriting">
-      <WritingStack.Screen 
-        name="PostWriting"
-        component={ProfileOverviewScreen}
-        options={{headerShown : false}}/>
-    </WritingStack.Navigator>
-  );
-}
-
-const PostingStack = createStackNavigator<Types.PostingStackParam>();
-function PostingStackNavigator(){
-  return(
-    <PostingStack.Navigator
-      initialRouteName="Posting">
-      <PostingStack.Screen 
-        name="Posting"
-        component={PostDetailScreen}
-        options={{headerShown : false}}/>
-      <PostingStack.Screen 
-        name="ProfileDetail"
-        component={ProfileDetailScreen}
-        options={{headerShown : false}}/>
-    </PostingStack.Navigator>
-  );
-}
-
-const WelcomeStack = createStackNavigator<Types.WelcomeStackParam>();
-export default function AppStack(){
-  return(
-    <SafeAreaProvider>
-      <NavigationContainer>
-        <WelcomeStack.Navigator
-          initialRouteName="Welcome">
-            <WelcomeStack.Screen
-              name="Welcome"
-              component={WelcomeScreen}
-              options={{headerShown: false}}/>
-            <WelcomeStack.Screen
-              name="Login"
-              component={LoginScreen}
-              options={{headerShown: false}}/>
-            <WelcomeStack.Screen
-              name="Register"
-              component={RegisterScreen}
-              options={{headerShown : false}}/>
-            <WelcomeStack.Screen
-              name="Tab"
-              component={TabNavigator}
-              options={{headerShown : false}}/>
-        </WelcomeStack.Navigator>
-      </NavigationContainer>
-    </SafeAreaProvider>
   );
 }

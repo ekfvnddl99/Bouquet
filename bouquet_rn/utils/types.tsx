@@ -1,31 +1,36 @@
 import { StackScreenProps } from '@react-navigation/stack';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 
-// welcome
-export type WelcomeStackParam = {
-  Welcome : undefined,
-  Login : undefined,
-  Register : undefined,
-  Tab : undefined,
+export type TabParam = {
+  Home: undefined,
+  Search: undefined,
+  Notification: undefined,
+  Profile: undefined,
 }
-export type WelcomeProps = StackScreenProps<WelcomeStackParam, "Welcome">;
+export type TabProps = BottomTabScreenProps<TabParam, "Home">
 
-export type ChaGenerationStackParam = {
-  ChaGeneration : undefined,
-  Profile : undefined,
-}
-export type ChaGenerationProps = StackScreenProps<ChaGenerationStackParam, "ChaGeneration">;
-
+//// basics
+// writing - fab
 export type WritingStackParam = {
   PostWriting : undefined,
+  PostItem : undefined,
 }
 export type WritingProps = StackScreenProps<WritingStackParam, "PostWriting">;
-
-export type PostingStackParam = {
-  Posting : undefined,
-  ProfileDetail : undefined,
+// post item
+export type PostItemStackParam = {
+  PostDetail : undefined,
+  ProfileItem : undefined,
 }
-export type PostingProps = StackScreenProps<PostingStackParam, "Posting">;
-
+export type PostItemProps = StackScreenProps<PostItemStackParam, "PostDetail">;
+// profile item - profileoverview, character item
+export type ProfileItemStackParam = {
+  ProfileDetail : undefined,
+  ProfileModification : undefined,
+  ProfileDeletion : undefined,
+  PostItem : undefined,
+}
+export type ProfileItemProps = StackScreenProps<ProfileItemStackParam, "ProfileDetail">;
+// setting
 export type SettingStackParam = {
   Setting : undefined,
   SettingAlarm : undefined,
@@ -35,44 +40,54 @@ export type SettingStackParam = {
   SettingAccountDeletionTwo : undefined,
 }
 export type SettingProps = StackScreenProps<SettingStackParam, "Setting">;
+// character generation
+export type ChaGenerationStackParam = {
+  ChaGeneration:undefined
+}
+export type ChaGenerationProps = StackScreenProps<ChaGenerationStackParam, "ChaGeneration">;
 
-// TAB
+
+//// tab screens
 // home
 export type HomeStackParam = {
   Home : undefined,
-  Generation : {id : number},
-  PostingItem : undefined,
+  PostItem : undefined,
+  Floating : undefined,
+  ChaGeneration : undefined,
 }
 export type HomeProps = StackScreenProps<HomeStackParam, "Home">;
-
 // search
 export type SearchStackParam = {
   Search : undefined,
-  Episode : undefined,
-  PostingItem  :undefined
+  ProfileItem : undefined,
+  PostItem  :undefined,
+  Floating : undefined,
 }
 export type SearchProps = StackScreenProps<SearchStackParam, "Search">;
-
-// notification
+// noti
 export type NotificationStackParam = {
   Notification : undefined,
-  Generation : object,
+  ProfileItem : undefined,
+  PostItem : undefined,
+  ChaGeneration : undefined,
 }
 export type NotificationProps = StackScreenProps<NotificationStackParam, "Notification">;
-
 // profile
 export type ProfileStackParam = {
   ProfileOverview : undefined,
-  ProfileDetail : undefined,
+  ProfileItem : undefined,
   Account : undefined,
-  ProfileDeletion : undefined,
-  ProfileModification : undefined,
-  Setting : undefined
+  Setting : undefined,
+  Floating : undefined,
 }
 export type ProfileProps = StackScreenProps<ProfileStackParam, "ProfileOverview">;
-
-// crew
-export type CrewStackParam = {
-  Crew : undefined,
+// welcome
+export type WelcomeStackParam = {
+  Welcome : undefined,
+  Login : undefined,
+  Register : undefined,
+  Tab : undefined,
 }
-export type CrewProps = StackScreenProps<CrewStackParam, "Crew">;
+export type WelcomeProps = StackScreenProps<WelcomeStackParam, "Welcome">;
+
+

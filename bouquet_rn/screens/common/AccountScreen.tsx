@@ -49,7 +49,7 @@ export default function AccountScreen(){
         </Animated.View>
 
         <area.RowArea style={{paddingHorizontal:30, paddingVertical:16}}>
-          <BackButton navigation={()=>{}}/>
+          <BackButton/>
           <View style={{flex:1}}/>
           <elses.CircleImg diameter={28} source={require('../../assets/img.jpg')}/>
         </area.RowArea>

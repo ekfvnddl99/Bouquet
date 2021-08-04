@@ -28,18 +28,18 @@ export default function PostWritingScreen(){
   const[select, setSelect]=useState(1);
     // dummy data - 서버에서 불러와야 함
     let threeData=[1,2,3,4,5,6,7,8,9];
-
     return(
         <area.Container>
           <area.RowArea style={{paddingHorizontal:30, paddingVertical:16}}>
-            <BackButton navigation={()=>{}}/>
+            <BackButton/>
+            <View style={{flex:1}}/>
             <elses.CircleImg diameter={28} source={require('../../assets/img.jpg')}/>
           </area.RowArea>
 
           <ScrollView>
             <area.ContainerBlank30>
               <area.RowArea>
-                <View style={{flex:1}}><ProfileButton diameter={30}/></View>
+                <View style={{flex:1}}><ProfileButton diameter={30} account={0}/></View>
                 {select===1 ? 
                 <LineButton press={()=>{}} content="템플릿 변경" color={colors.black} incolor={colors.gray2} outcolor={'transparent'}/> : null}
               </area.RowArea>

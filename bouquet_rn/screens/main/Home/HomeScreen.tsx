@@ -111,7 +111,7 @@ function InHomeScreen(){
                 <PostingItem press={selectId} id={obj.index}/>
               </TouchableWithoutFeedback>
             ); 
-          }}></FlatList>
+          }}/>
       </Animated.ScrollView>
       <FloatingButton/>
     </area.Container>      
@@ -121,11 +121,6 @@ function InHomeScreen(){
 function OutHomeScreen(){
   // dummy data - 서버에서 불러와야 함
   let Data=[{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9}];
-
-  const navigation = useNavigation();
-  const goGeneration=()=>{
-    navigation.navigate('Generation');
-  }
 
   const[selectId, setSelectId]=useState(-1);
 
@@ -183,7 +178,7 @@ function OutHomeScreen(){
           }}/>
       </Animated.ScrollView>
       <View style={{justifyContent:'flex-end'}}>
-        <NotLoginPrimaryButton press={goGeneration}/>
+        <NotLoginPrimaryButton/>
       </View>
     </area.Container>
   )

@@ -98,7 +98,7 @@ export const TagModifyButton = styled.TouchableOpacity`
 `
 
 export const AddTemplate = styled.TouchableOpacity`
-  background-color: 'transparent';
+  background-color: transparent;
   border-radius: 10;
   border-color:${colors.black};
   border-style: dashed;
