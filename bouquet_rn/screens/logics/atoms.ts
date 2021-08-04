@@ -2,7 +2,7 @@ import { atom } from 'recoil';
 
 import { User } from '../../utils/types';
 
-const guest: User = {
+export const guest: User = {
   isLogined: false,
   id: 0,
   email: '',

@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useCallback } from 'react';
 import { User } from '../../utils/types';
 import * as SecureStore from 'expo-secure-store';
 import { serverAddress } from './ServerInfos';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, SetterOrUpdater } from 'recoil';
 import { userState } from './atoms';
 
 async function getUser(auth: string) {
@@ -32,6 +32,8 @@ async function getUser(auth: string) {
 
 export default function useUser() {
   const [user, setUser] = useRecoilState(userState);
+  const getIsLogined = useCallback(() => user.isLogined, [user]);
+  const isLogined = useMemo(() => getIsLogined(), [getIsLogined]);
 
   useEffect(() => {
     async function setUserFromAuth() {
@@ -52,10 +54,18 @@ export default function useUser() {
       }
     }
 
-    if (!user.isLogined) {
+    if (!isLogined) {
+      console.log("a");
       setUserFromAuth();
     }
-  }, []);
+  }, [isLogined]);
 
-  return user;
+  type OutputType = [
+    User,
+    SetterOrUpdater<User>
+  ];
+
+  const returns: OutputType = [user, setUser];
+
+  return returns;
 }
