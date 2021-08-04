@@ -6,6 +6,7 @@ import {
     Keyboard,
     BackHandler
 } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as button from '../../styles/styled-components/button';
@@ -28,6 +29,7 @@ import ChaGenerationScreenOne from './ChaGenerationScreenOne';
 import ChaGenerationScreenTwo from './ChaGenerationScreenTwo';
 import ChaGenerationScreenThree from './ChaGenerationScreenThree';
 import ChaGenerationScreenFour from './ChaGenerationScreenFour';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 function setTitle(step:number){
   if(step===1) return "어떤 모습인가요?";
@@ -43,13 +45,15 @@ function setIntro(step:number){
   else return null;
 }
 
-export default function ChaGenerationScreen({route, navigation} : ChaGenerationProps){
+export default function ChaGenerationScreen(){
   const[step, setStep]=useState(1);
-  const param = route.params;
+  const navigation = useNavigation<StackNavigationProp<ChaGenerationProps>>();
+  const route = useRoute();
+  console.log(route.params);
 
   return(
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <area.Container>
+      <area.Container> 
         <View style={{paddingHorizontal:20, paddingTop:20}}>
           <ProgressArea back={()=>setStep(step-1)} step={step} title={setTitle(step)} intro={setIntro(step)} navigation={navigation}/>
         </View>

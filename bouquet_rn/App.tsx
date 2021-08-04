@@ -33,18 +33,12 @@ export default function App() {
 
   useEffect(() => {
     getFonts();
-    setFont(1);
   }, []);
 
   setI18nConfig();
-  if(font){
-    return (
-      <RecoilRoot>
-        <AppStack/>
-      </RecoilRoot>
-    );
-  }
-  else{
-    return <AppLoading/>
-  }
+  return (
+    <RecoilRoot>
+      <AppStack/>
+    </RecoilRoot>
+  );
 }

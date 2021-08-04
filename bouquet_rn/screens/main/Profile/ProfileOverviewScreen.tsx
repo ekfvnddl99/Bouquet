@@ -8,6 +8,7 @@ import {
     Platform,
     StyleSheet
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import {colors} from '../../../styles/colors';
 import * as area from '../../../styles/styled-components/area';
 import * as text from '../../../styles/styled-components/text';
@@ -34,10 +35,12 @@ const HEADER_MAX_HEIGHT = 90;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
-export default function ProfileOverviewScreen({navigation} : ProfileProps){
+export default function ProfileOverviewScreen(){
   const[swipe, setSwipe]=useState(1);
     // dummy data - 서버에서 불러와야 함
     let threeData=[1,2,3,4,5,6,7,8,9];
+
+    const navigation = useNavigation();
 
     const scroll = useRef(new Animated.Value(0)).current;
     const OpacityHeader=scroll.interpolate({
@@ -55,15 +58,19 @@ export default function ProfileOverviewScreen({navigation} : ProfileProps){
 
           <area.RowArea style={{paddingHorizontal:30, paddingVertical:16}}>
             <View style={{flex:1}}><elses.CircleImg diameter={24} source={require('../../../assets/img.jpg')}/></View>
-            <TouchableOpacity style={{marginRight:16}}><PlusSvg w='24' h='24'/></TouchableOpacity>
+            <TouchableOpacity style={{marginRight:16}} onPress={()=>navigation.navigate('Generation')}>
+              <PlusSvg w='24' h='24'/>
+            </TouchableOpacity>
             {swipe===1 ? 
             <TouchableOpacity onPress={()=>setSwipe(0)}>
               <GridSvg w='24' h='24'/>
-            </TouchableOpacity> :
+            </TouchableOpacity> : 
             <TouchableOpacity onPress={()=>setSwipe(1)}>
               <SwipeSvg w='24' h='24'/>
             </TouchableOpacity>}
-            <TouchableOpacity style={{marginLeft:16}} onPress={()=>navigation.navigate('Setting')}><SettingSvg w='24' h='24'/></TouchableOpacity>
+            <TouchableOpacity style={{marginLeft:16}} onPress={()=>navigation.navigate('Setting')}>
+              <SettingSvg w='24' h='24'/>
+            </TouchableOpacity>
           </area.RowArea>
           
           {swipe===1 ? <ProfileSwipeScreen/> : <ProfileGridScreen scroll={scroll}/>}

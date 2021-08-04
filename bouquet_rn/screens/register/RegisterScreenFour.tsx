@@ -9,7 +9,7 @@ import * as text from '../../styles/styled-components/text';
 import * as elses from '../../styles/styled-components/elses';
 
 // props & logic
-import type {RegisterProps} from '../../utils/types';
+import type { WelcomeProps} from '../../utils/types';
 
 // components
 import ProgressArea from '../components/ProgressArea';
@@ -20,7 +20,7 @@ export default function RegisterScreenFour({navigation} : {navigation : any}){
   const[name,setName]=useState('undefined');
 
   const goNext=()=>{
-    navigation.navigate("Tab");
+    navigation.replace('Tab');
   }
 
   return(

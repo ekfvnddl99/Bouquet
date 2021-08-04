@@ -1,5 +1,6 @@
 import React, {Component, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import {colors} from '../../styles/colors';
 import * as button from '../../styles/styled-components/button';
 import * as text from '../../styles/styled-components/text';
@@ -11,8 +12,13 @@ import ConditionButton from './ConditionButton';
 
 
 export default function ProfileChaItem({name, introduction, idx} : {name: string, introduction : string, idx:number}){
+  const navigation = useNavigation();
+  const goProfileDetail=()=>{
+    navigation.navigate('ProfileDetail');
+  }
   return(
-    <button.MiniListButton isWidth={false} height={238} color={colors.white} paddingH={25} paddingV={0} style={styles.button} activeOpacity={1}>
+    <button.MiniListButton isWidth={false} height={238} color={colors.white} paddingH={25} paddingV={0} 
+    style={styles.button} activeOpacity={1} onPress={goProfileDetail}>
         <elses.Circle diameter={100}/>
         <View style={{marginBottom:8}}/>
         <text.Body2B color={colors.black}>{name}</text.Body2B>

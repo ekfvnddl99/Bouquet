@@ -27,9 +27,10 @@ export default function ProgressArea({back, step, title, intro, navigation} : {b
   })
   return(
     <View style={{marginBottom:12}}>
-      <TouchableOpacity onPress={step===1 ? ()=>navigation.navigate('Login') : back}>
+      {step===4 ? <View style={{marginBottom:24}}/> :
+      <TouchableOpacity onPress={step===1 ? ()=>navigation.goBack() : back}>
         <ArrowLeftSvg w='24' h='24'/>
-      </TouchableOpacity>
+      </TouchableOpacity>}
       <View style={{marginTop:20, marginBottom:24}}>
         <elses.Bar width='100%' color={colors.alpha20_primary}/>
         <Animated.View style={[{width :TranslateX ,height:8, borderRadius:10, position:'absolute', backgroundColor:colors.primary},]}/>

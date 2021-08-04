@@ -12,7 +12,7 @@ import * as text from '../../styles/styled-components/text';
 import * as input from '../../styles/styled-components/input';
 
 // props & logic
-import type {RegisterProps} from '../../utils/types';
+
 
 // components
 import ProgressArea from '../components/ProgressArea';

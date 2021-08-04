@@ -5,6 +5,7 @@ import {
     TouchableWithoutFeedback,
     Keyboard
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as button from '../../styles/styled-components/button';
@@ -12,7 +13,7 @@ import * as text from '../../styles/styled-components/text';
 import * as input from '../../styles/styled-components/input';
 
 // props & logic
-import type {RegisterProps} from '../../utils/types';
+import type {WelcomeProps} from '../../utils/types';
 
 // components
 import ProgressArea from '../components/ProgressArea';
@@ -35,12 +36,13 @@ function setTitle(step:number){
   else return "회원가입 완료!";
 }
 
-export default function RegisterScreen({navigation} : RegisterProps){
+export default function RegisterScreen(){
   const[step, setStep]=useState(1);
+  const navigation = useNavigation();
   
   return(
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <area.Container>
+      <area.Container> 
         <View style={{paddingHorizontal:20, paddingTop:20}}>
           <ProgressArea back={()=>setStep(step-1)} step={step} title={setTitle(step)} intro={null} navigation={navigation}/>
         </View>
