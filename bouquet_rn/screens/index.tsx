@@ -1,7 +1,8 @@
-import React, {Component} from 'react';
+import React, {Component, useState, useRef} from 'react';
 import { View, Platform, TouchableOpacity, ScrollView} from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { TabBarArea } from '../styles/styled-components/area';
+import { useRecoilState } from 'recoil';
 
 // navigation tools
 import { NavigationContainer } from '@react-navigation/native';
@@ -20,6 +21,8 @@ import NotificationSvg from '../assets/Notification';
 import NotificationFocusSvg from '../assets/NotificationFocus';
 import ProfileSvg from '../assets/Profile';
 import ProfileFocusSvg from '../assets/ProfileFocus';
+
+import { bottomBarHideState } from './logics/atoms';
 
 //// basics
 // writing - fab
@@ -326,8 +329,11 @@ import ChaDeletionScreen from './character/ChaDeletionScreen';
 
 
 //// tab
-function CustomTabBar({ state, navigation} : {state:any, navigation:any}){
-  return(
+function CustomTabBar({ state, navigation, hide} : {state:any, navigation:any, hide:boolean}){
+  if (hide) {
+    return null;
+  }
+  else return(
     <TabBarArea style={{height : Platform.OS==='ios' ? 60+18: 60}}>
       {state.routes.map((route : any, index: number) => {
         const isFocused = state.index === index;
@@ -368,12 +374,13 @@ function CustomTabBar({ state, navigation} : {state:any, navigation:any}){
 }
 const Tab = createBottomTabNavigator<Types.TabParam>();
 function TabNavigator(){
+  const [hide, setHide] = useRecoilState(bottomBarHideState);
   return(
     <>
     <Tab.Navigator
       initialRouteName="Home"
       backBehavior='none'
-      tabBar={({state, navigation})=>CustomTabBar({state, navigation})}
+      tabBar={({state, navigation})=>CustomTabBar({state, navigation, hide})}
       lazy = {false}
       tabBarOptions={{
         showLabel : false,

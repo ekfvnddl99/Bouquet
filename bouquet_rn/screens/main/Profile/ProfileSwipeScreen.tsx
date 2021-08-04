@@ -23,7 +23,7 @@ export default function ProfileSwipeScreen(){
   return(
     <View style={{flex:1}}>
       <View style={{flex:1}}/>
-      <Carousel pages={Data} gap={20} offset={38} pageWidth={screenWidth - (20+38)*2}/>
+      <Carousel pages={Data} gap={20} offset={(screenWidth-260-20*2) /2} pageWidth={260}/>
       <View style={{flex:1, alignItems:'center', justifyContent:'flex-end', marginBottom:16, marginTop:41}}>
         <BackgroundButton press={()=>navigation.navigate('ProfileDetail')} content="캐릭터 선택" height={45} active={1} paddingH={40} paddingV={14}/>
       </View>

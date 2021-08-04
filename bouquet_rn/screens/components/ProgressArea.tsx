@@ -9,7 +9,7 @@ import * as elses from '../../styles/styled-components/elses';
 // icons
 import ArrowLeftSvg from '../../assets/ArrowLeft';
 
-export default function ProgressArea({back, step, title, intro, navigation} : {back : any, step:number, title : string, intro:string|null, navigation : any}){
+export default function ProgressArea({back, step, title, intro, navigation, press} : {back : any, step:number, title : string, intro:string|null, navigation : any, press?: Function}){
   const[curr, setCurr]=useState(step*25);
   const progress = useRef(new Animated.Value(0)).current;
   const TranslateX = progress.interpolate({
@@ -25,10 +25,16 @@ export default function ProgressArea({back, step, title, intro, navigation} : {b
       useNativeDriver: false
     }).start();
   })
+  const pressBack = () => {
+    if (press) {
+      press();
+    }
+    navigation.goBack();
+  }
   return(
     <View style={{marginBottom:12}}>
       {step===4 ? <View style={{marginBottom:24}}/> :
-      <TouchableOpacity onPress={step===1 ? ()=>navigation.goBack() : back}>
+      <TouchableOpacity onPress={step===1 ? pressBack : back}>
         <ArrowLeftSvg w='24' h='24'/>
       </TouchableOpacity>}
       <View style={{marginTop:20, marginBottom:24}}>
