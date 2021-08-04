@@ -155,7 +155,7 @@ export default function SearchScreen({navigation} : SearchProps){
               renderItem={(obj)=>{
                 return(
                   <TouchableWithoutFeedback onPress={()=>{selectIdPost===obj.index ? setSelectIdPost(-1) : setSelectIdPost(obj.index)}}>
-                    <PostingItem navigation={navigation} press={selectIdPost} id={obj.index}/>
+                    <PostingItem press={selectIdPost} id={obj.index}/>
                   </TouchableWithoutFeedback>
                 ); 
               }}/>

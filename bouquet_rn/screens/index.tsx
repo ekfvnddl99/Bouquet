@@ -68,7 +68,7 @@ function ProfileItemStackNavigator(){
         options={{headerShown : false}}/>
       <ProfileItemStack.Screen 
         name="ProfileModification"
-        component={ProfileDetailScreen}
+        component={ChaGenerationStackNavigator}
         options={{headerShown : false}}/>
       <ProfileItemStack.Screen 
         name="ProfileDeletion"
@@ -124,7 +124,28 @@ function ChaGenerationStackNavigator(){
         name="ChaGeneration"
         component={ChaGenerationScreen}
         options={{headerShown : false}}/>
+      <ChaGenerationStack.Screen 
+        name="Profile"
+        component={ProfileStackNavigator}
+        options={{headerShown : false}}/>
     </ChaGenerationStack.Navigator>
+  );
+}
+// aacount
+const AccountStack = createStackNavigator<Types.AccountStackParam>();
+function AccountStackNavigator(){
+  return(
+    <AccountStack.Navigator
+      initialRouteName="Account">
+      <AccountStack.Screen 
+        name="Account"
+        component={AccountScreen}
+        options={{headerShown : false}}/>
+      <AccountStack.Screen 
+        name="ProfileItem"
+        component={ProfileItemStackNavigator}
+        options={{headerShown : false}}/>
+    </AccountStack.Navigator>
   );
 }
 
@@ -143,10 +164,14 @@ function HomeStackNavigator(){
         component={HomeScreen}
         options={{headerShown : false}}/>
       <HomeStack.Screen 
+        name="ProfileItem" 
+        component={ProfileItemStackNavigator}
+        options={{headerShown : false}}/>
+      <HomeStack.Screen 
         name="PostItem" 
         component={PostItemStackNavigator}
         options={{headerShown : false}}/>
-      <HomeStack.Screen 
+      <HomeStack.Screen  
         name="Floating" 
         component={WritingStackNavigator}
         options={{headerShown : false}}/>
@@ -219,7 +244,7 @@ function ProfileStackNavigator(){
         options={{headerShown : false}}/>
       <ProfileStack.Screen 
         name="Account"
-        component={AccountScreen}
+        component={AccountStackNavigator}
         options={{headerShown : false}}/>
       <ProfileStack.Screen 
         name="Setting"
@@ -228,6 +253,10 @@ function ProfileStackNavigator(){
       <ProfileStack.Screen 
         name="Floating" 
         component={WritingStackNavigator}
+        options={{headerShown : false}}/>
+      <ProfileStack.Screen 
+        name="ChaGeneration" 
+        component={ChaGenerationStackNavigator}
         options={{headerShown : false}}/>
     </ProfileStack.Navigator>
   );

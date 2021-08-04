@@ -22,6 +22,7 @@ import { StatusBarHeight } from '../../logics/StatusbarHeight';
 import NotificationItem from '../../components/NotificationItem';
 import NameNText from '../../components/NameNText';
 import NotLoginPrimaryButton from '../../components/NotLoginPrimaryButton';
+import ProfileItem from '../../components/ProfileItem';
 
 const HEADER_MAX_HEIGHT = 94;
 const HEADER_MIN_HEIGHT = 60;
@@ -72,7 +73,7 @@ function InNotificationScreen(){
           <text.Subtitle2R color={colors.black}>알림</text.Subtitle2R>
         </Animated.View>
         <Animated.View style={[styles.b, {transform:[{scale: ScaleImg},{translateY: TranslateImgY}, {translateX:TranslateImgX}]}]}>
-          <elses.CircleImg diameter={40} source={require('../../../assets/img.jpg')}/>
+          <ProfileItem diameter={40}/>
         </Animated.View>
       </area.RowArea>
       <Animated.ScrollView
@@ -132,7 +133,7 @@ function OutNotificationScreen(){
 
 export default function NotificationScreen(){
   // dummy data - 서버에서 불러와야 함
-  const [login, setLogin]=useState(0);
+  const [login, setLogin]=useState(1);
   return(
     <View style={{flex:1}}>
       {login===1 ? <InNotificationScreen/> : <OutNotificationScreen/>}

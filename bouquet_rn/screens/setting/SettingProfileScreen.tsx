@@ -26,6 +26,7 @@ import ConditionTextInput from '../components/ConditionTextInput';
 import WarningText from '../components/WarningText';
 import BackButton from '../components/BackButton';
 import { SettingProps } from '../../utils/types';
+import ProfileItem from '../components/ProfileItem';
 
 export default function SettingProfileScreen({navigation} : SettingProps){
   const[err, setErr] = useState(1);
@@ -36,9 +37,9 @@ export default function SettingProfileScreen({navigation} : SettingProps){
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <area.Container>
     <area.RowArea style={{paddingHorizontal:30, paddingVertical:16}}>
-        <BackButton navigation={navigation}/>
+        <BackButton/>
         <View style={{flex:1}}/>
-        <elses.CircleImg diameter={28} source={require('../../assets/img.jpg')}/>
+        <ProfileItem diameter={28}/>
       </area.RowArea>
 
       <area.ContainerBlank20>

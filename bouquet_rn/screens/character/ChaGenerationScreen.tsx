@@ -15,6 +15,7 @@ import * as input from '../../styles/styled-components/input';
 
 // props & logic
 import type {ChaGenerationProps} from '../../utils/types';
+import { ChaGenerationStackParam } from '../../utils/types';
 
 // components
 import ProgressArea from '../components/ProgressArea';
@@ -49,9 +50,7 @@ export default function ChaGenerationScreen(){
   const[step, setStep]=useState(1);
   const navigation = useNavigation<StackNavigationProp<ChaGenerationProps>>();
   const route = useRoute();
-  useEffect(()=>{
-    console.log(route.params);
-  })
+
 
   return(
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

@@ -25,6 +25,7 @@ import NameNText from '../../components/NameNText';
 import NotLoginPrimaryButton from '../../components/NotLoginPrimaryButton';
 import FloatingButton from '../../components/FloatingButton';
 import QnATextInput from '../../components/QnATextInput';
+import ProfileItem from '../../components/ProfileItem';
 
 const HEADER_MAX_HEIGHT = 94;
 const HEADER_MIN_HEIGHT = 60;
@@ -78,7 +79,7 @@ function InHomeScreen(){
           <text.Subtitle2R color={colors.black}>피드</text.Subtitle2R>
         </Animated.View>
         <Animated.View style={[styles.b, {transform:[{scale: ScaleImg},{translateY: TranslateImgY}, {translateX:TranslateImgX}]}]}>
-          <elses.CircleImg diameter={40} source={require('../../../assets/img.jpg')}/>
+          <ProfileItem diameter={40}/>
         </Animated.View>
       </area.RowArea>
 

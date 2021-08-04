@@ -42,15 +42,23 @@ export type SettingStackParam = {
 export type SettingProps = StackScreenProps<SettingStackParam, "Setting">;
 // character generation
 export type ChaGenerationStackParam = {
-  ChaGeneration:undefined
+  ChaGeneration:undefined,
+  Profile:undefined,
 }
 export type ChaGenerationProps = StackScreenProps<ChaGenerationStackParam, "ChaGeneration">;
+// account
+export type AccountStackParam = {
+  Account : undefined,
+  ProfileItem : undefined,
+}
+export type AccountProps = StackScreenProps<AccountStackParam, "Account">;
 
 
 //// tab screens
 // home
 export type HomeStackParam = {
   Home : undefined,
+  ProfileItem : undefined,
   PostItem : undefined,
   Floating : undefined,
   ChaGeneration : undefined,
@@ -79,6 +87,7 @@ export type ProfileStackParam = {
   Account : undefined,
   Setting : undefined,
   Floating : undefined,
+  ChaGeneration : undefined,
 }
 export type ProfileProps = StackScreenProps<ProfileStackParam, "ProfileOverview">;
 // welcome

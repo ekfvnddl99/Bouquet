@@ -23,6 +23,7 @@ import ConditionButton from '../components/ConditionButton';
 import ProfileButton from '../components/ProfileButton';
 import BackButton from '../components/BackButton';
 import LineButton from '../components/LineButton';
+import ProfileItem from '../components/ProfileItem';
 
 export default function PostWritingScreen(){
   const[select, setSelect]=useState(1);
@@ -33,7 +34,7 @@ export default function PostWritingScreen(){
           <area.RowArea style={{paddingHorizontal:30, paddingVertical:16}}>
             <BackButton/>
             <View style={{flex:1}}/>
-            <elses.CircleImg diameter={28} source={require('../../assets/img.jpg')}/>
+            <ProfileItem diameter={28}/>
           </area.RowArea>
 
           <ScrollView>

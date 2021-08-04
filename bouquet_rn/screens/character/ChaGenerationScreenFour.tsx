@@ -21,7 +21,8 @@ export default function ChaGenerationScreenFour({modify, navigation} : {modify :
   const[name,setName]=useState('undefined');
 
   const goNext=()=>{
-    navigation.replace('Profile');
+    navigation.popToTop();
+    navigation.navigate('Profile');
   }
 
   return(

@@ -18,6 +18,7 @@ import type {ChaGenerationProps, SettingProps} from '../../utils/types';
 import SettingItem from '../components/SettingItem';
 import BackButton from '../components/BackButton';
 import SettingToggleItem from '../components/SettingToggleItem';
+import ProfileItem from '../components/ProfileItem';
 
 function setTitle(idx:number){
   let title="";
@@ -38,7 +39,7 @@ export default function SettingAlarmCustomScreen({props}: {props : SettingProps}
       <area.RowArea style={{paddingHorizontal:30, paddingVertical:16, marginBottom:20}}>
         <BackButton/>
         <View style={{flex:1}}/>
-        <elses.CircleImg diameter={28} source={require('../../assets/img.jpg')}/>
+        <ProfileItem diameter={28}/>
       </area.RowArea>
       
       <View style={{paddingHorizontal:30}}>

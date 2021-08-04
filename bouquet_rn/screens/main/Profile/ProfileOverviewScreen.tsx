@@ -41,6 +41,12 @@ export default function ProfileOverviewScreen(){
     let threeData=[1,2,3,4,5,6,7,8,9];
 
     const navigation = useNavigation();
+    const goChaGeneration=()=>{
+      navigation.navigate('ChaGeneration');
+    }
+    const goSetting=()=>{
+      navigation.navigate('Setting');
+    }
 
     const scroll = useRef(new Animated.Value(0)).current;
     const OpacityHeader=scroll.interpolate({
@@ -58,7 +64,7 @@ export default function ProfileOverviewScreen(){
 
           <area.RowArea style={{paddingHorizontal:30, paddingVertical:16}}>
             <View style={{flex:1}}><elses.CircleImg diameter={24} source={require('../../../assets/img.jpg')}/></View>
-            <TouchableOpacity style={{marginRight:16}} onPress={()=>navigation.navigate('Generation')}>
+            <TouchableOpacity style={{marginRight:16}} onPress={goChaGeneration}>
               <PlusSvg w='24' h='24'/>
             </TouchableOpacity>
             {swipe===1 ? 
@@ -68,7 +74,7 @@ export default function ProfileOverviewScreen(){
             <TouchableOpacity onPress={()=>setSwipe(1)}>
               <SwipeSvg w='24' h='24'/>
             </TouchableOpacity>}
-            <TouchableOpacity style={{marginLeft:16}} onPress={()=>navigation.navigate('Setting')}>
+            <TouchableOpacity style={{marginLeft:16}} onPress={goSetting}>
               <SettingSvg w='24' h='24'/>
             </TouchableOpacity>
           </area.RowArea>

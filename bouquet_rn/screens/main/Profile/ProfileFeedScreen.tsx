@@ -37,7 +37,7 @@ export default function ProfileFeedScreen(){
           showsVerticalScrollIndicator={false}
           renderItem={(obj)=>{
             return(
-              <PostingItem navigation={()=>{}} press={selectId} id={obj.index}/>
+              <PostingItem press={selectId} id={obj.index}/>
             ); 
           }}></FlatList>
       </View>

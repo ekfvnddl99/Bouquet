@@ -16,6 +16,7 @@ import ConditionButton from '../components/ConditionButton';
 import NameNText from '../components/NameNText';
 import BackButton from '../components/BackButton';
 import { SettingProps, SettingStackParam } from '../../utils/types';
+import ProfileItem from '../components/ProfileItem';
 
 export default function AccountDeletionScreenOne(){
   const[name,setName]=useState('undefined');
@@ -30,7 +31,7 @@ export default function AccountDeletionScreenOne(){
       <area.RowArea style={{paddingHorizontal:30, paddingVertical:16}}>
         <BackButton/>
         <View style={{flex:1}}/>
-        <elses.CircleImg diameter={28} source={require('../../assets/img.jpg')}/>
+        <ProfileItem diameter={28}/>
       </area.RowArea>
 
       <area.ContainerBlank20>
