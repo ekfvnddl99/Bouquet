@@ -128,7 +128,7 @@ function ChaGenerationStackNavigator(){
         component={ChaGenerationScreen}
         options={{headerShown : false}}/>
       <ChaGenerationStack.Screen 
-        name="Profile"
+        name="ProfileItem"
         component={ProfileStackNavigator}
         options={{headerShown : false}}/>
     </ChaGenerationStack.Navigator>

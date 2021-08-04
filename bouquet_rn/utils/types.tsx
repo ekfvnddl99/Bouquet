@@ -43,7 +43,7 @@ export type SettingProps = StackScreenProps<SettingStackParam, "Setting">;
 // character generation
 export type ChaGenerationStackParam = {
   ChaGeneration:undefined,
-  Profile:undefined,
+  ProfileItem:undefined,
 }
 export type ChaGenerationProps = StackScreenProps<ChaGenerationStackParam, "ChaGeneration">;
 // account

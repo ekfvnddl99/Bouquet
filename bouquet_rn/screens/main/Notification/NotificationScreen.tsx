@@ -133,7 +133,7 @@ function OutNotificationScreen(){
 
 export default function NotificationScreen(){
   // dummy data - 서버에서 불러와야 함
-  const [login, setLogin]=useState(1);
+  const [login, setLogin]=useState(0);
   return(
     <View style={{flex:1}}>
       {login===1 ? <InNotificationScreen/> : <OutNotificationScreen/>}
