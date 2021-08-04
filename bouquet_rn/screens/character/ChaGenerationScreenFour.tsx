@@ -21,7 +21,7 @@ export default function ChaGenerationScreenFour({modify, navigation} : {modify :
   const[name,setName]=useState('undefined');
 
   const goNext=()=>{
-    navigation.navigate("ChaGenerationFour");
+    navigation.replace('Profile');
   }
 
   return(

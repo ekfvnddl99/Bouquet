@@ -6,8 +6,10 @@ import {
     ScrollView,
     Platform,
     StyleSheet,
-    TouchableWithoutFeedback
+    TouchableWithoutFeedback,
+    TouchableOpacity
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import {colors} from '../../../styles/colors';
 import * as area from '../../../styles/styled-components/area';
 import * as text from '../../../styles/styled-components/text';
@@ -100,7 +102,7 @@ function InNotificationScreen(){
 
 function OutNotificationScreen(){
   let Data=[{id:1}];
-
+  const navigation = useNavigation();
   const[selectId, setSelectId]=useState(-1);
 
   return(
@@ -121,9 +123,9 @@ function OutNotificationScreen(){
             );}}>
           </FlatList>
       </View>
-      <View style={{flex:1, justifyContent:'flex-end'}}>
+      <TouchableOpacity style={{flex:1, justifyContent:'flex-end'}} onPress={()=>navigation.navigate('Generation')}>
         <NotLoginPrimaryButton/>
-      </View>
+      </TouchableOpacity>
     </area.Container>
   )
 }

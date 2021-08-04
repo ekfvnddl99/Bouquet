@@ -34,7 +34,7 @@ export default function CommentItem({press, id}  :{press:number, id:number}){
       </area.RowArea>
 
       <area.RowArea>
-        <ProfileButton diameter={20}/>
+        <ProfileButton diameter={20} account={0}/>
         <View style={{flex:1}}/>
         <area.RowArea>
           {press===id ? <TouchableOpacity style={{marginRight:8}}><BinSvg w='18' h='18'/></TouchableOpacity> : null}

@@ -6,6 +6,7 @@ import {
     StyleSheet,
     TouchableOpacity
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
@@ -18,16 +19,17 @@ import * as cal from '../logics/Calculation';
 import SunButton from './SunButton';
 import ProfileButton from './ProfileButton';
 
-export default function PostingItem({navigation, press, id}  :{navigation: any, press:number, id:number}){
+export default function PostingItem({press, id}  :{press:number, id:number}){
   const[isPress, setIsPress]=useState(-1);
+  const navigation=useNavigation();
   const goPosting=()=>{
-    navigation.navigate("Posting");
+    navigation.navigate("PostingItem");
   }
     return(
       <button.BigListButton color={colors.white} paddingH={10} paddingV={10} onPress={goPosting} activeOpacity={1}>
         <area.RowArea>
           <View style={styles.profileArea}>
-              <ProfileButton diameter={30}/>
+              <ProfileButton diameter={30} account={0}/>
           </View>
           <View style={styles.timeArea}>
               <text.Caption color={colors.gray5}>{cal.timeName(57)} 전</text.Caption>

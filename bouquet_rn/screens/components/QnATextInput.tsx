@@ -14,7 +14,7 @@ export default function QnATextInput(){
   return(
     <View style={{paddingHorizontal:10, paddingVertical:10, backgroundColor:colors.white, borderRadius:10, marginBottom:10}}>
       <area.RowArea style={{marginBottom:10}}>
-        <View style={{flex:1}}><ProfileButton diameter={30}/></View>
+        <View style={{flex:1}}><ProfileButton diameter={30} account={0}/></View>
         <LineButton press={()=>{}} content="질문 바꾸기" color={colors.black} incolor={colors.gray2} outcolor={'transparent'}/>
       </area.RowArea>
       <QuestionItem/>

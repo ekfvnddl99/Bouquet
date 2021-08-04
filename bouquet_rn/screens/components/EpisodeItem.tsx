@@ -21,7 +21,7 @@ function Inner(mini:number,){
           <TagItem content="크루참여" active={1}/>
           <TagItem content="전체공개" active={1}/>
         </area.RowArea>
-        <ProfileButton diameter={30}/>
+        <ProfileButton diameter={30} account={0}/>
       </View>
     </View>
   );

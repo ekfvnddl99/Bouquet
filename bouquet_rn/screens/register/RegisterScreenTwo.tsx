@@ -14,9 +14,6 @@ import * as area from '../../styles/styled-components/area';
 import EyeSvg from '../../assets/Eye';
 import EyeFocusSvg from '../../assets/EyeFocus';
 
-// props & logic
-import type {RegisterProps} from '../../utils/types';
-
 // components
 import ProgressArea from '../components/ProgressArea';
 import ConditionText from '../components/ConditionText';
