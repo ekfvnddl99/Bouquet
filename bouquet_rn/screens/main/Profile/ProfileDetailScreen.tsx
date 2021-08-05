@@ -19,6 +19,8 @@ import ProfileQnAScreen from './ProfileQnAScreen';
 
 // props & logic
 import { StatusBarHeight } from '../../logics/StatusbarHeight';
+import useCharacterView from '../../logics/useCharacterView';
+import { noCharacter } from '../../logics/atoms';
 
 // components
 import ProfileInfoText from '../../components/ProfileInfoText';
@@ -30,8 +32,9 @@ const HEADER_MAX_HEIGHT = 80;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
-export default function ProfileDetailScreen(){
+export default function ProfileDetailScreen({ route, navigation }: {route: any, navigation: any}){
   const [press, setPress] = useState(0);
+  const [viewCharacter, setViewCharacterId] = useCharacterView();
 
   const scroll = useRef(new Animated.Value(0)).current;
   const OpacityHeader=scroll.interpolate({
@@ -61,7 +64,7 @@ export default function ProfileDetailScreen(){
           [{ nativeEvent: { contentOffset: { y: scroll } } }],
           { useNativeDriver: true })}>
           <View style={{paddingTop: 20}}/>
-          <ProfileDetailItem mini={0} press={0} id={-1}/>
+          <ProfileDetailItem mini={0} press={0} id={-1} character={viewCharacter.state === 'hasValue' ? viewCharacter.contents : noCharacter} />
 
           <View style={{marginTop:30}}>
             <area.RowArea>
