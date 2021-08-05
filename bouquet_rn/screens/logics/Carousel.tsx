@@ -16,12 +16,12 @@ interface carouselProps{
   pages: Array<Character>,
   offset:number,
   gap:number,
-  pageWidth:number
+  pageWidth:number,
+  setPage: Function
 }
 
-export default function  Carousel({pages, offset, gap, pageWidth} : carouselProps){
+export default function  Carousel({pages, offset, gap, pageWidth, setPage} : carouselProps){
   const[selectId, setSelectId]=useState(-1);
-  const[page, setPage]=useState(0);
   const onScroll = (e: any) => {
     const newPage = Math.round(
       e.nativeEvent.contentOffset.x / (pageWidth + gap),

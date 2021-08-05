@@ -54,6 +54,8 @@ export default function ChaGenerationScreen(){
   const route = useRoute();
   const [hide, setHide] = useRecoilState(bottomBarHideState);
 
+  const [image, setImage] = useState(null);
+
   useEffect(() => {
     setHide(true);
 
@@ -72,7 +74,7 @@ export default function ChaGenerationScreen(){
         <View style={{paddingHorizontal:20, paddingTop:20}}>
           <ProgressArea back={()=>setStep(step-1)} step={step} title={setTitle(step)} intro={setIntro(step)} navigation={navigation} press={pressBack}/>
         </View>
-        {step===1 ? <ChaGenerationScreenOne modify={0} onChange={()=>setStep(step+1)}/> :
+        {step===1 ? <ChaGenerationScreenOne modify={0} onChange={()=>setStep(step+1)} setImage={setImage}/> :
         step===2 ? <ChaGenerationScreenTwo modify={0} onChange={()=>setStep(step+1)}/> :
         step===3 ? <ChaGenerationScreenThree modify={0} onChange={()=>setStep(step+1)}/> : 
         <ChaGenerationScreenFour modify={0} navigation={navigation}/>}

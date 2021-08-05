@@ -43,7 +43,8 @@
     "react-native-web": "~0.13.12",
     "recoil": "^0.3.1",
     "styled-components": "^5.3.0",
-    "expo-secure-store": "~10.2.0"
+    "expo-secure-store": "~10.2.0",
+    "expo-image-picker": "~10.2.2"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
