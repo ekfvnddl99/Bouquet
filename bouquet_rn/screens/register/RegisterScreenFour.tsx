@@ -3,6 +3,7 @@ import {
   View,
   StyleSheet,
 } from 'react-native';
+import i18n from 'i18n-js';
 import { colors } from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
@@ -30,12 +31,12 @@ export default function RegisterScreenFour({navigation} : {navigation : any}){
       <View style={styles.middleArea}>
         <elses.CircleImg diameter={120} source={require('../../assets/img.jpg')} style={{marginBottom:16}}/>
         <NameNText name={name} sub="님,"/>
-        <text.Subtitle2R color={colors.black}>환영합니다!</text.Subtitle2R>
+        <text.Subtitle2R color={colors.black}>{i18n.t('환영합니다')}</text.Subtitle2R>
       </View>
 
       <area.ContainerBlank20>
         <area.BottomArea style={{marginBottom:16}}>
-          <ConditionButton active={1} press={goNext} content="시작" paddingH={0} paddingV={14} height={45}/>
+          <ConditionButton active={1} press={goNext} content={i18n.t("시작")} paddingH={0} paddingV={14} height={45}/>
         </area.BottomArea>
       </area.ContainerBlank20>
     </View>

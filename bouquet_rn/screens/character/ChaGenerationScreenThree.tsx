@@ -7,6 +7,7 @@ import {
   TextInput,
   BackHandler
 } from 'react-native';
+import i18n from 'i18n-js';
 import * as area from '../../styles/styled-components/area';
 import * as input from '../../styles/styled-components/input';
 
@@ -57,30 +58,30 @@ export default function ChaGenerationScreenThree({modify, onChange} : {modify : 
         <ScrollView>
 
           <View style={{marginBottom:16}}>
-            <ConditionTextInput height={44} placeholder="한 줄 소개 (필수)" onChange={()=>{}} keyboard={'default'} active={1}/>
+            <ConditionTextInput height={44} placeholder={i18n.t("한 줄 소개 (필수)")} onChange={()=>{}} keyboard={'default'} active={1}/>
             {err===1 ? <WarningText content="무야호" marginTop={8}/> : null}
           </View>
 
           <area.NoHeightArea marBottom={16} paddingH={16} paddingV={8}>
             <View style={{flexDirection:'row', flexWrap:'wrap'}}>
               {likeList.map((data : any)=>{return(<View>{data}</View>)})}
-              <TextInput placeholder={likeList.length===0 ? '좋아하는 것' : ''} onChangeText={(input)=>setLikeInput(input)} value={likeInput} onBlur={()=>likeTags(1)}/>
+              <TextInput placeholder={likeList.length===0 ? i18n.t('좋아하는 것') : ''} onChangeText={(input)=>setLikeInput(input)} value={likeInput} onBlur={()=>likeTags(1)}/>
             </View>
           </area.NoHeightArea>
 
           <area.NoHeightArea marBottom={16} paddingH={16} paddingV={8}>
             <View style={{flexDirection:'row', flexWrap:'wrap'}}>
               {dislikeList.map((data : any)=>{return(<View>{data}</View>)})}
-              <TextInput placeholder={dislikeList.length===0 ? '싫어하는 것' : ''} onChangeText={(input)=>setDisLikeInput(input)} value={dislikeInput} onBlur={()=>dislikeTags(1)}/>
+              <TextInput placeholder={dislikeList.length===0 ? i18n.t('싫어하는 것') : ''} onChangeText={(input)=>setDisLikeInput(input)} value={dislikeInput} onBlur={()=>dislikeTags(1)}/>
             </View>
           </area.NoHeightArea>
 
-          <input.FormInput height='148' placeholder='이외에도 캐릭터에 대해서 자유롭게 알려 주세요!&#13;&#10;예시: 난 고민따위 하지 않는다' onChangeText={()=>{}} multiline={true}
+          <input.FormInput height='148' placeholder={i18n.t('이외에도 캐릭터에 대해서 자유롭게 알려 주세요') + i18n.t('예시: 난 고민따위 하지 않는다')} onChangeText={()=>{}} multiline={true}
           style={{textAlignVertical: 'top', paddingTop:16}}/>
 
 </ScrollView>
 <area.BottomArea style={{marginBottom:16, overflow:'hidden'}}>
-        <ConditionButton height={44} active={1} press={onChange} content={modify===1 ? "캐릭터 정보 수정 완료" : "캐릭터 생성 완료"} paddingH={0} paddingV={14}/>
+        <ConditionButton height={44} active={1} press={onChange} content={modify===1 ? i18n.t("캐릭터 정보 수정 완료") : i18n.t("캐릭터 생성 완료")} paddingH={0} paddingV={14}/>
       </area.BottomArea>
         </area.ContainerBlank20>
   );
