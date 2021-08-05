@@ -20,7 +20,8 @@ export default function RegisterScreenFour({navigation} : {navigation : any}){
   const[name,setName]=useState('undefined');
 
   const goNext=()=>{
-    navigation.replace('Tab');
+    navigation.popToTop();
+    navigation.navigate('Tab');
   }
 
   return(

@@ -21,12 +21,6 @@ import { bottomBarHideState } from '../logics/atoms';
 
 // components
 import ProgressArea from '../components/ProgressArea';
-import ConditionButton from '../components/ConditionButton';
-import PrimaryTextButton from '../components/PrimaryTextButton';
-import WarningText from '../components/WarningText';
-import ConditionTextInput from '../components/ConditionTextInput';
-import LineButton from '../components/LineButton';
-
 // screens
 import ChaGenerationScreenOne from './ChaGenerationScreenOne';
 import ChaGenerationScreenTwo from './ChaGenerationScreenTwo';

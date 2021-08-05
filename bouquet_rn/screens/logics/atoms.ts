@@ -22,6 +22,11 @@ export const bottomBarHideState = atom({
   default: false,
 })
 
+export const selectTemplate = atom({
+  key: 'selectTemplate',
+  default: -1,
+})
+
 export const noCharacter: Character = {
   id: -1,
   name: '',

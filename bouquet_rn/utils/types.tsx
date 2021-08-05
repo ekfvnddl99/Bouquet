@@ -13,6 +13,7 @@ export type TabProps = BottomTabScreenProps<TabParam, "Home">
 // writing - fab
 export type WritingStackParam = {
   PostWriting : undefined,
+  SelectTemplate:undefined,
   PostItem : undefined,
 }
 export type WritingProps = StackScreenProps<WritingStackParam, "PostWriting">;
@@ -43,7 +44,6 @@ export type SettingProps = StackScreenProps<SettingStackParam, "Setting">;
 // character generation
 export type ChaGenerationStackParam = {
   ChaGeneration:undefined,
-  ProfileItem:undefined,
 }
 export type ChaGenerationProps = StackScreenProps<ChaGenerationStackParam, "ChaGeneration">;
 // account
