@@ -4,21 +4,26 @@ import {
   Text,
   StyleSheet,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
 import * as elses from '../../styles/styled-components/elses';
 
-// props & logic
-import type {ChaGenerationProps} from '../../utils/types';
-
 // components
 import ConditionButton from '../components/ConditionButton';
 import NameNText from '../components/NameNText';
 import BackButton from '../components/BackButton';
+import { SettingStackParam } from '../../utils/types';
 
 export default function AccountDeletionScreenTwo(){
   const[name,setName]=useState('undefined');
+  const navigation = useNavigation<StackNavigationProp<SettingStackParam>>();
+  const goOut=()=>{
+    console.log('aaaa');
+    navigation.popToTop();
+  }
 
   return(
     <area.Container>
@@ -36,7 +41,7 @@ export default function AccountDeletionScreenTwo(){
 
       <area.ContainerBlank20>
         <area.BottomArea style={{marginBottom:16}}>
-          <ConditionButton height={44} active={1} press={()=>{}} content="완료" paddingH={0} paddingV={14}/>
+          <ConditionButton height={44} active={1} press={goOut} content="완료" paddingH={0} paddingV={14}/>
         </area.BottomArea>
       </area.ContainerBlank20>
       </area.ContainerBlank20>

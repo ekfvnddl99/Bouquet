@@ -22,13 +22,13 @@ export default function ProfileDetailItem({mini, press, id} : {mini:number, pres
   const[owner, setOwner]=useState(1);
   const navigation = useNavigation();
   const goProfileDetail=()=>{
-    navigation.navigate('ProfileDetail');
+    navigation.navigate('ProfileItem');
   }
   const goChaModification=()=>{
-    navigation.navigate('ChaModification');
+    navigation.navigate('ProfileModification');
   }
   const goChaDeletion=()=>{
-    navigation.navigate('ChaDeletion');
+    navigation.navigate('ProfileDeletion');
   }
   return(
       <button.ProfileDetailButton activeOpacity={1} onPress={mini===1 ? goProfileDetail : ()=>{}}>

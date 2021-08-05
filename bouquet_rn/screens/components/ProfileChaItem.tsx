@@ -14,7 +14,7 @@ import ConditionButton from './ConditionButton';
 export default function ProfileChaItem({name, introduction, idx} : {name: string, introduction : string, idx:number}){
   const navigation = useNavigation();
   const goProfileDetail=()=>{
-    navigation.navigate('ProfileDetail');
+    navigation.navigate('ProfileItem');
   }
   return(
     <button.MiniListButton isWidth={false} height={238} color={colors.white} paddingH={25} paddingV={0} 

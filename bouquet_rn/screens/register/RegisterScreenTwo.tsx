@@ -38,7 +38,7 @@ export default function RegisterScreenTwo({onChange, pw, setPw} : {onChange : an
     <area.ContainerBlank20>
       <ScrollView style={{flex:1}}>
       <area.FormArea height='44' style={err===1 ? {borderWidth:1, borderColor:colors.warning_red} : null}>
-        <TextInput style={{flex: 1}} placeholder='비밀번호' onChangeText={(pw)=>setPw(pw)}/>
+        <TextInput style={{flex: 1}} placeholder='비밀번호' secureTextEntry={eye===1? true : false} onChangeText={(pw)=>setPw(pw)}/>
         <TouchableOpacity onPress={()=>{setEye(eye*(-1))}}>
           {EyeSelect(eye)}
         </TouchableOpacity>

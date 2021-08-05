@@ -15,6 +15,7 @@ import * as elses from '../../styles/styled-components/elses';
 import SettingItem from '../components/SettingItem';
 import BackButton from '../components/BackButton';
 import { SettingProps } from '../../utils/types';
+import ProfileItem from '../components/ProfileItem';
 
 import { guest } from '../logics/atoms';
 import useUser from '../logics/useUser';
@@ -35,9 +36,9 @@ export default function SettingScreen({navigation} : SettingProps){
   return(
     <area.Container>
       <area.RowArea style={{paddingHorizontal:30, paddingVertical:16}}>
-        <BackButton navigation={navigation}/>
+        <BackButton/>
         <View style={{flex:1}}/>
-        <elses.CircleImg diameter={28} source={require('../../assets/img.jpg')}/>
+        <ProfileItem diameter={28}/>
       </area.RowArea>
       
       <View style={{marginVertical:20, paddingHorizontal:30}}>

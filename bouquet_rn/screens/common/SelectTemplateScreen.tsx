@@ -20,6 +20,7 @@ import { StatusBarHeight } from '../logics/StatusbarHeight';
 import PostingItem from '../components/PostingItem';
 import SelectTemplateItem from '../components/SelectTemplateItem';
 import BackButton from '../components/BackButton';
+import ProfileItem from '../components/ProfileItem';
 
 const HEADER_MAX_HEIGHT = 90;
 const HEADER_MIN_HEIGHT = 60;
@@ -49,8 +50,9 @@ export default function EpisodeScreen(){
           </Animated.View>
 
           <area.RowArea style={{paddingHorizontal:30, paddingVertical:16}}>
-            <BackButton navigation={()=>{}}/>
-            <elses.CircleImg diameter={28} source={require('../../assets/img.jpg')}/>
+            <BackButton/>
+            <View style={{flex:1}}/>
+            <ProfileItem diameter={28}/>
           </area.RowArea>
           
           <Animated.ScrollView 

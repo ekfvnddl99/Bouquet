@@ -52,7 +52,7 @@ export default function NotificationItem({press, id}  :{press:number, id:number}
           <View style={{alignItems:'center'}}><BinWhiteSvg w='24' h='24'/></View>
         </View>
         <Animated.View style={[{width: '100%'}, 
-        {transform : [{translateX: swipe===1 ? TranslateXa : TranslateXb}]}]} {..._panResponder.panHandlers}>
+        {transform : [{translateX: swipe===0 ? TranslateXa : TranslateXb}]}]} {..._panResponder.panHandlers}>
           <button.NotificationButton activeOpacity={1}>
             <elses.CircleImg diameter={20} source={require('../../assets/img.jpg')}/>
             <View style={styles.contentText}>

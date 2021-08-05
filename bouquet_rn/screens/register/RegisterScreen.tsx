@@ -48,12 +48,8 @@ export default function RegisterScreen(){
 
   const register = async () => {
     const result = await EmailRegisterAsync(email, pw, name, profilePic);
-    if (!result) {
-      setStep(step+1);
-    }
-    else {
-      alert(result);
-    }
+    if (!result) setStep(step+1);
+    else alert(result);
   }
   
   return(

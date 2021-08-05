@@ -11,6 +11,8 @@ import * as elses from '../../styles/styled-components/elses';
 
 // props & logic
 import type {ChaGenerationProps} from '../../utils/types';
+import { useRecoilState } from 'recoil';
+import { bottomBarHideState } from '../logics/atoms';
 
 // components
 import ProgressArea from '../components/ProgressArea';
@@ -19,9 +21,12 @@ import NameNText from '../components/NameNText';
 
 export default function ChaGenerationScreenFour({modify, navigation} : {modify : number, navigation:any}){
   const[name,setName]=useState('undefined');
+  const [hide, setHide] = useRecoilState(bottomBarHideState);
 
   const goNext=()=>{
-    navigation.replace('Profile');
+    setHide(false);
+    navigation.popToTop();
+    navigation.navigate('Profile');
   }
 
   return(

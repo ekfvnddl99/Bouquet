@@ -6,15 +6,18 @@ import {
     Keyboard,
     BackHandler
 } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as button from '../../styles/styled-components/button';
 import * as text from '../../styles/styled-components/text';
 import * as input from '../../styles/styled-components/input';
+import { useRecoilState } from 'recoil';
 
 // props & logic
 import type {ChaGenerationProps} from '../../utils/types';
+import { ChaGenerationStackParam } from '../../utils/types';
+import { bottomBarHideState } from '../logics/atoms';
 
 // components
 import ProgressArea from '../components/ProgressArea';
@@ -49,13 +52,25 @@ export default function ChaGenerationScreen(){
   const[step, setStep]=useState(1);
   const navigation = useNavigation<StackNavigationProp<ChaGenerationProps>>();
   const route = useRoute();
-  console.log(route.params);
+  const [hide, setHide] = useRecoilState(bottomBarHideState);
+
+  useEffect(() => {
+    setHide(true);
+
+    return () => {
+      setHide(false);
+    }
+  }, []);
+
+  const pressBack = () => {
+    setHide(false);
+  }
 
   return(
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <area.Container> 
         <View style={{paddingHorizontal:20, paddingTop:20}}>
-          <ProgressArea back={()=>setStep(step-1)} step={step} title={setTitle(step)} intro={setIntro(step)} navigation={navigation}/>
+          <ProgressArea back={()=>setStep(step-1)} step={step} title={setTitle(step)} intro={setIntro(step)} navigation={navigation} press={pressBack}/>
         </View>
         {step===1 ? <ChaGenerationScreenOne modify={0} onChange={()=>setStep(step+1)}/> :
         step===2 ? <ChaGenerationScreenTwo modify={0} onChange={()=>setStep(step+1)}/> :

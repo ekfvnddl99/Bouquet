@@ -24,6 +24,7 @@ import { StatusBarHeight } from '../../logics/StatusbarHeight';
 import ProfileInfoText from '../../components/ProfileInfoText';
 import ProfileDetailItem from '../../components/ProfileDetailItem';
 import BackButton from '../../components/BackButton';
+import ProfileItem from '../../components/ProfileItem';
 
 const HEADER_MAX_HEIGHT = 80;
 const HEADER_MIN_HEIGHT = 60;
@@ -47,9 +48,9 @@ export default function ProfileDetailScreen(){
         </Animated.View>
 
         <area.RowArea style={{paddingHorizontal:30, paddingVertical:16}}>
-          <BackButton navigation={()=>{}}/>
+          <BackButton/>
           <View style={{flex:1}}/>
-          <elses.CircleImg diameter={28} source={require('../../../assets/img.jpg')}/>
+          <ProfileItem diameter={28}/>
         </area.RowArea>
 
         <Animated.ScrollView

@@ -15,3 +15,8 @@ export const userState = atom({
   key: 'userState',
   default: guest,
 });
+
+export const bottomBarHideState = atom({
+  key: 'bottomBarHideState',
+  default: false,
+})

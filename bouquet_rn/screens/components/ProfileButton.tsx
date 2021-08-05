@@ -9,7 +9,7 @@ import * as text from '../../styles/styled-components/text';
 export default function ProfileButton({diameter, account} : {diameter:number, account : number}){
   const navigation = useNavigation();
   const goProfileDetail=()=>{
-    navigation.navigate('ProfileDetail');
+    navigation.navigate("ProfileItem");
   }
   const goAccount=()=>{
     navigation.navigate('Account');

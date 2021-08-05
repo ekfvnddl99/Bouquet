@@ -25,6 +25,7 @@ import NameNText from '../../components/NameNText';
 import NotLoginPrimaryButton from '../../components/NotLoginPrimaryButton';
 import FloatingButton from '../../components/FloatingButton';
 import QnATextInput from '../../components/QnATextInput';
+import ProfileItem from '../../components/ProfileItem';
 
 const HEADER_MAX_HEIGHT = 94;
 const HEADER_MIN_HEIGHT = 60;
@@ -78,7 +79,7 @@ function InHomeScreen(){
           <text.Subtitle2R color={colors.black}>피드</text.Subtitle2R>
         </Animated.View>
         <Animated.View style={[styles.b, {transform:[{scale: ScaleImg},{translateY: TranslateImgY}, {translateX:TranslateImgX}]}]}>
-          <elses.CircleImg diameter={40} source={require('../../../assets/img.jpg')}/>
+          <ProfileItem diameter={40}/>
         </Animated.View>
       </area.RowArea>
 
@@ -112,7 +113,7 @@ function InHomeScreen(){
                 <PostingItem press={selectId} id={obj.index}/>
               </TouchableWithoutFeedback>
             ); 
-          }}></FlatList>
+          }}/>
       </Animated.ScrollView>
       <FloatingButton/>
     </area.Container>      
@@ -122,11 +123,6 @@ function InHomeScreen(){
 function OutHomeScreen(){
   // dummy data - 서버에서 불러와야 함
   let Data=[{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9}];
-
-  const navigation = useNavigation();
-  const goGeneration=()=>{
-    navigation.navigate('Generation');
-  }
 
   const[selectId, setSelectId]=useState(-1);
 
@@ -184,7 +180,7 @@ function OutHomeScreen(){
           }}/>
       </Animated.ScrollView>
       <View style={{justifyContent:'flex-end'}}>
-        <NotLoginPrimaryButton press={goGeneration}/>
+        <NotLoginPrimaryButton/>
       </View>
     </area.Container>
   )

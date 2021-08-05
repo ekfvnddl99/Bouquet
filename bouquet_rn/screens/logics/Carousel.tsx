@@ -36,7 +36,6 @@ export default function  Carousel({pages, offset, gap, pageWidth} : carouselProp
         horizontal
         pagingEnabled
         snapToInterval={pageWidth + gap}
-        snapToAlignment='center'
         showsHorizontalScrollIndicator={false}
         renderItem={(obj)=>{
           return(

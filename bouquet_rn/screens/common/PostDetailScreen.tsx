@@ -27,6 +27,7 @@ import CommentItem from '../components/CommentItem';
 import CommentInputBar from '../components/CommentInputBar';
 import LineButton from '../components/LineButton';
 import ConditionButton from '../components/ConditionButton';
+import ProfileItem from '../components/ProfileItem';
 
 // template
 import TextTemplate from '../template/TextTemplate';
@@ -58,9 +59,9 @@ export default function PostDetailScreen(){
           </Animated.View>
 
           <area.RowArea style={{paddingHorizontal:30, paddingVertical:16}}>
-            <BackButton navigation={()=>{}}/>
+            <BackButton/>
             <View style={{flex:1}}/>
-            <elses.CircleImg diameter={28} source={require('../../assets/img.jpg')}/>
+            <ProfileItem diameter={28}/>
           </area.RowArea>
           
           <Animated.ScrollView 
@@ -72,7 +73,7 @@ export default function PostDetailScreen(){
             { useNativeDriver: true })}>
             <View style={{paddingTop: 20}}/>
             <area.RowArea>
-              <View style={{flex:1}}><ProfileButton diameter={30}/></View>
+              <View style={{flex:1}}><ProfileButton diameter={30} account={0}/></View>
               {owner===1 ? 
               <area.RowArea>
                 <LineButton press={()=>{}} content="수정" color={colors.black} incolor={colors.gray2} outcolor={'transparent'}/>

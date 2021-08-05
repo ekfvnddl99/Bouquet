@@ -23,7 +23,7 @@ export default function PostingItem({press, id}  :{press:number, id:number}){
   const[isPress, setIsPress]=useState(-1);
   const navigation=useNavigation();
   const goPosting=()=>{
-    navigation.navigate("PostingItem");
+    navigation.navigate("PostItem");
   }
     return(
       <button.BigListButton color={colors.white} paddingH={10} paddingV={10} onPress={goPosting} activeOpacity={1}>

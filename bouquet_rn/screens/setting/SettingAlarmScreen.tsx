@@ -12,6 +12,7 @@ import * as elses from '../../styles/styled-components/elses';
 // components
 import SettingItem from '../components/SettingItem';
 import BackButton from '../components/BackButton';
+import ProfileItem from '../components/ProfileItem';
 import { SettingProps } from '../../utils/types';
 
 export default function SettingAlarmScreen({navigation} : SettingProps){
@@ -20,9 +21,9 @@ export default function SettingAlarmScreen({navigation} : SettingProps){
   return(
     <area.Container>
       <area.RowArea style={{paddingHorizontal:30, paddingVertical:16}}>
-        <BackButton navigation={navigation}/>
+        <BackButton/>
         <View style={{flex:1}}/>
-        <elses.CircleImg diameter={28} source={require('../../assets/img.jpg')}/>
+        <ProfileItem diameter={28}/>
       </area.RowArea>
       
       <View style={{marginVertical:20, paddingHorizontal:30}}>

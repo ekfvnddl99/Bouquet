@@ -13,7 +13,7 @@ import type {WritingProps} from '../../utils/types';
 export default function FloatingButton(){
   const navigation = useNavigation();
   const goPostWriting=()=>{
-    navigation.navigate('PostWriting');
+    navigation.navigate("Floating");
   }
   return(
     <TouchableOpacity style={styles.floating} onPress={goPostWriting}>
