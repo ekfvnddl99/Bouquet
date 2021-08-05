@@ -12,7 +12,7 @@ import ConditionButton from './ConditionButton';
 
 export default function QnATextInput(){
   return(
-    <View style={{paddingHorizontal:10, paddingVertical:10, backgroundColor:colors.white, borderRadius:10, marginBottom:10}}>
+    <area.NoHeightArea paddingH={10} paddingV={10} marBottom={10}>
       <area.RowArea style={{marginBottom:10}}>
         <View style={{flex:1}}><ProfileButton diameter={30} account={0}/></View>
         <LineButton press={()=>{}} content="질문 바꾸기" color={colors.black} incolor={colors.gray2} outcolor={'transparent'}/>
@@ -23,6 +23,6 @@ export default function QnATextInput(){
       <View style={{alignItems:'flex-end'}}>
         <LineButton press={()=>{}} content="올리기" color={colors.primary} incolor={colors.alpha20_primary} outcolor={'transparent'}/>
       </View>
-    </View>
+    </area.NoHeightArea>
   );
 }

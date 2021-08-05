@@ -20,3 +20,8 @@ export const bottomBarHideState = atom({
   key: 'bottomBarHideState',
   default: false,
 })
+
+export const selectTemplate = atom({
+  key: 'selectTemplate',
+  default: -1,
+})
