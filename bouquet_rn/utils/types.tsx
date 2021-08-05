@@ -114,3 +114,16 @@ export type User = {
   profileImg: string;
   snsType: string;
 }
+
+export type Character = {
+  id: number;
+  name: string;
+  profileImg: string;
+  birth: number;
+  job: string;
+  nationality: string;
+  intro: string;
+  tmi: string;
+  likes: Array<string>;
+  hates: Array<string>;
+}

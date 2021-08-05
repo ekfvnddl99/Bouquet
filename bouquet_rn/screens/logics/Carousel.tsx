@@ -10,16 +10,18 @@ import { colors } from '../../styles/colors';
 // components
 import ProfileDetailItem from '../components/ProfileDetailItem';
 
+import { Character } from '../../utils/types';
+
 interface carouselProps{
-  pages:any[],
+  pages: Array<Character>,
   offset:number,
   gap:number,
-  pageWidth:number
+  pageWidth:number,
+  setPage: Function
 }
 
-export default function  Carousel({pages, offset, gap, pageWidth} : carouselProps){
+export default function  Carousel({pages, offset, gap, pageWidth, setPage} : carouselProps){
   const[selectId, setSelectId]=useState(-1);
-  const[page, setPage]=useState(0);
   const onScroll = (e: any) => {
     const newPage = Math.round(
       e.nativeEvent.contentOffset.x / (pageWidth + gap),
@@ -41,7 +43,7 @@ export default function  Carousel({pages, offset, gap, pageWidth} : carouselProp
           return(
             <TouchableWithoutFeedback onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
               <View style={{width: pageWidth, marginHorizontal: gap / 2}}>
-                <ProfileDetailItem mini={1} press={selectId} id={obj.index}/>
+                <ProfileDetailItem mini={1} press={selectId} id={obj.index} character={obj.item}/>
               </View>
             </TouchableWithoutFeedback>
           );

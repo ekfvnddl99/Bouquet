@@ -3,6 +3,7 @@ import {
     View,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
@@ -11,6 +12,8 @@ import * as elses from '../../styles/styled-components/elses';
 
 // props & logic
 import * as cal from '../logics/Calculation';
+import { Character } from '../../utils/types';
+import useCharacterView from '../logics/useCharacterView';
 
 // components
 import ProfileInfoText from '../components/ProfileInfoText';
@@ -18,10 +21,13 @@ import ProfileButton from './ProfileButton';
 import ProfileInfoTag from './ProfileInfoTag';
 import LineButton from './LineButton';
 
-export default function ProfileDetailItem({mini, press, id} : {mini:number, press:number, id:number}){
+export default function ProfileDetailItem({mini, press, id, character} : {mini:number, press:number, id:number, character: Character}){
   const[owner, setOwner]=useState(1);
   const navigation = useNavigation();
+  const [viewCharacter, setViewCharacterId] = useCharacterView();
+
   const goProfileDetail=()=>{
+    setViewCharacterId(character.id);
     navigation.navigate('ProfileItem');
   }
   const goChaModification=()=>{
@@ -33,11 +39,11 @@ export default function ProfileDetailItem({mini, press, id} : {mini:number, pres
   return(
       <button.ProfileDetailButton activeOpacity={1} onPress={mini===1 ? goProfileDetail : ()=>{}}>
         <View style={{alignItems:'center', justifyContent:'center'}}>
-          <elses.Circle diameter={120}/>
+          <elses.CircleImg diameter={120} source={{ uri: character.profileImg }}/>
           <View style={{marginTop:8}}/>
-          <text.Subtitle2B color={colors.black}>이름</text.Subtitle2B>
+          <text.Subtitle2B color={colors.black}>{character.name}</text.Subtitle2B>
           <View style={{marginTop:8}}/>
-          <text.Body2R color={colors.gray5}>설명</text.Body2R>
+          <text.Body2R color={colors.gray5}>{character.intro}</text.Body2R>
         </View>
 
         {mini===1 ? <View style={{marginTop:34}}/> :
@@ -62,16 +68,16 @@ export default function ProfileDetailItem({mini, press, id} : {mini:number, pres
         }
 
         <area.RowArea style={{justifyContent:'center'}}>
-          <ProfileInfoText bold="직업" regular="대학생" color={colors.black} center={1}/>
-          <View style={{flex:1}}><ProfileInfoText bold="생년월일" regular="123" color={colors.black} center={1}/></View>
-          <ProfileInfoText bold="국적" regular="123" color={colors.black} center={1}/>
+          <ProfileInfoText bold="직업" regular={character.job} color={colors.black} center={1}/>
+          <View style={{flex:1}}><ProfileInfoText bold="생년월일" regular={`${character.birth}`} color={colors.black} center={1}/></View>
+          <ProfileInfoText bold="국적" regular={character.nationality} color={colors.black} center={1}/>
         </area.RowArea>
         <View style={{marginTop:16}}/>
-        <ProfileInfoTag title="좋아하는 것" tags={['1','2']}/>
+        <ProfileInfoTag title="좋아하는 것" tags={character.likes}/>
         <View style={{marginTop:16}}/>
-        <ProfileInfoTag title="싫어하는 것" tags={['1','2']}/>
+        <ProfileInfoTag title="싫어하는 것" tags={character.hates}/>
         <View style={{marginTop:16}}/>
-        <ProfileInfoText bold="특이사항" regular="231" color={colors.black} center={0}/>
+        <ProfileInfoText bold="특이사항" regular={character.tmi} color={colors.black} center={0}/>
       </button.ProfileDetailButton>
   );
 }

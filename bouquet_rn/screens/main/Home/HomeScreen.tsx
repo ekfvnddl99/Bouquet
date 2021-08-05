@@ -16,8 +16,9 @@ import * as elses from '../../../styles/styled-components/elses';
 
 // props & logic
 import { StatusBarHeight } from '../../logics/StatusbarHeight';
-import type {HomeProps} from '../../../utils/types';
+import type {HomeProps, Character} from '../../../utils/types';
 import useUser from '../../logics/useUser';
+import useCharacter from '../../logics/useCharacter';
 
 // components
 import PostingItem from '../../components/PostingItem';
@@ -31,7 +32,7 @@ const HEADER_MAX_HEIGHT = 94;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
-function InHomeScreen(){
+function InHomeScreen({ character }: { character: Character }){
   // dummy data - 서버에서 불러와야 함
   let Data=[{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9}];
 
@@ -75,11 +76,11 @@ function InHomeScreen(){
 
       <area.RowArea style={{marginHorizontal:30, marginTop:30}}>
         <Animated.View style={[styles.a, {opacity : OpacityTitle}, {transform:[{translateY: TranslateImgY}]}]}>
-          <NameNText name="eksghwhk" sub="의"/>
+          <NameNText name={character.name} sub="의"/>
           <text.Subtitle2R color={colors.black}>피드</text.Subtitle2R>
         </Animated.View>
         <Animated.View style={[styles.b, {transform:[{scale: ScaleImg},{translateY: TranslateImgY}, {translateX:TranslateImgX}]}]}>
-          <ProfileItem diameter={40}/>
+          <ProfileItem diameter={40} picUrl={character.profileImg} characterId={character.id} />
         </Animated.View>
       </area.RowArea>
 
@@ -189,9 +190,10 @@ function OutHomeScreen(){
 export default function HomeScreen(){
   // dummy data - 서버에서 불러와야 함
   const [user, setUser] = useUser();
+  const [character, setCharacter] = useCharacter();
   return(
     <View style={{flex:1}}>
-      {user.isLogined ? <InHomeScreen/> : <OutHomeScreen/>}
+      {character.id !== -1 ? <InHomeScreen character={character}/> : <OutHomeScreen/>}
     </View>
   )
 }
