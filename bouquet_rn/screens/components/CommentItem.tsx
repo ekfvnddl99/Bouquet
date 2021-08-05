@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
@@ -17,11 +17,52 @@ import * as cal from '../logics/Calculation';
 
 // components
 import ProfileButton from './ProfileButton';
+import { indexOf } from 'lodash';
+
+interface CommentItemProps{
+  press:number, 
+  id:number, 
+  owner:number, 
+  IsMore?:number, 
+  IsClick? : Function, 
+  AddClicks? : Function, 
+  clicks?:number[]
+}
 
 
-export default function CommentItem({press, id}  :{press:number, id:number}){
-  const[multi, setMulti]=useState(1);
-  const[more, setMore]=useState(0);
+export default function CommentItem({press, id, owner, IsMore, IsClick, AddClicks, clicks}  : CommentItemProps){
+  const[more, setMore]=useState(-1);
+  useEffect(()=>{
+    if(IsClick){
+      if(more===1) {
+        IsClick(id);
+        inClick();
+      }
+      else {
+        IsClick(-1);
+        outClick();
+      }
+    }
+  }, [more])
+
+  const inClick=()=>{
+    if(clicks && AddClicks){
+      let tmp : number[]=clicks;
+      if(tmp.includes(id)===false) tmp.push(id);
+      AddClicks(tmp);
+      console.log(tmp);
+    }
+  }
+  const outClick=()=>{
+    if(clicks && AddClicks){
+      let tmp : number[]=clicks;
+      let idx = tmp.indexOf(id);
+      tmp.splice(idx,1);
+      AddClicks(tmp);
+      console.log(tmp);
+    }
+  }
+
   return(
     <area.NoHeightArea marBottom={8} paddingH={16} paddingV={12} style={{backgroundColor: press===id ? colors.alpha10_primary : colors.white}}>
       <area.RowArea style={{alignItems:'flex-start', marginBottom:8}}>
@@ -37,10 +78,12 @@ export default function CommentItem({press, id}  :{press:number, id:number}){
         <ProfileButton diameter={20} account={0}/>
         <View style={{flex:1}}/>
         <area.RowArea>
-          {press===id ? <TouchableOpacity style={{marginRight:8}}><BinSvg w='18' h='18'/></TouchableOpacity> : null}
-          {multi===1 ? 
-          <View>{more===1 ?<TouchableOpacity onPress={()=>setMore(-1)}><CommentDownArrowSvg w='18' h='18'/></TouchableOpacity> 
-          : <TouchableOpacity onPress={()=>setMore(1)}><CommentUpArrowSvg w='18' h='18'/></TouchableOpacity>}</View>
+          {press===id && owner ? <TouchableOpacity><BinSvg w='18' h='18'/></TouchableOpacity> : null}
+          {IsMore===1 ? 
+          <View style={{marginLeft:8}}>
+            {more===1 ?<TouchableOpacity onPress={()=>setMore(-1)}><CommentDownArrowSvg w='18' h='18'/></TouchableOpacity> 
+              : <TouchableOpacity onPress={()=>setMore(1)}><CommentUpArrowSvg w='18' h='18'/></TouchableOpacity>}
+          </View>
             : null}
           <View style={{marginLeft:8}}/>
           <CommentSvg w='18' h='18'/>

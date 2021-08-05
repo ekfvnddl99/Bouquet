@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import {
     ScrollView,
     FlatList,
@@ -7,6 +7,7 @@ import {
     TouchableOpacity,
     Platform,
     StyleSheet,
+    Text,
     TouchableWithoutFeedback,
   Keyboard
 } from 'react-native';
@@ -39,9 +40,12 @@ const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 export default function PostDetailScreen(){
     // dummy data - 서버에서 불러와야 함
     let Data=[{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9}];
+    let data=[{id:1},{id:2}];
 
     const[selectId, setSelectId]=useState(-1);
+    const[clickedLowerId, setClickedLowerId]=useState<number[]>([]);
     const[owner, setOwner]=useState(1);
+    const[click, setClick]=useState(1);
 
     const scroll = useRef(new Animated.Value(0)).current;
     const OpacityHeader=scroll.interpolate({
@@ -84,22 +88,35 @@ export default function PostDetailScreen(){
             <View style={{marginBottom: 12}}/>
             <TextTemplate/>
             <View style={{alignItems:'flex-start'}}><SunButton sun={24}/></View>
+
+            
             <View style={{marginTop:36}}>
               <text.Subtitle3 color={colors.black}>반응</text.Subtitle3>
               <View style={{marginBottom: 12}}/>
             </View>
             <FlatList
               data={Data}
-              showsHorizontalScrollIndicator={false}
               keyExtractor={(item) => item.id.toString()}
               renderItem={(obj)=>{
                 return(
+                  <>
                   <TouchableOpacity activeOpacity={1} onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
-                    <CommentItem press={selectId} id={obj.index}/>
+                    <CommentItem press={selectId} id={obj.index} owner={1} IsMore={1} IsClick={setClick} AddClicks={setClickedLowerId} clicks={clickedLowerId}/>
                   </TouchableOpacity>
+                  {clickedLowerId.includes(obj.index) ?
+                  <FlatList
+                    style={{marginLeft:16}}
+                    data={data}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={(lowerobj)=>{
+                      return(
+                        <TouchableOpacity activeOpacity={1} onPress={()=>{selectId===((obj.index+1)*10)+lowerobj.index ? setSelectId(-1) : setSelectId(((obj.index+1)*10)+lowerobj.index)}}>
+                          <CommentItem press={selectId} id={((obj.index+1)*10)+lowerobj.index} owner={1}/>
+                        </TouchableOpacity>
+                      );}}/>: null}
+                  </>
                 ); 
-              }}>
-            </FlatList>
+              }}/>
           </Animated.ScrollView>
           {selectId!==-1 ? <CommentInputBar/> : null}
         </area.Container>

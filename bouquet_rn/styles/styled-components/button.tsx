@@ -98,10 +98,12 @@ export const TagModifyButton = styled.TouchableOpacity`
 `
 
 export const AddTemplate = styled.TouchableOpacity`
+  height:77;
   background-color: transparent;
   border-radius: 10;
   border-color:${colors.black};
   border-style: dashed;
+  border-width:1;
   margin-vertical: 12;
   align-items:center;
   justify-content:center;

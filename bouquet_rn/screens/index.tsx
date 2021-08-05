@@ -36,6 +36,10 @@ function WritingStackNavigator(){
         component={PostWritingScreen}
         options={{headerShown : false}}/>
       <WritingStack.Screen 
+        name="SelectTemplate"
+        component={SelectTemplateScreen}
+        options={{headerShown : false}}/>
+      <WritingStack.Screen 
         name="PostItem"
         component={PostItemStackNavigator}
         options={{headerShown : false}}/>
@@ -126,10 +130,6 @@ function ChaGenerationStackNavigator(){
       <ChaGenerationStack.Screen 
         name="ChaGeneration"
         component={ChaGenerationScreen}
-        options={{headerShown : false}}/>
-      <ChaGenerationStack.Screen 
-        name="ProfileItem"
-        component={ProfileStackNavigator}
         options={{headerShown : false}}/>
     </ChaGenerationStack.Navigator>
   );
@@ -322,6 +322,7 @@ import AccountDeletionScreenOne from './setting/AccountDeletionScreenOne';
 import AccountDeletionScreenTwo from './setting/AccountDeletionScreenTwo';
 
 import PostWritingScreen from './common/PostWritingScreen';
+import SelectTemplateScreen from './common/SelectTemplateScreen';
 import PostDetailScreen from './common/PostDetailScreen';
 
 import ChaGenerationScreen from './character/ChaGenerationScreen';
