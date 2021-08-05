@@ -32,16 +32,33 @@ export function responseToCharacter(response: CharacterResponseType, id: number)
   return newObj;
 }
 
-export async function getCharacterListAsync() {
+export async function getCharacterListAsync(userName?: string) {
   const auth = await SecureStore.getItemAsync('auth');
   if (auth) {
     try {
-      let response = await fetch(serverAddress + "/user/character/all", {
+      let path = "/character";
+      let header:
+      {'accept': string, 'Authorization': string} |
+      {'accept': string, 'Authorization': string, 'user-name': string}
+      = {
+        'accept': 'application/json',
+        'Authorization': auth
+      };
+
+      if (userName) {
+        path += "/another";
+        header = {
+          ...header,
+          'user-name': userName
+        };
+      }
+      else {
+        path += "/me";
+      }
+
+      let response = await fetch(serverAddress + path + "/all", {
         method: 'GET',
-        headers: {
-          'accept': 'application/json',
-          'Authorization': auth
-        }
+        headers: header
       });
       let result = await response.json();
       console.log(result);
@@ -59,17 +76,36 @@ export async function getCharacterListAsync() {
   else return "로그인되어 있지 않아요.";
 }
 
-export async function getCharacterAsync(characterId: number) {
+export async function getCharacterAsync(characterId?: number, characterName?: string) {
   const auth = await SecureStore.getItemAsync('auth');
   if (auth) {
     try {
-      let response = await fetch(serverAddress + "/user/character", {
-        method: 'GET',
-        headers: {
-          'accept': 'application/json',
-          'Authorization': auth,
-          'character-id': `${characterId}`
+      let path = "/character";
+      let header:
+      {'accept': string, 'Authorization': string, 'character-id': string} |
+      {'accept': string, 'Authorization': string, 'character-name': string}
+      = {
+        'accept': 'application/json',
+        'Authorization': auth,
+        'character-id': ''
+      };
+
+      if (characterId) {
+        path += "/me";
+        header['character-id'] = `${characterId}`;
+      }
+      else if (characterName) {
+        path += "/another";
+        header = {
+          'accept': header['accept'],
+          'Authorization': header['Authorization'],
+          'character-name': characterName
         }
+      }
+
+      let response = await fetch(serverAddress + path, {
+        method: 'GET',
+        headers: header
       });
       let result = await response.json();
       console.log(result);
