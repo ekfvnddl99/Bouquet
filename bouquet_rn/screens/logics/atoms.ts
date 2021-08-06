@@ -55,6 +55,7 @@ export const characterListSelector = selector({
       })
       return list;
     }
+    else return [];
   }
 })
 

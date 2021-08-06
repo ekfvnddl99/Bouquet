@@ -9,9 +9,9 @@ export default function useCharacter() {
   const characterList = useRecoilValueLoadable(characterListSelector);
 
   useEffect(() => {
-    // if (characterList.state === 'hasValue' && characterList.contents.length > 0 && character.id === -1) {
-    //   setCharacter(characterList.contents[0]);
-    // }
+    if (characterList.state === 'hasValue' && characterList.contents.length > 0 && character.id === -1) {
+      setCharacter(characterList.contents[0]);
+    }
   }, [characterList]);
 
   type OutputType = [
