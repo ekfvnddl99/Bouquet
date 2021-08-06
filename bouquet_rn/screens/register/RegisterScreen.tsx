@@ -5,23 +5,13 @@ import {
     TouchableWithoutFeedback,
     Keyboard
 } from 'react-native';
+import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
-import * as button from '../../styles/styled-components/button';
-import * as text from '../../styles/styled-components/text';
-import * as input from '../../styles/styled-components/input';
-
-// props & logic
-import type {WelcomeProps} from '../../utils/types';
 
 // components
 import ProgressArea from '../components/ProgressArea';
-import ConditionButton from '../components/ConditionButton';
-import PrimaryTextButton from '../components/PrimaryTextButton';
-import WarningText from '../components/WarningText';
-import ConditionTextInput from '../components/ConditionTextInput';
-import LineButton from '../components/LineButton';
 
 // screens
 import RegisterScreenOne from './RegisterScreenOne';
@@ -32,10 +22,10 @@ import RegisterScreenFour from './RegisterScreenFour';
 import { EmailRegisterAsync } from '../logics/EmailLogin';
 
 function setTitle(step:number){
-  if(step===1) return "메일로 회원가입";
-  else if(step===2) return "비밀번호 설정";
-  else if(step===3) return "계정 정보 입력";
-  else return "회원가입 완료!";
+  if(step===1) return i18n.t("메일로 회원가입");
+  else if(step===2) return i18n.t("비밀번호 설정");
+  else if(step===3) return i18n.t("계정 정보 입력");
+  else return i18n.t("회원가입 완료!");
 }
 
 export default function RegisterScreen(){

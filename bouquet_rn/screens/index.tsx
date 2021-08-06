@@ -1,4 +1,4 @@
-import React, {Component, useState, useRef} from 'react';
+import React, {Component, useState, useRef, useEffect} from 'react';
 import { View, Platform, TouchableOpacity, ScrollView} from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { TabBarArea } from '../styles/styled-components/area';
@@ -292,10 +292,16 @@ function WelcomeStackNavigator(){
 }
 
 export default function AppStack(){
+  const[splash, setSplash]=useState(true);
+  useEffect(()=>{
+    setTimeout( () => {
+      setSplash(false);
+    },2000);
+  })
   return(
     <SafeAreaProvider>
       <NavigationContainer>
-        <WelcomeStackNavigator/>
+        {splash===true ? <SplashScreen/> : <WelcomeStackNavigator/>}
       </NavigationContainer>
     </SafeAreaProvider>
   )
@@ -303,6 +309,7 @@ export default function AppStack(){
 
 
 // screens
+import SplashScreen from './SplashScreen';
 import WelcomeScreen from './WelcomeScreen';
 import LoginScreen from './LoginScreen';
 import RegisterScreen from './register/RegisterScreen';

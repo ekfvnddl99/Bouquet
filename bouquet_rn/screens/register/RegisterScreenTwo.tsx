@@ -7,6 +7,7 @@ import {
   View,
   ScrollView
 } from 'react-native';
+import i18n from 'i18n-js';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 
@@ -38,16 +39,16 @@ export default function RegisterScreenTwo({onChange, pw, setPw} : {onChange : an
     <area.ContainerBlank20>
       <ScrollView style={{flex:1}}>
       <area.FormArea height='44' style={err===1 ? {borderWidth:1, borderColor:colors.warning_red} : null}>
-        <TextInput style={{flex: 1}} placeholder='비밀번호' secureTextEntry={eye===1? true : false} onChangeText={(pw)=>setPw(pw)}/>
+        <TextInput style={{flex: 1}} placeholder={i18n.t('비밀번호')} secureTextEntry={eye===1? true : false} onChangeText={(pw)=>setPw(pw)}/>
         <TouchableOpacity onPress={()=>{setEye(eye*(-1))}}>
           {EyeSelect(eye)}
         </TouchableOpacity>
       </area.FormArea>
 
-      <ConditionText content=" 8글자 이상, 32글자 이하" active={PWCheck(pw)}/>
+      <ConditionText content={i18n.t("8글자 이상, 32글자 이하")} active={PWCheck(pw)}/>
       </ScrollView>
       <area.BottomArea style={{marginBottom:16, overflow:'hidden'}}>
-        <ConditionButton active={1} press={onChange} content="계정 정보 입력" paddingH={0} paddingV={14} height={45}/>
+        <ConditionButton active={1} press={onChange} content={i18n.t("계정 정보 입력")} paddingH={0} paddingV={14} height={45}/>
       </area.BottomArea>
     </area.ContainerBlank20>
   );

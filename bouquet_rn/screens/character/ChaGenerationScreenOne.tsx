@@ -1,5 +1,6 @@
 import React, {Component, useState, useEffect} from 'react';
 import { View, TouchableOpacity } from 'react-native';
+import i18n from 'i18n-js';
 import * as ImagePicker from 'expo-image-picker';
 
 import {colors} from '../../styles/colors';
@@ -41,13 +42,13 @@ export default function ChaGenerationScreenOne({modify, onChange, setImage} : {m
 
   return(
     <area.ContainerBlank20>
-      <View style={{alignItems:'center', marginBottom:32}}>
-          <TouchableOpacity onPress={onPress}>
-            <elses.CircleImg diameter={120} source={require('../../assets/img.jpg')}/>
-          </TouchableOpacity>
+      <View style={{alignItems:'center', justifyContent:'center', flex:1}}>
+        <TouchableOpacity onPress={onPress}>
+          <elses.CircleImg diameter={180} source={require('../../assets/img.jpg')}/>
+        </TouchableOpacity>
       </View>
       <area.BottomArea style={{marginBottom:16}}>
-        <ConditionButton height={44} active={1} press={onChange} content={modify===1 ? "기본 정보 수정" : "기본 정보 입력"} paddingH={0} paddingV={14}/>
+        <ConditionButton height={44} active={1} press={onChange} content={modify===1 ? i18n.t("기본 정보 수정") : i18n.t("기본 정보 입력")} paddingH={0} paddingV={14}/>
       </area.BottomArea>
     </area.ContainerBlank20>
   );

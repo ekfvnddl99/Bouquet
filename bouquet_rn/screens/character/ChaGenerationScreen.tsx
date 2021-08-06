@@ -6,6 +6,7 @@ import {
     Keyboard,
     BackHandler
 } from 'react-native';
+import i18n from 'i18n-js';
 import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
@@ -29,16 +30,16 @@ import ChaGenerationScreenFour from './ChaGenerationScreenFour';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 function setTitle(step:number){
-  if(step===1) return "어떤 모습인가요?";
-  else if(step===2) return "이 캐릭터는 누구인가요?";
-  else if(step===3) return "어떤 캐릭터인가요?";
-  else return "캐릭터 생성 완료!";
+  if(step===1) return i18n.t("어떤 모습인가요");
+  else if(step===2) return i18n.t("이 캐릭터는 누구인가요");
+  else if(step===3) return i18n.t("어떤 캐릭터인가요");
+  else return i18n.t("캐릭터 생성 완료")+"!";
 }
 
 function setIntro(step:number){
-  if(step===1) return "이 캐릭터의 겉모습을 생각해 보아요.";
-  else if(step===2) return "이름, 직업 등 이 캐릭터의 기본 정보를 정해 보아요.";
-  else if(step===3) return "캐릭터의 특징을 생각해 보아요.";
+  if(step===1) return i18n.t("이 캐릭터의 겉모습을 생각해 보아요");
+  else if(step===2) return i18n.t("이름, 직업 등 이 캐릭터의 기본 정보를 정해 보아요");
+  else if(step===3) return i18n.t("캐릭터의 특징을 생각해 보아요");
   else return null;
 }
 

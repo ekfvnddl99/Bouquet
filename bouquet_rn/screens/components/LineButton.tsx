@@ -15,7 +15,7 @@ export default function LineButton({press, content, color, incolor, outcolor} : 
   const[bgcolor, setBgColor]=useState('transparent');
   return(
     <button.LineButton color={color} height={22} paddingH={12} paddingV={4} activeOpacity={1}
-    onPress={press} onPressIn={()=>setBgColor(incolor)} onPressOut={()=>setBgColor(outcolor)}
+    onPress={press} onPressIn={()=>setBgColor(incolor)} onPressOut={()=>setBgColor(outcolor)} 
     style={{backgroundColor:bgcolor}}>
       <text.Button3 color={color}>{content}</text.Button3>
     </button.LineButton>

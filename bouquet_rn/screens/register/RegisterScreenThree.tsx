@@ -5,6 +5,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard
 } from 'react-native';
+import i18n from 'i18n-js';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
@@ -27,7 +28,7 @@ import WarningText from '../components/WarningText';
 
 export default function RegisterScreenThree({onChange, name, setName, setProfilePic} : {onChange : any, name: string, setName: Function, setProfilePic: Function}){
   const[err, setErr] = useState(1);
-  const[byte, setByte]=useState(0);
+  const[en, setEn]=useState(0);
 
   return(
     <area.ContainerBlank20>
@@ -40,22 +41,23 @@ export default function RegisterScreenThree({onChange, name, setName, setProfile
         </TouchableOpacity>
       </View>
 
-      <ConditionTextInput height={44} placeholder="별명" onChange={setName} keyboard={'default'} active={1}/>
+      <ConditionTextInput height={44} placeholder={i18n.t("별명")} onChange={setName} keyboard={'default'} active={1}/>
       <area.RowArea style={{marginTop:8}}>
         <View style={{flex:1}}>{err===1 ? <WarningText content="무야호" marginTop={0}/> : null}</View>
         <text.Caption color={colors.gray6}>{getByte(name)} / 20 byte</text.Caption>
       </area.RowArea>
-      <ConditionText content=" 20 byte 이하" active={0}/>
-      <ConditionText content=" 중복되지 않는 별명" active={0}/>
+      <ConditionText content={i18n.t("20 byte 이하")} active={0}/>
+      <ConditionText content={i18n.t("중복되지 않는 이름")} active={0}/>
 
       <area.BottomArea style={{marginBottom:16}}>
         <area.TextBtnArea style={{marginBottom:16}}>
-          <PrimaryTextButton press={()=>{}} content="서비스 이용 약관" level={2}/>
+          {i18n.locale==='en' ? <text.Caption color={colors.gray6}>{i18n.t('에 모두 동의하시나요')} </text.Caption> : null}
+          <PrimaryTextButton press={()=>{}} content={i18n.t("서비스 이용 약관")} level={2}/>
           <text.Caption color={colors.gray6}>, </text.Caption>
-          <PrimaryTextButton press={()=>{}} content="개인정보 취급 방침" level={2}/>
-          <text.Caption color={colors.gray6}>에 모두 동의하시나요?</text.Caption>
+          <PrimaryTextButton press={()=>{}} content={i18n.t("개인정보 취급 방침")} level={2}/>
+          {i18n.locale==='ko' ? <text.Caption color={colors.gray6}>{i18n.t('에 모두 동의하시나요')}</text.Caption> :null}
         </area.TextBtnArea>
-        <ConditionButton active={1} press={onChange} content="필수 약관 동의 & 가입 완료" paddingH={0} paddingV={14} height={45}/>
+        <ConditionButton active={1} press={onChange} content={i18n.t("필수 약관 동의 & 가입 완료")} paddingH={0} paddingV={14} height={45}/>
       </area.BottomArea>
     </area.ContainerBlank20>
   );

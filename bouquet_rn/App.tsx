@@ -1,11 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import * as Font from 'expo-font';
 import * as Localization from 'expo-localization';
+import { StatusBar } from 'expo-status-bar';
 import i18n from 'i18n-js';
 import {RecoilRoot, atom, useRecoilState} from 'recoil';
 import AppLoading from 'expo-app-loading';
 
 import AppStack from './screens/'
+import SplashScreen from './screens/SplashScreen';
 
 async function getFonts() {
   return await Font.loadAsync({
@@ -22,9 +24,9 @@ const translationGetters = {
 }
 
 const setI18nConfig = () => {
-  i18n.defaultLocale = 'en';
   i18n.translations = translationGetters;
-  i18n.locale = Localization.locale;
+  // i18n.locale = Localization.locale;
+  i18n.locale = 'en';
   i18n.fallbacks = true;
 }
 
@@ -33,12 +35,19 @@ export default function App() {
 
   useEffect(() => {
     getFonts();
+    setFont(1);
   }, []);
 
   setI18nConfig();
-  return (
-    <RecoilRoot>
-      <AppStack/>
-    </RecoilRoot>
-  );
+  if(font){
+    return (
+      <RecoilRoot>
+        <StatusBar/>
+        <AppStack/>
+      </RecoilRoot>
+    );
+  }
+  else {
+    return <SplashScreen/>
+  }
 }
