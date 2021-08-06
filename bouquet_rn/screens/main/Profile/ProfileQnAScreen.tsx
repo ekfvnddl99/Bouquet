@@ -5,6 +5,7 @@ import {
     FlatList,
     TouchableOpacity
 } from 'react-native';
+import i18n from 'i18n-js';
 import {colors} from '../../../styles/colors';
 import * as area from '../../../styles/styled-components/area';
 import * as text from '../../../styles/styled-components/text';
@@ -22,9 +23,9 @@ export default function ProfileQnAScreen(){
   return(
     <View style={{marginTop:16}}>
       <area.RowArea style={{marginBottom:12}}>
-        <text.Body2R color={colors.black}>총 </text.Body2R>
+        <text.Body2R color={colors.black}>{i18n.t('총')} </text.Body2R>
         <text.Body2B color={colors.black}>{Data.length}</text.Body2B>
-        <text.Body2R color={colors.black}>개</text.Body2R>
+        <text.Body2R color={colors.black}>{i18n.t('개')}</text.Body2R>
       </area.RowArea>
 
       <FlatList

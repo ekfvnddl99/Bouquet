@@ -75,7 +75,7 @@ export default function WelcomeScreen() {
         </area.BottomArea>
 
         <area.TextBtnArea style={{marginTop:15}}>
-            <text.Button2R color={colors.black}>{i18n.t('또는')} </text.Button2R>
+            <text.Button2R color={colors.black}>{i18n.t('또는')}</text.Button2R>
             <PrimaryTextButton press={goLogin} content={i18n.t("로그인")} level={1}/>
         </area.TextBtnArea>
       </area.ContainerBlank20>

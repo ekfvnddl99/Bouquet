@@ -4,6 +4,7 @@ import {
   Text,
   StyleSheet,
 } from 'react-native';
+import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import {colors} from '../../styles/colors';
@@ -35,17 +36,17 @@ export default function AccountDeletionScreenOne(){
       </area.RowArea>
 
       <area.ContainerBlank20>
-      <text.Subtitle1 color={colors.black} style={{marginBottom:32}}>계정 삭제</text.Subtitle1>
+      <text.Subtitle1 color={colors.black} style={{marginBottom:32}}>{i18n.t('계정 삭제')}</text.Subtitle1>
       <View style={{alignItems:'center'}}>
         <elses.CircleImg diameter={120} source={require('../../assets/img.jpg')} style={{marginBottom:16}}/>
-        <NameNText name={name} sub="님,"/>
-        <text.Subtitle2R color={colors.black}>정말로 삭제하시겠어요?</text.Subtitle2R>
+        <NameNText name={name} sub={i18n.t('님')+","}/>
+        <text.Subtitle2R color={colors.black}>{i18n.t('정말로')+ i18n.t('삭제하시겠어요')+(i18n.locale=='en' ? '?' : '')}</text.Subtitle2R>
       </View>
         <area.BottomArea style={{marginBottom:16}}>
           <View style={{alignItems: 'center'}}>
-            <text.Caption color={colors.gray6} style={{marginBottom:16}}>아쉽지만 계정은 삭제하면 복구하지 못해요.</text.Caption>
+            <text.Caption color={colors.gray6} style={{marginBottom:16}}>{i18n.t('아쉽지만 계정은 삭제하면 복구하지 못해요')}</text.Caption>
           </View>
-          <ConditionButton height={44} active={1} press={goScreenTwo} content="계정 삭제" paddingH={0} paddingV={14}/>
+          <ConditionButton height={44} active={1} press={goScreenTwo} content={i18n.t("계정 삭제")} paddingH={0} paddingV={14}/>
         </area.BottomArea>
       </area.ContainerBlank20>
     </area.Container>

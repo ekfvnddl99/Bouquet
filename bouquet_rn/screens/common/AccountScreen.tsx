@@ -7,6 +7,7 @@ import {
     StyleSheet,
     Animated,
 } from 'react-native';
+import i18n from 'i18n-js';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
@@ -67,24 +68,24 @@ export default function AccountScreen(){
             <elses.CircleImg diameter={120} source={require('../../assets/img.jpg')}/>
             <text.Subtitle2B color={colors.black} style={{marginVertical:8}}>현지</text.Subtitle2B>
             <area.RowArea style={{justifyContent:'center'}}>
-              <ProfileInfoText bold={cal.numName(1200).toString()} regular="팔로워" color={colors.primary} center={1}/>
+              <ProfileInfoText bold={cal.numName(1200).toString()} regular={i18n.t("팔로워")} color={colors.primary} center={1}/>
               <View style={{marginRight:32}}/>
-              <ProfileInfoText bold={Data.length.toString()} regular="캐릭터" color={colors.primary} center={1}/>
+              <ProfileInfoText bold={Data.length.toString()} regular={i18n.t("캐릭터")+(i18n.locale==='en' ? 's' : '')} color={colors.primary} center={1}/>
             </area.RowArea>
           </area.NoHeightArea>
 
-          <View>
-            <text.Subtitle3 color={colors.black} style={{marginBottom:16}}>캐릭터</text.Subtitle3>
+          <View style={{flex:1}}>
+            <text.Subtitle3 color={colors.black} style={{marginBottom:16}}>{i18n.t('캐릭터')}</text.Subtitle3>
 
             <area.RowArea style={{marginBottom:12}}>
-              <text.Body2R color={colors.black}>총 </text.Body2R>
+              <text.Body2R color={colors.black}>{i18n.t('총')} </text.Body2R>
               <text.Body2B color={colors.black}>{Data[Data.length-1].id===-1 ? Data.length-1 : Data.length}</text.Body2B>
-              <text.Body2R color={colors.black}>명</text.Body2R>
+              <text.Body2R color={colors.black}>{i18n.t('명')}</text.Body2R>
             </area.RowArea>
 
             <FlatList
               columnWrapperStyle={{justifyContent:'space-between'}}
-              contentContainerStyle={{justifyContent:'center'}}
+              contentContainerStyle={{justifyContent:'center',}}
               data={Data}
               keyExtractor={(item) => item.id.toString()}
               numColumns={2}

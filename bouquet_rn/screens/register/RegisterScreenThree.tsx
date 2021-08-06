@@ -27,7 +27,9 @@ import ConditionTextInput from '../components/ConditionTextInput';
 import WarningText from '../components/WarningText';
 
 export default function RegisterScreenThree({onChange, name, setName, setProfilePic} : {onChange : any, name: string, setName: Function, setProfilePic: Function}){
-  const[err, setErr] = useState(1);
+  const[err, setErr] = useState(0);
+  const[con1, setCon1]=useState(0);
+  const[con2, setCon2]=useState(0);
   const[en, setEn]=useState(0);
 
   return(
@@ -50,12 +52,12 @@ export default function RegisterScreenThree({onChange, name, setName, setProfile
       <ConditionText content={i18n.t("중복되지 않는 이름")} active={0}/>
 
       <area.BottomArea style={{marginBottom:16}}>
+        {i18n.locale==='en' ? <View style={{alignItems:'center'}}><text.Caption color={colors.gray6}>{i18n.t('에 모두 동의하시나요')} </text.Caption></View> : null}
         <area.TextBtnArea style={{marginBottom:16}}>
-          {i18n.locale==='en' ? <text.Caption color={colors.gray6}>{i18n.t('에 모두 동의하시나요')} </text.Caption> : null}
           <PrimaryTextButton press={()=>{}} content={i18n.t("서비스 이용 약관")} level={2}/>
           <text.Caption color={colors.gray6}>, </text.Caption>
           <PrimaryTextButton press={()=>{}} content={i18n.t("개인정보 취급 방침")} level={2}/>
-          {i18n.locale==='ko' ? <text.Caption color={colors.gray6}>{i18n.t('에 모두 동의하시나요')}</text.Caption> :null}
+          {i18n.locale==='ko' ? <text.Caption color={colors.gray6}>{i18n.t('에 모두 동의하시나요')}</text.Caption> :<text.Caption color={colors.gray6}>?</text.Caption>}
         </area.TextBtnArea>
         <ConditionButton active={1} press={onChange} content={i18n.t("필수 약관 동의 & 가입 완료")} paddingH={0} paddingV={14} height={45}/>
       </area.BottomArea>

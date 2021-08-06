@@ -75,7 +75,7 @@ function ProfileItemStackNavigator(){
         options={{headerShown : false}}/>
       <ProfileItemStack.Screen 
         name="ProfileModification"
-        component={ChaGenerationStackNavigator}
+        component={ChaGenerationScreen}
         options={{headerShown : false}}/>
       <ProfileItemStack.Screen 
         name="ProfileDeletion"
@@ -122,18 +122,18 @@ function SettingnStackNavigator(){
   );
 }
 // character generation
-const ChaGenerationStack = createStackNavigator<Types.ChaGenerationStackParam>();
-function ChaGenerationStackNavigator(){
-  return(
-    <ChaGenerationStack.Navigator
-      initialRouteName="ChaGeneration">
-      <ChaGenerationStack.Screen 
-        name="ChaGeneration"
-        component={ChaGenerationScreen}
-        options={{headerShown : false}}/>
-    </ChaGenerationStack.Navigator>
-  );
-}
+// const ChaGenerationStack = createStackNavigator<Types.ChaGenerationStackParam>();
+// function ChaGenerationStackNavigator(){
+//   return(
+//     <ChaGenerationStack.Navigator
+//       initialRouteName="ChaGeneration">
+//       <ChaGenerationStack.Screen 
+//         name="ChaGeneration"
+//         component={ChaGenerationScreen}
+//         options={{headerShown : false}}/>
+//     </ChaGenerationStack.Navigator>
+//   );
+// }
 // aacount
 const AccountStack = createStackNavigator<Types.AccountStackParam>();
 function AccountStackNavigator(){
@@ -180,7 +180,7 @@ function HomeStackNavigator(){
         options={{headerShown : false}}/>
       <HomeStack.Screen 
         name="ChaGeneration" 
-        component={ChaGenerationStackNavigator}
+        component={ChaGenerationScreen}
         options={{headerShown : false}}/>
     </HomeStack.Navigator>
   );
@@ -226,7 +226,7 @@ function NotificationStackNavigator(){
         options={{headerShown : false}}/>
       <NotificationStack.Screen 
         name="ChaGeneration" 
-        component={ChaGenerationStackNavigator}
+        component={ChaGenerationScreen}
         options={{headerShown : false}}/>
     </NotificationStack.Navigator>
   );
@@ -259,7 +259,7 @@ function ProfileStackNavigator(){
         options={{headerShown : false}}/>
       <ProfileStack.Screen 
         name="ChaGeneration" 
-        component={ChaGenerationStackNavigator}
+        component={ChaGenerationScreen}
         options={{headerShown : false}}/>
     </ProfileStack.Navigator>
   );

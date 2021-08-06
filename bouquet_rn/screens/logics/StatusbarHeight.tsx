@@ -1,5 +1,6 @@
 import { Dimensions, Platform, StatusBar } from 'react-native';
 import { useSafeAreaInsets, } from 'react-native-safe-area-context';
+import Constants from 'expo-constants';
 
 const X_WIDTH = 375;
 const X_HEIGHT = 812;
@@ -14,7 +15,8 @@ export const isIPhoneX = () => Platform.OS === 'ios' && !Platform.isPad && !Plat
     : false;
 
 export const StatusBarHeight = Platform.select({
-    ios: isIPhoneX() ? 44 : 20,
+    // ios: isIPhoneX() ? 44 : 20,
+    ios : Constants.statusBarHeight,
     android: StatusBar.currentHeight,
     default: 0
 })

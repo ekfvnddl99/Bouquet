@@ -4,6 +4,8 @@ import {
   Text,
   StyleSheet,
 } from 'react-native';
+import i18n from 'i18n-js';
+import { useNavigation } from '@react-navigation/native';
 import * as SecureStore from 'expo-secure-store';
 
 import {colors} from '../../styles/colors';
@@ -20,9 +22,10 @@ import ProfileItem from '../components/ProfileItem';
 import { guest } from '../logics/atoms';
 import useUser from '../logics/useUser';
 
-export default function SettingScreen({navigation} : SettingProps){
+export default function SettingScreen(){
   const[name,setName]=useState('undefined');
   const [user, setUser] = useUser();
+  const navigation = useNavigation();
 
   const logOut = async () => {
     const auth = await SecureStore.getItemAsync('auth');
@@ -42,23 +45,23 @@ export default function SettingScreen({navigation} : SettingProps){
       </area.RowArea>
       
       <View style={{marginVertical:20, paddingHorizontal:30}}>
-        <text.Subtitle2B color={colors.black} style={{marginBottom:11}}>기본 설정</text.Subtitle2B>
+        <text.Subtitle2B color={colors.black} style={{marginBottom:11}}>{i18n.t('기본 설정')}</text.Subtitle2B>
         <area.NoHeightArea marBottom={0} paddingH={8} paddingV={8}>
-          <SettingItem content="계정 프로필 수정" press={()=>navigation.navigate('SettingProfile')}/>
-          <SettingItem content="캐릭터별 알림 설정" press={()=>navigation.navigate('SettingAlarm')}/>
-          <SettingItem content="로그아웃" press={logOut}/>
+          <SettingItem content={i18n.t("계정 프로필 수정")} press={()=>navigation.navigate('SettingProfile')}/>
+          <SettingItem content={i18n.t("캐릭터별 알림 설정")} press={()=>navigation.navigate('SettingAlarm')}/>
+          <SettingItem content={i18n.t("로그아웃")} press={logOut}/>
         </area.NoHeightArea>
       </View>
 
       <View style={{marginVertical:20, paddingHorizontal:30}}>
         <text.Subtitle2B color={colors.black} style={{marginBottom:11}}>정보</text.Subtitle2B>
         <area.NoHeightArea marBottom={0} paddingH={8} paddingV={8}>
-          <SettingItem content="Bouquet 소개" press={()=>{}}/>
-          <SettingItem content="달달한 오렌지 떡볶이 소개" press={()=>{}}/>
-          <SettingItem content="서비스 이용 약관" press={()=>{}}/>
-          <SettingItem content="개인정보 취급 방침" press={()=>{}}/>
-          <SettingItem content="오픈 소스 정보" press={()=>{}}/>
-          <SettingItem content="문의/건의" press={()=>{}}/>
+          <SettingItem content={i18n.locale==='en' ? i18n.t('소개')+"Bouquet?" : "Bouquet "+i18n.t('소개')} press={()=>{}}/>
+          <SettingItem content={i18n.locale==='en' ? i18n.t('소개')+i18n.t('달달한 오렌지 떡볶이')+'?' : i18n.t('달달한 오렌지 떡볶이')+' '+i18n.t('소개')} press={()=>{}}/>
+          <SettingItem content={i18n.t("서비스 이용 약관")} press={()=>{}}/>
+          <SettingItem content={i18n.t("개인정보 취급 방침")} press={()=>{}}/>
+          <SettingItem content={i18n.t("오픈 소스 정보")} press={()=>{}}/>
+          <SettingItem content={i18n.t("문의/건의")} press={()=>{}}/>
         </area.NoHeightArea>
       </View>
     </area.Container>

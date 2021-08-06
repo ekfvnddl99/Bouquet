@@ -5,6 +5,7 @@ import {
     StyleSheet,
     Dimensions
 } from 'react-native';
+import i18n from 'i18n-js';
 import PagerView from 'react-native-pager-view';
 import { colors } from '../../../styles/colors';
 import { useNavigation } from '@react-navigation/native';
@@ -22,6 +23,7 @@ import { ProfileProps } from '../../../utils/types';
 const screenWidth = Math.round(Dimensions.get('window').width);
 export default function ProfileSwipeScreen(){
   const [page, setPage] = useState(0);
+  const [select, setSelect]=useState(-1);
   const characterList = useRecoilValueLoadable(characterListSelector);
   const [character, setCharacter] = useCharacter();
   const navigation = useNavigation();
@@ -29,6 +31,7 @@ export default function ProfileSwipeScreen(){
   const onPress = () => {
     if (characterList.state === 'hasValue' && characterList.contents.length > 0) {
       setCharacter(characterList.contents[page]);
+      setSelect(page);
     }
   }
 
@@ -43,7 +46,8 @@ export default function ProfileSwipeScreen(){
         setPage={setPage}
       />
       <View style={{flex:1, alignItems:'center', justifyContent:'flex-end', marginBottom:16, marginTop:41}}>
-        <BackgroundButton press={onPress} content="캐릭터 선택" height={45} active={1} paddingH={40} paddingV={14}/>
+        <BackgroundButton press={onPress} content={select===page ? i18n.t("선택된 캐릭터") : i18n.t("캐릭터 선택")} 
+        height={45} active={select===page ? 0 : 1} paddingH={40} paddingV={14}/>
       </View>
     </View>
   );

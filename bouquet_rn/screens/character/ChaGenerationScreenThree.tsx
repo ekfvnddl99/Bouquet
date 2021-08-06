@@ -33,18 +33,16 @@ export default function ChaGenerationScreenThree({modify, onChange} : {modify : 
 
   function likeTags(blur: number){
     let tmpLikes = likeInput.slice(0, likeInput.length).trim();
-    if((likeInput[likeInput.length-1]===' ' && tmpLikes.length>0) || blur===1){
-      likeList.push(<TagModifyItem content={tmpLikes} press={()=>{}} id={-1} search={0}/>)
+    if((likeInput[likeInput.length-1]===' ' && tmpLikes.length>0) || (blur===1 && tmpLikes.length>0)){
       setLikeInput('')
-      setLikeList(likeList);
+      setLikeList([...likeList, <TagModifyItem content={tmpLikes} press={()=>{}} id={-1} search={0}/>]);
     }
   }
   function dislikeTags(blur: number){
     let tmpDisLikes = dislikeInput.slice(0, dislikeInput.length).trim();
-    if((dislikeInput[dislikeInput.length-1]===' ' && tmpDisLikes.length>0) || blur===1){
-      dislikeList.push(<TagModifyItem content={tmpDisLikes} press={()=>{}} id={-1} search={0}/>)
+    if((dislikeInput[dislikeInput.length-1]===' ' && tmpDisLikes.length>0) || (blur===1 && tmpDisLikes.length>0)){
       setDisLikeInput('')
-      setDisLikeList(dislikeList);
+      setDisLikeList([...dislikeList, <TagModifyItem content={tmpDisLikes} press={()=>{}} id={-1} search={0}/>]);
     }
   }
 
@@ -62,17 +60,17 @@ export default function ChaGenerationScreenThree({modify, onChange} : {modify : 
             {err===1 ? <WarningText content="무야호" marginTop={8}/> : null}
           </View>
 
-          <area.NoHeightArea marBottom={16} paddingH={16} paddingV={8}>
+          <area.NoHeightArea marBottom={16} paddingH={16} paddingV={8} >
             <View style={{flexDirection:'row', flexWrap:'wrap'}}>
               {likeList.map((data : any)=>{return(<View>{data}</View>)})}
-              <TextInput placeholder={likeList.length===0 ? i18n.t('좋아하는 것') : ''} onChangeText={(input)=>setLikeInput(input)} value={likeInput} onBlur={()=>likeTags(1)}/>
+              <TextInput placeholder={likeList.length===0 ? i18n.t('좋아하는 것') : ''} onChangeText={(input)=>setLikeInput(input)} value={likeInput} onBlur={()=>likeTags(1)} style={{flex:1}}/>
             </View>
           </area.NoHeightArea>
 
           <area.NoHeightArea marBottom={16} paddingH={16} paddingV={8}>
             <View style={{flexDirection:'row', flexWrap:'wrap'}}>
               {dislikeList.map((data : any)=>{return(<View>{data}</View>)})}
-              <TextInput placeholder={dislikeList.length===0 ? i18n.t('싫어하는 것') : ''} onChangeText={(input)=>setDisLikeInput(input)} value={dislikeInput} onBlur={()=>dislikeTags(1)}/>
+              <TextInput placeholder={dislikeList.length===0 ? i18n.t('싫어하는 것') : ''} onChangeText={(input)=>setDisLikeInput(input)} value={dislikeInput} onBlur={()=>dislikeTags(1)} style={{flex:1}}/>
             </View>
           </area.NoHeightArea>
 

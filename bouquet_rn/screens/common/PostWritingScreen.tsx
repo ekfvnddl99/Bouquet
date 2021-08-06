@@ -6,6 +6,7 @@ import {
     BackHandler,
     TouchableOpacity
 } from 'react-native';
+import I18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {colors} from '../../styles/colors';
@@ -40,11 +41,11 @@ function setTemplate(idx : number){
     case 0:
       return null;
     case 1:
-      return <AlbumTemplate mode='detail'/>;
+      return <AlbumTemplate mode='edit'/>;
     case 2:
-      return <DiaryTemplate mode='detail'/>;
+      return <DiaryTemplate mode='edit'/>;
     case 3:
-      return <ListTemplate mode='detail'/>;
+      return <ListTemplate mode='edit'/>;
   }
 }
 
@@ -88,18 +89,18 @@ export default function PostWritingScreen(){
           <area.RowArea>
             <View style={{flex:1}}><ProfileButton diameter={30} account={0}/></View>
             {select!==-1 ? 
-            <LineButton press={goSelect} content="템플릿 변경" color={colors.black} incolor={colors.gray2} outcolor={'transparent'}/> : null}
+            <LineButton press={goSelect} content={I18n.t("템플릿 변경")} color={colors.black} incolor={colors.gray2} outcolor={'transparent'}/> : null}
           </area.RowArea>
 
           {select===-1 ? 
           <button.AddTemplate onPress={goSelect}>
-            <text.Button2B color={colors.black}>템플릿 선택</text.Button2B>
+            <text.Button2B color={colors.black}>{I18n.t('템플릿 선택')}</text.Button2B>
           </button.AddTemplate> 
           : <View style={{marginTop:12}}>{setTemplate(select)}</View>}
 
-          <input.TextTemplate placeholder="내용을 입력해 주세요."/>
+          <input.TextTemplate placeholder={I18n.t("내용을 입력해 주세요")}/>
           <View style={{marginTop:40}}/>
-          <ConditionButton active={1} press={goUpload} content="게시글 올리기" paddingH={0} paddingV={14} height={45}/>
+          <ConditionButton active={1} press={goUpload} content={I18n.t("게시글 올리기")} paddingH={0} paddingV={14} height={45}/>
         </area.ContainerBlank30>
       </ScrollView>
     </area.Container>  

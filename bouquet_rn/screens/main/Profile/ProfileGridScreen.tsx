@@ -13,6 +13,7 @@ import * as area from '../../../styles/styled-components/area';
 import ProfileChaItem from '../../components/ProfileChaItem';
 
 export default function ProfileGridScreen({scroll}: {scroll:any}){
+  // dummy data
   let twoData=[{name:'김', introduction:'b'}, {name:'김', introduction:'b'},{name:'김', introduction:'c'},{name:'김', introduction:'a'},{name:'김', introduction:'a'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'}];
   if(twoData.length%2===1) twoData.push({name:'', introduction:''});
 
@@ -40,7 +41,7 @@ export default function ProfileGridScreen({scroll}: {scroll:any}){
               {obj.item.name==='' ? <View/> 
               : 
               <TouchableWithoutFeedback onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
-                <ProfileChaItem name={obj.item.name} introduction={obj.item.introduction} idx={obj.index}/>
+                <ProfileChaItem name={obj.item.name} introduction={obj.item.introduction} idx={obj.index} select={selectId} setSelect={setSelectId}/>
               </TouchableWithoutFeedback>
         }
             </View>

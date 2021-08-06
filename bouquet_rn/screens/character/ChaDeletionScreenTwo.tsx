@@ -4,6 +4,7 @@ import {
   Text,
   StyleSheet,
 } from 'react-native';
+import i18n from 'i18n-js';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
@@ -28,13 +29,13 @@ export default function ChaDeletionScreenTwo({navigation}:{navigation:any}){
     <area.Container>
       <View style={styles.middleArea}>
         <elses.CircleImg diameter={120} source={require('../../assets/img.jpg')} style={{marginBottom:16}}/>
-        <NameNText name={name} sub="님으로"/>
-        <text.Subtitle2R color={colors.black}>보여 주신 새로운 모습이</text.Subtitle2R>
-        <text.Subtitle2R color={colors.black}>아름다웠습니다.</text.Subtitle2R>
+        <NameNText name={name} sub={i18n.t("님으로")}/>
+        <text.Subtitle2R color={colors.black}>{i18n.t('보여 주신 새로운 모습이')}</text.Subtitle2R>
+        <text.Subtitle2R color={colors.black}>{i18n.t('아름다웠습니다')}</text.Subtitle2R>
       </View>
 
       <area.BottomArea style={{marginBottom:16}}>
-        <ConditionButton height={44} active={1} press={goOverview} content="캐릭터 목록으로 돌아가기" paddingH={0} paddingV={14}/>
+        <ConditionButton height={44} active={1} press={goOverview} content={i18n.t("캐릭터 목록으로 돌아가기")} paddingH={0} paddingV={14}/>
       </area.BottomArea>
     </area.Container>
   );

@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, TextInput, TouchableWithoutFeedback} from 'react-native';
+import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
@@ -23,7 +24,7 @@ export default function QnAItem(){
     <View style={{paddingHorizontal:10, paddingVertical:10, backgroundColor:colors.white, borderRadius:10, marginBottom:10}}>
       <area.RowArea style={{marginBottom:10}}>
         <View style={{flex:1}}><ProfileButton diameter={30} account={0}/></View>
-        <text.Caption color={colors.gray5}>{cal.timeName(57)} 전</text.Caption>
+        <text.Caption color={colors.gray5}>{cal.timeName(57)} {i18n.t('전')}</text.Caption>
       </area.RowArea>
       <QuestionItem/>
       <View style={{borderWidth:1, borderColor:colors.gray5, marginBottom:10, marginHorizontal:10}}/>

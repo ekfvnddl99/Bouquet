@@ -2,7 +2,8 @@ import React, {Component, useState} from 'react';
 import {
     View,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import i18n from 'i18n-js';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
@@ -24,6 +25,8 @@ import LineButton from './LineButton';
 export default function ProfileDetailItem({mini, press, id, character} : {mini:number, press:number, id:number, character: Character}){
   const[owner, setOwner]=useState(1);
   const navigation = useNavigation();
+  const route = useRoute();
+  console.log(route.name);
   const [viewCharacter, setViewCharacterId] = useCharacterView();
 
   const goProfileDetail=()=>{
@@ -31,7 +34,7 @@ export default function ProfileDetailItem({mini, press, id, character} : {mini:n
     navigation.navigate('ProfileItem');
   }
   const goChaModification=()=>{
-    navigation.navigate('ProfileModification');
+    navigation.navigate('ProfileModification', {modify : 1});
   }
   const goChaDeletion=()=>{
     navigation.navigate('ProfileDeletion');
@@ -50,34 +53,34 @@ export default function ProfileDetailItem({mini, press, id, character} : {mini:n
         <View style={{marginTop:8, alignItems:'center'}}>
           {owner===1 ?
           <area.RowArea>
-            <LineButton press={goChaModification} content="정보 수정" color={colors.primary} incolor={colors.alpha20_primary} outcolor={'transparent'}/>
+            <LineButton press={goChaModification} content={i18n.t("정보 수정")} color={colors.primary} incolor={colors.alpha20_primary} outcolor={'transparent'}/>
             <View style={{marginLeft:8}}/>
-            <LineButton press={goChaDeletion} content="삭제" color={colors.warning_red} incolor={colors.alpha20_primary} outcolor={'transparent'}/>
+            <LineButton press={goChaDeletion} content={i18n.t("삭제")} color={colors.warning_red} incolor={colors.alpha20_primary} outcolor={'transparent'}/>
           </area.RowArea>:
-          <LineButton press={()=>{}} content="팔로우" color={colors.primary} incolor={colors.alpha20_primary} outcolor={'transparent'}/>}
+          <LineButton press={()=>{}} content={i18n.t("팔로우")} color={colors.primary} incolor={colors.alpha20_primary} outcolor={'transparent'}/>}
           <area.RowArea style={{justifyContent:'center', marginTop:8, marginBottom:24}}>
-            <ProfileInfoText bold={cal.numName(1200).toString()} regular="팔로워" color={colors.primary} center={1}/>
+            <ProfileInfoText bold={cal.numName(1200).toString()} regular={i18n.t("팔로워")} color={colors.primary} center={1}/>
             <View style={{marginRight:32}}/> 
-            <ProfileInfoText bold="321" regular="게시글" color={colors.primary} center={1}/>
+            <ProfileInfoText bold="321" regular={i18n.t("게시글")} color={colors.primary} center={1}/>
           </area.RowArea>
           <area.RowArea style={{marginBottom:24}}>
             <ProfileButton diameter={20} account={1}/>
-            <text.Body2R color={colors.black}>의 캐릭터</text.Body2R>
+            <text.Body2R color={colors.black}>{i18n.t('의')} {i18n.t('캐릭터')}</text.Body2R>
           </area.RowArea>
         </View>
         }
 
         <area.RowArea style={{justifyContent:'center'}}>
-          <ProfileInfoText bold="직업" regular={character.job} color={colors.black} center={1}/>
-          <View style={{flex:1}}><ProfileInfoText bold="생년월일" regular={`${character.birth}`} color={colors.black} center={1}/></View>
-          <ProfileInfoText bold="국적" regular={character.nationality} color={colors.black} center={1}/>
+          <ProfileInfoText bold={i18n.t("직업")} regular={character.job} color={colors.black} center={1}/>
+          <View style={{flex:1}}><ProfileInfoText bold={i18n.t("생년월일")} regular={`${character.birth}`} color={colors.black} center={1}/></View>
+          <ProfileInfoText bold={i18n.t("국적")} regular={character.nationality} color={colors.black} center={1}/>
         </area.RowArea>
         <View style={{marginTop:16}}/>
-        <ProfileInfoTag title="좋아하는 것" tags={character.likes}/>
+        <ProfileInfoTag title={i18n.t("좋아하는 것")} tags={character.likes}/>
         <View style={{marginTop:16}}/>
-        <ProfileInfoTag title="싫어하는 것" tags={character.hates}/>
+        <ProfileInfoTag title={i18n.t("싫어하는 것")} tags={character.hates}/>
         <View style={{marginTop:16}}/>
-        <ProfileInfoText bold="특이사항" regular={character.tmi} color={colors.black} center={0}/>
+        <ProfileInfoText bold={i18n.t("특이사항")} regular={character.tmi} color={colors.black} center={0}/>
       </button.ProfileDetailButton>
   );
 }

@@ -1,5 +1,6 @@
 import React, {Component, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
+import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
 import {colors} from '../../styles/colors';
 import * as button from '../../styles/styled-components/button';
@@ -10,8 +11,15 @@ import {useSetRecoilState, useRecoilValue} from 'recoil';
 // components
 import ConditionButton from './ConditionButton';
 
+interface ProfileChaItemProps{
+  name: string, 
+  introduction : string, 
+  idx:number,
+  select:number,
+  setSelect : Function,
+}
 
-export default function ProfileChaItem({name, introduction, idx} : {name: string, introduction : string, idx:number}){
+export default function ProfileChaItem({name, introduction, idx, select, setSelect} : ProfileChaItemProps){
   const navigation = useNavigation();
   const goProfileDetail=()=>{
     navigation.navigate('ProfileItem');
@@ -25,7 +33,7 @@ export default function ProfileChaItem({name, introduction, idx} : {name: string
         <View style={{marginBottom:8}}/>
         <text.Caption color={colors.black} numberOfLines={2}>{introduction}</text.Caption>
         <View style={{marginTop: 21}}/>
-        <ConditionButton active={1} press={()=>{}} content={"캐릭터 선택"} paddingH={12} paddingV={4} height={22}/>
+        <ConditionButton active={select===idx ? 0 : 1} press={()=>setSelect(idx)} content={select===idx ? i18n.t("선택된 캐릭터") :i18n.t("캐릭터 선택")} paddingH={12} paddingV={4} height={22}/>
     </button.MiniListButton>
   );
 }

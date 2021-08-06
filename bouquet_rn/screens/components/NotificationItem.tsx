@@ -10,6 +10,7 @@ import {
     Dimensions,
     GestureResponderHandlers
 } from 'react-native';
+import i18n from 'i18n-js';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as elses from '../../styles/styled-components/elses';
@@ -63,7 +64,7 @@ export default function NotificationItem({press, id}  :{press:number, id:number}
               </area.RowArea>
             </View>
             <View style={styles.timeText}>
-                <text.Caption color={colors.gray5}>{cal.timeName(57)} 전</text.Caption>
+                <text.Caption color={colors.gray5}>{cal.timeName(57)} {i18n.t('전')}</text.Caption>
             </View>
           </button.NotificationButton>
         </Animated.View>

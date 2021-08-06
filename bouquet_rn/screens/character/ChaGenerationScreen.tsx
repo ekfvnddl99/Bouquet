@@ -7,7 +7,7 @@ import {
     BackHandler
 } from 'react-native';
 import i18n from 'i18n-js';
-import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
+import { useNavigation, useRoute, useFocusEffect, RouteProp } from '@react-navigation/native';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as button from '../../styles/styled-components/button';
@@ -42,11 +42,16 @@ function setIntro(step:number){
   else if(step===3) return i18n.t("캐릭터의 특징을 생각해 보아요");
   else return null;
 }
-
+type ParamList = {
+  ProfileDetail: {
+    modify: number;
+  };
+};
 export default function ChaGenerationScreen(){
   const[step, setStep]=useState(1);
   const navigation = useNavigation<StackNavigationProp<ChaGenerationProps>>();
-  const route = useRoute();
+  const route = useRoute<RouteProp<ParamList, 'ProfileDetail'>>();
+  const modify = route.params?.modify;
   const [hide, setHide] = useRecoilState(bottomBarHideState);
 
   const [image, setImage] = useState(null);
@@ -69,10 +74,10 @@ export default function ChaGenerationScreen(){
         <View style={{paddingHorizontal:20, paddingTop:20}}>
           <ProgressArea back={()=>setStep(step-1)} step={step} title={setTitle(step)} intro={setIntro(step)} navigation={navigation} press={pressBack}/>
         </View>
-        {step===1 ? <ChaGenerationScreenOne modify={0} onChange={()=>setStep(step+1)} setImage={setImage}/> :
-        step===2 ? <ChaGenerationScreenTwo modify={0} onChange={()=>setStep(step+1)}/> :
-        step===3 ? <ChaGenerationScreenThree modify={0} onChange={()=>setStep(step+1)}/> : 
-        <ChaGenerationScreenFour modify={0} navigation={navigation}/>}
+        {step===1 ? <ChaGenerationScreenOne modify={modify} onChange={()=>setStep(step+1)} setImage={setImage}/> :
+        step===2 ? <ChaGenerationScreenTwo modify={modify} onChange={()=>setStep(step+1)}/> :
+        step===3 ? <ChaGenerationScreenThree modify={modify} onChange={()=>setStep(step+1)}/> : 
+        <ChaGenerationScreenFour modify={modify} navigation={navigation}/>}
       </area.Container>
     </TouchableWithoutFeedback>
   );

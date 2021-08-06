@@ -9,6 +9,7 @@ import {
     TouchableWithoutFeedback,
   Keyboard
 } from 'react-native';
+import i18n from 'i18n-js';
 import {colors} from '../../../styles/colors'
 import * as area from '../../../styles/styled-components/area';
 import * as text from '../../../styles/styled-components/text';
@@ -76,7 +77,7 @@ export default function SearchScreen({navigation} : SearchProps){
                 {focus===1 || searchText.length>0 ? <SearchViewFocusSvg w='15' h='15'/> : <SearchViewSvg w='15' h='15'/>}
               </View>
               <View style={{flex:1}}>
-                <TextInput placeholder="무엇이 궁금한가요?" onFocus={()=>setFocus(1)} onBlur={()=>setFocus(0)} onChangeText={(str)=>setSearchText(str)}/>
+                <TextInput placeholder={i18n.t("무엇이 궁금한가요")} onFocus={()=>setFocus(1)} onBlur={()=>setFocus(0)} onChangeText={(str)=>setSearchText(str)}/>
               </View>
             </Animated.View>
           </View>
@@ -92,7 +93,7 @@ export default function SearchScreen({navigation} : SearchProps){
             <Animated.View style={{marginLeft : 30}}>
 
               <Animated.View>
-                <text.Subtitle3 color={colors.black}>최근 검색어</text.Subtitle3>
+                <text.Subtitle3 color={colors.black}>{i18n.t('최근 검색어')}</text.Subtitle3>
                 <FlatList
                   style={{marginTop:12}}
                   data={Data}
@@ -110,7 +111,7 @@ export default function SearchScreen({navigation} : SearchProps){
               </Animated.View>
 
               <Animated.View style={{marginTop:40}}>
-                <text.Subtitle3 color={colors.black}>인기 부캐</text.Subtitle3>
+                <text.Subtitle3 color={colors.black}>{i18n.t('인기 부캐')}</text.Subtitle3>
                 <FlatList
                   style={{marginTop:12}}
                   data={Data}
@@ -126,7 +127,7 @@ export default function SearchScreen({navigation} : SearchProps){
                   }}></FlatList>
               </Animated.View>
 
-              <Animated.View style={{marginTop:40}}>
+              {/* <Animated.View style={{marginTop:40}}>
                 <text.Subtitle3 color={colors.black}>인기 에피소드</text.Subtitle3>
                 <FlatList
                   style={{marginTop:12}}
@@ -141,12 +142,12 @@ export default function SearchScreen({navigation} : SearchProps){
                       </TouchableWithoutFeedback>
                     ); 
                   }}></FlatList>
-              </Animated.View>
+              </Animated.View> */}
 
           </Animated.View>
 
           <area.ContainerBlank30 style={{marginTop:10}}>
-            <text.Subtitle3 color={colors.black}>인기 게시물</text.Subtitle3>
+            <text.Subtitle3 color={colors.black}>{i18n.t('인기 게시물')}</text.Subtitle3>
             <FlatList
               style={{marginTop:12}}
               data={Data}

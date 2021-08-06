@@ -11,6 +11,7 @@ import {
     TouchableWithoutFeedback,
   Keyboard
 } from 'react-native';
+import i18n from 'i18n-js';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
@@ -80,9 +81,9 @@ export default function PostDetailScreen(){
               <View style={{flex:1}}><ProfileButton diameter={30} account={0}/></View>
               {owner===1 ? 
               <area.RowArea>
-                <LineButton press={()=>{}} content="수정" color={colors.black} incolor={colors.gray2} outcolor={'transparent'}/>
+                <LineButton press={()=>{}} content={i18n.t("수정")} color={colors.black} incolor={colors.gray2} outcolor={'transparent'}/>
                 <View style={{marginLeft:4}}/>
-                <LineButton press={()=>{}} content="삭제" color={colors.warning_red} incolor={colors.alpha20_primary} outcolor={'transparent'}/>
+                <LineButton press={()=>{}} content={i18n.t("삭제")} color={colors.warning_red} incolor={colors.alpha20_primary} outcolor={'transparent'}/>
               </area.RowArea> : null}
             </area.RowArea>
             <View style={{marginBottom: 12}}/>
@@ -91,7 +92,7 @@ export default function PostDetailScreen(){
 
             
             <View style={{marginTop:36}}>
-              <text.Subtitle3 color={colors.black}>반응</text.Subtitle3>
+              <text.Subtitle3 color={colors.black}>{i18n.t('반응')}</text.Subtitle3>
               <View style={{marginBottom: 12}}/>
             </View>
             <FlatList

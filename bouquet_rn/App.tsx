@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {colors} from './styles/colors';
 import * as Font from 'expo-font';
 import * as Localization from 'expo-localization';
 import { StatusBar } from 'expo-status-bar';
@@ -15,6 +16,8 @@ async function getFonts() {
     'light': require('./assets/fonts/Pretendard-Light.otf'),
     'regular': require('./assets/fonts/Pretendard-Regular.otf'),
     'semibold': require('./assets/fonts/Pretendard-SemiBold.otf'),
+    'Bbold': require('./assets/fonts/NanumBarunpenB.otf'),
+    'Bregular': require('./assets/fonts/NanumBarunpenR.otf'),
   });
 }
 
@@ -26,7 +29,7 @@ const translationGetters = {
 const setI18nConfig = () => {
   i18n.translations = translationGetters;
   // i18n.locale = Localization.locale;
-  i18n.locale = 'en';
+  i18n.locale = 'ko';
   i18n.fallbacks = true;
 }
 
@@ -42,7 +45,7 @@ export default function App() {
   if(font){
     return (
       <RecoilRoot>
-        <StatusBar/>
+        <StatusBar backgroundColor={'transparent'}/>
         <AppStack/>
       </RecoilRoot>
     );

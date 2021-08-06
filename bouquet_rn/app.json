@@ -30,7 +30,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/png/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "softwareKeyboardLayoutMode": "pan"
     },
     "web": {
       "favicon": "./assets/png/favicon.png"

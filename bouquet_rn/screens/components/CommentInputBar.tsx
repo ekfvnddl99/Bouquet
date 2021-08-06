@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
+import {View, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform} from 'react-native';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
@@ -14,7 +14,7 @@ import RoundXSvg from '../../assets/RoundX';
 
 export default function CommentInputBar(){
   return(
-    <View style={{width:'100%'}}>
+    <KeyboardAvoidingView style={{width:'100%', position:'absolute', bottom:0, left:0, right:0}} behavior={Platform.OS==='ios' ? 'padding' : 'height'}>
       <area.RowArea style={styles.commentUpper}>
         <CommetnInputSvg w='18' h='18'/>
         <View style={{flex:1, marginHorizontal:8}}>
@@ -29,7 +29,7 @@ export default function CommentInputBar(){
         </View>
         <SendSvg w='30' h='30'/>
       </area.RowArea>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -50,6 +50,8 @@ const styles = StyleSheet.create({
   },
   commentInput:{
     backgroundColor:colors.gray0,
+    alignItems:'center',
+    minHeight:33,
     borderRadius:10,
     paddingHorizontal:18,
     marginHorizontal:12

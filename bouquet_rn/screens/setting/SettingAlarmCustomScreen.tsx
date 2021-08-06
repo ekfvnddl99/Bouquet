@@ -6,6 +6,7 @@ import {
   FlatList,
   TouchableWithoutFeedback
 } from 'react-native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
@@ -20,19 +21,17 @@ import BackButton from '../components/BackButton';
 import SettingToggleItem from '../components/SettingToggleItem';
 import ProfileItem from '../components/ProfileItem';
 
-function setTitle(idx:number){
-  let title="";
-  if(idx===0) title="팔로우하는 캐릭터의 새 글";
-  else if(idx===1) title="내 글이 받은 햇빛";
-  else if(idx===2) title="내 글에 달린 댓글";
-  else title="다른 캐릭터가 나를 팔로우";
-  return title;
-}
-
+type ParamList = {
+  SettingAlarm: {
+    title: string;
+  };
+};
 export default function SettingAlarmCustomScreen({props}: {props : SettingProps}){
   let Data=[{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9}];
 
   const[selectId, setSelectId]=useState(-1);
+  const route=useRoute<RouteProp<ParamList, 'SettingAlarm'>>();
+  const title : string = route.params?.title;
 
   return(
     <area.Container>
@@ -43,7 +42,7 @@ export default function SettingAlarmCustomScreen({props}: {props : SettingProps}
       </area.RowArea>
       
       <View style={{paddingHorizontal:30}}>
-        <text.Subtitle2B color={colors.black} style={{marginBottom:11}}>{setTitle(1)}</text.Subtitle2B>
+        <text.Subtitle2B color={colors.black} style={{marginBottom:11}}>{title}</text.Subtitle2B>
         <area.NoHeightArea marBottom={0} paddingH={8} paddingV={8}>
           <FlatList
             data={Data}

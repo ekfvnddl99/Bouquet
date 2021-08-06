@@ -8,15 +8,20 @@ interface BtnProps{
   paddingV:number,
 }
 
+interface LineBtnProps{
+  color : string,
+  paddingH:number,
+  paddingV:number,
+}
+
 export const LineButton = styled.TouchableOpacity`
   border-width:1;
-  border-color:${(props : BtnProps)=>props.color};
-  height:${(props : BtnProps)=>props.height};
+  border-color:${(props : LineBtnProps)=>props.color};
   border-radius:25;
   align-items:center;
   justify-content:center;
-  padding-horizontal: ${(props : BtnProps)=>props.paddingH};
-  padding-vertical: ${(props : BtnProps)=>props.paddingV};
+  padding-horizontal: ${(props : LineBtnProps)=>props.paddingH};
+  padding-vertical: ${(props : LineBtnProps)=>props.paddingV};
 `
 
 export const BackgroundButton = styled.TouchableOpacity`

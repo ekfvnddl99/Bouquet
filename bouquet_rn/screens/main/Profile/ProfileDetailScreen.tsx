@@ -7,6 +7,7 @@ import {
     StyleSheet,
     Animated,
 } from 'react-native';
+import i18n from 'i18n-js';
 import {colors} from '../../../styles/colors';
 import * as area from '../../../styles/styled-components/area';
 import * as text from '../../../styles/styled-components/text';
@@ -69,15 +70,15 @@ export default function ProfileDetailScreen({ route, navigation }: {route: any, 
           <View style={{marginTop:30}}>
             <area.RowArea>
               <TouchableOpacity onPress={()=>setPress(0)}>
-                <text.Subtitle3 color={press===0 ? colors.black : colors.gray5}>게시글</text.Subtitle3>
+                <text.Subtitle3 color={press===0 ? colors.black : colors.gray5}>{i18n.t('게시글')}</text.Subtitle3>
               </TouchableOpacity>
               <View style={{marginRight:16}}/>
-              <TouchableOpacity onPress={()=>setPress(1)}>
+              {/* <TouchableOpacity onPress={()=>setPress(1)}>
                 <text.Subtitle3 color={press===1 ? colors.black : colors.gray5}>에피소드</text.Subtitle3>
               </TouchableOpacity>
-              <View style={{marginRight:16}}/>
+              <View style={{marginRight:16}}/> */}
               <TouchableOpacity onPress={()=>setPress(2)}>
-                <text.Subtitle3 color={press===2 ? colors.black : colors.gray5}>질문</text.Subtitle3>
+                <text.Subtitle3 color={press===2 ? colors.black : colors.gray5}>{i18n.t('질문')}</text.Subtitle3>
               </TouchableOpacity>
             </area.RowArea>
             {press===0 ? <ProfileFeedScreen/> : press===1 ? <ProfileEpisodeScreen/> : <ProfileQnAScreen/>}

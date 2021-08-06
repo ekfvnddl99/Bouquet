@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import i18n from 'i18n-js';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
@@ -50,7 +51,6 @@ export default function CommentItem({press, id, owner, IsMore, IsClick, AddClick
       let tmp : number[]=clicks;
       if(tmp.includes(id)===false) tmp.push(id);
       AddClicks(tmp);
-      console.log(tmp);
     }
   }
   const outClick=()=>{
@@ -59,7 +59,6 @@ export default function CommentItem({press, id, owner, IsMore, IsClick, AddClick
       let idx = tmp.indexOf(id);
       tmp.splice(idx,1);
       AddClicks(tmp);
-      console.log(tmp);
     }
   }
 
@@ -70,7 +69,7 @@ export default function CommentItem({press, id, owner, IsMore, IsClick, AddClick
           <text.Body2R color={colors.black}>qmffkqfmffkwkdskskdlsjfka; jf;asjdfasjficwfmqwe</text.Body2R>
         </View>
         <View style={styles.timeText}>
-            <text.Caption color={colors.gray5}>{cal.timeName(57)} 전</text.Caption>
+            <text.Caption color={colors.gray5}>{cal.timeName(57)} {i18n.t('전')}</text.Caption>
         </View>
       </area.RowArea>
 

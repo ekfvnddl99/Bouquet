@@ -5,6 +5,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard
 } from 'react-native';
+import i18n from 'i18n-js';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
@@ -43,7 +44,7 @@ export default function SettingProfileScreen({navigation} : SettingProps){
       </area.RowArea>
 
       <area.ContainerBlank20>
-        <text.Subtitle1 color={colors.black} style={{marginBottom:32}}>계정 프로필 수정</text.Subtitle1>
+        <text.Subtitle1 color={colors.black} style={{marginBottom:32}}>{i18n.t('계정 프로필 수정')}</text.Subtitle1>
 
         <View style={{alignItems:'center', marginBottom:32}}>
           <TouchableOpacity>
@@ -54,19 +55,19 @@ export default function SettingProfileScreen({navigation} : SettingProps){
           </TouchableOpacity>
         </View>
 
-        <ConditionTextInput height={44} placeholder="별명" onChange={setNickname} keyboard={'default'} active={1}/>
+        <ConditionTextInput height={44} placeholder={i18n.t("별명")} onChange={setNickname} keyboard={'default'} active={1}/>
         <area.RowArea style={{marginTop:8}}>
           <View style={{flex:1}}>{err===1 ? <WarningText content="무야호" marginTop={0}/> : null}</View>
           <text.Caption color={colors.gray6}>{getByte(nickname)} / 20 byte</text.Caption>
         </area.RowArea>
-        <ConditionText content=" 20 byte 이하" active={0}/>
-        <ConditionText content=" 중복되지 않는 별명" active={0}/>
+        <ConditionText content={i18n.t("20 byte 이하")} active={0}/>
+        <ConditionText content={i18n.t("중복되지 않는 별명")} active={0}/>
 
         <area.BottomArea style={{marginBottom:16}}>
           <TouchableOpacity style={{alignItems:'center'}} onPress={()=>navigation.navigate('SettingAccountDeletionOne')}>
-            <text.Button3 color={colors.warning_red} style={{marginBottom:16}}>계정 삭제</text.Button3>
+            <text.Button3 color={colors.warning_red} style={{marginBottom:16}}>{i18n.t('계정 삭제')}</text.Button3>
           </TouchableOpacity>
-          <ConditionButton active={1} press={()=>{}} content="계정 프로필 수정 완료" paddingH={0} paddingV={14} height={45}/>
+          <ConditionButton active={1} press={()=>{}} content={i18n.t("계정 프로필 수정 완료")} paddingH={0} paddingV={14} height={45}/>
         </area.BottomArea>
       </area.ContainerBlank20>
     </area.Container>

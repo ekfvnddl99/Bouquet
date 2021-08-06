@@ -6,7 +6,8 @@ import {
     Keyboard,
     BackHandler
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import i18n from 'i18n-js';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as button from '../../styles/styled-components/button';
@@ -23,8 +24,8 @@ import ChaDeletionScreenOne from './ChaDeletionScreenOne';
 import ChaDeletionScreenTwo from './ChaDeletionScreenTwo';
 
 function setTitle(step:number){
-  if(step===1) return "캐릭터 삭제";
-  else return "캐릭터 삭제 완료";
+  if(step===1) return i18n.t("캐릭터 삭제");
+  else return i18n.t("캐릭터 삭제 완료");
 }
 
 export default function ChaDeletionScreen(){

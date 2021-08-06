@@ -9,6 +9,7 @@ import {
     TouchableWithoutFeedback,
     TouchableOpacity
 } from 'react-native';
+import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
 import {colors} from '../../../styles/colors';
 import * as area from '../../../styles/styled-components/area';
@@ -69,8 +70,8 @@ function InNotificationScreen(){
       </Animated.View>
       <area.RowArea style={{marginHorizontal:30, marginTop:30}}>
         <Animated.View style={[styles.a, {opacity : OpacityTitle}, {transform:[{translateY: TranslateImgY}]}]}>
-          < NameNText name="eksghwhk" sub="의"/>
-          <text.Subtitle2R color={colors.black}>알림</text.Subtitle2R>
+          < NameNText name="eksghwhk" sub={i18n.t("의")}/>
+          <text.Subtitle2R color={colors.black}>{i18n.t('알림')}</text.Subtitle2R>
         </Animated.View>
         <Animated.View style={[styles.b, {transform:[{scale: ScaleImg},{translateY: TranslateImgY}, {translateX:TranslateImgX}]}]}>
           <ProfileItem diameter={40}/>
@@ -85,7 +86,7 @@ function InNotificationScreen(){
           { useNativeDriver: true })}>
         <View style={{paddingTop: 30+14}}/>
         {Data.length===0 ? 
-          <View style={{alignItems:'center'}}><text.Caption color={colors.gray6}>이제 확인할 알림이 없어요!</text.Caption></View>
+          <View style={{alignItems:'center'}}><text.Caption color={colors.gray6}>{i18n.t('이제 확인할 알림이 없어요')}</text.Caption></View>
           :<FlatList 
           data={Data} 
           keyExtractor={(item) => item.id.toString()}
@@ -110,8 +111,8 @@ function OutNotificationScreen(){
     <area.Container>
       <area.RowArea style={{marginHorizontal:30, marginTop:30}}>
         <View>
-          <text.Subtitle2R color={colors.black}>당신의</text.Subtitle2R>
-          <text.Subtitle2B color={colors.black}>알림</text.Subtitle2B>
+          <text.Subtitle2R color={colors.black}>{i18n.t('당신의')}</text.Subtitle2R>
+          <text.Subtitle2B color={colors.black}>{i18n.t('알림')}</text.Subtitle2B>
         </View>
       </area.RowArea>
       <View style={{marginTop:30}}>

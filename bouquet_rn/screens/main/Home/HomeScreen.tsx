@@ -8,6 +8,7 @@ import {
     StatusBar,
     TouchableOpacity
 } from 'react-native';
+import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
 import {colors} from '../../../styles/colors';
 import * as area from '../../../styles/styled-components/area';
@@ -76,8 +77,8 @@ function InHomeScreen({ character }: { character: Character }){
 
       <area.RowArea style={{marginHorizontal:30, marginTop:30}}>
         <Animated.View style={[styles.a, {opacity : OpacityTitle}, {transform:[{translateY: TranslateImgY}]}]}>
-          <NameNText name={character.name} sub="의"/>
-          <text.Subtitle2R color={colors.black}>피드</text.Subtitle2R>
+          <NameNText name={character.name} sub={i18n.t("의")}/>
+          <text.Subtitle2R color={colors.black}>{i18n.t('피드')}</text.Subtitle2R>
         </Animated.View>
         <Animated.View style={[styles.b, {transform:[{scale: ScaleImg},{translateY: TranslateImgY}, {translateX:TranslateImgX}]}]}>
           <ProfileItem diameter={40} picUrl={character.profileImg} characterId={character.id} />
@@ -155,8 +156,8 @@ function OutHomeScreen(){
 
       <area.RowArea style={{marginHorizontal:30, marginTop:30}}>
         <Animated.View style={[styles.a, {opacity : OpacityTitle}, {transform:[{translateY: TranslateImgY}]}]}>
-          <text.Subtitle2R color={colors.black}>눈길이 가는</text.Subtitle2R>
-          <text.Subtitle2B color={colors.black}>피드</text.Subtitle2B>
+          <text.Subtitle2R color={colors.black}>{i18n.t('눈길이 가는')}</text.Subtitle2R>
+          <text.Subtitle2B color={colors.black}>{i18n.t('피드')}</text.Subtitle2B>
         </Animated.View>
       </area.RowArea>
 

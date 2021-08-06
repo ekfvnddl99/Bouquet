@@ -95,18 +95,18 @@ export default function LoginScreen(){
 
             <area.TextBtnArea style={{marginTop:16}}>
               <text.Caption color={colors.black}>{i18n.t('비밀번호를 잊었나요')} </text.Caption>
-              <PrimaryTextButton press={()=>{}} content={i18n.t("계정 찾기")} level={2}/>
+              <PrimaryTextButton press={()=>{}} content={i18n.t("비밀번호 찾기")} level={2}/>
             </area.TextBtnArea>
             </ScrollView>
 
             <area.BottomArea style={{overflow:'hidden'}}>
-              <LoginButton sentence={i18n.t("Google로 계속하기")} tag={<GoogleSvg w='15' h='15'/>} press={GoogleSignInAsync}/>
+              <LoginButton sentence={i18n.t('Google로 계속하기')} tag={<GoogleSvg w='15' h='15'/>} press={GoogleSignInAsync}/>
               <LoginButton sentence={i18n.t("Apple로 계속하기")} tag={<AppleSvg w='15' h='15'/>} press={()=>{}}/>
 
               <area.TextBtnArea style={{marginTop:15, overflow:'hidden'}}>
-              <text.Body2R color={colors.black}>{i18n.t('계정이 없다면')} </text.Body2R>
-              <PrimaryTextButton press={goRegister} content={i18n.t("회원가입")} level={1}/>
-            </area.TextBtnArea>
+                <text.Body2R color={colors.black}>{i18n.t("계정이 없다면")} </text.Body2R>
+                <PrimaryTextButton press={goRegister} content={i18n.t("회원가입")} level={1}/>
+              </area.TextBtnArea>
             </area.BottomArea>
 
 
@@ -116,6 +116,7 @@ export default function LoginScreen(){
           <area.TextBackgroundBtnArea style={{overflow:'hidden'}}>
             <text.Body2R color={colors.black}>{i18n.t('우선 알아보고 싶다면')} </text.Body2R>
             <PrimaryTextButton press={goTabs} content={i18n.t("미리보기")} level={1}/>
+            <View style={{height: 1}} />
           </area.TextBackgroundBtnArea>
 
           <View style={{paddingBottom: bottom, backgroundColor:colors.white}}/>

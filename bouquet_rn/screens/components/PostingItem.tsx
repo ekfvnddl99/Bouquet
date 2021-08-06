@@ -6,6 +6,7 @@ import {
     StyleSheet,
     TouchableOpacity
 } from 'react-native';
+import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
@@ -32,7 +33,7 @@ export default function PostingItem({press, id}  :{press:number, id:number}){
               <ProfileButton diameter={30} account={0}/>
           </View>
           <View style={styles.timeArea}>
-              <text.Caption color={colors.gray5}>{cal.timeName(57)} 전</text.Caption>
+              <text.Caption color={colors.gray5}>{cal.timeName(57)} {i18n.t('전')}</text.Caption>
           </View>
         </area.RowArea>
         <View style={{marginVertical:10}}>

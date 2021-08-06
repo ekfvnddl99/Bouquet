@@ -117,7 +117,9 @@ export const Caption = styled.Text`
 `
 
 export const DiarySubtitle3 = styled(Subtitle3)`
+  font-family : 'Bbold';
 `;
 
 export const DiaryBody2R = styled(Body2R)`
+  font-family : 'Bregular';
 `;
