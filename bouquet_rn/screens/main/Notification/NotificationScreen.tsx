@@ -77,7 +77,7 @@ function InNotificationScreen(){
         </Animated.View>
       </area.RowArea>
       <Animated.ScrollView
-        style={{marginTop: HEADER_MIN_HEIGHT-30, marginHorizontal:30}}
+        style={{marginTop: HEADER_MIN_HEIGHT-30}}
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={1}
         onScroll={Animated.event(
@@ -114,7 +114,7 @@ function OutNotificationScreen(){
           <text.Subtitle2B color={colors.black}>알림</text.Subtitle2B>
         </View>
       </area.RowArea>
-      <View style={{marginTop:30, marginHorizontal:30}}>
+      <View style={{marginTop:30}}>
       <FlatList 
           data={Data} 
           keyExtractor={(item) => item.id.toString()}
@@ -133,7 +133,7 @@ function OutNotificationScreen(){
 
 export default function NotificationScreen(){
   // dummy data - 서버에서 불러와야 함
-  const [login, setLogin]=useState(0);
+  const [login, setLogin]=useState(1);
   return(
     <View style={{flex:1}}>
       {login===1 ? <InNotificationScreen/> : <OutNotificationScreen/>}

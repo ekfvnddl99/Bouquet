@@ -8,7 +8,7 @@ import {
     Platform,
     StyleSheet
 } from 'react-native';
-import { useSetRecoilState } from 'recoil';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 
@@ -31,12 +31,8 @@ const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 export default function SelectTemplateScreen(){
-  const[press, setPress]=useState<number>(-1);
-  const setTemplate=useSetRecoilState(selectTemplate);
-
-  useEffect(()=>{
-    setTemplate(press);
-  }, [press])
+  const select=useRecoilValue(selectTemplate);
+  const setSelect=useSetRecoilState(selectTemplate);
 
     const scroll = useRef(new Animated.Value(0)).current;
     const OpacityHeader=scroll.interpolate({
@@ -78,7 +74,7 @@ export default function SelectTemplateScreen(){
               renderItem={(obj)=>{
                 return(
                   <SelectTemplateItem name={obj.item.name} explain={obj.item.explain} svg={obj.item.svg} 
-                  press={press} setPress={setPress} id={obj.index}/>
+                  select={select} setSelect={setSelect} id={obj.index}/>
                 );
               }}/>
           </Animated.ScrollView>

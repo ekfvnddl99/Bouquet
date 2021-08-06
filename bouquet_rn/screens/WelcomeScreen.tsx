@@ -43,7 +43,7 @@ export default function WelcomeScreen() {
   useEffect(()=>{
     setTop(insets.top);
     setBottom(insets.bottom);
-  })
+  },[])
 
   const goTabs =()=>{
     navigation.navigate("Tab");

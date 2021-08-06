@@ -47,7 +47,7 @@ export default function NotificationItem({press, id}  :{press:number, id:number}
   })).current;
 
     return(
-      <View style={{flexDirection:'row', alignItems:'center', flex:1}}>
+      <View style={{flexDirection:'row', alignItems:'center', flex:1, marginHorizontal:30}}>
         <View style={styles.bin}>
           <View style={{alignItems:'center'}}><BinWhiteSvg w='24' h='24'/></View>
         </View>
