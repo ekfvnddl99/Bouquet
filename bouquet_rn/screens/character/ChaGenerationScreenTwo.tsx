@@ -15,7 +15,7 @@ import EyeSvg from '../../assets/Eye';
 import EyeFocusSvg from '../../assets/EyeFocus';
 
 // props & logic
-import type {ChaGenerationProps} from '../../utils/types';
+import type {ChaGenerationProps, Character} from '../../utils/types';
 import {getByte} from '../logics/Calculation';
 
 // components
@@ -30,26 +30,42 @@ function PWCheck(pw : string){
   return 0;
 }
 
-export default function ChaGenerationScreenTwo({modify, onChange} : {modify : number, onChange:any}){
+export default function ChaGenerationScreenTwo({modify, onChange, characterToCreate, setCharacterToCreate} : {modify : number, onChange:any, characterToCreate: Character, setCharacterToCreate: Function}){
   const[err, setErr] =useState(1);
   const[eye, setEye]=useState(1);
-  const[pw,setPW]=useState('');
-  const[name, setName]=useState('');
 
   return(
       
         <area.ContainerBlank20>
         <ScrollView>
-          <ConditionTextInput height={44} placeholder={i18n.t("캐릭터 이름 (필수)")} onChange={setName} keyboard={'default'} active={1}/>
+          <ConditionTextInput height={44} placeholder={i18n.t("캐릭터 이름 (필수)")}
+            onChange={(text: string) => {setCharacterToCreate({...characterToCreate, name: text})}}
+            keyboard={'default'}
+            active={1}
+            value={characterToCreate.name}
+          />
           <area.RowArea style={{marginTop:8}}>
             <View style={{flex:1}}>{err===1 ? <WarningText content="무야호" marginTop={0}/> : null}</View>
-            <text.Caption color={colors.gray6}>{getByte(name)} / 20 byte</text.Caption>
+            <text.Caption color={colors.gray6}>{getByte(characterToCreate.name)} / 20 byte</text.Caption>
           </area.RowArea>
-          <ConditionText content={i18n.t("18 byte 이하")} active={PWCheck(pw)}/>
-          <ConditionText content={i18n.t("중복되지 않는 이름")} active={PWCheck(pw)}/>
-          <input.FormInput height='44' placeholder={i18n.t('생년월일')} onChangeText={()=>{}} style={{marginTop:16}} keyboardType='numeric'/>
-          <input.FormInput height='44' placeholder={i18n.t('직업')} onChangeText={()=>{}} style={{marginTop:16}}/>
-          <input.FormInput height='44' placeholder={i18n.t('국적')} onChangeText={()=>{}} style={{marginTop:16}}/>
+          <ConditionText content={i18n.t("18 byte 이하")} active={PWCheck(characterToCreate.name)}/>
+          <ConditionText content={i18n.t("중복되지 않는 이름")} active={PWCheck(characterToCreate.name)}/>
+          <input.FormInput height='44' placeholder={i18n.t('생년월일')}
+            onChangeText={(text: string)=>{setCharacterToCreate({...characterToCreate, birth: Number(text)})}}
+            style={{marginTop:16}}
+            keyboardType='numeric'
+            value={`${characterToCreate.birth}`}
+          />
+          <input.FormInput height='44' placeholder={i18n.t('직업')}
+            onChangeText={(text: string)=>{setCharacterToCreate({...characterToCreate, job: text})}}
+            style={{marginTop:16}}
+            value={characterToCreate.job}
+          />
+          <input.FormInput height='44' placeholder={i18n.t('국적')}
+            onChangeText={(text: string)=>{setCharacterToCreate({...characterToCreate, nationality: text})}}
+            style={{marginTop:16}}
+            value={characterToCreate.nationality}
+          />
 
           <area.BottomArea>
           </area.BottomArea>
