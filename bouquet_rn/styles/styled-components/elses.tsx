@@ -24,7 +24,7 @@ export const Circle = styled.View`
   width:${(props:CircleProps) => props.diameter};
   height:${(props:CircleProps) => props.diameter};
   border-radius:${(props:CircleProps) => (props.diameter)/2};
-  background-color:${colors.black};
+  background-color:${colors.white};
   align-items:center;
   justify-content:center;
 `

@@ -31,7 +31,7 @@ export const noCharacter: Character = {
   id: -1,
   name: '',
   profileImg: '',
-  birth: 0,
+  birth: '',
   job: '',
   nationality: '',
   intro: '',

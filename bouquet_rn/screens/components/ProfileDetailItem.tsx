@@ -26,7 +26,6 @@ export default function ProfileDetailItem({mini, press, id, character} : {mini:n
   const[owner, setOwner]=useState(1);
   const navigation = useNavigation();
   const route = useRoute();
-  console.log(route.name);
   const [viewCharacter, setViewCharacterId] = useCharacterView();
 
   const goProfileDetail=()=>{

@@ -32,7 +32,7 @@ export function responseToCharacter(response: CharacterResponseType, id: number)
     id: response.id ? response.id : id,
     name: response.name,
     profileImg: response.profile_img,
-    birth: response.birth,
+    birth: String(response.birth),
     job: response.job,
     nationality: response.nationality,
     intro: response.intro,
@@ -48,7 +48,7 @@ export function characterToRequest(character: Character) {
   const newObj: CharacterRequestType = {
     "name": character.name,
     "profile_img": character.profileImg,
-    "birth": character.birth,
+    "birth": Number(character.birth),
     "job": character.job,
     "nationality": character.nationality,
     "intro": character.intro,

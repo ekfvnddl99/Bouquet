@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, {Component, useState, useEffect} from 'react';
 import {
   View,
   ScrollView, 
@@ -31,47 +31,72 @@ function PWCheck(pw : string){
 }
 
 export default function ChaGenerationScreenTwo({modify, onChange, characterToCreate, setCharacterToCreate} : {modify : number, onChange:any, characterToCreate: Character, setCharacterToCreate: Function}){
-  const[err, setErr] =useState(1);
-  const[eye, setEye]=useState(1);
+  const[IsOK, setIsOK]=useState(false);
+  const[conArray, setConArray]=useState([false, false, false, false, false, false]);
+  const errText=["필수 입력 항목이에요.", "이름 규칙을 지켜야 해요."];
+  useEffect(()=>{
+    let tmpArray=[...conArray];
+    if(characterToCreate.name.length>0) tmpArray[0]=true;
+    else tmpArray[0]=false;
+    if(getByte(characterToCreate.name)<=18 && getByte(characterToCreate.name)>0) tmpArray[1]=true;
+    else tmpArray[1]=false;
+    if(characterToCreate.name) tmpArray[2]=true;
+    else tmpArray[2]=false;
+    if(characterToCreate.birth.length>0) tmpArray[3]=true;
+    else tmpArray[3]=false;
+    if(characterToCreate.job.length>0) tmpArray[4]=true;
+    else tmpArray[4]=false;
+    if(characterToCreate.nationality.length>0) tmpArray[5]=true;
+    else tmpArray[5]=false;
+    setConArray(tmpArray);
+  }, [characterToCreate])
+  useEffect(()=>{
+    if(conArray.includes(false)) setIsOK(false);
+    else setIsOK(true);
+  })
 
   return(
       
         <area.ContainerBlank20>
         <ScrollView>
-          <ConditionTextInput height={44} placeholder={i18n.t("캐릭터 이름 (필수)")}
+          <ConditionTextInput height={44} placeholder={i18n.t("캐릭터 이름")}
             onChange={(text: string) => {setCharacterToCreate({...characterToCreate, name: text})}}
             keyboard={'default'}
-            active={1}
+            active={!(conArray[0]||conArray[1]||conArray[2])}
             value={characterToCreate.name}
+            warnText={!conArray[0] ? errText[0] : errText[1]}
+            conditions={
+              <View>
+                <ConditionText content={i18n.t("18 byte 이하")} active={conArray[1]}/>
+                <ConditionText content={i18n.t("중복되지 않는 이름")} active={conArray[2]}/>
+              </View>
+            }
+            byte={18}
           />
-          <area.RowArea style={{marginTop:8}}>
-            <View style={{flex:1}}>{err===1 ? <WarningText content="무야호" marginTop={0}/> : null}</View>
-            <text.Caption color={colors.gray6}>{getByte(characterToCreate.name)} / 20 byte</text.Caption>
-          </area.RowArea>
-          <ConditionText content={i18n.t("18 byte 이하")} active={PWCheck(characterToCreate.name)}/>
-          <ConditionText content={i18n.t("중복되지 않는 이름")} active={PWCheck(characterToCreate.name)}/>
-          <input.FormInput height='44' placeholder={i18n.t('생년월일')}
-            onChangeText={(text: string)=>{setCharacterToCreate({...characterToCreate, birth: Number(text)})}}
-            style={{marginTop:16}}
-            keyboardType='numeric'
-            value={`${characterToCreate.birth}`}
+          <ConditionTextInput height={44} placeholder={i18n.t("생년월일")}
+            onChange={(text: string) => {setCharacterToCreate({...characterToCreate, birth: text})}}
+            keyboard={'numeric'}
+            active={!(conArray[3])}
+            value={characterToCreate.birth}
+            warnText={errText[0]}
           />
-          <input.FormInput height='44' placeholder={i18n.t('직업')}
-            onChangeText={(text: string)=>{setCharacterToCreate({...characterToCreate, job: text})}}
-            style={{marginTop:16}}
+          <ConditionTextInput height={44} placeholder={i18n.t("직업")}
+            onChange={(text: string) => {setCharacterToCreate({...characterToCreate, job: text})}}
+            keyboard={'default'}
+            active={!(conArray[4])}
             value={characterToCreate.job}
+            warnText={errText[0]}
           />
-          <input.FormInput height='44' placeholder={i18n.t('국적')}
-            onChangeText={(text: string)=>{setCharacterToCreate({...characterToCreate, nationality: text})}}
-            style={{marginTop:16}}
+          <ConditionTextInput height={44} placeholder={i18n.t("국적")}
+            onChange={(text: string) => {setCharacterToCreate({...characterToCreate, nationality: text})}}
+            keyboard={'default'}
+            active={!(conArray[5])}
             value={characterToCreate.nationality}
+            warnText={errText[0]}
           />
-
-          <area.BottomArea>
-          </area.BottomArea>
       </ScrollView>
-      <area.BottomArea style={{marginBottom:16, overflow:'hidden'}}>
-        <ConditionButton height={44} active={true} press={onChange} content={modify===1 ? i18n.t("세부 소개 수정 완료") : i18n.t("세부 소개 입력")} paddingH={0} paddingV={14}/>
+      <area.BottomArea style={{marginBottom:16}}>
+        <ConditionButton height={44} active={IsOK} press={IsOK ? onChange : ()=>{}} content={modify===1 ? i18n.t("세부 소개 수정 완료") : i18n.t("세부 소개 입력")} paddingH={0} paddingV={14}/>
       </area.BottomArea>
         </area.ContainerBlank20>
   );

@@ -119,7 +119,7 @@ export type Character = {
   id: number;
   name: string;
   profileImg: string;
-  birth: number;
+  birth: string;
   job: string;
   nationality: string;
   intro: string;

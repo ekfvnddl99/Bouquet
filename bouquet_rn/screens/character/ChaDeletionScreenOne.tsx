@@ -34,7 +34,7 @@ export default function ChaDeletionScreenOne({onChange}:{onChange:any}){
         <View style={{alignItems: 'center'}}>
           <text.Caption color={colors.gray6} style={{marginBottom:16}}>{i18n.t('아쉽지만 캐릭터는 삭제하면 복구하지 못해요')}</text.Caption>
         </View>
-        <ConditionButton height={44} active={1} press={onChange} content={i18n.t("캐릭터 삭제")} paddingH={0} paddingV={14}/>
+        <ConditionButton height={44} active={true} press={onChange} content={i18n.t("캐릭터 삭제")} paddingH={0} paddingV={14}/>
       </area.BottomArea>
     </View>
   );
