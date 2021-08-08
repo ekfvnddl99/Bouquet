@@ -12,7 +12,7 @@ export default function ProfileButton({diameter, account} : {diameter:number, ac
     navigation.navigate("ProfileItem");
   }
   const goAccount=()=>{
-    navigation.navigate('Account');
+    navigation.navigate('ProfileAccount');
   }
   return(
     <TouchableWithoutFeedback onPress={account===1 ? goAccount : goProfileDetail}>

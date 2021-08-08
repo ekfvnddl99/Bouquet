@@ -82,7 +82,7 @@ export default function RegisterScreenOne({onChange, navigation, setEmail, email
         </View>
 
         <View style={{marginVertical:16}}>
-          <ConditionButton active={!err1&&!err2 ? 1 : 0} press={!err1&&!err2 ? onChange : ()=>{}} content={i18n.t("메일로 계속하기")} paddingH={0} paddingV={14} height={45}/>
+          <ConditionButton active={!err1&&!err2} press={!err1&&!err2 ? onChange : ()=>{}} content={i18n.t("메일로 계속하기")} paddingH={0} paddingV={14} height={45}/>
         </View>
 
         <area.TextBtnArea style={{marginBottom:16}}>

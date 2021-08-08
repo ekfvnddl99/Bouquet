@@ -85,6 +85,10 @@ function ProfileItemStackNavigator(){
         name="PostItem"
         component={PostItemStackNavigator}
         options={{headerShown : false}}/>
+      <ProfileItemStack.Screen 
+        name="ProfileAccount"
+        component={AccountStackNavigator}
+        options={{headerShown : false}}/>
     </ProfileItemStack.Navigator>
   );
 }
@@ -113,10 +117,6 @@ function SettingnStackNavigator(){
       <SettingStack.Screen 
         name="SettingAccountDeletionOne" 
         component={AccountDeletionScreenOne}
-        options={{headerShown : false}}/>
-      <SettingStack.Screen 
-        name="SettingAccountDeletionTwo" 
-        component={AccountDeletionScreenTwo}
         options={{headerShown : false}}/>
     </SettingStack.Navigator>
   );
@@ -246,10 +246,6 @@ function ProfileStackNavigator(){
         component={ProfileItemStackNavigator}
         options={{headerShown : false}}/>
       <ProfileStack.Screen 
-        name="Account"
-        component={AccountStackNavigator}
-        options={{headerShown : false}}/>
-      <ProfileStack.Screen 
         name="Setting"
         component={SettingnStackNavigator}
         options={{headerShown : false}}/>
@@ -286,6 +282,10 @@ function WelcomeStackNavigator(){
       <WelcomeStack.Screen
         name="Tab"
         component={TabNavigator}
+        options={{headerShown : false}}/>
+      <WelcomeStack.Screen
+        name="SettingAccountDeletionTwo" 
+        component={AccountDeletionScreenTwo}
         options={{headerShown : false}}/>
     </WelcomeStack.Navigator>
   );

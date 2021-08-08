@@ -11,6 +11,7 @@ import {
     GestureResponderHandlers
 } from 'react-native';
 import i18n from 'i18n-js';
+import { Swipeable } from 'react-native-gesture-handler';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as elses from '../../styles/styled-components/elses';
@@ -22,17 +23,12 @@ import BinWhiteSvg from '../../assets/BinWhite';
 
 // props & logic
 import * as cal from '../logics/Calculation';
+import { useEffect } from 'react';
 
 const SWIPE = 50
 export default function NotificationItem({press, id}  :{press:number, id:number}){
-  const[swipe, setSwipe]=useState(-1);
   const drag = useRef(new Animated.Value(0)).current;
-  const TranslateXa = drag.interpolate({
-    inputRange: [0, SWIPE],
-    outputRange: [-SWIPE, 0],
-    extrapolate: 'clamp',
-  });
-  const TranslateXb = drag.interpolate({
+  const TranslateX = drag.interpolate({
     inputRange: [-SWIPE, 0],
     outputRange: [-SWIPE, 0],
     extrapolate: 'clamp',
@@ -42,8 +38,12 @@ export default function NotificationItem({press, id}  :{press:number, id:number}
     onMoveShouldSetPanResponderCapture: () => true,
     onPanResponderMove: Animated.event([null, {dx: drag}]),
     onPanResponderRelease: (e, {vx, dx}) => {
-      drag.flattenOffset();
-      setSwipe(swipe*(-1));
+      if(dx>0){
+        Animated.spring(drag, {
+          toValue: 0,
+          useNativeDriver: false
+        }).start();
+      }
     }
   })).current;
 
@@ -53,7 +53,7 @@ export default function NotificationItem({press, id}  :{press:number, id:number}
           <View style={{alignItems:'center'}}><BinWhiteSvg w='24' h='24'/></View>
         </View>
         <Animated.View style={[{width: '100%'}, 
-        {transform : [{translateX: swipe===0 ? TranslateXa : TranslateXb}]}]} {..._panResponder.panHandlers}>
+        {transform : [{translateX: TranslateX}]}]} {..._panResponder.panHandlers}>
           <button.NotificationButton activeOpacity={1}>
             <elses.CircleImg diameter={20} source={require('../../assets/img.jpg')}/>
             <View style={styles.contentText}>

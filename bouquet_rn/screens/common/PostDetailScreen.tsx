@@ -1,6 +1,6 @@
 import React, {useRef, useState, useEffect} from 'react';
 import {
-    ScrollView,
+    KeyboardAvoidingView,
     FlatList,
     View,
     Animated,
@@ -8,7 +8,10 @@ import {
     Platform,
     StyleSheet,
     Text,
+    Dimensions,
+    ScrollView,
     TouchableWithoutFeedback,
+    KeyboardEvent,
   Keyboard
 } from 'react-native';
 import i18n from 'i18n-js';
@@ -27,6 +30,7 @@ import BackButton from '../components/BackButton';
 import SunButton from '../components/SunButton';
 import CommentItem from '../components/CommentItem';
 import CommentInputBar from '../components/CommentInputBar';
+import CommentInputComment from '../components/CommentInputComment';
 import LineButton from '../components/LineButton';
 import ConditionButton from '../components/ConditionButton';
 import ProfileItem from '../components/ProfileItem';
@@ -42,11 +46,14 @@ export default function PostDetailScreen(){
     // dummy data - 서버에서 불러와야 함
     let Data=[{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9}];
     let data=[{id:1},{id:2}];
-
+    const[IsLogin, setIsLogin]=useState(true);
     const[selectId, setSelectId]=useState(-1);
     const[clickedLowerId, setClickedLowerId]=useState<number[]>([]);
     const[owner, setOwner]=useState(1);
     const[click, setClick]=useState(1);
+    useEffect(()=>{
+      //여기서 setIsLogin 사용하여 로그인 여부 체크하면 됨!
+    }, [])
 
     const scroll = useRef(new Animated.Value(0)).current;
     const OpacityHeader=scroll.interpolate({
@@ -56,7 +63,7 @@ export default function PostDetailScreen(){
     });
 
     return(
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      
         <area.Container>
           <Animated.View
             pointerEvents="none"
@@ -68,7 +75,7 @@ export default function PostDetailScreen(){
             <View style={{flex:1}}/>
             <ProfileItem diameter={28}/>
           </area.RowArea>
-          
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <Animated.ScrollView 
             style={{marginHorizontal:30}}
             showsVerticalScrollIndicator={false}
@@ -102,26 +109,30 @@ export default function PostDetailScreen(){
                 return(
                   <>
                   <TouchableOpacity activeOpacity={1} onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
-                    <CommentItem press={selectId} id={obj.index} owner={1} IsMore={1} IsClick={setClick} AddClicks={setClickedLowerId} clicks={clickedLowerId}/>
+                    <CommentItem press={selectId} id={obj.index} owner={1} login={IsLogin} IsMore={1} IsClick={setClick} AddClicks={setClickedLowerId} clicks={clickedLowerId}/>
                   </TouchableOpacity>
                   {clickedLowerId.includes(obj.index) ?
                   <FlatList
                     style={{marginLeft:16}}
-                    data={data}
+                    data={Data}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={(lowerobj)=>{
                       return(
                         <TouchableOpacity activeOpacity={1} onPress={()=>{selectId===((obj.index+1)*10)+lowerobj.index ? setSelectId(-1) : setSelectId(((obj.index+1)*10)+lowerobj.index)}}>
-                          <CommentItem press={selectId} id={((obj.index+1)*10)+lowerobj.index} owner={1}/>
+                          <CommentItem press={selectId} id={((obj.index+1)*10)+lowerobj.index} owner={1} login={IsLogin}/>
                         </TouchableOpacity>
                       );}}/>: null}
                   </>
                 ); 
               }}/>
           </Animated.ScrollView>
-          {selectId!==-1 ? <CommentInputBar/> : null}
+          </TouchableWithoutFeedback>
+          {IsLogin ?
+          <View style={{position:'absolute', left:0, right:0, bottom:0}}>
+            {selectId!==-1 ? <CommentInputComment setSelectId={setSelectId} comment={Data[selectId%10].id.toString()}/> : null}
+            <CommentInputBar selectId={selectId}/>
+          </View> : null}
         </area.Container>
-      </TouchableWithoutFeedback>
     )
 }
 

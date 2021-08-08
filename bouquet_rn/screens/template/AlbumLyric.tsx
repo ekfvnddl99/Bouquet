@@ -95,7 +95,7 @@ export default function AlbumLyric({ isEdit }: AlbumLyricProps) {
       </Animated.View>
 
       <area.RowArea style={{paddingHorizontal:30, paddingVertical:16, justifyContent: 'space-between', height: 60}}>
-        <BackButton navigation={()=>{}}/>
+        <BackButton/>
         <SongTitleWrap>
           <text.Body2B color={colors.white}>시간의 바깥</text.Body2B>
           <ArtistText color={colors.white}>아이유</ArtistText>

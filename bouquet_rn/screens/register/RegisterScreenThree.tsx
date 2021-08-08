@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, {Component, useState, useEffect, useMemo} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -26,11 +26,22 @@ import PrimaryTextButton from '../components/PrimaryTextButton';
 import ConditionTextInput from '../components/ConditionTextInput';
 import WarningText from '../components/WarningText';
 
+function errCheck(name:string, errList:number[], setErrList:Function){
+  if(name.length===0) setErrList([...errList, 0]);
+  if(getByte(name)>20 && getByte(name)>0) setErrList([...errList, 1]);
+  // *** 중복 여부 체크는 2를 넣음!
+}
+
 export default function RegisterScreenThree({onChange, name, setName, setProfilePic} : {onChange : any, name: string, setName: Function, setProfilePic: Function}){
-  const[err, setErr] = useState(0);
-  const[con1, setCon1]=useState(0);
-  const[con2, setCon2]=useState(0);
-  const[en, setEn]=useState(0);
+  const[err, setErr] = useState(1);
+  const[errList, setErrList]=useState<number[]>([]);
+  const errTextList=["별명을 입력해 주세요.", "별명 규칙을 지켜야 해요."];
+  useEffect(()=>{
+    console.log(name.length);
+    errCheck(name, errList, setErrList);
+    if(errList.length===0) setErr(0);
+    else setErr(1);
+  }, [name])
 
   return(
     <area.ContainerBlank20>
@@ -43,13 +54,15 @@ export default function RegisterScreenThree({onChange, name, setName, setProfile
         </TouchableOpacity>
       </View>
 
-      <ConditionTextInput height={44} placeholder={i18n.t("별명")} onChange={setName} keyboard={'default'} active={1}/>
-      <area.RowArea style={{marginTop:8}}>
-        <View style={{flex:1}}>{err===1 ? <WarningText content="무야호" marginTop={0}/> : null}</View>
-        <text.Caption color={colors.gray6}>{getByte(name)} / 20 byte</text.Caption>
+      <ConditionTextInput height={44} placeholder={i18n.t("별명")} onChange={setName} keyboard={'default'} active={err} value={name}/>
+      <area.RowArea>
+        <View style={{flex:1}}>
+          {err===1 ? <WarningText content={errList[0]===0 ? errTextList[0] : errTextList[1]} marginTop={8}/> : null}
+          <ConditionText content={i18n.t("20 byte 이하")} active={!errList.includes(1)}/>
+          <ConditionText content={i18n.t("중복되지 않는 이름")} active={!errList.includes(2)}/>
+        </View>
+        <text.Caption color={colors.gray6} style={{marginTop:8}}>{getByte(name)} / 20 byte</text.Caption>
       </area.RowArea>
-      <ConditionText content={i18n.t("20 byte 이하")} active={0}/>
-      <ConditionText content={i18n.t("중복되지 않는 이름")} active={0}/>
 
       <area.BottomArea style={{marginBottom:16}}>
         {i18n.locale==='en' ? <View style={{alignItems:'center'}}><text.Caption color={colors.gray6}>{i18n.t('에 모두 동의하시나요')} </text.Caption></View> : null}
@@ -59,7 +72,9 @@ export default function RegisterScreenThree({onChange, name, setName, setProfile
           <PrimaryTextButton press={()=>{}} content={i18n.t("개인정보 취급 방침")} level={2}/>
           {i18n.locale==='ko' ? <text.Caption color={colors.gray6}>{i18n.t('에 모두 동의하시나요')}</text.Caption> :<text.Caption color={colors.gray6}>?</text.Caption>}
         </area.TextBtnArea>
-        <ConditionButton active={1} press={onChange} content={i18n.t("필수 약관 동의 & 가입 완료")} paddingH={0} paddingV={14} height={45}/>
+
+        <ConditionButton active={!err} press={!err ? onChange : ()=>{}} 
+          content={i18n.t("필수 약관 동의 & 가입 완료")} paddingH={0} paddingV={14} height={45}/>
       </area.BottomArea>
     </area.ContainerBlank20>
   );

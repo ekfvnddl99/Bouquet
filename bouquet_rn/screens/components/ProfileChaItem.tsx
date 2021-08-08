@@ -17,23 +17,26 @@ interface ProfileChaItemProps{
   idx:number,
   select:number,
   setSelect : Function,
+  account? : boolean,
 }
 
-export default function ProfileChaItem({name, introduction, idx, select, setSelect} : ProfileChaItemProps){
+export default function ProfileChaItem({name, introduction, idx, select, setSelect, account} : ProfileChaItemProps){
   const navigation = useNavigation();
   const goProfileDetail=()=>{
     navigation.navigate('ProfileItem');
   }
   return(
-    <button.MiniListButton isWidth={false} height={238} color={colors.white} paddingH={25} paddingV={0} 
+    <button.MiniListButton isWidth={false} height={account ? 200 : 238} color={colors.white} paddingH={25} paddingV={18} 
     style={styles.button} activeOpacity={1} onPress={goProfileDetail}>
         <elses.Circle diameter={100}/>
         <View style={{marginBottom:8}}/>
         <text.Body2B color={colors.black}>{name}</text.Body2B>
         <View style={{marginBottom:8}}/>
         <text.Caption color={colors.black} numberOfLines={2}>{introduction}</text.Caption>
-        <View style={{marginTop: 21}}/>
-        <ConditionButton active={select===idx ? 0 : 1} press={()=>setSelect(idx)} content={select===idx ? i18n.t("선택된 캐릭터") :i18n.t("캐릭터 선택")} paddingH={12} paddingV={4} height={22}/>
+        {account ? null :
+        <View style={{marginTop: 21}}>
+        <ConditionButton active={!(select===idx)} press={()=>setSelect(idx)} content={select===idx ? i18n.t("선택된 캐릭터") :i18n.t("캐릭터 선택")} paddingH={12} paddingV={4} height={22}/>
+        </View>}
     </button.MiniListButton>
   );
 }

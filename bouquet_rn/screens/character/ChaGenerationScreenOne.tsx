@@ -51,7 +51,7 @@ export default function ChaGenerationScreenOne({modify, onChange, characterToCre
         </TouchableOpacity>
       </View>
       <area.BottomArea style={{marginBottom:16}}>
-        <ConditionButton height={44} active={1} press={onChange} content={modify===1 ? i18n.t("기본 정보 수정") : i18n.t("기본 정보 입력")} paddingH={0} paddingV={14}/>
+        <ConditionButton height={44} active={true} press={onChange} content={modify===1 ? i18n.t("기본 정보 수정") : i18n.t("기본 정보 입력")} paddingH={0} paddingV={14}/>
       </area.BottomArea>
     </area.ContainerBlank20>
   );

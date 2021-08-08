@@ -8,6 +8,7 @@ import * as elses from '../../styles/styled-components/elses';
 
 // icons
 import ArrowLeftSvg from '../../assets/ArrowLeft';
+import { transform } from 'lodash';
 
 export default function ProgressArea({back, step, title, intro, navigation, press} : {back : any, step:number, title : string, intro:string|null, navigation : any, press?: Function}){
   const[curr, setCurr]=useState(step*25);
@@ -39,7 +40,7 @@ export default function ProgressArea({back, step, title, intro, navigation, pres
       </TouchableOpacity>}
       <View style={{marginTop:20, marginBottom:24}}>
         <elses.Bar width='100%' color={colors.alpha20_primary}/>
-        <Animated.View style={[{width :TranslateX ,height:8, borderRadius:10, position:'absolute', backgroundColor:colors.primary},]}/>
+        <Animated.View style={[{width : TranslateX, height:8, borderRadius:10, position:'absolute', backgroundColor:colors.primary}]}/>
       </View>
       <text.Subtitle1 color={colors.black}>{title}</text.Subtitle1>
       {intro===null ? null : <View style={{marginTop:8}}><text.Caption color={colors.gray6}>{intro}</text.Caption></View>}

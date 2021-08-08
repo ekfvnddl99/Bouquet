@@ -1,5 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
+import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
 import { colors } from '../../styles/colors';
 import * as text from '../../styles/styled-components/text';
@@ -28,7 +29,7 @@ export default function SelectTemplateItem({name, explain, svg, select, setSelec
         <text.Subtitle3 color={colors.black}>{name}</text.Subtitle3>
         <View style={{flex:1}}/>
         <ConditionButton active={select===id ? 0 : 1} press={()=>[setSelect(id), goBack()]} height={22} paddingH={12} paddingV={4} 
-        content={select===id ? "선택한 템플릿" : "선택"}/>
+        content={select===id ? i18n.t("선택한 템플릿") : i18n.t("선택")}/>
       </area.RowArea>
       <text.Caption color={colors.gray6} style={{marginBottom:12}}>{explain}</text.Caption>
       {svg}
