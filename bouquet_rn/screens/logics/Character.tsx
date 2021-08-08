@@ -164,7 +164,8 @@ export async function createCharacterAsync(character: Character) {
         method: 'POST',
         headers: {
           'accept': 'application/json',
-          'Authorization': auth
+          'Authorization': auth,
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(characterToRequest(character))
       });

@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import {
     View,
     FlatList,
@@ -8,7 +8,7 @@ import {
 import i18n from 'i18n-js';
 import PagerView from 'react-native-pager-view';
 import { colors } from '../../../styles/colors';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useRecoilValueLoadable } from 'recoil';
 
 // props & logic
@@ -18,7 +18,7 @@ import useCharacter from '../../logics/useCharacter';
 
 // components
 import BackgroundButton from '../../components/BackgroundButton';
-import { ProfileProps } from '../../../utils/types';
+import { ProfileProps, Character } from '../../../utils/types';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 export default function ProfileSwipeScreen(){
@@ -34,6 +34,13 @@ export default function ProfileSwipeScreen(){
       setSelect(page);
     }
   }
+
+  useFocusEffect(() => {
+    if (characterList.state === 'hasValue' && characterList.contents.length > 0) {
+      const idx = characterList.contents.findIndex((element: Character) => element.id === character.id);
+      if (idx !== -1) setSelect(idx);
+    }
+  });
 
   return(
     <View style={{flex:1}}>

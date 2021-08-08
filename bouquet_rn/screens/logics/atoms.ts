@@ -47,15 +47,17 @@ export const characterState = atom({
 
 export const characterListSelector = selector({
   key: 'characterListSeletor',
-  get: async () => {
-    const result = await getCharacterListAsync();
-    if (typeof(result) !== "string") {
-      let list = result.map((obj: CharacterResponseType) => {
-        return responseToCharacter(obj, obj.id);
-      })
-      return list;
+  get: async ({ get }) => {
+    if (get(userState).isLogined) {
+      const result = await getCharacterListAsync();
+      if (typeof(result) !== "string") {
+        let list = result.map((obj: CharacterResponseType) => {
+          return responseToCharacter(obj, obj.id);
+        })
+        return list;
+      }
     }
-    else return [];
+    return [];
   }
 })
 

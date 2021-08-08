@@ -23,6 +23,8 @@ import ProfileSvg from '../assets/Profile';
 import ProfileFocusSvg from '../assets/ProfileFocus';
 
 import { bottomBarHideState } from './logics/atoms';
+import useUser from './logics/useUser';
+import useCharacter from './logics/useCharacter';
 
 //// basics
 // writing - fab
@@ -293,6 +295,9 @@ function WelcomeStackNavigator(){
 
 export default function AppStack(){
   const[splash, setSplash]=useState(true);
+  const [user, setUser] = useUser();
+  const [character, setCharacter] = useCharacter();
+
   useEffect(()=>{
     setTimeout( () => {
       setSplash(false);
@@ -301,7 +306,12 @@ export default function AppStack(){
   return(
     <SafeAreaProvider>
       <NavigationContainer>
-        {splash===true ? <SplashScreen/> : <WelcomeStackNavigator/>}
+        {splash===true ? <SplashScreen/> :
+        user.isLogined ?
+        <TabNavigator />
+        :
+        <WelcomeStackNavigator/>
+        }
       </NavigationContainer>
     </SafeAreaProvider>
   )

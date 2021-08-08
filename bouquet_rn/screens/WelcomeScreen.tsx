@@ -19,6 +19,7 @@ import TitleSvg from '../assets/Title';
 // props & logic
 import type {WelcomeProps} from '../utils/types';
 import GoogleSignInAsync  from './logics/GoogleLogin';
+import useUser from './logics/useUser';
 
 // components
 import LoginButton from './components/LoginButton';

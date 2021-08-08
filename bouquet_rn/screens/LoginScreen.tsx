@@ -27,6 +27,7 @@ import type {WelcomeProps, WelcomeStackParam} from '../utils/types'
 import GoogleSignInAsync from './logics/GoogleLogin';
 import AppleSignInAsync from './logics/AppleLogin';
 import { EmailLoginAsync } from './logics/EmailLogin';
+import useUser from './logics/useUser';
 
 // components
 import LoginButton from './components/LoginButton';
@@ -53,6 +54,7 @@ export default function LoginScreen(){
     const top=useRecoilValue(viewTop);
     const bottom = useRecoilValue(viewBottom);
     const navigation = useNavigation<StackNavigationProp<WelcomeStackParam>>();
+    const [user, setUser] = useUser();
 
     const goTabs =()=>{
       navigation.replace("Tab");
@@ -65,6 +67,7 @@ export default function LoginScreen(){
     const emailLogin = async () => {
       const errorMessage = await EmailLoginAsync(mail, password);
       setErr(errorMessage);
+      if (!errorMessage) navigation.navigate("Tab");
     }
 
     return(

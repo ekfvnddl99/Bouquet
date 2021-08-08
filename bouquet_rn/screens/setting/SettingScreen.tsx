@@ -19,12 +19,14 @@ import BackButton from '../components/BackButton';
 import { SettingProps } from '../../utils/types';
 import ProfileItem from '../components/ProfileItem';
 
-import { guest } from '../logics/atoms';
+import { guest, noCharacter } from '../logics/atoms';
 import useUser from '../logics/useUser';
+import useCharacter from '../logics/useCharacter';
 
 export default function SettingScreen(){
   const[name,setName]=useState('undefined');
   const [user, setUser] = useUser();
+  const [character, setCharacter] = useCharacter();
   const navigation = useNavigation();
 
   const logOut = async () => {
@@ -32,8 +34,9 @@ export default function SettingScreen(){
     if (auth) {
       await SecureStore.deleteItemAsync('auth');
     }
-    setUser(guest);
     alert('로그아웃했습니다.');
+    setUser(guest);
+    setCharacter(noCharacter);
   }
 
   return(
