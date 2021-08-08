@@ -26,8 +26,8 @@ import ConditionTextInput from '../components/ConditionTextInput';
 import WarningText from '../components/WarningText';
 
 function PWCheck(pw : string){
-  if(pw.length>=8 && pw.length<=32) return 1;
-  return 0;
+  if(pw.length>=8 && pw.length<=32) return true;
+  return false;
 }
 
 export default function ChaGenerationScreenTwo({modify, onChange} : {modify : number, onChange:any}){
@@ -55,7 +55,7 @@ export default function ChaGenerationScreenTwo({modify, onChange} : {modify : nu
           </area.BottomArea>
       </ScrollView>
       <area.BottomArea style={{marginBottom:16, overflow:'hidden'}}>
-        <ConditionButton height={44} active={1} press={onChange} content={modify===1 ? i18n.t("세부 소개 수정 완료") : i18n.t("세부 소개 입력")} paddingH={0} paddingV={14}/>
+        <ConditionButton height={44} active={true} press={onChange} content={modify===1 ? i18n.t("세부 소개 수정 완료") : i18n.t("세부 소개 입력")} paddingH={0} paddingV={14}/>
       </area.BottomArea>
         </area.ContainerBlank20>
   );

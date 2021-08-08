@@ -12,48 +12,34 @@ import CommetnInputSvg from '../../assets/CommentInput';
 import RoundXSvg from '../../assets/RoundX';
 
 
-export default function CommentInputBar(){
+export default function CommentInputBar({selectId}:{selectId:number}){
   return(
-    <KeyboardAvoidingView style={{width:'100%', position:'absolute', bottom:0, left:0, right:0}} behavior={Platform.OS==='ios' ? 'padding' : 'height'}>
-      <area.RowArea style={styles.commentUpper}>
-        <CommetnInputSvg w='18' h='18'/>
-        <View style={{flex:1, marginHorizontal:8}}>
-          <text.Body3 color={colors.gray6} numberOfLines={1}>gpgpg asdfoddl guswl</text.Body3>
-        </View>
-        <RoundXSvg w='18' h='18'/>
-      </area.RowArea>
-      <area.RowArea style={styles.commentLower}>
+    <area.RowArea style={styles.commentLower}>
       <elses.CircleImg diameter={30} source={require('../../assets/img.jpg')}/>
-        <View style={{flex:1}}>
-          <TextInput placeholder="어떤 반응을 남기고 싶나요?" placeholderTextColor={colors.gray5} style={styles.commentInput} multiline={true}/>
-        </View>
+      <TextInput placeholder="어떤 반응을 남기고 싶나요?" placeholderTextColor={colors.gray5} style={styles.commentInput} multiline={true}/>
+      <TouchableOpacity activeOpacity={1}>
         <SendSvg w='30' h='30'/>
-      </area.RowArea>
-    </KeyboardAvoidingView>
+      </TouchableOpacity>
+    </area.RowArea>
   );
 }
 
 const styles = StyleSheet.create({
-  commentUpper:{
-    backgroundColor:colors.gray1,
-    height:32,
-    paddingHorizontal:15,
-    paddingVertical:7,
-    justifyContent:'center'
-  },
   commentLower:{
-    backgroundColor:colors.white,
+    backgroundColor:colors.black,
     paddingHorizontal:18,
     paddingVertical:8,
     justifyContent:'center',
-    alignItems:'flex-end'
+    alignItems:'center',
   },
   commentInput:{
+    flex:1,
     backgroundColor:colors.gray0,
-    alignItems:'center',
     minHeight:33,
     borderRadius:10,
     paddingHorizontal:18,
-    marginHorizontal:12
+    paddingTop:(Platform.OS==='ios' ? 8 : 0),
+    paddingBottom:(Platform.OS==='ios' ? 8 : 0),
+    marginHorizontal:12,
   },
 })

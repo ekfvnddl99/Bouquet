@@ -7,11 +7,11 @@ import * as text from '../../styles/styled-components/text';
 import CheckSvg from '../../assets/Check';
 import CheckFocusSvg from '../../assets/CheckFocus';
 
-export default function ConditionText({content, active} : {content : string, active : number}){
+export default function ConditionText({content, active} : {content : string, active : boolean}){
   return(
     <area.RowArea style={{marginTop:8}}>
-      {active===1 ? <CheckFocusSvg w='15' h='15'/> : <CheckSvg w='15' h='15'/>}
-      <text.Caption color={active===1 ? colors.primary : colors.gray6}> {content}</text.Caption>
+      {active===true ? <CheckFocusSvg w='15' h='15'/> : <CheckSvg w='15' h='15'/>}
+      <text.Caption color={active===true ? colors.primary : colors.gray6}> {content}</text.Caption>
     </area.RowArea>
   );
 }

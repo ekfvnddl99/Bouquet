@@ -89,7 +89,7 @@ export default function LoginScreen(){
             <View style={{alignItems:'center'}}>
               {err ? <WarningText content={err} marginTop={16}/> : null}
               <View style={{marginTop:16}}>
-                <ConditionButton active={1} press={emailLogin} content={i18n.t("로그인")} paddingH={40} paddingV={14} height={45}/>
+                <ConditionButton active={true} press={emailLogin} content={i18n.t("로그인")} paddingH={40} paddingV={14} height={45}/>
               </View>
             </View>
 

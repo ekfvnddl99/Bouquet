@@ -24,6 +24,7 @@ interface CommentItemProps{
   press:number, 
   id:number, 
   owner:number, 
+  login:boolean,
   IsMore?:number, 
   IsClick? : Function, 
   AddClicks? : Function, 
@@ -31,7 +32,7 @@ interface CommentItemProps{
 }
 
 
-export default function CommentItem({press, id, owner, IsMore, IsClick, AddClicks, clicks}  : CommentItemProps){
+export default function CommentItem({press, id, owner, login, IsMore, IsClick, AddClicks, clicks}  : CommentItemProps){
   const[more, setMore]=useState(-1);
   useEffect(()=>{
     if(IsClick){
@@ -63,7 +64,7 @@ export default function CommentItem({press, id, owner, IsMore, IsClick, AddClick
   }
 
   return(
-    <area.NoHeightArea marBottom={8} paddingH={16} paddingV={12} style={{backgroundColor: press===id ? colors.alpha10_primary : colors.white}}>
+    <area.NoHeightArea marBottom={8} paddingH={16} paddingV={12} style={{backgroundColor: press===id && login ? colors.alpha10_primary : colors.white}}>
       <area.RowArea style={{alignItems:'flex-start', marginBottom:8}}>
         <View style={styles.contentText}>
           <text.Body2R color={colors.black}>qmffkqfmffkwkdskskdlsjfka; jf;asjdfasjficwfmqwe</text.Body2R>

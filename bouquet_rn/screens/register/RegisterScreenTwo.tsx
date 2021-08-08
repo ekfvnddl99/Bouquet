@@ -27,8 +27,8 @@ function EyeSelect(eye : number){
 }
 
 function PWCheck(pw : string){
-  if((pw.length>=8 && pw.length<=32)) return 1;
-  return 0;
+  if((pw.length>=8 && pw.length<=32)) return true;
+  return false;
 }
 
 export default function RegisterScreenTwo({onChange, pw, setPw} : {onChange : any, pw: string, setPw : Function}){
@@ -38,7 +38,7 @@ export default function RegisterScreenTwo({onChange, pw, setPw} : {onChange : an
 
   useEffect(()=>{
     let ch=PWCheck(pw);
-    if(ch===1) setErr(0);
+    if(ch) setErr(0);
     else setErr(1);
   })
 
@@ -55,7 +55,7 @@ export default function RegisterScreenTwo({onChange, pw, setPw} : {onChange : an
       <ConditionText content={i18n.t("8글자 이상, 32글자 이하")} active={PWCheck(pw)}/>
       </ScrollView>
       <area.BottomArea style={{marginBottom:16, overflow:'hidden'}}>
-        <ConditionButton active={err===0 ? 1 : 0} press={err===0 ? onChange : ()=>{}} content={i18n.t("계정 정보 입력")} paddingH={0} paddingV={14} height={45}/>
+        <ConditionButton active={!err} press={err===0 ? onChange : ()=>{}} content={i18n.t("계정 정보 입력")} paddingH={0} paddingV={14} height={45}/>
       </area.BottomArea>
     </area.ContainerBlank20>
   );

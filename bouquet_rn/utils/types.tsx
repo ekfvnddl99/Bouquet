@@ -29,6 +29,7 @@ export type ProfileItemStackParam = {
   ProfileModification : undefined,
   ProfileDeletion : undefined,
   PostItem : undefined,
+  ProfileAccount : undefined,
 }
 export type ProfileItemProps = StackScreenProps<ProfileItemStackParam, "ProfileDetail">;
 // setting
@@ -38,7 +39,6 @@ export type SettingStackParam = {
   SettingAlarmCustom : object,
   SettingProfile : undefined,
   SettingAccountDeletionOne : undefined,
-  SettingAccountDeletionTwo : undefined,
 }
 export type SettingProps = StackScreenProps<SettingStackParam, "Setting">;
 // character generation
@@ -84,7 +84,6 @@ export type NotificationProps = StackScreenProps<NotificationStackParam, "Notifi
 export type ProfileStackParam = {
   ProfileOverview : undefined,
   ProfileItem : undefined,
-  Account : undefined,
   Setting : undefined,
   Floating : undefined,
   ChaGeneration : undefined,
@@ -96,6 +95,7 @@ export type WelcomeStackParam = {
   Login : undefined,
   Register : undefined,
   Tab : undefined,
+  SettingAccountDeletionTwo : undefined,
 }
 export type WelcomeProps = StackScreenProps<WelcomeStackParam, "Welcome">;
 

@@ -14,8 +14,8 @@ import ProfileChaItem from '../../components/ProfileChaItem';
 
 export default function ProfileGridScreen({scroll}: {scroll:any}){
   // dummy data
-  let twoData=[{name:'김', introduction:'b'}, {name:'김', introduction:'b'},{name:'김', introduction:'c'},{name:'김', introduction:'a'},{name:'김', introduction:'a'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'}];
-  if(twoData.length%2===1) twoData.push({name:'', introduction:''});
+  let Data=[{name:'김', introduction:'b'}, {name:'김', introduction:'b'},{name:'김', introduction:'c'},{name:'김', introduction:'a'},{name:'김', introduction:'a'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'}];
+  if(Data.length%2===1) Data.push({name:'', introduction:''});
 
   const[selectId, setSelectId]=useState(-1);
 
@@ -31,7 +31,7 @@ export default function ProfileGridScreen({scroll}: {scroll:any}){
       <FlatList
         columnWrapperStyle={{justifyContent:'space-between'}}
         contentContainerStyle={{justifyContent:'center'}}
-        data={twoData}
+        data={Data}
         keyExtractor={(item) => item.name.toString()}
         numColumns={2}
         showsHorizontalScrollIndicator={false}

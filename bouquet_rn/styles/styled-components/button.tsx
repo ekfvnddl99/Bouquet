@@ -7,6 +7,16 @@ interface BtnProps{
   paddingH:number,
   paddingV:number,
 }
+export const ConditionButton = styled.TouchableOpacity`
+  height:${(props : BtnProps)=>props.height};
+  border-width:1;
+  border-color:${(props : BtnProps)=>props.color};
+  border-radius:25;
+  align-items:center;
+  justify-content:center;
+  padding-horizontal: ${(props : BtnProps)=>props.paddingH};
+  padding-vertical: ${(props : BtnProps)=>props.paddingV};
+`
 
 interface LineBtnProps{
   color : string,
