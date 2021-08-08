@@ -9,13 +9,13 @@ import * as text from '../../styles/styled-components/text';
 import * as elses from '../../styles/styled-components/elses';
 
 // props & logic
-import type {ChaGenerationProps} from '../../utils/types';
+import type {ChaGenerationProps, Character} from '../../utils/types';
 
 // components
 import ProgressArea from '../components/ProgressArea';
 import ConditionButton from '../components/ConditionButton';
 
-export default function ChaGenerationScreenOne({modify, onChange, setImage} : {modify : number, onChange:any, setImage: Function}){
+export default function ChaGenerationScreenOne({modify, onChange, characterToCreate, setCharacterToCreate} : {modify : number, onChange:any, characterToCreate: Character, setCharacterToCreate: Function}){
   useEffect(() => {
     (async () => {
       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -36,7 +36,10 @@ export default function ChaGenerationScreenOne({modify, onChange, setImage} : {m
     console.log(result);
 
     if (!result.cancelled) {
-      setImage(result.uri);
+      setCharacterToCreate({
+        ...characterToCreate,
+        profileImg: result.uri
+      });
     }
   };
 
@@ -44,7 +47,7 @@ export default function ChaGenerationScreenOne({modify, onChange, setImage} : {m
     <area.ContainerBlank20>
       <View style={{alignItems:'center', justifyContent:'center', flex:1}}>
         <TouchableOpacity onPress={onPress}>
-          <elses.CircleImg diameter={180} source={require('../../assets/img.jpg')}/>
+          <elses.CircleImg diameter={180} source={characterToCreate.profileImg ? { uri: characterToCreate.profileImg } : require('../../assets/img.jpg')}/>
         </TouchableOpacity>
       </View>
       <area.BottomArea style={{marginBottom:16}}>

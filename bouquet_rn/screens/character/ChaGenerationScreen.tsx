@@ -18,7 +18,10 @@ import { useRecoilState } from 'recoil';
 // props & logic
 import type {ChaGenerationProps} from '../../utils/types';
 import { ChaGenerationStackParam } from '../../utils/types';
-import { bottomBarHideState } from '../logics/atoms';
+import { bottomBarHideState, noCharacter } from '../logics/atoms';
+import { createCharacterAsync } from '../logics/Character';
+import useCharacter from '../logics/useCharacter';
+import UploadImageAsync from '../logics/UploadImage';
 
 // components
 import ProgressArea from '../components/ProgressArea';
@@ -54,7 +57,8 @@ export default function ChaGenerationScreen(){
   const modify = route.params?.modify;
   const [hide, setHide] = useRecoilState(bottomBarHideState);
 
-  const [image, setImage] = useState(null);
+  const [characterToCreate, setCharacterToCreate] = useState(noCharacter);
+  const [character, setCharacter] = useCharacter();
 
   useEffect(() => {
     setHide(true);
@@ -68,15 +72,50 @@ export default function ChaGenerationScreen(){
     setHide(false);
   }
 
+  const create = async () => {
+    let realCharacter = {...characterToCreate};
+    if (characterToCreate.profileImg) {
+      const img = await UploadImageAsync(characterToCreate.profileImg);
+      if (typeof(img) !== "string") {
+        realCharacter.profileImg = img.url;
+      }
+      else {
+        alert("이미지 업로드에 실패했어요. 프로필 이미지를 기본 이미지로 설정할게요.");
+        realCharacter.profileImg = "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg";
+      }
+    }
+    else {
+      realCharacter.profileImg = "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg";
+    }
+
+    const result = await createCharacterAsync(realCharacter);
+    if (typeof(result) !== "string") {
+      setCharacter(result);
+      setStep(step+1);
+    }
+    else {
+      alert(result);
+    }
+  }
+
   return(
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <area.Container> 
         <View style={{paddingHorizontal:20, paddingTop:20}}>
           <ProgressArea back={()=>setStep(step-1)} step={step} title={setTitle(step)} intro={setIntro(step)} navigation={navigation} press={pressBack}/>
         </View>
-        {step===1 ? <ChaGenerationScreenOne modify={modify} onChange={()=>setStep(step+1)} setImage={setImage}/> :
-        step===2 ? <ChaGenerationScreenTwo modify={modify} onChange={()=>setStep(step+1)}/> :
-        step===3 ? <ChaGenerationScreenThree modify={modify} onChange={()=>setStep(step+1)}/> : 
+        {step===1 ? <ChaGenerationScreenOne modify={modify} onChange={()=>setStep(step+1)}
+          characterToCreate={characterToCreate}
+          setCharacterToCreate={setCharacterToCreate}
+        /> :
+        step===2 ? <ChaGenerationScreenTwo modify={modify} onChange={()=>setStep(step+1)}
+          characterToCreate={characterToCreate}
+          setCharacterToCreate={setCharacterToCreate}
+        /> :
+        step===3 ? <ChaGenerationScreenThree modify={modify} onChange={create}
+          characterToCreate={characterToCreate}
+          setCharacterToCreate={setCharacterToCreate}
+        /> : 
         <ChaGenerationScreenFour modify={modify} navigation={navigation}/>}
       </area.Container>
     </TouchableWithoutFeedback>

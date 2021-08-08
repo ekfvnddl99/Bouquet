@@ -1,7 +1,7 @@
 import { atom, selector } from 'recoil';
 
 import { User, Character } from '../../utils/types';
-import { getCharacterListAsync, getCharacterAsync, responseToCharacter, CharacterResponseType } from './GetCharacter';
+import { getCharacterListAsync, getCharacterAsync, responseToCharacter, CharacterResponseType } from './Character';
 
 export const guest: User = {
   isLogined: false,
@@ -36,8 +36,8 @@ export const noCharacter: Character = {
   nationality: '',
   intro: '',
   tmi: '',
-  likes: [''],
-  hates: ['']
+  likes: [],
+  hates: []
 }
 
 export const characterState = atom({
