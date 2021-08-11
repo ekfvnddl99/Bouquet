@@ -1,4 +1,6 @@
+<div align="center">
 # 💐 Bouquet : Bloom Yourself!
+</div>
 
 ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/fb485985-5bcb-44a1-957f-6c02670e0205/EffectNone.svg](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/fb485985-5bcb-44a1-957f-6c02670e0205/EffectNone.svg)
 
