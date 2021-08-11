@@ -16,13 +16,13 @@
 
 ## ➡️ List
 
-- [What is Bouquet?](https://git.swmgit.org/swm-12/12_swm46/bouquet_real_front/-/master/README.md#L29)
-- [Main Functions](https://git.swmgit.org/swm-12/12_swm46/bouquet_real_front/-/master/README.md#L49)
-- [Workflow](https://git.swmgit.org/swm-12/12_swm46/bouquet_real_front/-/master/README.md#L73)
-- [Environment](https://git.swmgit.org/swm-12/12_swm46/bouquet_real_front/-/master/README.md#L75)
-- [Dependencies](https://git.swmgit.org/swm-12/12_swm46/bouquet_real_front/-/edit/master/README.md#L82)
-- [Team. 달오떡 && Mentors](https://git.swmgit.org/swm-12/12_swm46/bouquet_real_front/-/edit/master/README.md#L90)
-- [Project Support](https://git.swmgit.org/swm-12/12_swm46/bouquet_real_front/-/edit/master/README.md#L108)
+- [What is Bouquet?](https://git.swmgit.org/swm-12/12_swm46/bouquet_real_front/-/blob/master/README.md#-what-is-bouquet)
+- [Main Functions](https://git.swmgit.org/swm-12/12_swm46/bouquet_real_front/-/blob/master/README.md#-main-functions)
+- [Workflow](https://git.swmgit.org/swm-12/12_swm46/bouquet_real_front/-/blob/master/README.md#-workflow)
+- [Environment](https://git.swmgit.org/swm-12/12_swm46/bouquet_real_front/-/blob/master/README.md#-environment)
+- [Dependencies](https://git.swmgit.org/swm-12/12_swm46/bouquet_real_front/-/blob/master/README.md#-dependencies)
+- [Team. 달오떡 && Mentors](https://git.swmgit.org/swm-12/12_swm46/bouquet_real_front#-team-%EB%8B%AC%EC%98%A4%EB%96%A1-aka-%EB%8B%AC%EB%8B%AC%ED%95%9C-%EC%98%A4%EB%A0%8C%EC%A7%80-%EB%96%A1%EB%B3%B6%EC%9D%B4)
+- [Project Support](https://git.swmgit.org/swm-12/12_swm46/bouquet_real_front/-/blob/master/README.md#-project-support)
 
 ---
 
