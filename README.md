@@ -11,7 +11,7 @@
 <div align="center">
 
 <img src="https://user-images.githubusercontent.com/48302738/129101642-2cce4f00-9746-4e78-a7a0-bc824c5d566c.png" width="10%" height="10%">
-<div>
+</div>
 
 <div align="center">
 
@@ -115,7 +115,7 @@ Bouquet에서 다음과 같은 것들을 지원해줘요!
 
 <div align="center">
 
-<img src="https://user-images.githubusercontent.com/48302738/129100511-222df9db-5a14-4a65-84ed-7895997c5771.png" width="40%" height="40%">
+<img src="https://user-images.githubusercontent.com/48302738/129100511-222df9db-5a14-4a65-84ed-7895997c5771.png" width="20%" height="20%">
 </div>
 
 이 성과는 2021년도 과학기술정보통신부의 재원으로 정보통신기획평가원의 지원을 받아 수행된 연구임(IITP-2021-SW마에스트로과정). This work was supported by the Institute of Information & Communications Technology Planning & Evaluation(IITP) grant funded by the Ministry of Science and ICT(MSIT) (IITP-2021-SW Maestro training course).
