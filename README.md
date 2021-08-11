@@ -1,10 +1,10 @@
-<center># 💐 Bouquet : Bloom Yourself!</center>
+# 💐 Bouquet : Bloom Yourself!{: .text-center }
 
 ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/fb485985-5bcb-44a1-957f-6c02670e0205/EffectNone.svg](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/fb485985-5bcb-44a1-957f-6c02670e0205/EffectNone.svg)
 
 ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/70106237-8a6a-4aba-9803-ad95ad051292/Title.svg](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/70106237-8a6a-4aba-9803-ad95ad051292/Title.svg)
 
-<center>**당신의 꿈꿔왔던, 당신만의 부캐를 꽃피워 보세요! 부캐 생성 sns, Bouquet 💐**</center>
+**당신의 꿈꿔왔던, 당신만의 부캐를 꽃피워 보세요! 부캐 생성 sns, Bouquet 💐**
 
 ---
 
@@ -105,4 +105,4 @@ Bouquet에서 다음과 같은 것들을 지원해줘요!
 
 이 성과는 2021년도 과학기술정보통신부의 재원으로 정보통신기획평가원의 지원을 받아 수행된 연구임(IITP-2021-SW마에스트로과정). This work was supported by the Institute of Information & Communications Technology Planning & Evaluation(IITP) grant funded by the Ministry of Science and ICT(MSIT) (IITP-2021-SW Maestro training course).
 
-<center>### Copyright © 2021. (Team. 달오떡) All rights reserved.</center>
+### Copyright © 2021. (Team. 달오떡) All rights reserved.
