@@ -3,9 +3,9 @@
 # 💐 Bouquet : Bloom Yourself!
 </div>
 
-<img src="https://user-images.githubusercontent.com/48302738/129101784-39f3283b-ab0d-4f45-b563-0f80734f1e74.png" align="center" width="40%" height="40%">
+<img src="https://user-images.githubusercontent.com/48302738/129101784-39f3283b-ab0d-4f45-b563-0f80734f1e74.png" align="center" width="4%" height="40%">
 
-<img src="https://user-images.githubusercontent.com/48302738/129101642-2cce4f00-9746-4e78-a7a0-bc824c5d566c.png" align="center" width="40%" height="40%">
+<img src="https://user-images.githubusercontent.com/48302738/129101642-2cce4f00-9746-4e78-a7a0-bc824c5d566c.png" align="center" width="4%" height="40%">
 
 <div align="center">
 
@@ -16,10 +16,10 @@
 
 ## ➡️ List
 
-- [What is Bouquet?](https://git.swmgit.org/swm-12/12_swm46/bouquet_real_front/-/edit/master/README.md#L29)
-- [Main Functions](https://git.swmgit.org/swm-12/12_swm46/bouquet_real_front/-/edit/master/README.md#L49)
-- [Workflow](https://git.swmgit.org/swm-12/12_swm46/bouquet_real_front/-/edit/master/README.md#L73)
-- [Environment](https://git.swmgit.org/swm-12/12_swm46/bouquet_real_front/-/edit/master/README.md#L75)
+- [What is Bouquet?](https://git.swmgit.org/swm-12/12_swm46/bouquet_real_front/-/master/README.md#L29)
+- [Main Functions](https://git.swmgit.org/swm-12/12_swm46/bouquet_real_front/-/master/README.md#L49)
+- [Workflow](https://git.swmgit.org/swm-12/12_swm46/bouquet_real_front/-/master/README.md#L73)
+- [Environment](https://git.swmgit.org/swm-12/12_swm46/bouquet_real_front/-/master/README.md#L75)
 - [Dependencies](https://git.swmgit.org/swm-12/12_swm46/bouquet_real_front/-/edit/master/README.md#L82)
 - [Team. 달오떡 && Mentors](https://git.swmgit.org/swm-12/12_swm46/bouquet_real_front/-/edit/master/README.md#L90)
 - [Project Support](https://git.swmgit.org/swm-12/12_swm46/bouquet_real_front/-/edit/master/README.md#L108)
