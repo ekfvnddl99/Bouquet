@@ -7,19 +7,22 @@
 
 ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/70106237-8a6a-4aba-9803-ad95ad051292/Title.svg](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/70106237-8a6a-4aba-9803-ad95ad051292/Title.svg)
 
+<div align="center">
+
 **당신의 꿈꿔왔던, 당신만의 부캐를 꽃피워 보세요! 부캐 생성 sns, Bouquet 💐**
+</div>
 
 ---
 
 ## ➡️ List
 
-- [What is Bouquet?](https://www.notion.so/README-ae1063395dc145499c39e76a2dd204cc)
-- [Main Functions](https://www.notion.so/README-ae1063395dc145499c39e76a2dd204cc)
-- [Workflow](https://www.notion.so/README-ae1063395dc145499c39e76a2dd204cc)
-- [Environment](https://www.notion.so/README-ae1063395dc145499c39e76a2dd204cc)
-- [Dependencies](https://www.notion.so/README-ae1063395dc145499c39e76a2dd204cc)
-- [Team. 달오떡 && Mentors](https://www.notion.so/README-ae1063395dc145499c39e76a2dd204cc)
-- [Project Support](https://www.notion.so/README-ae1063395dc145499c39e76a2dd204cc)
+- [What is Bouquet?]
+- [Main Functions]
+- [Workflow]
+- [Environment]
+- [Dependencies]
+- [Team. 달오떡 && Mentors]
+- [Project Support]
 
 ---
 
@@ -104,8 +107,11 @@ Bouquet에서 다음과 같은 것들을 지원해줘요!
 
 ## 🙏🏻 Project Support
 
-![SWM_Logos_Color_CMYK2](https://user-images.githubusercontent.com/48302738/129100511-222df9db-5a14-4a65-84ed-7895997c5771.png)
+![SWM_Logos_Color_CMYK2](https://user-images.githubusercontent.com/48302738/129100511-222df9db-5a14-4a65-84ed-7895997c5771.png){: width="40%" height="40%"}
 
 이 성과는 2021년도 과학기술정보통신부의 재원으로 정보통신기획평가원의 지원을 받아 수행된 연구임(IITP-2021-SW마에스트로과정). This work was supported by the Institute of Information & Communications Technology Planning & Evaluation(IITP) grant funded by the Ministry of Science and ICT(MSIT) (IITP-2021-SW Maestro training course).
 
+<div align="center">
+
 ### Copyright © 2021. (Team. 달오떡) All rights reserved.
+</div>
