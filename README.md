@@ -17,6 +17,7 @@
 
 **당신의 꿈꿔왔던, 당신만의 부캐를 꽃피워 보세요! 부캐 생성 sns, Bouquet 💐**
 </div>
+<img src="https://img.shields.io/badge/-reactnative-orange"><img src="https://img.shields.io/badge/-expo-yellow"><img src="https://img.shields.io/badge/-recoil-green"><img src="https://img.shields.io/badge/-typescript-blue">
 
 ---
 
