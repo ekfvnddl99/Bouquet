@@ -4,6 +4,7 @@ const Wrap = styled.div`
   border-radius: 32px;
   border: 1px solid #FA7268;
   transition: 0.5s;
+  cursor: pointer;
 
   @media (min-width: 320px) and (max-width: 659px) {
     padding: 16px 36px 16px 36px;
