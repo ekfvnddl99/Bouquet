@@ -40,36 +40,37 @@ export default function RegisterScreenOne({onChange, email, setEmail, authNum, s
   const [IsFocus, setFocus] = useState(false);
   const [next, setNext]=useState(false);
 
-  const [conArray, setConArray] = useState([false, false, false, false, false]);
+  const [con1Array, setCon1Array] = useState([false, false, false]);
+  const [con2Array, setCon2Array] = useState([false, false]);
   const errText =["메일을 입력해 주세요.", "메일 형식대로 입력해야 해요.", "메일을 인증해 주세요.", "인증 번호를 입력해 주세요.", "인증 번호가 틀렸나 봐요."];
+  const emailReg = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
 
   const navigation = useNavigation<StackNavigationProp<SettingStackParam>>();
 
   useEffect(()=>{
-    let tmpArray=[...conArray];
+    let tmpArray=[...con1Array];
     IsNewEmail();
     if(email.length>0) tmpArray[0]=true;
     else tmpArray[0]=false;
-    if(email.includes('@')) tmpArray[1]=true;
+    if(emailReg.test(email)) tmpArray[1]=true;
     else tmpArray[1]=false;
     // 중복되지 않는 조건
     if(email.length>0) tmpArray[2]=true;
     else tmpArray[2]=false;
-    setConArray(tmpArray);
-    console.log(email)
+    setCon1Array(tmpArray)
   }, [email])
 
   useEffect(()=>{
-    let tmpArray=[...conArray];
-    if(authNum.length>0) tmpArray[3]=true;
-    else tmpArray[3]=false;
-    if(authNum==='1234') tmpArray[4]=true;
-    else tmpArray[4]=false;
-    setConArray(tmpArray);
+    let tmpArray=[...con2Array];
+    if(authNum.length>0) tmpArray[0]=true;
+    else tmpArray[0]=false;
+    if(authNum==='1234') tmpArray[1]=true;
+    else tmpArray[1]=false;
+    setCon2Array(tmpArray)
   }, [authNum])
 
   useEffect(()=>{
-    if(conArray.includes(false)) setIsOK(false);
+    if(con1Array.includes(false) || con2Array.includes(false)) setIsOK(false);
     else setIsOK(true);
   })
 
@@ -82,31 +83,30 @@ export default function RegisterScreenOne({onChange, email, setEmail, authNum, s
     if(IsOK){
       setNext(false);
       setAuthNum('');
-      console.log(next);
     }
   }
 
   return(
     <area.ContainerBlank20>
-      <area.FormArea height='44' style={IsFocus && !(conArray[0]&&conArray[1]&&conArray[2]) ? {borderWidth:1, borderColor:colors.warning_red} : null}>
+      <area.FormArea height='44' style={IsFocus && !(con1Array[0]&&con1Array[1]&&con1Array[2]) ? {borderWidth:1, borderColor:colors.warning_red} : null}>
         <TextInput style={{flex: 1}} placeholder={i18n.t('메일')} 
           keyboardType={'email-address'}
           onChangeText={(text : string) => setEmail(text)} 
           value={email} 
           onFocus={()=>setFocus(true)}/>
-        <LineButton press={()=>(conArray[0]&&conArray[1]&&conArray[2]) ? setNext(true) : {}} content={i18n.t("메일 인증")} 
+        <LineButton press={()=>(con1Array[0]&&con1Array[1]&&con1Array[2]) ? setNext(true) : {}} content={i18n.t("메일 인증")} 
           color={colors.black} incolor={colors.gray2} outcolor={'transparent'}/>
       </area.FormArea>
-      {IsFocus && !(conArray[0]&&conArray[1]&&conArray[2]) ? <WarningText content={!conArray[0] ? errText[0] : errText[1]} marginTop={8}/> : null}
+      {IsFocus && !(con1Array[0]&&con1Array[1]&&con1Array[2]) ? <WarningText content={!con1Array[0] ? errText[0] : errText[1]} marginTop={8}/> : null}
         
-      {authNum.length>0 || next? 
+      {authNum.length > 0 || next ? 
       <View style={{marginTop:16}}>
         <ConditionTextInput height={44} placeholder={i18n.t("메일 인증 번호")}
           onChange={(text: string) => setAuthNum(text)}
           keyboard={'numeric'}
-          active={!(conArray[3] && conArray[4])}
+          active={!(con2Array[0] && con2Array[1])}
           value={authNum}
-          warnText={!conArray[3] ? errText[3] : errText[4]}
+          warnText={!con2Array[0] ? errText[3] : errText[4]}
         />
       </View> : null}
 

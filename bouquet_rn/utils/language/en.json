@@ -41,7 +41,7 @@
   "이름, 직업 등 이 캐릭터의 기본 정보를 정해 보아요":"Let's decide on the basic information of this character.",
   "캐릭터 이름":"Character name",
   "18 byte 이하":" less than 18 byte",
-  "생년월일":"Birth date",
+  "생년월일 (YYYYMMDD)":"Birth date (YYYYMMDD)",
   "직업":"Job",
   "국적":"Nationality",
   "세부 소개 입력":"Enter detailed introduction",

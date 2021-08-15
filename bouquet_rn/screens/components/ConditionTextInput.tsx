@@ -16,15 +16,20 @@ interface ConditionTextInputProps{
   value : string,
   warnText : string,
   conditions? : any,
-  byte? : number
+  byte? : number,
+  maxLen? : number,
 }
-export default function ConditionTextInput({height, placeholder, onChange, keyboard, active, value, warnText, conditions, byte} : ConditionTextInputProps){
+export default function ConditionTextInput({height, placeholder, onChange, keyboard, active, value, warnText, conditions, byte, maxLen} : ConditionTextInputProps){
   const[IsFocus, setFocus]=useState(false);
   return(
     <View style={{marginBottom:16}}>
-      <input.FormInput height={height} placeholder={placeholder} onChangeText={(input)=>onChange(input)} keyboardType={keyboard} value={value}
-      onFocus={()=>setFocus(true)}
-      style={ active && IsFocus ? {borderWidth:1, borderColor:colors.warning_red} : null}/>
+      <input.FormInput height={height} placeholder={placeholder}
+        onChangeText={(input)=>onChange(input)} 
+        keyboardType={keyboard} 
+        value={value}
+        onFocus={()=>setFocus(true)}
+        maxLength={maxLen}
+        style={ active && IsFocus ? {borderWidth:1, borderColor:colors.warning_red} : null}/>
       <View style={{alignItems:'flex-start', flexDirection:'row'}}>
         <View style={{flex:1}}>
           {active && IsFocus? <WarningText content={warnText} marginTop={8}/> : null}

@@ -60,7 +60,7 @@ export default function ProfileDetailItem({mini, press, id, character} : {mini:n
           <area.RowArea style={{justifyContent:'center', marginTop:8, marginBottom:24}}>
             <ProfileInfoText bold={cal.numName(1200).toString()} regular={i18n.t("팔로워")} color={colors.primary} center={1}/>
             <View style={{marginRight:32}}/> 
-            <ProfileInfoText bold="321" regular={i18n.t("게시글")} color={colors.primary} center={1}/>
+            <ProfileInfoText bold="321" regular={i18n.t("팔로우")} color={colors.primary} center={1}/>
           </area.RowArea>
           <area.RowArea style={{marginBottom:24}}>
             <ProfileButton diameter={20} account={1}/>

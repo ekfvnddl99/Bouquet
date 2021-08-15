@@ -71,12 +71,13 @@ export default function ChaGenerationScreenTwo({modify, onChange, characterToCre
               }
               byte={18}
             />
-            <ConditionTextInput height={44} placeholder={i18n.t("생년월일")}
+            <ConditionTextInput height={44} placeholder={i18n.t("생년월일 (YYYYMMDD)")}
               onChange={(text: string) => {setCharacterToCreate({...characterToCreate, birth: text})}}
               keyboard={'numeric'}
               active={!(conArray[3])}
               value={characterToCreate.birth}
               warnText={errText[0]}
+              maxLen={8}
             />
             <ConditionTextInput height={44} placeholder={i18n.t("직업")}
               onChange={(text: string) => {setCharacterToCreate({...characterToCreate, job: text})}}
