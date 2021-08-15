@@ -69,20 +69,31 @@ export default function ChaGenerationScreenThree({modify, onChange, characterToC
     let tmpArray=[...conArray];
     if(characterToCreate.intro.length>0) tmpArray[0]=true;
     else tmpArray[0]=false;
-    if(characterToCreate.likes.length>0) tmpArray[1]=true;
-    else tmpArray[1]=false;
-    if(characterToCreate.hates.length>0) tmpArray[2]=true;
-    else tmpArray[2]=false;
     setConArray(tmpArray);
   }, [characterToCreate])
+  useEffect(()=>{
+    let tmpArray=[...conArray];
+    if(likeList.length>0) tmpArray[1]=true;
+    else tmpArray[1]=false;
+    setConArray(tmpArray);
+    setCharacterToCreate({...characterToCreate, likes: likeList})
+  }, [likeList])
+  useEffect(()=>{
+    let tmpArray=[...conArray];
+    if(dislikeList.length>0) tmpArray[2]=true;
+    else tmpArray[2]=false;
+    setConArray(tmpArray);
+    setCharacterToCreate({...characterToCreate, hates: dislikeList})
+  }, [dislikeList])
   useEffect(()=>{
     if(conArray.includes(false)) setIsOK(false);
     else setIsOK(true);
   })
 
   return(
+    <KeyboardAvoidingView style={{flex:1}} behavior={'height'}>
     <area.ContainerBlank20>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{flexGrow:1}} keyboardShouldPersistTaps={'always'}>
         <ConditionTextInput height={44} placeholder={i18n.t("한 줄 소개")}
             onChange={(text: string) => {setCharacterToCreate({...characterToCreate, intro: text})}}
             keyboard={'default'}
@@ -100,7 +111,7 @@ export default function ChaGenerationScreenThree({modify, onChange, characterToC
             </View>
             )})}
             <TextInput placeholder={likeList.length===0 ? i18n.t('좋아하는 것') : ''} onChangeText={(input)=>setLikeInput(input)} value={likeInput} 
-            onFocus={()=>setLikeFocus(true)} onBlur={()=>likeTags(1)} style={{flex:1}}/>
+            onFocus={()=>setLikeFocus(true)} onBlur={()=>likeTags(1)} style={{flexWrap:'wrap', flexGrow:1}} multiline={true}/>
           </View>
         </area.NoHeightArea>
         <View style={{marginBottom:16}}>
@@ -116,23 +127,25 @@ export default function ChaGenerationScreenThree({modify, onChange, characterToC
             </View>
             )})}
             <TextInput placeholder={dislikeList.length===0 ? i18n.t('싫어하는 것') : ''} onChangeText={(input)=>setDisLikeInput(input)} value={dislikeInput}
-            onFocus={()=>setDislikeFocus(true)} onBlur={()=>dislikeTags(1)} style={{flex:1}}/>
+            onFocus={()=>setDislikeFocus(true)} onBlur={()=>dislikeTags(1)} style={{flexWrap:'wrap', flexGrow:1}} multiline={true}/>
           </View>
         </area.NoHeightArea>
         <View style={{marginBottom:16}}>
           {dislikeFocus && dislikeList.length===0 ? <WarningText content={errText[1]} marginTop={8}/> : null}
         </View>
 
-        <input.FormInput height='148' placeholder={i18n.t('이외에도 캐릭터에 대해서 자유롭게 알려 주세요') + i18n.t('예시: 난 고민따위 하지 않는다')}
+        <input.FormInput height='148' placeholder={i18n.t('이외에도 캐릭터에 대해서 자유롭게 알려 주세요 (선택)') + i18n.t('예시: 난 고민따위 하지 않는다')}
           onChangeText={(text: string)=>{setCharacterToCreate({...characterToCreate, tmi: text})}}
           multiline={true}
           style={{textAlignVertical: 'top', paddingTop:16}}
           value={characterToCreate.tmi}
         />
+        <View style={{flex:1}}/>
+        <View style={{marginVertical:16}}>
+          <ConditionButton height={44} active={IsOK} press={IsOK ? onChange : Keyboard.dismiss} content={modify===1 ? i18n.t("캐릭터 정보 수정 완료") : i18n.t("캐릭터 생성 완료")} paddingH={0} paddingV={14}/>
+        </View>
       </ScrollView>
-      <area.BottomArea style={{marginBottom:16}}>
-        <ConditionButton height={44} active={IsOK} press={IsOK ? onChange : ()=>{}} content={modify===1 ? i18n.t("캐릭터 정보 수정 완료") : i18n.t("캐릭터 생성 완료")} paddingH={0} paddingV={14}/>
-      </area.BottomArea>
     </area.ContainerBlank20>
+    </KeyboardAvoidingView>
   );
 }

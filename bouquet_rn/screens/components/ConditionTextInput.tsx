@@ -24,10 +24,10 @@ export default function ConditionTextInput({height, placeholder, onChange, keybo
     <View style={{marginBottom:16}}>
       <input.FormInput height={height} placeholder={placeholder} onChangeText={(input)=>onChange(input)} keyboardType={keyboard} value={value}
       onFocus={()=>setFocus(true)}
-      style={ active && (IsFocus && value.length===0)  ? {borderWidth:1, borderColor:colors.warning_red} : null}/>
+      style={ active && IsFocus ? {borderWidth:1, borderColor:colors.warning_red} : null}/>
       <View style={{alignItems:'flex-start', flexDirection:'row'}}>
         <View style={{flex:1}}>
-          {active && (IsFocus && value.length===0)? <WarningText content={warnText} marginTop={8}/> : null}
+          {active && IsFocus? <WarningText content={warnText} marginTop={8}/> : null}
           {conditions ? conditions : null}
         </View>
         {byte ? <text.Caption color={colors.gray6} style={{marginTop:8}}>{getByte(value)} / {byte} byte</text.Caption> : null}

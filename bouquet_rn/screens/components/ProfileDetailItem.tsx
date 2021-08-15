@@ -70,9 +70,9 @@ export default function ProfileDetailItem({mini, press, id, character} : {mini:n
         }
 
         <area.RowArea style={{justifyContent:'center'}}>
-          <ProfileInfoText bold={i18n.t("직업")} regular={character.job} color={colors.black} center={1}/>
-          <View style={{flex:1}}><ProfileInfoText bold={i18n.t("생년월일")} regular={`${character.birth}`} color={colors.black} center={1}/></View>
-          <ProfileInfoText bold={i18n.t("국적")} regular={character.nationality} color={colors.black} center={1}/>
+          <View style={{flex:1}}><ProfileInfoText bold={i18n.t("직업")} regular={character.job} color={colors.black} center={1}/></View>
+          <View style={{flex: mini===1 ? 1.5 :1}}><ProfileInfoText bold={i18n.t("생년월일")} regular={`${character.birth}`} color={colors.black} center={1}/></View>
+          <View style={{flex:1}}><ProfileInfoText bold={i18n.t("국적")} regular={character.nationality} color={colors.black} center={1}/></View>
         </area.RowArea>
         <View style={{marginTop:16}}/>
         <ProfileInfoTag title={i18n.t("좋아하는 것")} tags={character.likes}/>

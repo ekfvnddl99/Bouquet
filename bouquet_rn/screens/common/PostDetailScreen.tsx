@@ -63,7 +63,6 @@ export default function PostDetailScreen(){
     });
 
     return(
-      
         <area.Container>
           <Animated.View
             pointerEvents="none"
@@ -75,60 +74,61 @@ export default function PostDetailScreen(){
             <View style={{flex:1}}/>
             <ProfileItem diameter={28}/>
           </area.RowArea>
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <Animated.ScrollView 
-            style={{marginHorizontal:30}}
-            showsVerticalScrollIndicator={false}
-            scrollEventThrottle={1}
-            onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { y: scroll } } }],
-            { useNativeDriver: true })}>
-            <View style={{paddingTop: 20}}/>
-            <area.RowArea>
-              <View style={{flex:1}}><ProfileButton diameter={30} account={0}/></View>
-              {owner===1 ? 
-              <area.RowArea>
-                <LineButton press={()=>{}} content={i18n.t("수정")} color={colors.black} incolor={colors.gray2} outcolor={'transparent'}/>
-                <View style={{marginLeft:4}}/>
-                <LineButton press={()=>{}} content={i18n.t("삭제")} color={colors.warning_red} incolor={colors.alpha20_primary} outcolor={'transparent'}/>
-              </area.RowArea> : null}
-            </area.RowArea>
-            <View style={{marginBottom: 12}}/>
-            <TextTemplate/>
-            <View style={{alignItems:'flex-start'}}><SunButton sun={24}/></View>
+      
+          <KeyboardAvoidingView style={{flex:1}} behavior={'height'} enabled>
+            <Animated.ScrollView 
+              contentContainerStyle={{marginHorizontal:30, flexGrow:1}}
+              showsVerticalScrollIndicator={false}
+              scrollEventThrottle={1}
+              onScroll={Animated.event(
+              [{ nativeEvent: { contentOffset: { y: scroll } } }],
+              { useNativeDriver: true })}>
+              <View style={{paddingTop: 20}}/>
 
-            
-            <View style={{marginTop:36}}>
-              <text.Subtitle3 color={colors.black}>{i18n.t('반응')}</text.Subtitle3>
+              <area.RowArea>
+                <View style={{flex:1}}><ProfileButton diameter={30} account={0}/></View>
+                {owner===1 ? 
+                <area.RowArea style={{paddingRight:1}}>
+                  <LineButton press={()=>{}} content={i18n.t("수정")} color={colors.black} incolor={colors.gray2} outcolor={'transparent'}/>
+                  <View style={{marginRight:4}}/>
+                  <LineButton press={()=>{}} content={i18n.t("삭제")} color={colors.warning_red} incolor={colors.alpha20_primary} outcolor={'transparent'}/>
+                </area.RowArea> : null}
+              </area.RowArea>
               <View style={{marginBottom: 12}}/>
-            </View>
-            <FlatList
-              data={Data}
-              keyExtractor={(item) => item.id.toString()}
-              renderItem={(obj)=>{
-                return(
-                  <>
-                  <TouchableOpacity activeOpacity={1} onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
-                    <CommentItem press={selectId} id={obj.index} owner={1} login={IsLogin} IsMore={1} IsClick={setClick} AddClicks={setClickedLowerId} clicks={clickedLowerId}/>
-                  </TouchableOpacity>
-                  {clickedLowerId.includes(obj.index) ?
-                  <FlatList
-                    style={{marginLeft:16}}
-                    data={Data}
-                    keyExtractor={(item) => item.id.toString()}
-                    renderItem={(lowerobj)=>{
-                      return(
-                        <TouchableOpacity activeOpacity={1} onPress={()=>{selectId===((obj.index+1)*10)+lowerobj.index ? setSelectId(-1) : setSelectId(((obj.index+1)*10)+lowerobj.index)}}>
-                          <CommentItem press={selectId} id={((obj.index+1)*10)+lowerobj.index} owner={1} login={IsLogin}/>
-                        </TouchableOpacity>
-                      );}}/>: null}
-                  </>
-                ); 
-              }}/>
-          </Animated.ScrollView>
-          </TouchableWithoutFeedback>
+              <TextTemplate/>
+              <View style={{alignItems:'flex-start'}}><SunButton sun={24}/></View>
+              <text.Subtitle3 color={colors.black} style={{marginTop:36}}>{i18n.t('반응')}</text.Subtitle3>
+
+              <View style={{paddingTop: 12}}/>
+              {/* <KeyboardAvoidingView style={{flex:1}} behavior={'height'}> */}
+              <FlatList
+                data={Data}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={(obj)=>{
+                  return(
+                    <>
+                    <TouchableOpacity activeOpacity={1} onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
+                      <CommentItem press={selectId} id={obj.index} owner={1} login={IsLogin} IsMore={1} IsClick={setClick} AddClicks={setClickedLowerId} clicks={clickedLowerId}/>
+                    </TouchableOpacity>
+                    {clickedLowerId.includes(obj.index) ?
+                    <FlatList
+                      style={{marginLeft:16}}
+                      data={data}
+                      keyExtractor={(item) => item.id.toString()}
+                      renderItem={(lowerobj)=>{
+                        return(
+                          <TouchableOpacity activeOpacity={1} onPress={()=>{selectId===((obj.index+1)*10)+lowerobj.index ? setSelectId(-1) : setSelectId(((obj.index+1)*10)+lowerobj.index)}}>
+                            <CommentItem press={selectId} id={((obj.index+1)*10)+lowerobj.index} owner={1} login={IsLogin}/>
+                          </TouchableOpacity>
+                        );}}/>: null}
+                    </>
+                  ); 
+                }}/>
+                {/* </KeyboardAvoidingView> */}
+            </Animated.ScrollView>
+          </KeyboardAvoidingView>
           {IsLogin ?
-          <View style={{position:'absolute', left:0, right:0, bottom:0}}>
+          <View>
             {selectId!==-1 ? <CommentInputComment setSelectId={setSelectId} comment={Data[selectId%10].id.toString()}/> : null}
             <CommentInputBar selectId={selectId}/>
           </View> : null}

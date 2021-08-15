@@ -100,7 +100,7 @@ export default function PostWritingScreen(){
 
           <input.TextTemplate placeholder={I18n.t("내용을 입력해 주세요")}/>
           <View style={{marginTop:40}}/>
-          <ConditionButton active={1} press={goUpload} content={I18n.t("게시글 올리기")} paddingH={0} paddingV={14} height={45}/>
+          <ConditionButton active={true} press={goUpload} content={I18n.t("게시글 올리기")} paddingH={0} paddingV={14} height={45}/>
         </area.ContainerBlank30>
       </ScrollView>
     </area.Container>  

@@ -35,7 +35,7 @@ export default function ChaDeletionScreenTwo({navigation}:{navigation:any}){
       </View>
 
       <area.BottomArea style={{marginBottom:16}}>
-        <ConditionButton height={44} active={1} press={goOverview} content={i18n.t("캐릭터 목록으로 돌아가기")} paddingH={0} paddingV={14}/>
+        <ConditionButton height={44} active={true} press={goOverview} content={i18n.t("캐릭터 목록으로 돌아가기")} paddingH={0} paddingV={14}/>
       </area.BottomArea>
     </area.Container>
   );
