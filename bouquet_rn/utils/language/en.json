@@ -8,7 +8,7 @@
   "미리보기":"Preview",
   "메일":"Email",
   "전화번호":"Password",
-  "비밀번호를 잊었나요":"Forget password? ",
+  "비밀번호를 잊었나요":"Forgot password? ",
   "비밀번호 찾기":"Find Password",
   "계정이 없다면":"Don't have Account? ",
   "회원가입":"Register",
@@ -36,6 +36,7 @@
   "어떤 모습인가요":"What does it look like?",
   "이 캐릭터의 겉모습을 생각해 보아요":"Let's think about the appearance of this character.",
   "기본 정보 입력":"Enter basic information",
+  "기본 정보 수정":"Modify basic information",
   "이 캐릭터는 누구인가요":"Who is this character?",
   "이름, 직업 등 이 캐릭터의 기본 정보를 정해 보아요":"Let's decide on the basic information of this character.",
   "캐릭터 이름":"Character name",
@@ -50,7 +51,7 @@
   "한 줄 소개":"One-line introduction",
   "좋아하는 것":"Favorite things",
   "싫어하는 것":"Not-Favorite things",
-  "이외에도 캐릭터에 대해서 자유롭게 알려 주세요":"Please feel free to tell me about your character!\n",
+  "이외에도 캐릭터에 대해서 자유롭게 알려 주세요 (선택)":"Please feel free to tell me about your character! (option)\n",
   "예시: 난 고민따위 하지 않는다":"ex: No hesitation to me",
   "캐릭터 생성 완료":"Complete",
   "캐릭터 정보 수정 완료":"Complete",
@@ -124,5 +125,7 @@
   "내 글이 받은 햇빛":"My Post's Sunshines",
   "내 글에 달린 댓글":"My Post's Comments",
   "다른 캐릭터가 나를 팔로우":"Another follows me",
-  "님":""
+  "님":"",
+  "선택":"select",
+  "선택한 템플릿":"selected"
  }

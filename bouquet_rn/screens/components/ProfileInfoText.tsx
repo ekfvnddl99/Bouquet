@@ -6,7 +6,7 @@ export default function ProfileInfoText({bold, regular, color, center} : {bold :
   return(
     <View style={center===1 ? {alignItems:'center'} : null}>
       <text.Body2B color={color}>{bold}</text.Body2B>
-      <text.Body2R color={color}>{regular}</text.Body2R>
+      <text.Body2R color={color} numberOfLines={1}>{regular}</text.Body2R>
     </View>
   );
 }

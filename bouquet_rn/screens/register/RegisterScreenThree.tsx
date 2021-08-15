@@ -33,15 +33,24 @@ function errCheck(name:string, errList:number[], setErrList:Function){
 }
 
 export default function RegisterScreenThree({onChange, name, setName, setProfilePic} : {onChange : any, name: string, setName: Function, setProfilePic: Function}){
-  const[err, setErr] = useState(1);
-  const[errList, setErrList]=useState<number[]>([]);
-  const errTextList=["별명을 입력해 주세요.", "별명 규칙을 지켜야 해요."];
+  const[IsOK, setIsOK]=useState(false);
+  const[conArray, setConArray]=useState([false, false, false]);
+  const errText=["별명을 입력해 주세요.", "별명 규칙을 지켜야 해요."];
+
   useEffect(()=>{
-    console.log(name.length);
-    errCheck(name, errList, setErrList);
-    if(errList.length===0) setErr(0);
-    else setErr(1);
+    let tmpArray=[...conArray];
+    if(name.length>0) tmpArray[0]=true;
+    else tmpArray[0]=false;
+    if(getByte(name)<=20 && getByte(name)>0) tmpArray[1]=true;
+    else tmpArray[1]=false;
+    if(name) tmpArray[2]=true;
+    else tmpArray[2]=false;
+    setConArray(tmpArray);
   }, [name])
+  useEffect(()=>{
+    if(conArray.includes(false)) setIsOK(false);
+    else setIsOK(true);
+  })
 
   return(
     <area.ContainerBlank20>
@@ -54,15 +63,20 @@ export default function RegisterScreenThree({onChange, name, setName, setProfile
         </TouchableOpacity>
       </View>
 
-      <ConditionTextInput height={44} placeholder={i18n.t("별명")} onChange={setName} keyboard={'default'} active={err} value={name}/>
-      <area.RowArea>
-        <View style={{flex:1}}>
-          {err===1 ? <WarningText content={errList[0]===0 ? errTextList[0] : errTextList[1]} marginTop={8}/> : null}
-          <ConditionText content={i18n.t("20 byte 이하")} active={!errList.includes(1)}/>
-          <ConditionText content={i18n.t("중복되지 않는 이름")} active={!errList.includes(2)}/>
-        </View>
-        <text.Caption color={colors.gray6} style={{marginTop:8}}>{getByte(name)} / 20 byte</text.Caption>
-      </area.RowArea>
+      <ConditionTextInput height={44} placeholder={i18n.t("별명")}
+        onChange={(text: string) => setName(text)}
+        keyboard={'default'}
+        active={!(conArray[0]||conArray[1]||conArray[2])}
+        value={name}
+        warnText={!conArray[0] ? errText[0] : errText[1]}
+        conditions={
+          <View>
+            <ConditionText content={i18n.t("20 byte 이하")} active={conArray[1]}/>
+            <ConditionText content={i18n.t("중복되지 않는 이름")} active={conArray[2]}/>
+          </View>
+        }
+        byte={20}
+      />
 
       <area.BottomArea style={{marginBottom:16}}>
         {i18n.locale==='en' ? <View style={{alignItems:'center'}}><text.Caption color={colors.gray6}>{i18n.t('에 모두 동의하시나요')} </text.Caption></View> : null}
@@ -73,7 +87,7 @@ export default function RegisterScreenThree({onChange, name, setName, setProfile
           {i18n.locale==='ko' ? <text.Caption color={colors.gray6}>{i18n.t('에 모두 동의하시나요')}</text.Caption> :<text.Caption color={colors.gray6}>?</text.Caption>}
         </area.TextBtnArea>
 
-        <ConditionButton active={!err} press={!err ? onChange : ()=>{}} 
+        <ConditionButton active={IsOK} press={IsOK ? onChange : ()=>{}} 
           content={i18n.t("필수 약관 동의 & 가입 완료")} paddingH={0} paddingV={14} height={45}/>
       </area.BottomArea>
     </area.ContainerBlank20>

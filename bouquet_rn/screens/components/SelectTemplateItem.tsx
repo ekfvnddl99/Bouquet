@@ -28,7 +28,7 @@ export default function SelectTemplateItem({name, explain, svg, select, setSelec
       <area.RowArea style={{marginBottom:12}}>
         <text.Subtitle3 color={colors.black}>{name}</text.Subtitle3>
         <View style={{flex:1}}/>
-        <ConditionButton active={select===id ? 0 : 1} press={()=>[setSelect(id), goBack()]} height={22} paddingH={12} paddingV={4} 
+        <ConditionButton active={select===id ? false : true} press={()=>[setSelect(id), goBack()]} height={22} paddingH={12} paddingV={4} 
         content={select===id ? i18n.t("선택한 템플릿") : i18n.t("선택")}/>
       </area.RowArea>
       <text.Caption color={colors.gray6} style={{marginBottom:12}}>{explain}</text.Caption>

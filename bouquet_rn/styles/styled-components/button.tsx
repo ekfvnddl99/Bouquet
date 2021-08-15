@@ -102,14 +102,14 @@ interface colorProps{
   color:string
 }
 export const TagModifyButton = styled.TouchableOpacity`
-  height: 28;
   background-color: ${(props:colorProps)=> props.color};
   border-radius: 10;
   margin-right: 4;
   margin-bottom : 2;
   flex-direction:row;
   align-items:center;
-  padding-left: 10;
+  padding-left: 8;
+  padding-vertical: 5;
 `
 
 export const AddTemplate = styled.TouchableOpacity`

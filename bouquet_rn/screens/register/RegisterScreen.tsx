@@ -32,7 +32,7 @@ export default function RegisterScreen(){
   const[step, setStep]=useState(1);
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
-  const [pw, setPw] = useState('');
+  const [pw, setPW] = useState('');
   const [name, setName] = useState('');
   const [authNum, setAuthNum] = useState('');
   const [profilePic, setProfilePic] = useState('https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg');
@@ -49,8 +49,8 @@ export default function RegisterScreen(){
         <View style={{paddingHorizontal:20, paddingTop:20}}>
           <ProgressArea back={()=>setStep(step-1)} step={step} title={setTitle(step)} intro={null} navigation={navigation}/>
         </View>
-        {step===1 ? <RegisterScreenOne onChange={()=>setStep(step+1)} navigation={navigation} setEmail={setEmail} email={email} setAuthNum={setAuthNum} authNum={authNum}/> :
-        step===2 ? <RegisterScreenTwo onChange={()=>setStep(step+1)} pw={pw} setPw={setPw} /> :
+        {step===1 ? <RegisterScreenOne onChange={()=>setStep(step+1)} setEmail={setEmail} email={email} setAuthNum={setAuthNum} authNum={authNum}/> :
+        step===2 ? <RegisterScreenTwo onChange={()=>setStep(step+1)} pw={pw} setPW={setPW} /> :
         step===3 ? <RegisterScreenThree onChange={register} name={name} setName={setName} setProfilePic={setProfilePic} /> : 
         <RegisterScreenFour navigation={navigation}/>}
       </area.Container>

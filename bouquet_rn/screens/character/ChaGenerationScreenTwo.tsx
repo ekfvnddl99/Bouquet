@@ -3,7 +3,9 @@ import {
   View,
   ScrollView, 
   TouchableWithoutFeedback,
-  Keyboard} from 'react-native';
+  Keyboard,
+  KeyboardAvoidingView
+} from 'react-native';
 import i18n from 'i18n-js';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
@@ -25,10 +27,6 @@ import ConditionButton from '../components/ConditionButton';
 import ConditionTextInput from '../components/ConditionTextInput';
 import WarningText from '../components/WarningText';
 
-function PWCheck(pw : string){
-  if(pw.length>=8 && pw.length<=32) return true;
-  return false;
-}
 
 export default function ChaGenerationScreenTwo({modify, onChange, characterToCreate, setCharacterToCreate} : {modify : number, onChange:any, characterToCreate: Character, setCharacterToCreate: Function}){
   const[IsOK, setIsOK]=useState(false);
@@ -56,48 +54,51 @@ export default function ChaGenerationScreenTwo({modify, onChange, characterToCre
   })
 
   return(
-      
+      <KeyboardAvoidingView style={{flex:1}} behavior={'height'}>
         <area.ContainerBlank20>
-        <ScrollView>
-          <ConditionTextInput height={44} placeholder={i18n.t("캐릭터 이름")}
-            onChange={(text: string) => {setCharacterToCreate({...characterToCreate, name: text})}}
-            keyboard={'default'}
-            active={!(conArray[0]||conArray[1]||conArray[2])}
-            value={characterToCreate.name}
-            warnText={!conArray[0] ? errText[0] : errText[1]}
-            conditions={
-              <View>
-                <ConditionText content={i18n.t("18 byte 이하")} active={conArray[1]}/>
-                <ConditionText content={i18n.t("중복되지 않는 이름")} active={conArray[2]}/>
-              </View>
-            }
-            byte={18}
-          />
-          <ConditionTextInput height={44} placeholder={i18n.t("생년월일")}
-            onChange={(text: string) => {setCharacterToCreate({...characterToCreate, birth: text})}}
-            keyboard={'numeric'}
-            active={!(conArray[3])}
-            value={characterToCreate.birth}
-            warnText={errText[0]}
-          />
-          <ConditionTextInput height={44} placeholder={i18n.t("직업")}
-            onChange={(text: string) => {setCharacterToCreate({...characterToCreate, job: text})}}
-            keyboard={'default'}
-            active={!(conArray[4])}
-            value={characterToCreate.job}
-            warnText={errText[0]}
-          />
-          <ConditionTextInput height={44} placeholder={i18n.t("국적")}
-            onChange={(text: string) => {setCharacterToCreate({...characterToCreate, nationality: text})}}
-            keyboard={'default'}
-            active={!(conArray[5])}
-            value={characterToCreate.nationality}
-            warnText={errText[0]}
-          />
-      </ScrollView>
-      <area.BottomArea style={{marginBottom:16}}>
-        <ConditionButton height={44} active={IsOK} press={IsOK ? onChange : ()=>{}} content={modify===1 ? i18n.t("세부 소개 수정 완료") : i18n.t("세부 소개 입력")} paddingH={0} paddingV={14}/>
-      </area.BottomArea>
-        </area.ContainerBlank20>
+          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{flexGrow:1}} keyboardShouldPersistTaps={'always'}>
+            <ConditionTextInput height={44} placeholder={i18n.t("캐릭터 이름")}
+              onChange={(text: string) => {setCharacterToCreate({...characterToCreate, name: text})}}
+              keyboard={'default'}
+              active={!(conArray[0]&&conArray[1]&&conArray[2])}
+              value={characterToCreate.name}
+              warnText={!conArray[0] ? errText[0] : errText[1]}
+              conditions={
+                <View>
+                  <ConditionText content={i18n.t("18 byte 이하")} active={conArray[1]}/>
+                  <ConditionText content={i18n.t("중복되지 않는 이름")} active={conArray[2]}/>
+                </View>
+              }
+              byte={18}
+            />
+            <ConditionTextInput height={44} placeholder={i18n.t("생년월일")}
+              onChange={(text: string) => {setCharacterToCreate({...characterToCreate, birth: text})}}
+              keyboard={'numeric'}
+              active={!(conArray[3])}
+              value={characterToCreate.birth}
+              warnText={errText[0]}
+            />
+            <ConditionTextInput height={44} placeholder={i18n.t("직업")}
+              onChange={(text: string) => {setCharacterToCreate({...characterToCreate, job: text})}}
+              keyboard={'default'}
+              active={!(conArray[4])}
+              value={characterToCreate.job}
+              warnText={errText[0]}
+            />
+            <ConditionTextInput height={44} placeholder={i18n.t("국적")}
+              onChange={(text: string) => {setCharacterToCreate({...characterToCreate, nationality: text})}}
+              keyboard={'default'}
+              active={!(conArray[5])}
+              value={characterToCreate.nationality}
+              warnText={errText[0]}
+            />
+            <View style={{flexGrow:1}}/>
+            <View style={{marginBottom:16}}>
+              <ConditionButton height={44} active={IsOK} press={IsOK ? onChange : Keyboard.dismiss} content={modify===1 ? i18n.t("세부 소개 수정 완료") : i18n.t("세부 소개 입력")} paddingH={0} paddingV={14}/>
+            </View>
+        </ScrollView>
+       
+      </area.ContainerBlank20>
+    </KeyboardAvoidingView>
   );
 }

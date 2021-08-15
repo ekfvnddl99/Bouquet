@@ -4,7 +4,8 @@ import {
     TextInput,
     TouchableWithoutFeedback,
     Keyboard,
-    BackHandler
+    BackHandler,
+    KeyboardAvoidingView
 } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation, useRoute, useFocusEffect, RouteProp } from '@react-navigation/native';
@@ -71,6 +72,17 @@ export default function ChaGenerationScreen(){
   const pressBack = () => {
     setHide(false);
   }
+
+  const backAction=()=>{
+    if(step!==1) setStep(step-1);
+    else navigation.goBack();
+    return true;
+  }
+  useEffect(() => {
+    BackHandler.addEventListener("hardwareBackPress", backAction);
+    return () =>
+      BackHandler.removeEventListener("hardwareBackPress", backAction);
+  });
 
   const create = async () => {
     let realCharacter = {...characterToCreate};

@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {
+  View,
     TouchableOpacity,
 } from 'react-native';
 import {colors} from '../../styles/colors';
@@ -21,13 +22,13 @@ export default function TagModifyItem({content, index, search, array, setArray} 
   const[id, setId]=useState(index);
   const deleteTag=()=>{
     let tmp=[...array];
-    tmp.splice(id, 1);
+    tmp.splice(id, 1); 
     setArray(tmp);
   }
   return(
       <button.TagModifyButton color={search===1 ? colors.white : colors.alpha10_primary} activeOpacity={1}>
-          <text.Caption color={search===1 ? colors.black : colors.primary}>{content}</text.Caption>
-          <TouchableOpacity onPress={deleteTag}>{search===1 ? <XSvg w='25' h='25'/> : <XFocusSvg w='25' h='25'/>}</TouchableOpacity>
+        <text.Caption color={search===1 ? colors.black : colors.primary} style={{flexShrink:1}}>{content}</text.Caption>
+        <TouchableOpacity onPress={deleteTag} style={{flexGrow:1}}>{search===1 ? <XSvg w='25' h='25'/> : <XFocusSvg w='25' h='25'/>}</TouchableOpacity>
       </button.TagModifyButton>
   );
 }
