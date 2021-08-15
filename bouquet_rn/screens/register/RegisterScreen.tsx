@@ -49,9 +49,18 @@ export default function RegisterScreen(){
         <View style={{paddingHorizontal:20, paddingTop:20}}>
           <ProgressArea back={()=>setStep(step-1)} step={step} title={setTitle(step)} intro={null} navigation={navigation}/>
         </View>
-        {step===1 ? <RegisterScreenOne onChange={()=>setStep(step+1)} setEmail={setEmail} email={email} setAuthNum={setAuthNum} authNum={authNum}/> :
-        step===2 ? <RegisterScreenTwo onChange={()=>setStep(step+1)} pw={pw} setPW={setPW} /> :
-        step===3 ? <RegisterScreenThree onChange={register} name={name} setName={setName} setProfilePic={setProfilePic} /> : 
+        {step===1 ? <RegisterScreenOne onChange={()=>setStep(step+1)} 
+          setEmail={setEmail} 
+          email={email} 
+          setAuthNum={setAuthNum} 
+          authNum={authNum}/> :
+        step===2 ? <RegisterScreenTwo onChange={()=>setStep(step+1)} 
+          pw={pw} 
+          setPW={setPW} /> :
+        step===3 ? <RegisterScreenThree onChange={register} 
+          name={name} 
+          setName={setName} 
+          setProfilePic={setProfilePic} /> : 
         <RegisterScreenFour navigation={navigation}/>}
       </area.Container>
     </TouchableWithoutFeedback>

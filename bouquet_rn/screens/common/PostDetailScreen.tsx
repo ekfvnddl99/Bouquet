@@ -12,7 +12,8 @@ import {
     ScrollView,
     TouchableWithoutFeedback,
     KeyboardEvent,
-  Keyboard
+  Keyboard,
+  SafeAreaView
 } from 'react-native';
 import i18n from 'i18n-js';
 import {colors} from '../../styles/colors';
@@ -23,6 +24,8 @@ import * as elses from '../../styles/styled-components/elses';
 
 // props & logic
 import { StatusBarHeight } from '../logics/StatusbarHeight';
+import { userState } from '../logics/atoms';
+import { useRecoilValue } from 'recoil';
 
 // components
 import ProfileButton from '../components/ProfileButton';
@@ -42,18 +45,18 @@ const HEADER_MAX_HEIGHT = 90;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
+const width = Dimensions.get('window').width;
+
 export default function PostDetailScreen(){
     // dummy data - 서버에서 불러와야 함
     let Data=[{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9}];
     let data=[{id:1},{id:2}];
-    const[IsLogin, setIsLogin]=useState(true);
+    const user = useRecoilValue(userState);
     const[selectId, setSelectId]=useState(-1);
     const[clickedLowerId, setClickedLowerId]=useState<number[]>([]);
     const[owner, setOwner]=useState(1);
     const[click, setClick]=useState(1);
-    useEffect(()=>{
-      //여기서 setIsLogin 사용하여 로그인 여부 체크하면 됨!
-    }, [])
+    const[commet, setComment]=useState('');
 
     const scroll = useRef(new Animated.Value(0)).current;
     const OpacityHeader=scroll.interpolate({
@@ -75,11 +78,12 @@ export default function PostDetailScreen(){
             <ProfileItem diameter={28}/>
           </area.RowArea>
       
-          <KeyboardAvoidingView style={{flex:1}} behavior={'height'} enabled>
-            <Animated.ScrollView 
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <KeyboardAvoidingView style={{flex:1}} behavior={'padding'} enabled>
+            <Animated.ScrollView
               contentContainerStyle={{marginHorizontal:30, flexGrow:1}}
               showsVerticalScrollIndicator={false}
-              scrollEventThrottle={1}
+              keyboardShouldPersistTaps={'always'}
               onScroll={Animated.event(
               [{ nativeEvent: { contentOffset: { y: scroll } } }],
               { useNativeDriver: true })}>
@@ -100,15 +104,15 @@ export default function PostDetailScreen(){
               <text.Subtitle3 color={colors.black} style={{marginTop:36}}>{i18n.t('반응')}</text.Subtitle3>
 
               <View style={{paddingTop: 12}}/>
-              {/* <KeyboardAvoidingView style={{flex:1}} behavior={'height'}> */}
               <FlatList
                 data={Data}
+                keyboardShouldPersistTaps={'always'}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={(obj)=>{
                   return(
                     <>
                     <TouchableOpacity activeOpacity={1} onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
-                      <CommentItem press={selectId} id={obj.index} owner={1} login={IsLogin} IsMore={1} IsClick={setClick} AddClicks={setClickedLowerId} clicks={clickedLowerId}/>
+                      <CommentItem press={selectId} id={obj.index} owner={1} login={user.isLogined} IsMore={1} IsClick={setClick} AddClicks={setClickedLowerId} clicks={clickedLowerId}/>
                     </TouchableOpacity>
                     {clickedLowerId.includes(obj.index) ?
                     <FlatList
@@ -118,20 +122,20 @@ export default function PostDetailScreen(){
                       renderItem={(lowerobj)=>{
                         return(
                           <TouchableOpacity activeOpacity={1} onPress={()=>{selectId===((obj.index+1)*10)+lowerobj.index ? setSelectId(-1) : setSelectId(((obj.index+1)*10)+lowerobj.index)}}>
-                            <CommentItem press={selectId} id={((obj.index+1)*10)+lowerobj.index} owner={1} login={IsLogin}/>
+                            <CommentItem press={selectId} id={((obj.index+1)*10)+lowerobj.index} owner={1} login={user.isLogined}/>
                           </TouchableOpacity>
                         );}}/>: null}
                     </>
                   ); 
                 }}/>
-                {/* </KeyboardAvoidingView> */}
             </Animated.ScrollView>
-          </KeyboardAvoidingView>
-          {IsLogin ?
-          <View>
-            {selectId!==-1 ? <CommentInputComment setSelectId={setSelectId} comment={Data[selectId%10].id.toString()}/> : null}
-            <CommentInputBar selectId={selectId}/>
-          </View> : null}
+            {user.isLogined ?
+              <View style={{justifyContent:'flex-end'}}>
+                {selectId!==-1 ? <CommentInputComment setSelectId={setSelectId} comment={Data[selectId%10].id.toString()}/> : null}
+                <CommentInputBar selectId={selectId} value={commet} onChange={setComment}/>
+              </View> : null}
+            </KeyboardAvoidingView>
+            </TouchableWithoutFeedback>
         </area.Container>
     )
 }
