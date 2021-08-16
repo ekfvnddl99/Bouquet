@@ -51,7 +51,11 @@ const ArrowWrap = styled.div`
   bottom: 20px;
 `;
 
-export default function Main() {
+export default function Main({ finalRef } : { finalRef: React.MutableRefObject<any> }) {
+  const onclick = () => {
+    finalRef.current.scrollIntoView({ behavior: "smooth" });
+  }
+
   return (
     <Wrap>
       <ContentWrap>
@@ -67,7 +71,7 @@ export default function Main() {
           </span>
           <TitleTextBold>BOUQUET</TitleTextBold>
         </TextWrap>
-        <Button text="앱 다운로드" />
+        <Button text="앱 다운로드" click={onclick} />
       </ContentWrap>
       <ArrowWrap><Arrow /></ArrowWrap>
     </Wrap>

@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 
 const Wrap = styled.div`
@@ -38,9 +39,9 @@ const Text = styled.span`
   }
 `;
 
-export default function Button({ text }: { text: string }) {
+export default function Button({ text, click }: { text: string, click: React.MouseEventHandler }) {
   return (
-    <Wrap>
+    <Wrap onClick={click}>
       <Text>{text}</Text>
     </Wrap>
   )
