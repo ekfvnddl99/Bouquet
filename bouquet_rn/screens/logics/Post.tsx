@@ -2,58 +2,65 @@ import { serverAddress } from './ServerInfos';
 import * as SecureStore from 'expo-secure-store';
 import { Character } from '../../utils/types';
 
+// Template Request Types
 
-export type CharacterRequestType = {
-  chaID:number,
-  chaName:string, 
-  template:number, 
-  text:string,
-  img?:string,
-  title?:string,
-  weather?:string,
-  date?:number,
-  content?:string,
-  releaseDate?:number,
-  components?:object[]
+export interface PostRequestInterface {
+  characterId: number,
+  template: string,
+  text?: string,
+}
+
+export interface ImagePostRequestInterface extends PostRequestInterface {
+  img: string,
+}
+
+export interface DiaryPostRequestInterface extends PostRequestInterface {
+  title: string,
+  weather: string,
+  img: string,
+  date: number,
+  content: string,
+}
+
+export interface AlbumPostRequestInterface extends PostRequestInterface {
+  description: string,
+  title: string,
+  img: string,
+  releaseDate: number,
+  tracks: Array<{ title: string, lyric: string }>,
+}
+
+export interface ListPostRequestInterface extends PostRequestInterface {
+  title: string,
+  content: string,
+  components: Array<{ title: string, img: string, content: string }>,
 }
 
 // POST
-export async function PostAsync(chaID:number, chaName:string, template:number, text:string) {
-  function setTemplateString(){
-    switch(template){
-      case 0: return "None";
-      case 1: return "Album";
-      case 2: return "Diary";
-      case 3: return "List";
+export async function PostAsync<T extends PostRequestInterface>(body: T) {
+  function getTemplate() {
+    switch (body.template) {
+      case "None": return "/";
+      case "Image": return "/img";
+      case "Diary": return "/diary";
+      case "Album": return "/album";
+      case "List": return "/list";
+      default: return "/";
     }
   }
   const auth = await SecureStore.getItemAsync('auth');
   if (auth) {
+    const templateInfo = getTemplate();
     try {
-      let response = await fetch(serverAddress + "/post", {
+      let response = await fetch(serverAddress + "/post" + templateInfo, {
         method: 'POST',
         headers: {
           'accept': 'application/json',
           'Authorization': auth,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          "character_id": chaID,
-          "character_name": chaName,
-          "template": setTemplateString,
-          "text": text
-        })
+        body: JSON.stringify(body)
       });
-
-      switch(template){
-        case 0: break;
-        case 1: 
-        case 2: 
-        case 3: 
-        default: break;
-      }
-
-
       let result = await response.json();
       console.log(result);
 

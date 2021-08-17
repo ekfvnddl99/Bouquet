@@ -8,6 +8,7 @@ import { getCharacterAsync, getCharacterListAsync,
   responseToCharacter, CharacterResponseType } from './Character';
 import useUser from './useUser';
 
+
 export async function setCharacterListAsync(setter: SetterOrUpdater<Character[]>) {
   let list = [];
   const result = await getCharacterListAsync();
