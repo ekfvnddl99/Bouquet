@@ -101,7 +101,10 @@ export default function ChaGenerationScreen(){
 
     const result = await createCharacterAsync(realCharacter);
     if (typeof(result) !== "string") {
-      setCharacter(result);
+      setCharacter({
+        ...realCharacter,
+        id: result.id
+      });
       setStep(step+1);
     }
     else {

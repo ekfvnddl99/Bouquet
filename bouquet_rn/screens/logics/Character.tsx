@@ -3,7 +3,7 @@ import * as SecureStore from 'expo-secure-store';
 import { Character } from '../../utils/types';
 
 export type CharacterResponseType = {
-  id: number;
+  id?: number;
   name: string;
   profile_img: string;
   birth: number;
@@ -16,6 +16,7 @@ export type CharacterResponseType = {
 }
 
 export type CharacterRequestType = {
+  id?: number;
   name: string;
   profile_img: string;
   birth: number;
@@ -27,9 +28,9 @@ export type CharacterRequestType = {
   hates: Array<string>;
 }
 
-export function responseToCharacter(response: CharacterResponseType, id: number) {
+export function responseToCharacter(response: CharacterResponseType, id?: number) {
   const newObj: Character = {
-    id: response.id ? response.id : id,
+    id: response.id ? response.id : (id ? id : -1),
     name: response.name,
     profileImg: response.profile_img,
     birth: String(response.birth),
@@ -46,15 +47,16 @@ export function responseToCharacter(response: CharacterResponseType, id: number)
 
 export function characterToRequest(character: Character) {
   const newObj: CharacterRequestType = {
-    "name": character.name,
-    "profile_img": character.profileImg,
-    "birth": Number(character.birth),
-    "job": character.job,
-    "nationality": character.nationality,
-    "intro": character.intro,
-    "tmi": character.tmi,
-    "likes": character.likes,
-    "hates": character.hates
+    id: character.id ? character.id : undefined,
+    name: character.name,
+    profile_img: character.profileImg,
+    birth: Number(character.birth),
+    job: character.job,
+    nationality: character.nationality,
+    intro: character.intro,
+    tmi: character.tmi,
+    likes: character.likes,
+    hates: character.hates
   }
 
   return newObj;
@@ -210,7 +212,6 @@ export async function createCharacterAsync(character: Character) {
   else return "로그인되어 있지 않아요.";
 }
 
-
 export async function followCharacterAsync(characterID: number, followerID:number) {
   const auth = await SecureStore.getItemAsync('auth');
   if (auth) {
@@ -269,7 +270,6 @@ export async function editCharacterAsync(character: Character) {
     }
   }
   else return "로그인되어 있지 않아요.";
-
 }
 
 // DELETE
@@ -303,5 +303,4 @@ export async function deleteCharacterAsync(characterID: number) {
     }
   }
   else return "로그인되어 있지 않아요.";
-
 }
