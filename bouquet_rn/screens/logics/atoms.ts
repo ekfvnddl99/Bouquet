@@ -45,20 +45,9 @@ export const characterState = atom({
   default: noCharacter,
 })
 
-export const characterListSelector = selector({
-  key: 'characterListSeletor',
-  get: async ({ get }) => {
-    if (get(userState).isLogined) {
-      const result = await getCharacterListAsync();
-      if (typeof(result) !== "string") {
-        let list = result.map((obj: CharacterResponseType) => {
-          return responseToCharacter(obj, obj.id);
-        })
-        return list;
-      }
-    }
-    return [];
-  }
+export const characterListState = atom({
+  key: 'characterListState',
+  default: [],
 })
 
 export const viewCharacterIdState = atom({

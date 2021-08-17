@@ -9,11 +9,11 @@ import i18n from 'i18n-js';
 import PagerView from 'react-native-pager-view';
 import { colors } from '../../../styles/colors';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { useRecoilValueLoadable } from 'recoil';
+import { useRecoilState } from 'recoil';
 
 // props & logic
 import Carousel from '../../logics/Carousel';
-import { characterListSelector } from '../../logics/atoms';
+import { characterListState } from '../../logics/atoms';
 import useCharacter from '../../logics/useCharacter';
 
 // components
@@ -24,20 +24,20 @@ const screenWidth = Math.round(Dimensions.get('window').width);
 export default function ProfileSwipeScreen(){
   const [page, setPage] = useState(0);
   const [select, setSelect]=useState(-1);
-  const characterList = useRecoilValueLoadable(characterListSelector);
+  const [characterList, setCharacterList] = useRecoilState(characterListState);
   const [character, setCharacter] = useCharacter();
   const navigation = useNavigation();
 
   const onPress = () => {
-    if (characterList.state === 'hasValue' && characterList.contents.length > 0) {
-      setCharacter(characterList.contents[page]);
+    if (characterList.length > 0) {
+      setCharacter(characterList[page]);
       setSelect(page);
     }
   }
 
   useFocusEffect(() => {
-    if (characterList.state === 'hasValue' && characterList.contents.length > 0) {
-      const idx = characterList.contents.findIndex((element: Character) => element.id === character.id);
+    if (characterList.length > 0) {
+      const idx = characterList.findIndex((element: Character) => element.id === character.id);
       if (idx !== -1) setSelect(idx);
     }
   });
@@ -46,7 +46,7 @@ export default function ProfileSwipeScreen(){
     <View style={{flex:1}}>
       <View style={{flex:1}}/>
       <Carousel
-        pages={characterList.state === 'hasValue' ? characterList.contents : []}
+        pages={characterList}
         gap={20}
         offset={(screenWidth-260-20*2) /2}
         pageWidth={260}

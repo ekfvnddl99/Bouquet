@@ -1,19 +1,35 @@
 import { useEffect } from 'react';
-import { useRecoilState, SetterOrUpdater, useRecoilValueLoadable } from 'recoil';
+import { useRecoilState, SetterOrUpdater } from 'recoil';
 import * as SecureStore from 'expo-secure-store';
 
 import { Character } from '../../utils/types';
-import { characterState, characterListSelector } from './atoms';
-import { getCharacterAsync, responseToCharacter } from './Character';
+import { characterState, characterListState } from './atoms';
+import { getCharacterAsync, getCharacterListAsync,
+  responseToCharacter, CharacterResponseType } from './Character';
 import useUser from './useUser';
+
+export async function setCharacterListAsync(setter: SetterOrUpdater<never[]>) {
+  let list = [];
+  const result = await getCharacterListAsync();
+  if (typeof(result) !== "string") {
+    list = result.map((obj: CharacterResponseType) => {
+      return responseToCharacter(obj, obj.id);
+    });
+  }
+  setter(list);
+}
 
 export default function useCharacter() {
   const [character, setCharacter] = useRecoilState(characterState);
-  const characterList = useRecoilValueLoadable(characterListSelector);
+  const [characterList, setCharacterList] = useRecoilState(characterListState);
   const [user, setUser] = useUser();
 
   useEffect(() => {
     const init = async () => {
+      if (characterList.length === 0) {
+        await setCharacterListAsync(setCharacterList);
+      }
+
       if (character.id === -1) {
         const lastCharacterId = await SecureStore.getItemAsync('lastCharacterId');
         if (lastCharacterId) {
@@ -21,12 +37,12 @@ export default function useCharacter() {
           if (typeof(lastCharacter) !== "string") {
             setCharacter(responseToCharacter(lastCharacter, Number(lastCharacterId)));
           }
-          else if (characterList.state === 'hasValue' && characterList.contents.length > 0) {
-            setCharacter(characterList.contents[0]);
+          else if (characterList.length > 0) {
+            setCharacter(characterList[0]);
           }
         }
-        else if (characterList.state === 'hasValue' && characterList.contents.length > 0) {
-          setCharacter(characterList.contents[0]);
+        else if (characterList.length > 0) {
+          setCharacter(characterList[0]);
         }
       }
     }
