@@ -11,16 +11,14 @@ import i18n from 'i18n-js';
 import { useNavigation, useRoute, useFocusEffect, RouteProp } from '@react-navigation/native';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
-import * as button from '../../styles/styled-components/button';
-import * as text from '../../styles/styled-components/text';
-import * as input from '../../styles/styled-components/input';
 import { useRecoilState } from 'recoil';
+
 
 // props & logic
 import type {ChaGenerationProps} from '../../utils/types';
-import { bottomBarHideState, noCharacter } from '../logics/atoms';
-import { createCharacterAsync } from '../logics/Character';
-import useCharacter from '../logics/useCharacter';
+import { bottomBarHideState, noCharacter, characterListState } from '../logics/atoms';
+import { createCharacterAsync, editCharacterAsync } from '../logics/Character';
+import useCharacter, { setCharacterListAsync } from '../logics/useCharacter';
 import UploadImageAsync from '../logics/UploadImage';
 
 // components
@@ -59,6 +57,7 @@ export default function ChaGenerationScreen(){
 
   const [characterToCreate, setCharacterToCreate] = useState(noCharacter);
   const [character, setCharacter] = useCharacter();
+  const [characterList, setCharacterList] = useRecoilState(characterListState);
 
   useEffect(() => {
     setHide(true);
@@ -99,12 +98,19 @@ export default function ChaGenerationScreen(){
       realCharacter.profileImg = "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg";
     }
 
-    const result = await createCharacterAsync(realCharacter);
+    let func = createCharacterAsync;
+    if (modify === 1) {
+      func = editCharacterAsync;
+    }
+
+    const result = await func(realCharacter);
+
     if (typeof(result) !== "string") {
       setCharacter({
         ...realCharacter,
         id: result.id
       });
+      await setCharacterListAsync(setCharacterList);
       setStep(step+1);
     }
     else {

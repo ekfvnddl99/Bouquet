@@ -23,8 +23,9 @@ import SettingSvg from '../../../assets/Setting';
 // props & logic
 import { StatusBarHeight } from '../../logics/StatusbarHeight';
 import useCharacter from '../../logics/useCharacter';
-import { useRecoilValueLoadable } from 'recoil';
-import { characterListSelector } from '../../logics/atoms';
+import { characterListState, noCharacter } from '../../logics/atoms';
+import { useRecoilState } from 'recoil';
+import { Character } from '../../../utils/types';
 
 // components
 import BgButton from '../../components/BackgroundButton';
@@ -41,6 +42,12 @@ const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 export default function ProfileOverviewScreen(){
   const[swipe, setSwipe]=useState(1);
   const [character, setCharacter] = useCharacter();
+  const [characterList, setCharacterList] = useRecoilState(characterListState);
+  const[chaList, setChaList]=useState<Character[]>(characterList);
+  useEffect(()=>{
+    if(chaList.length%2===1) setChaList([...chaList, noCharacter]);
+  }, []);
+
   const navigation = useNavigation();
   useEffect(()=>{
     scroll.setValue(0);
@@ -83,7 +90,7 @@ export default function ProfileOverviewScreen(){
           </TouchableOpacity>
         </area.RowArea>
         
-        {swipe===1 ? <ProfileSwipeScreen/> : <ProfileGridScreen scroll={scroll}/>}
+        {swipe===1 ? <ProfileSwipeScreen characterList={characterList}/> : <ProfileGridScreen scroll={scroll} characterList={characterList}/>}
         <FloatingButton/>
       </area.Container>
   )

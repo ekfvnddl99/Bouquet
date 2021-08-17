@@ -16,6 +16,7 @@ import * as cal from '../logics/Calculation';
 import { Character } from '../../utils/types';
 import useCharacterView from '../logics/useCharacterView';
 import { followCharacterAsync } from '../logics/Character';
+import useUser from '../logics/useUser';
 
 // components
 import ProfileInfoText from '../components/ProfileInfoText';
@@ -26,7 +27,7 @@ import LineButton from './LineButton';
 export default function ProfileDetailItem({mini, press, id, character} : {mini:number, press:number, id:number, character: Character}){
   const navigation = useNavigation();
   const [viewCharacter, setViewCharacterId] = useCharacterView();
-  const[owner, setOwner]=useState(true);
+  const[user,setUser]=useUser();
 
   const goProfileDetail=()=>{
     setViewCharacterId(character.id);
@@ -56,7 +57,7 @@ async function follow() {
 
         {mini===1 ? <View style={{marginTop:34}}/> :
         <View style={{marginTop:8, alignItems:'center'}}>
-          {owner ?
+          {true ?
           <area.RowArea>
             <LineButton press={goChaModification} content={i18n.t("정보 수정")} color={colors.primary} incolor={colors.alpha20_primary} outcolor={'transparent'}/>
             <View style={{marginLeft:8}}/>
@@ -69,7 +70,7 @@ async function follow() {
             <ProfileInfoText bold="321" regular={i18n.t("팔로우")} color={colors.primary} center={1}/>
           </area.RowArea>
           <area.RowArea style={{marginBottom:24}}>
-            <ProfileButton diameter={20} account={1}/>
+            <ProfileButton diameter={20} account={1} name={user.name} profile={user.profileImg}/>
             <text.Body2R color={colors.black}>{i18n.t('의')} {i18n.t('캐릭터')}</text.Body2R>
           </area.RowArea>
         </View>

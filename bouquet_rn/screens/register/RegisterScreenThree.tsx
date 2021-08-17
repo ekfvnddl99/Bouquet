@@ -48,7 +48,7 @@ export default function RegisterScreenThree({onChange, name, setName, profilePic
   useEffect(()=> {
     const IsDupName=async()=>{
       const result = await UserDupAsync(name);
-      console.log(result);
+      console.log("B"+result)
       setDupResult(!result);
     }
     let tmpArray=[...conArray];
@@ -58,10 +58,11 @@ export default function RegisterScreenThree({onChange, name, setName, profilePic
     else tmpArray[1]=false;
     // 중복 조건
     IsDupName();
+    console.log("A"+dupResult)
     if(name.length>0 && dupResult) tmpArray[2]=true;
     else tmpArray[2]=false;
     setConArray(tmpArray);
-  }, [name])
+  }, [name, dupResult])
   useEffect(()=>{
     if(conArray.includes(false)) setIsOK(false);
     else setIsOK(true);

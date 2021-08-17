@@ -30,7 +30,7 @@ export default function PostingItem({press, id}  :{press:number, id:number}){
       <button.BigListButton color={colors.white} paddingH={10} paddingV={10} onPress={goPosting} activeOpacity={1}>
         <area.RowArea>
           <View style={styles.profileArea}>
-              <ProfileButton diameter={30} account={0}/>
+              <ProfileButton diameter={30} account={0} name={"ggg"} profile={"https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg"}/>
           </View>
           <View style={styles.timeArea}>
               <text.Caption color={colors.gray5}>{cal.timeName(57)} {i18n.t('전')}</text.Caption>

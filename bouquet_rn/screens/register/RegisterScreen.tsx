@@ -15,7 +15,6 @@ import ProgressArea from '../components/ProgressArea';
 
 // props && logic
 import { EmailRegisterAsync, EmailDupAsync } from '../logics/EmailLogin';
-import { UserDupAsync } from '../logics/User';
 
 // screens
 import RegisterScreenOne from './RegisterScreenOne';
@@ -44,6 +43,17 @@ export default function RegisterScreen(){
     if (!result) setStep(step+1);
     else alert(result);
   }
+
+  const backAction=()=>{
+    if(step!==1) setStep(step-1);
+    else navigation.goBack();
+    return true;
+  }
+  useEffect(() => {
+    BackHandler.addEventListener("hardwareBackPress", backAction);
+    return () =>
+      BackHandler.removeEventListener("hardwareBackPress", backAction);
+  });
   
   return(
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

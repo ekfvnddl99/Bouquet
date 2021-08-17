@@ -76,7 +76,6 @@ export default function RegisterScreenOne({onChange, email, setEmail, authNum, s
 
   const IsDupEmail=async()=>{
     const result = await EmailDupAsync(email);
-    console.log(result)
     return result;
   }
 

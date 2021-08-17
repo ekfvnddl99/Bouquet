@@ -30,7 +30,7 @@ export const selectTemplate = atom({
 export const noCharacter: Character = {
   id: -1,
   name: '',
-  profileImg: '',
+  profileImg: "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
   birth: '',
   job: '',
   nationality: '',
@@ -45,20 +45,10 @@ export const characterState = atom({
   default: noCharacter,
 })
 
-export const characterListSelector = selector({
-  key: 'characterListSeletor',
-  get: async ({ get }) => {
-    if (get(userState).isLogined) {
-      const result = await getCharacterListAsync();
-      if (typeof(result) !== "string") {
-        let list = result.map((obj: CharacterResponseType) => {
-          return responseToCharacter(obj, obj.id);
-        })
-        return list;
-      }
-    }
-    return [];
-  }
+
+export const characterListState = atom({
+  key: 'characterListState',
+  default: <Character[]>[],
 })
 
 export const viewCharacterIdState = atom({

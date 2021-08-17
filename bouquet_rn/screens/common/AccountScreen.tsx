@@ -18,9 +18,9 @@ import * as button from '../../styles/styled-components/button';
 import { StatusBarHeight } from '../logics/StatusbarHeight';
 import * as cal from '../logics/Calculation';
 import useUser from '../logics/useUser';
-import { characterListSelector, noCharacter } from '../logics/atoms';
+import { characterListState, noCharacter } from '../logics/atoms';
 import useCharacter from '../logics/useCharacter';
-import { useRecoilValueLoadable } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { Character } from '../../utils/types';
 
 // components
@@ -34,12 +34,12 @@ const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 export default function AccountScreen(){
   const [user, setUser] = useUser();
-  const characterList = useRecoilValueLoadable(characterListSelector);
+  const [characterList, setCharacterList] = useRecoilState(characterListState);
   const [character, setCharacter] = useCharacter();
   const[selectId, setSelectId]=useState(-1);
   const[chaList, setChaList]=useState<Character[]>([]);
   useEffect(()=>{
-    setChaList(characterList.contents);
+    setChaList(characterList);
     if(chaList.length%2===1) chaList.push(noCharacter);
   }, []);
 

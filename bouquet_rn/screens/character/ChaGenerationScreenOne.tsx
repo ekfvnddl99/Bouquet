@@ -54,7 +54,7 @@ export default function ChaGenerationScreenOne({modify, onChange, characterToCre
   return(
     <area.ContainerBlank20>
       <View style={{alignItems:'center', justifyContent:'center', flex:1}}>
-        <TouchableOpacity onPress={onPress}>
+        <TouchableOpacity onPress={()=>onPress()}>
         {characterToCreate.profileImg ? <elses.CircleImg diameter={180} source={{ uri: characterToCreate.profileImg }}/>
           : <elses.Circle diameter={180}><GallerySvg w='24' h='24'/></elses.Circle>}
         </TouchableOpacity>
