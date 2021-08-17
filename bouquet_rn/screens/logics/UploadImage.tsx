@@ -3,21 +3,44 @@ import * as SecureStore from 'expo-secure-store';
 import { Base64 } from 'js-base64';
 
 export default async function UploadImageAsync(uri: string) {
+  let extension = '';
+  for (let i = uri.length - 1; i >= 0; i--) {
+    if (uri.charAt(i) === '.') {
+      extension = uri.slice(i, uri.length);
+      break;
+    }
+  }
+  let type = ''
+  if (extension === ".jpg" || extension === ".jpeg") {
+    type = "image/jpeg"
+  }
+  else if (extension === ".png") {
+    type = "image/png"
+  }
+  else if (extension === ".gif") {
+    type = "image/gif"
+  }
+  else {
+    return "지원하지 않는 형식이거나, 파일 이름이 잘못되었어요.";
+  }
+  console.log(extension, type);
+
   const formData = new FormData();
   formData.append('img', {
-    type: "image/jpeg",
+    type: type,
     uri: uri,
-    name: 'upload.jpg',
+    name: 'upload' + extension,
   });
 
   const auth = await SecureStore.getItemAsync('auth');
   if (auth) {
     try {
-      let response = await fetch(serverAddress + "/services/img/upload", {
+      let response = await fetch(serverAddress + "/img/upload", {
         method: 'POST',
         headers: {
           'Authorization': auth,
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
+          'accept': 'application/json'
         },
         body: formData
       });

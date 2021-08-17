@@ -87,7 +87,7 @@ export default function ChaGenerationScreen(){
     if (characterToCreate.profileImg) {
       const img = await UploadImageAsync(characterToCreate.profileImg);
       if (typeof(img) !== "string") {
-        realCharacter.profileImg = img.uri;
+        realCharacter.profileImg = img.url;
       }
       else {
         alert("이미지 업로드에 실패했어요. 프로필 이미지를 기본 이미지로 설정할게요.");
