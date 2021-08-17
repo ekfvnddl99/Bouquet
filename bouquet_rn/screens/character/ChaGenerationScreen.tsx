@@ -16,9 +16,9 @@ import * as text from '../../styles/styled-components/text';
 import * as input from '../../styles/styled-components/input';
 import { useRecoilState } from 'recoil';
 
+
 // props & logic
 import type {ChaGenerationProps} from '../../utils/types';
-import { ChaGenerationStackParam } from '../../utils/types';
 import { bottomBarHideState, noCharacter, characterListState } from '../logics/atoms';
 import { createCharacterAsync, editCharacterAsync } from '../logics/Character';
 import useCharacter, { setCharacterListAsync } from '../logics/useCharacter';
@@ -90,7 +90,7 @@ export default function ChaGenerationScreen(){
     if (characterToCreate.profileImg) {
       const img = await UploadImageAsync(characterToCreate.profileImg);
       if (typeof(img) !== "string") {
-        realCharacter.profileImg = img.url;
+        realCharacter.profileImg = img.uri;
       }
       else {
         alert("이미지 업로드에 실패했어요. 프로필 이미지를 기본 이미지로 설정할게요.");
@@ -139,7 +139,7 @@ export default function ChaGenerationScreen(){
           characterToCreate={characterToCreate}
           setCharacterToCreate={setCharacterToCreate}
         /> : 
-        <ChaGenerationScreenFour modify={modify} navigation={navigation}/>}
+        <ChaGenerationScreenFour profile={characterToCreate.profileImg} name={characterToCreate.name} modify={modify} navigation={navigation}/>}
       </area.Container>
     </TouchableWithoutFeedback>
   );

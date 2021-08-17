@@ -18,9 +18,7 @@ import ConditionButton from '../components/ConditionButton';
 import NameNText from '../components/NameNText';
 import BackButton from '../components/BackButton';
 
-export default function ChaDeletionScreenTwo({navigation}:{navigation:any}){
-  const[name,setName]=useState('undefined');
-
+export default function ChaDeletionScreenTwo({profile, name, navigation}:{profile:string, name: string, navigation:any}){
   const goOverview = ()=>{
     navigation.navigate('ProfileOverview');
   }
@@ -28,7 +26,7 @@ export default function ChaDeletionScreenTwo({navigation}:{navigation:any}){
   return(
     <area.Container>
       <View style={styles.middleArea}>
-        <elses.CircleImg diameter={120} source={require('../../assets/img.jpg')} style={{marginBottom:16}}/>
+        <elses.CircleImg diameter={120} source={{uri:profile}} style={{marginBottom:16}}/>
         <NameNText name={name} sub={i18n.t("님으로")}/>
         <text.Subtitle2R color={colors.black}>{i18n.t('보여 주신 새로운 모습이')}</text.Subtitle2R>
         <text.Subtitle2R color={colors.black}>{i18n.t('아름다웠습니다')}</text.Subtitle2R>

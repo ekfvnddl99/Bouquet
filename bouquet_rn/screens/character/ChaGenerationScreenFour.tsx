@@ -11,7 +11,6 @@ import * as text from '../../styles/styled-components/text';
 import * as elses from '../../styles/styled-components/elses';
 
 // props & logic
-import type {ChaGenerationProps} from '../../utils/types';
 import { useRecoilState } from 'recoil';
 import { bottomBarHideState } from '../logics/atoms';
 
@@ -20,8 +19,7 @@ import ProgressArea from '../components/ProgressArea';
 import ConditionButton from '../components/ConditionButton';
 import NameNText from '../components/NameNText';
 
-export default function ChaGenerationScreenFour({modify, navigation} : {modify : number, navigation:any}){
-  const[name,setName]=useState('undefined');
+export default function ChaGenerationScreenFour({profile, name, modify, navigation} : {profile:string, name:string, modify : number, navigation:any}){
   const [hide, setHide] = useRecoilState(bottomBarHideState);
 
   const goNext=()=>{
@@ -33,7 +31,7 @@ export default function ChaGenerationScreenFour({modify, navigation} : {modify :
   return(
     <View style={{flex:1}}>
       <View style={styles.middleArea}>
-        <elses.CircleImg diameter={120} source={require('../../assets/img.jpg')} style={{marginBottom:16}}/>
+        <elses.CircleImg diameter={120} source={{uri: profile}} style={{marginBottom:16}}/>
         <NameNText name={name} sub="님,"/>
         <text.Subtitle2R color={colors.black}>{modify===1 ? i18n.t("다시 피어날") : i18n.t("또 다른 모습으로")}</text.Subtitle2R>
         <text.Subtitle2R color={colors.black}>{modify===1 ? i18n.t("준비가 되었어요") : i18n.t("피어날 준비가 되었어요")}</text.Subtitle2R>

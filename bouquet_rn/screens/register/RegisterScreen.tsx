@@ -3,15 +3,19 @@ import {
     View,
     TextInput,
     TouchableWithoutFeedback,
-    Keyboard
+    Keyboard,
+    BackHandler
 } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
-import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 
 // components
 import ProgressArea from '../components/ProgressArea';
+
+// props && logic
+import { EmailRegisterAsync, EmailDupAsync } from '../logics/EmailLogin';
+import { UserDupAsync } from '../logics/User';
 
 // screens
 import RegisterScreenOne from './RegisterScreenOne';
@@ -19,13 +23,11 @@ import RegisterScreenTwo from './RegisterScreenTwo';
 import RegisterScreenThree from './RegisterScreenThree';
 import RegisterScreenFour from './RegisterScreenFour';
 
-import { EmailRegisterAsync } from '../logics/EmailLogin';
-
 function setTitle(step:number){
   if(step===1) return i18n.t("메일로 회원가입");
   else if(step===2) return i18n.t("비밀번호 설정");
   else if(step===3) return i18n.t("계정 정보 입력");
-  else return i18n.t("회원가입 완료!");
+  else return i18n.t("회원가입 완료");
 }
 
 export default function RegisterScreen(){
@@ -35,7 +37,7 @@ export default function RegisterScreen(){
   const [pw, setPW] = useState('');
   const [name, setName] = useState('');
   const [authNum, setAuthNum] = useState('');
-  const [profilePic, setProfilePic] = useState('https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg');
+  const [profilePic, setProfilePic] = useState('');
 
   const register = async () => {
     const result = await EmailRegisterAsync(email, pw, name, profilePic);
@@ -60,8 +62,9 @@ export default function RegisterScreen(){
         step===3 ? <RegisterScreenThree onChange={register} 
           name={name} 
           setName={setName} 
-          setProfilePic={setProfilePic} /> : 
-        <RegisterScreenFour navigation={navigation}/>}
+          profilePic={profilePic}
+          setProfilePic={setProfilePic}/> : 
+        <RegisterScreenFour name={name} profile={profilePic} navigation={navigation}/>}
       </area.Container>
     </TouchableWithoutFeedback>
   );

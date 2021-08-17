@@ -38,7 +38,9 @@ export type SettingStackParam = {
   SettingAlarm : undefined,
   SettingAlarmCustom : object,
   SettingProfile : undefined,
+  SettingAccount : undefined,
   SettingAccountDeletionOne : undefined,
+  SettingAccountDeletionTwo : undefined,
 }
 export type SettingProps = StackScreenProps<SettingStackParam, "Setting">;
 // character generation
@@ -95,7 +97,6 @@ export type WelcomeStackParam = {
   Login : undefined,
   Register : undefined,
   Tab : undefined,
-  SettingAccountDeletionTwo : undefined,
 }
 export type WelcomeProps = StackScreenProps<WelcomeStackParam, "Welcome">;
 

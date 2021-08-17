@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, {Component, useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -12,19 +12,29 @@ import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
 import * as elses from '../../styles/styled-components/elses';
 
+// props && logic
+import { useRecoilState } from 'recoil';
+import { bottomBarHideState } from '../logics/atoms';
+
 // components
 import ConditionButton from '../components/ConditionButton';
 import NameNText from '../components/NameNText';
 import BackButton from '../components/BackButton';
-import { SettingStackParam } from '../../utils/types';
+import { WelcomeStackParam } from '../../utils/types';
 
 export default function AccountDeletionScreenTwo(){
   const[name,setName]=useState('undefined');
-  const navigation = useNavigation<StackNavigationProp<SettingStackParam>>();
+  const [hide, setHide] = useRecoilState(bottomBarHideState);
+  useEffect(() => {
+    setHide(true);
+  }, []);
+
+  const navigation = useNavigation();
   const goOut=()=>{
-    navigation.popToTop();
-    navigation.popToTop();
-    navigation.popToTop();
+    setHide(false);
+    navigation.reset({
+      routes: [{name: 'Welcome'}],
+    });
   }
 
   return(

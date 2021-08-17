@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useRef, useEffect} from 'react';
 import {
     ScrollView,
     FlatList,
@@ -22,6 +22,9 @@ import SettingSvg from '../../../assets/Setting';
 
 // props & logic
 import { StatusBarHeight } from '../../logics/StatusbarHeight';
+import useCharacter from '../../logics/useCharacter';
+import { useRecoilValueLoadable } from 'recoil';
+import { characterListSelector } from '../../logics/atoms';
 
 // components
 import BgButton from '../../components/BackgroundButton';
@@ -30,7 +33,6 @@ import ProfileGridScreen from './ProfileGridScreen';
 import { useState } from 'react';
 import FloatingButton from '../../components/FloatingButton';
 import { ProfileProps } from '../../../utils/types';
-import { useEffect } from 'react';
 
 const HEADER_MAX_HEIGHT = 90;
 const HEADER_MIN_HEIGHT = 60;
@@ -38,6 +40,7 @@ const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 export default function ProfileOverviewScreen(){
   const[swipe, setSwipe]=useState(1);
+  const [character, setCharacter] = useCharacter();
   const navigation = useNavigation();
   useEffect(()=>{
     scroll.setValue(0);
@@ -64,7 +67,7 @@ export default function ProfileOverviewScreen(){
         </Animated.View>
 
         <area.RowArea style={{paddingHorizontal:30, paddingVertical:16}}>
-          <View style={{flex:1}}><elses.CircleImg diameter={24} source={require('../../../assets/img.jpg')}/></View>
+          <View style={{flex:1}}><elses.CircleImg diameter={24} source={{uri: character.profileImg}}/></View>
           <TouchableOpacity style={{marginRight:16}} onPress={goChaGeneration}>
             <PlusSvg w='24' h='24'/>
           </TouchableOpacity>

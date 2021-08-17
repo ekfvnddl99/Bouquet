@@ -17,6 +17,11 @@ import * as button from '../../styles/styled-components/button';
 // props & logic
 import { StatusBarHeight } from '../logics/StatusbarHeight';
 import * as cal from '../logics/Calculation';
+import useUser from '../logics/useUser';
+import { characterListSelector, noCharacter } from '../logics/atoms';
+import useCharacter from '../logics/useCharacter';
+import { useRecoilValueLoadable } from 'recoil';
+import { Character } from '../../utils/types';
 
 // components
 import BackButton from '../components/BackButton';
@@ -28,14 +33,15 @@ const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 export default function AccountScreen(){
-  // dummy data - 서버에서 불러와야 함
-  let Data=[{name:'김', introduction:'b'}, {name:'김', introduction:'b'},{name:'김', introduction:'c'},{name:'김', introduction:'a'},{name:'김', introduction:'a'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'}];
-  useEffect(()=>{
-    if(Data.length%2===1) Data.push({name:'', introduction:''});
-  }, []);
-
-  const [press, setPress] = useState(0);
+  const [user, setUser] = useUser();
+  const characterList = useRecoilValueLoadable(characterListSelector);
+  const [character, setCharacter] = useCharacter();
   const[selectId, setSelectId]=useState(-1);
+  const[chaList, setChaList]=useState<Character[]>([]);
+  useEffect(()=>{
+    setChaList(characterList.contents);
+    if(chaList.length%2===1) chaList.push(noCharacter);
+  }, []);
 
   const scroll = useRef(new Animated.Value(0)).current;
   const OpacityHeader=scroll.interpolate({
@@ -54,7 +60,7 @@ export default function AccountScreen(){
         <area.RowArea style={{paddingHorizontal:30, paddingVertical:16}}>
           <BackButton/>
           <View style={{flex:1}}/>
-          <elses.CircleImg diameter={28} source={require('../../assets/img.jpg')}/>
+          <elses.CircleImg diameter={28} source={{uri:character.profileImg}}/>
         </area.RowArea>
 
         <Animated.ScrollView
@@ -67,12 +73,12 @@ export default function AccountScreen(){
           <View style={{paddingTop: 20}}/>
 
           <area.NoHeightArea marBottom={30} paddingH={20} paddingV={20} style={{alignItems:'center'}}>
-            <elses.CircleImg diameter={120} source={require('../../assets/img.jpg')}/>
-            <text.Subtitle2B color={colors.black} style={{marginVertical:8}}>현지</text.Subtitle2B>
+            <elses.CircleImg diameter={120} source={{uri:user.profileImg}}/>
+            <text.Subtitle2B color={colors.black} style={{marginVertical:8}}>{user.name}</text.Subtitle2B>
             <area.RowArea style={{justifyContent:'center'}}>
               <ProfileInfoText bold={cal.numName(1200).toString()} regular={i18n.t("팔로워")} color={colors.primary} center={1}/>
               <View style={{marginRight:32}}/>
-              <ProfileInfoText bold={Data.length.toString()} regular={i18n.t("캐릭터")+(i18n.locale==='en' ? 's' : '')} color={colors.primary} center={1}/>
+              <ProfileInfoText bold={chaList.length.toString()} regular={i18n.t("캐릭터")+(i18n.locale==='en' ? 's' : '')} color={colors.primary} center={1}/>
             </area.RowArea>
           </area.NoHeightArea>
 
@@ -80,13 +86,13 @@ export default function AccountScreen(){
 
           <area.RowArea style={{marginBottom:12}}>
             <text.Body2R color={colors.black}>{i18n.t('총')} </text.Body2R>
-            <text.Body2B color={colors.black}>{Data[Data.length-1].name==='' ? Data.length-1 : Data.length}</text.Body2B>
+            <text.Body2B color={colors.black}>{chaList[chaList.length-1] ? chaList.length-1 : chaList.length}</text.Body2B>
             <text.Body2R color={colors.black}>{i18n.t('명')}</text.Body2R>
           </area.RowArea>
           <FlatList
               columnWrapperStyle={{justifyContent:'space-between'}}
               contentContainerStyle={{justifyContent:'center',}}
-              data={Data}
+              data={chaList}
               keyExtractor={(item) => item.name.toString()}
               numColumns={2}
               showsHorizontalScrollIndicator={false}
@@ -96,7 +102,7 @@ export default function AccountScreen(){
                     {obj.item.name==='' ? <View/>
                     : 
                     <TouchableWithoutFeedback onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
-                      <ProfileChaItem name={obj.item.name} introduction={obj.item.introduction} idx={obj.index} select={selectId} setSelect={setSelectId} account={true}/>
+                      <ProfileChaItem name={obj.item.name} introduction={obj.item.intro} idx={obj.index} select={selectId} setSelect={setSelectId} account={true}/>
                     </TouchableWithoutFeedback>}
                   </View>
                 ); }}/>

@@ -12,6 +12,9 @@ import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
 import * as elses from '../../styles/styled-components/elses';
 
+// props && logic
+import { deleteUserAsync } from '../logics/User';
+
 // components
 import ConditionButton from '../components/ConditionButton';
 import NameNText from '../components/NameNText';
@@ -22,8 +25,13 @@ import ProfileItem from '../components/ProfileItem';
 export default function AccountDeletionScreenOne(){
   const[name,setName]=useState('undefined');
 
-  const navigation = useNavigation<StackNavigationProp<SettingStackParam>>();
-  const goScreenTwo=()=>{
+  async function deleteUser() {
+    await deleteUserAsync();
+  }
+
+  const navigation = useNavigation();
+  async function deleteNgoScreenTwo(){
+    await deleteUser();
     navigation.navigate('SettingAccountDeletionTwo');
   }
 
@@ -46,7 +54,7 @@ export default function AccountDeletionScreenOne(){
           <View style={{alignItems: 'center'}}>
             <text.Caption color={colors.gray6} style={{marginBottom:16}}>{i18n.t('아쉽지만 계정은 삭제하면 복구하지 못해요')}</text.Caption>
           </View>
-          <ConditionButton height={44} active={true} press={goScreenTwo} content={i18n.t("계정 삭제")} paddingH={0} paddingV={14}/>
+          <ConditionButton height={44} active={true} press={deleteNgoScreenTwo} content={i18n.t("계정 삭제")} paddingH={0} paddingV={14}/>
         </area.BottomArea>
       </area.ContainerBlank20>
     </area.Container>
