@@ -153,6 +153,31 @@ export async function getCharacterAsync(characterId?: number, characterName?: st
   else return "로그인되어 있지 않아요.";
 }
 
+export async function CharacterTopAsync() {
+  try {
+    let path = "/character/top";
+    let header: {'accept': string}
+    = {
+      'accept': 'application/json',
+    };
+
+    let response = await fetch(serverAddress + path, {
+      method: 'GET',
+      headers: header
+    });
+    let result = await response.json();
+
+    if (response.status === 200) {
+      return result.result;
+    }
+    else return "문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.";
+  }
+  catch (err) {
+    console.log("error: " + err);
+    return "서버와 연결할 수 없어요. 다시 시도해 보거나, 문의해 주세요.";
+  }
+}
+
 // POST
 
 export async function createCharacterAsync(character: Character) {
@@ -183,4 +208,100 @@ export async function createCharacterAsync(character: Character) {
     }
   }
   else return "로그인되어 있지 않아요.";
+}
+
+
+export async function followCharacterAsync(characterID: number, followerID:number) {
+  const auth = await SecureStore.getItemAsync('auth');
+  if (auth) {
+    try {
+      let response = await fetch(serverAddress + "/character/follow", {
+        method: 'POST',
+        headers: {
+          'accept': 'application/json',
+          'Authorization': auth,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({"character_id": characterID, "follower_id" : followerID})
+      });
+      let result = await response.json();
+      console.log(result);
+
+      if (response.status === 200) {
+        return result;
+      }
+      else return "문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.";
+    }
+    catch (err) {
+      console.log("error: " + err);
+      return "서버와 연결할 수 없어요. 다시 시도해 보거나, 문의해 주세요.";
+    }
+  }
+  else return "로그인되어 있지 않아요.";
+}
+
+// PUT
+
+export async function editCharacterAsync(character: Character) {
+  const auth = await SecureStore.getItemAsync('auth');
+  if (auth) {
+    try {
+      let response = await fetch(serverAddress + "/character/me", {
+        method: 'PUT',
+        headers: {
+          'accept': 'application/json',
+          'Authorization': auth,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(characterToRequest(character))
+      });
+      let result = await response.json();
+      console.log(result);
+
+      if (response.status === 200) {
+        return result;
+      }
+      else return "문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.";
+    }
+    catch (err) {
+      console.log("error: " + err);
+      return "서버와 연결할 수 없어요. 다시 시도해 보거나, 문의해 주세요.";
+    }
+  }
+  else return "로그인되어 있지 않아요.";
+
+}
+
+// DELETE
+export async function deleteCharacterAsync(characterID: number) {
+  const auth = await SecureStore.getItemAsync('auth');
+  if (auth) {
+    try {
+      let path = "/character/me";
+      let header: {'accept': string, 'Authorization': string, 'character-id': string}
+      = {
+        'accept': 'application/json',
+        'Authorization': auth,
+        'character-id' : `${characterID}`
+      };
+
+      let response = await fetch(serverAddress + path, {
+        method: 'DELETE',
+        headers: header
+      });
+      let result = await response.json();
+      console.log(result);
+  
+      if (response.status === 200) {
+        return true;
+      }
+      else return "문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.";
+    }
+    catch (err) {
+      console.log("error: " + err);
+      return "서버와 연결할 수 없어요. 다시 시도해 보거나, 문의해 주세요.";
+    }
+  }
+  else return "로그인되어 있지 않아요.";
+
 }

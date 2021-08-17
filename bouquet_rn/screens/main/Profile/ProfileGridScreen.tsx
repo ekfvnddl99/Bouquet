@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, {Component, useState, useEffect} from 'react';
 import {
     View,
     Text,
@@ -7,15 +7,22 @@ import {
     TouchableWithoutFeedback,
   Animated
 } from 'react-native';
-import { colors } from '../../../styles/colors';
-import * as area from '../../../styles/styled-components/area';
 
+// props && logic
+import { characterListSelector, noCharacter } from '../../logics/atoms';
+import { useRecoilValueLoadable } from 'recoil';
+import { Character } from '../../../utils/types';
+
+// components
 import ProfileChaItem from '../../components/ProfileChaItem';
 
 export default function ProfileGridScreen({scroll}: {scroll:any}){
-  // dummy data
-  let Data=[{name:'김', introduction:'b'}, {name:'김', introduction:'b'},{name:'김', introduction:'c'},{name:'김', introduction:'a'},{name:'김', introduction:'a'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'},{name:'김', introduction:'b'}];
-  if(Data.length%2===1) Data.push({name:'', introduction:''});
+  const characterList = useRecoilValueLoadable(characterListSelector);
+  const[chaList, setChaList]=useState<Character[]>([]);
+  useEffect(()=>{
+    setChaList(characterList.contents);
+    if(chaList.length%2===1) chaList.push(noCharacter);
+  }, []);
 
   const[selectId, setSelectId]=useState(-1);
 
@@ -31,7 +38,7 @@ export default function ProfileGridScreen({scroll}: {scroll:any}){
       <FlatList
         columnWrapperStyle={{justifyContent:'space-between'}}
         contentContainerStyle={{justifyContent:'center'}}
-        data={Data}
+        data={chaList}
         keyExtractor={(item) => item.name.toString()}
         numColumns={2}
         showsHorizontalScrollIndicator={false}
@@ -41,7 +48,7 @@ export default function ProfileGridScreen({scroll}: {scroll:any}){
               {obj.item.name==='' ? <View/> 
               : 
               <TouchableWithoutFeedback onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
-                <ProfileChaItem name={obj.item.name} introduction={obj.item.introduction} idx={obj.index} select={selectId} setSelect={setSelectId}/>
+                <ProfileChaItem name={obj.item.name} introduction={obj.item.intro} idx={obj.index} select={selectId} setSelect={setSelectId}/>
               </TouchableWithoutFeedback>
         }
             </View>

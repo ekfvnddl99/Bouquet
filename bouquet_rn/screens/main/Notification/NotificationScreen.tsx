@@ -18,18 +18,21 @@ import * as elses from '../../../styles/styled-components/elses';
 
 // props & logic
 import { StatusBarHeight } from '../../logics/StatusbarHeight';
+import useCharacter from '../../logics/useCharacter';
+import useUser from '../../logics/useUser';
 
 // components
 import NotificationItem from '../../components/NotificationItem';
 import NameNText from '../../components/NameNText';
 import NotLoginPrimaryButton from '../../components/NotLoginPrimaryButton';
 import ProfileItem from '../../components/ProfileItem';
+import { characterState } from '../../logics/atoms';
 
 const HEADER_MAX_HEIGHT = 94;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
-function InNotificationScreen(){
+function InNotificationScreen({name} : {name:string}){
   let Data=[{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9}];
 
   const[selectId, setSelectId]=useState(-1);
@@ -70,7 +73,7 @@ function InNotificationScreen(){
       </Animated.View>
       <area.RowArea style={{marginHorizontal:30, marginTop:30}}>
         <Animated.View style={[styles.a, {opacity : OpacityTitle}, {transform:[{translateY: TranslateImgY}]}]}>
-          < NameNText name="eksghwhk" sub={i18n.t("의")}/>
+          < NameNText name={name} sub={i18n.t("의")}/>
           <text.Subtitle2R color={colors.black}>{i18n.t('알림')}</text.Subtitle2R>
         </Animated.View>
         <Animated.View style={[styles.b, {transform:[{scale: ScaleImg},{translateY: TranslateImgY}, {translateX:TranslateImgX}]}]}>
@@ -93,7 +96,7 @@ function InNotificationScreen(){
           renderItem={(obj)=>{
             return(
               <TouchableWithoutFeedback onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
-                <NotificationItem press={selectId} id={obj.index}/>
+                <NotificationItem press={selectId} id={obj.index} name={name} content={"이 "+"팔로우하자고!"}/>
               </TouchableWithoutFeedback>
             );}}>
           </FlatList>}
@@ -121,7 +124,7 @@ function OutNotificationScreen(){
           keyExtractor={(item) => item.id.toString()}
           renderItem={(obj)=>{
             return(
-              <NotificationItem press={selectId} id={obj.index}/>
+              <NotificationItem press={selectId} id={obj.index} name={"Bouquet"} content={"이 "+"꿈꾸던 부캐를 만들어 보자고 제안해요."}/>
             );}}>
           </FlatList>
       </View>
@@ -133,11 +136,11 @@ function OutNotificationScreen(){
 }
 
 export default function NotificationScreen(){
-  // dummy data - 서버에서 불러와야 함
-  const [login, setLogin]=useState(1);
+  const [character, setCharacter] = useCharacter();
+  const [user, setUser]=useUser();
   return(
     <View style={{flex:1}}>
-      {login===1 ? <InNotificationScreen/> : <OutNotificationScreen/>}
+      {user.isLogined && character.name!=='' ? <InNotificationScreen name={character.name}/> : <OutNotificationScreen/>}
     </View>
   )
 }

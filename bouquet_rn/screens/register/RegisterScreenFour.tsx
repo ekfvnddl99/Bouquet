@@ -17,9 +17,7 @@ import ProgressArea from '../components/ProgressArea';
 import ConditionButton from '../components/ConditionButton';
 import NameNText from '../components/NameNText';
 
-export default function RegisterScreenFour({navigation} : {navigation : any}){
-  const[name,setName]=useState('undefined');
-
+export default function RegisterScreenFour({name, profile, navigation} : {name:string, profile:string, navigation : any}){
   const goNext=()=>{
     navigation.popToTop();
     navigation.navigate('Tab');
@@ -29,14 +27,14 @@ export default function RegisterScreenFour({navigation} : {navigation : any}){
     <View style={{flex:1}}>
       
       <View style={styles.middleArea}>
-        <elses.CircleImg diameter={120} source={require('../../assets/img.jpg')} style={{marginBottom:16}}/>
+        <elses.CircleImg diameter={120} source={{uri:profile}} style={{marginBottom:16}}/>
         <NameNText name={name} sub="님,"/>
         <text.Subtitle2R color={colors.black}>{i18n.t('환영합니다')}</text.Subtitle2R>
       </View>
 
       <area.ContainerBlank20>
         <area.BottomArea style={{marginBottom:16}}>
-          <ConditionButton active={1} press={goNext} content={i18n.t("시작")} paddingH={0} paddingV={14} height={45}/>
+          <ConditionButton active={true} press={goNext} content={i18n.t("시작")} paddingH={0} paddingV={14} height={45}/>
         </area.BottomArea>
       </area.ContainerBlank20>
     </View>

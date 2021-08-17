@@ -26,7 +26,7 @@ import * as cal from '../logics/Calculation';
 import { useEffect } from 'react';
 
 const SWIPE = 50
-export default function NotificationItem({press, id}  :{press:number, id:number}){
+export default function NotificationItem({press, id, name, content}  :{press:number, id:number, name:string, content:string}){
   const drag = useRef(new Animated.Value(0)).current;
   const TranslateX = drag.interpolate({
     inputRange: [-SWIPE, 0],
@@ -58,8 +58,8 @@ export default function NotificationItem({press, id}  :{press:number, id:number}
             <elses.CircleImg diameter={20} source={require('../../assets/img.jpg')}/>
             <View style={styles.contentText}>
               <area.RowArea>
-                <text.Body2B color={colors.black}>현지
-                  <text.Body2R color={colors.black}>qmffkqfmffkwkdskskdlsjfka; jf;asjdfasjficwfmqwe</text.Body2R>
+                <text.Body2B color={colors.black}>{name}
+                  <text.Body2R color={colors.black}>{content}</text.Body2R>
                 </text.Body2B>
               </area.RowArea>
             </View>

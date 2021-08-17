@@ -38,7 +38,7 @@ export default function RegisterScreenTwo({onChange, pw, setPW} : RegisterScreen
 
   const [conArray, setConArray] = useState([false, false]);
   const errText =["비밀번호를 입력해 주세요.", "비밀번호 규칙을 지켜야 해요."];
-  const pwReg=/^(?=.*\d{0,})(?=.*[a-zA-Z]{0,})(?=.*[!@#$%^*+=-]{0,}).{8,32}$/;
+  const pwReg=/^(?=.*\d)|((?=.*[\w])|(?=.*[!@#$%^*+=-])).{8,32}$/;
 
   useEffect(()=>{
     let tmpArray=[...conArray];

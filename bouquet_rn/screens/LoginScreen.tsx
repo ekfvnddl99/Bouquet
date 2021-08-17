@@ -74,7 +74,7 @@ export default function LoginScreen(){
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={{flex:1, backgroundColor:colors.gray0, paddingTop:top}}>
           <area.ContainerBlank20>
-            <ScrollView>
+            <ScrollView keyboardShouldPersistTaps={'handled'}>
             <BackButton/>
             <View style={{marginTop:30}}/>
             <text.Subtitle1 color={colors.black}>{i18n.t('로그인')}</text.Subtitle1>

@@ -1,5 +1,6 @@
 import { serverAddress } from './ServerInfos';
 import * as SecureStore from 'expo-secure-store';
+import {Base64} from 'js-base64';
 
 type EmailLoginProps = {
   email: string;
@@ -51,7 +52,7 @@ export async function EmailRegisterAsync(email: string, password: string, name: 
         "email": email,
         "pw": password,
         "profile_img": profilePic,
-        "name": name
+        "name": Base64.encode(name)
       })
     });
     let result = await response.json();
@@ -63,6 +64,31 @@ export async function EmailRegisterAsync(email: string, password: string, name: 
     }
     else {
       return '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.';
+    }
+  }
+  catch (err) {
+    console.log("error: " + err);
+    return "서버와 연결할 수 없어요. 다시 시도해 보거나, 문의해 주세요.";
+  }
+}
+
+export async function EmailDupAsync(email: string) {
+  try {
+    let response = await fetch(serverAddress + "/auth/dup_email", {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'accept': 'application/json',
+        'email' : email
+      },
+    });
+    let result = await response.json();
+
+    if (response.status === 200) {
+      return result.result;
+    }
+    else {
+      return result.result;
     }
   }
   catch (err) {

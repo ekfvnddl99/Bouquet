@@ -1,5 +1,6 @@
 import { serverAddress } from './ServerInfos';
 import * as SecureStore from 'expo-secure-store';
+import { Base64 } from 'js-base64';
 
 export default async function UploadImageAsync(uri: string) {
   const formData = new FormData();

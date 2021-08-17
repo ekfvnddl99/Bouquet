@@ -117,26 +117,21 @@ function SettingnStackNavigator(){
         component={SettingProfileScreen}
         options={{headerShown : false}}/>
       <SettingStack.Screen 
+        name="SettingAccount" 
+        component={AccountStackNavigator}
+        options={{headerShown : false}}/>
+      <SettingStack.Screen 
         name="SettingAccountDeletionOne" 
         component={AccountDeletionScreenOne}
+        options={{headerShown : false}}/>
+      <SettingStack.Screen
+        name="SettingAccountDeletionTwo" 
+        component={AccountDeletionScreenTwo}
         options={{headerShown : false}}/>
     </SettingStack.Navigator>
   );
 }
-// character generation
-// const ChaGenerationStack = createStackNavigator<Types.ChaGenerationStackParam>();
-// function ChaGenerationStackNavigator(){
-//   return(
-//     <ChaGenerationStack.Navigator
-//       initialRouteName="ChaGeneration">
-//       <ChaGenerationStack.Screen 
-//         name="ChaGeneration"
-//         component={ChaGenerationScreen}
-//         options={{headerShown : false}}/>
-//     </ChaGenerationStack.Navigator>
-//   );
-// }
-// aacount
+// account
 const AccountStack = createStackNavigator<Types.AccountStackParam>();
 function AccountStackNavigator(){
   return(
@@ -284,10 +279,6 @@ function WelcomeStackNavigator(){
       <WelcomeStack.Screen
         name="Tab"
         component={TabNavigator}
-        options={{headerShown : false}}/>
-      <WelcomeStack.Screen
-        name="SettingAccountDeletionTwo" 
-        component={AccountDeletionScreenTwo}
         options={{headerShown : false}}/>
     </WelcomeStack.Navigator>
   );

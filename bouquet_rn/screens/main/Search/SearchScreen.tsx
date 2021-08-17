@@ -21,6 +21,7 @@ import SearchViewFocusSvg from '../../../assets/SearchViewFocus';
 // props & logic
 import type {SearchProps} from '../../../utils/types';
 import { StatusBarHeight } from '../../logics/StatusbarHeight';
+import { CharacterTopAsync } from '../../logics/Character';
 
 // components
 import TagModifyItem from '../../components/TagModifyItem';
@@ -28,14 +29,16 @@ import CharacterItem from '../../components/CharacterItem';
 import PostingItem from '../../components/PostingItem';
 import EpisodeMiniItem from '../../components/EpisodeMiniItem';
 import FloatingButton from '../../components/FloatingButton';
+import { useEffect } from 'react';
 
 const HEADER_MAX_HEIGHT = 95;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 export default function SearchScreen({navigation} : SearchProps){
-    // dummy data - 서버에서 불러와야 함.
-    let Data=[{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9}];
+    const[recentList, setRecentList]=useState([]);
+    const[chaList, setChaList]=useState([]);
+    const[postList, setPostList]=useState([]);
 
     const[selectIdCha, setSelectIdCha]=useState(-1);
     const[selectIdEpi, setSelectIdEpi]=useState(-1);
@@ -43,6 +46,14 @@ export default function SearchScreen({navigation} : SearchProps){
     const[selectIdRecent, setSelectIdRecent]=useState(-1);
     const[focus, setFocus]=useState(0);
     const[searchText, setSearchText]=useState('');
+
+    useEffect(()=>{
+      async function getTopCharacter(){
+        const result = await CharacterTopAsync();
+        setChaList(result);
+      }
+      getTopCharacter();
+    }, [])
 
     const scroll = useRef(new Animated.Value(0)).current;
     const OpacityHeader=scroll.interpolate({
@@ -77,7 +88,8 @@ export default function SearchScreen({navigation} : SearchProps){
                 {focus===1 || searchText.length>0 ? <SearchViewFocusSvg w='15' h='15'/> : <SearchViewSvg w='15' h='15'/>}
               </View>
               <View style={{flex:1}}>
-                <TextInput placeholder={i18n.t("무엇이 궁금한가요")} onFocus={()=>setFocus(1)} onBlur={()=>setFocus(0)} onChangeText={(str)=>setSearchText(str)}/>
+                <TextInput placeholder={i18n.t("무엇이 궁금한가요")} 
+                  onFocus={()=>setFocus(1)} onBlur={()=>setFocus(0)} onChangeText={(str)=>setSearchText(str)} value={searchText}/>
               </View>
             </Animated.View>
           </View>
@@ -96,14 +108,15 @@ export default function SearchScreen({navigation} : SearchProps){
                 <text.Subtitle3 color={colors.black}>{i18n.t('최근 검색어')}</text.Subtitle3>
                 <FlatList
                   style={{marginTop:12}}
-                  data={Data}
-                  keyExtractor={(item) => item.id.toString()}
+                  data={recentList}
+                  keyExtractor={(item) => item}
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
                   renderItem={(obj)=>{
                     return(
                       <TouchableWithoutFeedback onPress={()=>{selectIdRecent===obj.index ? setSelectIdRecent(-1) : setSelectIdRecent(obj.index)}}>
-                        <TagModifyItem content={obj.item.id.toString()} press={selectIdEpi} id={obj.index} search={1}/>
+                        <TagModifyItem content={obj.item} press={selectIdRecent} setSearch={setSearchText} index={obj.index} search={1} 
+                          array={recentList} setArray={setRecentList}/>
                       </TouchableWithoutFeedback>
                     ); 
                   }}>
@@ -114,14 +127,14 @@ export default function SearchScreen({navigation} : SearchProps){
                 <text.Subtitle3 color={colors.black}>{i18n.t('인기 부캐')}</text.Subtitle3>
                 <FlatList
                   style={{marginTop:12}}
-                  data={Data}
-                  keyExtractor={(item) => item.id.toString()}
+                  data={chaList}
+                  keyExtractor={(item) => item}
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
                   renderItem={(obj)=>{
                     return(
                     <TouchableWithoutFeedback onPress={()=>{selectIdCha===obj.index ? setSelectIdCha(-1) : setSelectIdCha(obj.index)}}>
-                      <CharacterItem press={selectIdEpi} id={obj.index}/>
+                      <CharacterItem press={selectIdCha} id={obj.index}/>
                     </TouchableWithoutFeedback>
                     ); 
                   }}></FlatList>
@@ -150,8 +163,8 @@ export default function SearchScreen({navigation} : SearchProps){
             <text.Subtitle3 color={colors.black}>{i18n.t('인기 게시물')}</text.Subtitle3>
             <FlatList
               style={{marginTop:12}}
-              data={Data}
-              keyExtractor={(item) => item.id.toString()}
+              data={postList}
+              keyExtractor={(item) => item}
               showsVerticalScrollIndicator={false}
               renderItem={(obj)=>{
                 return(

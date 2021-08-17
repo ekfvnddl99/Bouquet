@@ -19,6 +19,11 @@ import * as elses from '../../styles/styled-components/elses';
 import ProfileItem from '../components/ProfileItem';
 import BackButton from '../components/BackButton';
 
+// props & logic
+import { deleteCharacterAsync } from '../logics/Character';
+import { characterState } from '../logics/atoms';
+import { useRecoilValue } from 'recoil';
+
 // screens
 import ChaDeletionScreenOne from './ChaDeletionScreenOne';
 import ChaDeletionScreenTwo from './ChaDeletionScreenTwo';
@@ -31,18 +36,26 @@ function setTitle(step:number){
 export default function ChaDeletionScreen(){
   const[step, setStep]=useState(1);
   const navigation = useNavigation();
+
+  const character = useRecoilValue(characterState);
+
+  async function deleteCharacter(){
+    const result = await deleteCharacterAsync(character.id);
+    if(result===true) setStep(step+1);
+    else alert(result);
+  }
   return(
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <area.Container>
         <area.RowArea style={{paddingHorizontal:30, paddingVertical:16}}>
-          <BackButton/>
+          {step===1 ? <BackButton/> : null}
           <View style={{flex:1}}/>
           <ProfileItem diameter={28}/>
         </area.RowArea>
         <area.ContainerBlank20>
           <text.Subtitle1 color={colors.black} style={{marginBottom:32}}>{setTitle(step)}</text.Subtitle1>
-          {step===1 ? <ChaDeletionScreenOne onChange={()=>setStep(step+1)}/> :
-          <ChaDeletionScreenTwo navigation={navigation}/>}
+          {step===1 ? <ChaDeletionScreenOne profile={character.profileImg} name={character.name} onChange={deleteCharacter}/> :
+          <ChaDeletionScreenTwo profile={character.profileImg} name={character.name} navigation={navigation}/>}
         </area.ContainerBlank20>
       </area.Container>
     </TouchableWithoutFeedback>

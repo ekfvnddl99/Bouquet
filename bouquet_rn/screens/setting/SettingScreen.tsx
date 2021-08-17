@@ -1,8 +1,7 @@
-import React, {Component, useState} from 'react';
+import React, {Component, useState, useEffect} from 'react';
 import {
   View,
-  Text,
-  StyleSheet,
+  TouchableOpacity
 } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
@@ -24,7 +23,6 @@ import useUser from '../logics/useUser';
 import useCharacter from '../logics/useCharacter';
 
 export default function SettingScreen(){
-  const[name,setName]=useState('undefined');
   const [user, setUser] = useUser();
   const [character, setCharacter] = useCharacter();
   const navigation = useNavigation();
@@ -44,7 +42,9 @@ export default function SettingScreen(){
       <area.RowArea style={{paddingHorizontal:30, paddingVertical:16}}>
         <BackButton/>
         <View style={{flex:1}}/>
-        <ProfileItem diameter={28}/>
+        <TouchableOpacity onPress={()=>navigation.navigate('SettingAccount')}>
+          <elses.CircleImg diameter={28} source={{uri:user.profileImg}}/>
+        </TouchableOpacity>
       </area.RowArea>
       
       <View style={{marginVertical:20, paddingHorizontal:30}}>

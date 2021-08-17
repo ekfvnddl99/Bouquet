@@ -4,6 +4,8 @@ import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
 
+import useCharacter from '../logics/useCharacter';
+
 // components
 import ProfileButton from './ProfileButton';
 import LineButton from './LineButton';
@@ -14,11 +16,13 @@ import QnAItem from './QnAItem';
 export default function QnATextInput(){
   const[upload, setUpload]=useState(false);
   const[answer, setAnswer]=useState('');
+  const [character, setCharacter] = useCharacter();
+
   if(!upload){
     return(
       <area.NoHeightArea paddingH={10} paddingV={10} marBottom={10}>
         <area.RowArea style={{marginBottom:10}}>
-          <View style={{flex:1}}><ProfileButton diameter={30} account={0}/></View>
+          <View style={{flex:1}}><ProfileButton diameter={30} account={0} name={character.name} profile={character.profileImg}/></View>
           <LineButton press={()=>{}} content="질문 바꾸기" color={colors.black} incolor={colors.gray2} outcolor={'transparent'}/>
         </area.RowArea>
         <QuestionItem/>

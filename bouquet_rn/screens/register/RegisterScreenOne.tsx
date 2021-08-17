@@ -2,22 +2,19 @@ import React, {Component, useState, useEffect} from 'react';
 import {
     View,
     TextInput,
-    TouchableWithoutFeedback,
-    Keyboard,
-    ScrollView
+    Alert,
 } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { SettingStackParam } from '../../utils/types';
+import { WelcomeStackParam } from '../../utils/types';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as button from '../../styles/styled-components/button';
 import * as text from '../../styles/styled-components/text';
 import * as input from '../../styles/styled-components/input';
 
-// props & logic
-
+import { EmailDupAsync } from '../logics/EmailLogin';
 
 // components
 import ProgressArea from '../components/ProgressArea';
@@ -26,6 +23,7 @@ import PrimaryTextButton from '../components/PrimaryTextButton';
 import WarningText from '../components/WarningText';
 import ConditionTextInput from '../components/ConditionTextInput';
 import LineButton from '../components/LineButton';
+import CustomAlert from '../components/CustomAlert';
 
 
 interface RegisterScreenProps{
@@ -40,12 +38,12 @@ export default function RegisterScreenOne({onChange, email, setEmail, authNum, s
   const [IsFocus, setFocus] = useState(false);
   const [next, setNext]=useState(false);
 
-  const [con1Array, setCon1Array] = useState([false, false, false]);
+  const [con1Array, setCon1Array] = useState([false, false]);
   const [con2Array, setCon2Array] = useState([false, false]);
   const errText =["메일을 입력해 주세요.", "메일 형식대로 입력해야 해요.", "메일을 인증해 주세요.", "인증 번호를 입력해 주세요.", "인증 번호가 틀렸나 봐요."];
   const emailReg = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
 
-  const navigation = useNavigation<StackNavigationProp<SettingStackParam>>();
+  const navigation = useNavigation<StackNavigationProp<WelcomeStackParam>>();
 
   useEffect(()=>{
     let tmpArray=[...con1Array];
@@ -54,9 +52,6 @@ export default function RegisterScreenOne({onChange, email, setEmail, authNum, s
     else tmpArray[0]=false;
     if(emailReg.test(email)) tmpArray[1]=true;
     else tmpArray[1]=false;
-    // 중복되지 않는 조건
-    if(email.length>0) tmpArray[2]=true;
-    else tmpArray[2]=false;
     setCon1Array(tmpArray)
   }, [email])
 
@@ -75,8 +70,14 @@ export default function RegisterScreenOne({onChange, email, setEmail, authNum, s
   })
 
   const goLogin=()=>{
-    navigation.popToTop();
+    navigation.pop();
     navigation.navigate('Login');
+  }
+
+  const IsDupEmail=async()=>{
+    const result = await EmailDupAsync(email);
+    console.log(result)
+    return result;
   }
 
   function IsNewEmail(){
@@ -86,18 +87,30 @@ export default function RegisterScreenOne({onChange, email, setEmail, authNum, s
     }
   }
 
+  function dupAlert(){
+    Alert.alert(
+      "이미 가입한 메일이에요.",
+      "이 메일로 로그인하시겠어요?",
+      [
+        {text : "로그인", onPress: ()=>goLogin()},
+        {text : "다른 메일로 가입", style:"cancel"}
+      ]
+    );
+  }
+
   return(
     <area.ContainerBlank20>
-      <area.FormArea height='44' style={IsFocus && !(con1Array[0]&&con1Array[1]&&con1Array[2]) ? {borderWidth:1, borderColor:colors.warning_red} : null}>
+      <area.FormArea height='44' style={IsFocus && !(con1Array[0]&&con1Array[1]) ? {borderWidth:1, borderColor:colors.warning_red} : null}>
         <TextInput style={{flex: 1}} placeholder={i18n.t('메일')} 
           keyboardType={'email-address'}
           onChangeText={(text : string) => setEmail(text)} 
           value={email} 
           onFocus={()=>setFocus(true)}/>
-        <LineButton press={()=>(con1Array[0]&&con1Array[1]&&con1Array[2]) ? setNext(true) : {}} content={i18n.t("메일 인증")} 
+        <LineButton content={i18n.t("메일 인증")} 
+          press={async ()=> (con1Array[0]&&con1Array[1]) ? (! await IsDupEmail() ? setNext(true) : dupAlert()) : {}} 
           color={colors.black} incolor={colors.gray2} outcolor={'transparent'}/>
       </area.FormArea>
-      {IsFocus && !(con1Array[0]&&con1Array[1]&&con1Array[2]) ? <WarningText content={!con1Array[0] ? errText[0] : errText[1]} marginTop={8}/> : null}
+      {IsFocus && !(con1Array[0]&&con1Array[1]) ? <WarningText content={!con1Array[0] ? errText[0] : errText[1]} marginTop={8}/> : null}
         
       {authNum.length > 0 || next ? 
       <View style={{marginTop:16}}>

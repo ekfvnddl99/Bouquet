@@ -80,55 +80,55 @@ export default function PostDetailScreen(){
       
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <KeyboardAvoidingView style={{flex:1}} behavior={'padding'} enabled>
-            <Animated.ScrollView
-              contentContainerStyle={{marginHorizontal:30, flexGrow:1}}
-              showsVerticalScrollIndicator={false}
-              keyboardShouldPersistTaps={'always'}
-              onScroll={Animated.event(
-              [{ nativeEvent: { contentOffset: { y: scroll } } }],
-              { useNativeDriver: true })}>
-              <View style={{paddingTop: 20}}/>
-
-              <area.RowArea>
-                <View style={{flex:1}}><ProfileButton diameter={30} account={0}/></View>
-                {owner===1 ? 
-                <area.RowArea style={{paddingRight:1}}>
-                  <LineButton press={()=>{}} content={i18n.t("수정")} color={colors.black} incolor={colors.gray2} outcolor={'transparent'}/>
-                  <View style={{marginRight:4}}/>
-                  <LineButton press={()=>{}} content={i18n.t("삭제")} color={colors.warning_red} incolor={colors.alpha20_primary} outcolor={'transparent'}/>
-                </area.RowArea> : null}
-              </area.RowArea>
-              <View style={{marginBottom: 12}}/>
-              <TextTemplate/>
-              <View style={{alignItems:'flex-start'}}><SunButton sun={24}/></View>
-              <text.Subtitle3 color={colors.black} style={{marginTop:36}}>{i18n.t('반응')}</text.Subtitle3>
-
-              <View style={{paddingTop: 12}}/>
-              <FlatList
-                data={Data}
+              <Animated.ScrollView
+                contentContainerStyle={{marginHorizontal:30, flexGrow:1}}
+                showsVerticalScrollIndicator={false}
                 keyboardShouldPersistTaps={'always'}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={(obj)=>{
-                  return(
-                    <>
-                    <TouchableOpacity activeOpacity={1} onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
-                      <CommentItem press={selectId} id={obj.index} owner={1} login={user.isLogined} IsMore={1} IsClick={setClick} AddClicks={setClickedLowerId} clicks={clickedLowerId}/>
-                    </TouchableOpacity>
-                    {clickedLowerId.includes(obj.index) ?
-                    <FlatList
-                      style={{marginLeft:16}}
-                      data={data}
-                      keyExtractor={(item) => item.id.toString()}
-                      renderItem={(lowerobj)=>{
-                        return(
-                          <TouchableOpacity activeOpacity={1} onPress={()=>{selectId===((obj.index+1)*10)+lowerobj.index ? setSelectId(-1) : setSelectId(((obj.index+1)*10)+lowerobj.index)}}>
-                            <CommentItem press={selectId} id={((obj.index+1)*10)+lowerobj.index} owner={1} login={user.isLogined}/>
-                          </TouchableOpacity>
-                        );}}/>: null}
-                    </>
-                  ); 
-                }}/>
-            </Animated.ScrollView>
+                onScroll={Animated.event(
+                [{ nativeEvent: { contentOffset: { y: scroll } } }],
+                { useNativeDriver: true })}>
+                <View style={{paddingTop: 20}}/>
+
+                <area.RowArea>
+                  <View style={{flex:1}}><ProfileButton diameter={30} account={0}/></View>
+                  {owner===1 ? 
+                  <area.RowArea style={{paddingRight:1}}>
+                    <LineButton press={()=>{}} content={i18n.t("수정")} color={colors.black} incolor={colors.gray2} outcolor={'transparent'}/>
+                    <View style={{marginRight:4}}/>
+                    <LineButton press={()=>{}} content={i18n.t("삭제")} color={colors.warning_red} incolor={colors.alpha20_primary} outcolor={'transparent'}/>
+                  </area.RowArea> : null}
+                </area.RowArea>
+                <View style={{marginBottom: 12}}/>
+                <TextTemplate/>
+                <View style={{alignItems:'flex-start'}}><SunButton sun={24}/></View>
+                <text.Subtitle3 color={colors.black} style={{marginTop:36}}>{i18n.t('반응')}</text.Subtitle3>
+
+                <View style={{paddingTop: 12}}/>
+                <FlatList
+                  data={Data}
+                  keyboardShouldPersistTaps={'always'}
+                  keyExtractor={(item) => item.id.toString()}
+                  renderItem={(obj)=>{
+                    return(
+                      <>
+                      <TouchableOpacity activeOpacity={1} onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
+                        <CommentItem press={selectId} id={obj.index} owner={1} login={user.isLogined} IsMore={1} IsClick={setClick} AddClicks={setClickedLowerId} clicks={clickedLowerId}/>
+                      </TouchableOpacity>
+                      {clickedLowerId.includes(obj.index) ?
+                      <FlatList
+                        style={{marginLeft:16}}
+                        data={data}
+                        keyExtractor={(item) => item.id.toString()}
+                        renderItem={(lowerobj)=>{
+                          return(
+                            <TouchableOpacity activeOpacity={1} onPress={()=>{selectId===((obj.index+1)*10)+lowerobj.index ? setSelectId(-1) : setSelectId(((obj.index+1)*10)+lowerobj.index)}}>
+                              <CommentItem press={selectId} id={((obj.index+1)*10)+lowerobj.index} owner={1} login={user.isLogined}/>
+                            </TouchableOpacity>
+                          );}}/>: null}
+                      </>
+                    ); 
+                  }}/>
+              </Animated.ScrollView>
             {user.isLogined ?
               <View style={{justifyContent:'flex-end'}}>
                 {selectId!==-1 ? <CommentInputComment setSelectId={setSelectId} comment={Data[selectId%10].id.toString()}/> : null}

@@ -26,7 +26,6 @@ export default function ProfileSwipeScreen(){
   const [select, setSelect]=useState(-1);
   const characterList = useRecoilValueLoadable(characterListSelector);
   const [character, setCharacter] = useCharacter();
-  const navigation = useNavigation();
 
   const onPress = () => {
     if (characterList.state === 'hasValue' && characterList.contents.length > 0) {
@@ -52,10 +51,11 @@ export default function ProfileSwipeScreen(){
         pageWidth={260}
         setPage={setPage}
       />
+      {characterList.contents.length===0 ? null :
       <View style={{flex:1, alignItems:'center', justifyContent:'flex-end', marginBottom:16, marginTop:41}}>
         <BackgroundButton press={onPress} content={select===page ? i18n.t("선택된 캐릭터") : i18n.t("캐릭터 선택")} 
         height={45} active={select===page ? 0 : 1} paddingH={40} paddingV={14}/>
-      </View>
+      </View>}
     </View>
   );
 }

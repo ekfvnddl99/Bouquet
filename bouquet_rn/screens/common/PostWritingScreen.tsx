@@ -22,6 +22,7 @@ import ArrowLeftSvg from '../../assets/ArrowLeft';
 // props & logic
 import { StatusBarHeight } from '../logics/StatusbarHeight';
 import { selectTemplate } from '../logics/atoms';
+import useCharacter from '../logics/useCharacter';
 
 // components
 import ConditionButton from '../components/ConditionButton';
@@ -54,6 +55,7 @@ export default function PostWritingScreen(){
   // 템플릿을 고른 상태라면 select에 1을 넣어줘야 한다.
   const select=useRecoilValue(selectTemplate);
   const setSelect=useSetRecoilState(selectTemplate);
+  const [character, setCharacter] = useCharacter();
 
   const backAction=()=>{
     setSelect(-1);
@@ -87,7 +89,7 @@ export default function PostWritingScreen(){
       <ScrollView>
         <area.ContainerBlank30>
           <area.RowArea>
-            <View style={{flex:1}}><ProfileButton diameter={30} account={0}/></View>
+            <View style={{flex:1}}><ProfileButton diameter={30} account={0} name={character.name} profile={character.profileImg}/></View>
             {select!==-1 ? 
             <LineButton press={goSelect} content={I18n.t("템플릿 변경")} color={colors.black} incolor={colors.gray2} outcolor={'transparent'}/> : null}
           </area.RowArea>

@@ -19,6 +19,7 @@ import EyeFocusSvg from '../../assets/EyeFocus';
 // props & logic
 import type {ChaGenerationProps, Character} from '../../utils/types';
 import {getByte} from '../logics/Calculation';
+import { CharacterDupAsync } from '../logics/Auth';
 
 // components
 import ProgressArea from '../components/ProgressArea';
@@ -32,13 +33,22 @@ export default function ChaGenerationScreenTwo({modify, onChange, characterToCre
   const[IsOK, setIsOK]=useState(false);
   const[conArray, setConArray]=useState([false, false, false, false, false, false]);
   const errText=["필수 입력 항목이에요.", "이름 규칙을 지켜야 해요."];
+
+  const[dupResult, setDupResult]=useState(false);
   useEffect(()=>{
+    async function IsDupName(){
+      const result = await CharacterDupAsync(characterToCreate.name);
+      setDupResult(!result)
+    }
+
     let tmpArray=[...conArray];
     if(characterToCreate.name.length>0) tmpArray[0]=true;
     else tmpArray[0]=false;
     if(getByte(characterToCreate.name)<=18 && getByte(characterToCreate.name)>0) tmpArray[1]=true;
     else tmpArray[1]=false;
-    if(characterToCreate.name) tmpArray[2]=true;
+    // 중복 확인
+    IsDupName();
+    if(characterToCreate.name.length>0 && dupResult) tmpArray[2]=true;
     else tmpArray[2]=false;
     if(characterToCreate.birth.length>0) tmpArray[3]=true;
     else tmpArray[3]=false;
