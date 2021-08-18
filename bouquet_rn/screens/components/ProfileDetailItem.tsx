@@ -24,13 +24,14 @@ import ProfileButton from './ProfileButton';
 import ProfileInfoTag from './ProfileInfoTag';
 import LineButton from './LineButton';
 
-export default function ProfileDetailItem({mini, press, id, character} : {mini:number, press:number, id:number, character: Character}){
+export default function ProfileDetailItem({mini, press, id, character} : {mini:number, press:number, id?:number, character: Character}){
   const navigation = useNavigation();
-  const [viewCharacter, setViewCharacterId] = useCharacterView();
+  const [viewCharacter, setViewCharacter] = useCharacterView();
   const[user,setUser]=useUser();
 
   const goProfileDetail=()=>{
-    setViewCharacterId(character.id);
+    if (character.id !== -1) setViewCharacter(character.id);
+    else setViewCharacter(character.name);
     navigation.navigate('ProfileItem');
   }
   const goChaModification=()=>{

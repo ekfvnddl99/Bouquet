@@ -1,17 +1,17 @@
 import { useRecoilState, useRecoilValueLoadable, Loadable, SetterOrUpdater } from 'recoil';
-import { viewCharacterIdState, viewCharacterSelector } from './atoms';
+import { viewCharacterState, viewCharacterSelector } from './atoms';
 import { Character } from '../../utils/types';
 
 export default function useCharacterView() {
-  const [viewCharacterId, setViewCharacterId] = useRecoilState(viewCharacterIdState);
+  const [viewCharacter, setViewCharacter] = useRecoilState(viewCharacterState);
   const character = useRecoilValueLoadable(viewCharacterSelector);
 
   type OutputType = [
     Loadable<Character>,
-    SetterOrUpdater<number>
+    SetterOrUpdater<number|string>
   ]
 
-  const returns: OutputType = [character, setViewCharacterId];
+  const returns: OutputType = [character, setViewCharacter];
 
   return returns;
 }

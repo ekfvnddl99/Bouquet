@@ -19,9 +19,10 @@ import SearchViewSvg from '../../../assets/SearchView';
 import SearchViewFocusSvg from '../../../assets/SearchViewFocus';
 
 // props & logic
-import type {SearchProps} from '../../../utils/types';
+import type {SearchProps, Character} from '../../../utils/types';
 import { StatusBarHeight } from '../../logics/StatusbarHeight';
 import { CharacterTopAsync } from '../../logics/Character';
+import { responseToCharacter, CharacterResponseType } from '../../logics/Character';
 
 // components
 import TagModifyItem from '../../components/TagModifyItem';
@@ -37,7 +38,7 @@ const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 export default function SearchScreen({navigation} : SearchProps){
     const[recentList, setRecentList]=useState([]);
-    const[chaList, setChaList]=useState([]);
+    const[chaList, setChaList]=useState<Character[]>([]);
     const[postList, setPostList]=useState([]);
 
     const[selectIdCha, setSelectIdCha]=useState(-1);
@@ -50,7 +51,10 @@ export default function SearchScreen({navigation} : SearchProps){
     useEffect(()=>{
       async function getTopCharacter(){
         const result = await CharacterTopAsync();
-        setChaList(result);
+        const realList: Character[] = result.map((obj: CharacterResponseType) => {
+          return responseToCharacter(obj);
+        })
+        setChaList(realList);
       }
       getTopCharacter();
     }, [])
@@ -128,13 +132,13 @@ export default function SearchScreen({navigation} : SearchProps){
                 <FlatList
                   style={{marginTop:12}}
                   data={chaList}
-                  keyExtractor={(item) => item}
+                  keyExtractor={(item, index) => index.toString()}
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
                   renderItem={(obj)=>{
                     return(
                     <TouchableWithoutFeedback onPress={()=>{selectIdCha===obj.index ? setSelectIdCha(-1) : setSelectIdCha(obj.index)}}>
-                      <CharacterItem press={selectIdCha} id={obj.index}/>
+                      <CharacterItem press={selectIdCha} id={obj.index} character={obj.item}/>
                     </TouchableWithoutFeedback>
                     ); 
                   }}></FlatList>

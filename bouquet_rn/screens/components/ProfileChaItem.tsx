@@ -11,11 +11,13 @@ import {useSetRecoilState, useRecoilValue} from 'recoil';
 // components
 import ConditionButton from './ConditionButton';
 
+import useCharacterView from '../logics/useCharacterView';
+
 interface ProfileChaItemProps{
   name: string, 
   profile:string,
   introduction : string, 
-  id?:number,
+  id:number,
   select?:number,
   press : Function,
   idx?:number,
@@ -24,7 +26,10 @@ interface ProfileChaItemProps{
 
 export default function ProfileChaItem({name, profile, introduction, id, select, press, idx, account} : ProfileChaItemProps){
   const navigation = useNavigation();
+  const [viewCharacter, setViewCharacter] = useCharacterView();
   const goProfileDetail=()=>{
+    if (id !== -1) setViewCharacter(id);
+    else setViewCharacter(name);
     navigation.navigate('ProfileItem');
   }
   return(

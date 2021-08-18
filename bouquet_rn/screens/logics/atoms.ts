@@ -51,19 +51,25 @@ export const characterListState = atom({
   default: <Character[]>[],
 })
 
-export const viewCharacterIdState = atom({
-  key: 'viewCharacterIdState',
-  default: -1,
+export const viewCharacterState = atom({
+  key: 'viewCharacterState',
+  default: <number|string>-1,
 })
 
 export const viewCharacterSelector = selector({
   key: 'viewCharacterSelector',
   get: async ({ get }) => {
-    const currentId = get(viewCharacterIdState);
-    if (currentId !== -1) {
-      const result = await getCharacterAsync(currentId);
+    const current = get(viewCharacterState);
+    if (typeof(current) === "number" && current !== -1) {
+      const result = await getCharacterAsync(current);
       if (typeof(result) !== "string") {
         return responseToCharacter(result, result.id);
+      }
+    }
+    else if (typeof(current) === "string" && current !== '') {
+      const result = await getCharacterAsync(undefined, current);
+      if (typeof(result) !== "string") {
+        return responseToCharacter(result);
       }
     }
     return noCharacter;
