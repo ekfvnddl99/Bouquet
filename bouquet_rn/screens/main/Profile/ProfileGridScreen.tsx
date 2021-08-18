@@ -7,14 +7,22 @@ import {
     TouchableWithoutFeedback,
   Animated
 } from 'react-native';
+
+// props && logic
 import { Character } from '../../../utils/types';
+import useCharacter from '../../logics/useCharacter';
 
 // components
 import ProfileChaItem from '../../components/ProfileChaItem';
 
 export default function ProfileGridScreen({scroll, characterList}: {scroll:any, characterList:Character[]}){
+  const [character, setCharacter] = useCharacter();
+  const[selectId, setSelectId]=useState(character.id);
 
-  const[selectId, setSelectId]=useState(-1);
+  const press=(idx:number, id:number)=>{
+    setCharacter(characterList[idx]);
+    setSelectId(id);
+  }
 
   return(
     <Animated.ScrollView 
@@ -29,7 +37,7 @@ export default function ProfileGridScreen({scroll, characterList}: {scroll:any, 
         columnWrapperStyle={{justifyContent:'space-between'}}
         contentContainerStyle={{justifyContent:'center'}}
         data={characterList}
-        keyExtractor={(item) => item.name.toString()}
+        keyExtractor={(item) => item.id.toString()}
         numColumns={2}
         showsHorizontalScrollIndicator={false}
         renderItem={(obj)=>{
@@ -37,10 +45,8 @@ export default function ProfileGridScreen({scroll, characterList}: {scroll:any, 
             <View style={{ flex:0.5, marginBottom:13, marginHorizontal:8}}>
               {obj.item.name==='' ? <View/> 
               : 
-              <TouchableWithoutFeedback onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
-                <ProfileChaItem name={obj.item.name} introduction={obj.item.intro} idx={obj.index} select={selectId} setSelect={setSelectId}/>
-              </TouchableWithoutFeedback>
-        }
+              <ProfileChaItem name={obj.item.name} profile={obj.item.profileImg} introduction={obj.item.intro} id={obj.item.id} 
+                select={selectId} press={press} idx={obj.index}/>}
             </View>
           ); }}/>
     </Animated.ScrollView>

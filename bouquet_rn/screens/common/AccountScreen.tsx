@@ -37,10 +37,11 @@ export default function AccountScreen(){
   const [characterList, setCharacterList] = useRecoilState(characterListState);
   const [character, setCharacter] = useCharacter();
   const[selectId, setSelectId]=useState(-1);
-  const[chaList, setChaList]=useState<Character[]>([]);
+  const[chaList, setChaList]=useState<Character[]>(characterList);
+  const[numOfCha, setNumOfCha]=useState(0);
   useEffect(()=>{
-    setChaList(characterList);
-    if(chaList.length%2===1) chaList.push(noCharacter);
+    setNumOfCha(characterList.length)
+    if(chaList.length%2===1) setChaList([...chaList, noCharacter]);
   }, []);
 
   const scroll = useRef(new Animated.Value(0)).current;
@@ -78,7 +79,7 @@ export default function AccountScreen(){
             <area.RowArea style={{justifyContent:'center'}}>
               <ProfileInfoText bold={cal.numName(1200).toString()} regular={i18n.t("팔로워")} color={colors.primary} center={1}/>
               <View style={{marginRight:32}}/>
-              <ProfileInfoText bold={chaList.length.toString()} regular={i18n.t("캐릭터")+(i18n.locale==='en' ? 's' : '')} color={colors.primary} center={1}/>
+              <ProfileInfoText bold={numOfCha.toString()} regular={i18n.t("캐릭터")+(i18n.locale==='en' ? 's' : '')} color={colors.primary} center={1}/>
             </area.RowArea>
           </area.NoHeightArea>
 
@@ -86,7 +87,7 @@ export default function AccountScreen(){
 
           <area.RowArea style={{marginBottom:12}}>
             <text.Body2R color={colors.black}>{i18n.t('총')} </text.Body2R>
-            <text.Body2B color={colors.black}>{chaList[chaList.length-1] ? chaList.length-1 : chaList.length}</text.Body2B>
+            <text.Body2B color={colors.black}>{numOfCha}</text.Body2B>
             <text.Body2R color={colors.black}>{i18n.t('명')}</text.Body2R>
           </area.RowArea>
           <FlatList
@@ -101,8 +102,8 @@ export default function AccountScreen(){
                   <View style={{ flex:0.5, marginBottom:13, marginHorizontal:8}}>
                     {obj.item.name==='' ? <View/>
                     : 
-                    <TouchableWithoutFeedback onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
-                      <ProfileChaItem name={obj.item.name} introduction={obj.item.intro} idx={obj.index} select={selectId} setSelect={setSelectId} account={true}/>
+                    <TouchableWithoutFeedback onPress={()=>setSelectId(obj.index)}>
+                      <ProfileChaItem name={obj.item.name} profile={obj.item.profileImg} introduction={obj.item.intro} idx={obj.index} select={selectId} press={setSelectId} account={true}/>
                     </TouchableWithoutFeedback>}
                   </View>
                 ); }}/>

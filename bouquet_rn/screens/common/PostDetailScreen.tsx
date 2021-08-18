@@ -45,7 +45,7 @@ const HEADER_MAX_HEIGHT = 90;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
-const width = Dimensions.get('window').width;
+
 
 export default function PostDetailScreen(){
     // dummy data - 서버에서 불러와야 함
@@ -56,7 +56,8 @@ export default function PostDetailScreen(){
     const[clickedLowerId, setClickedLowerId]=useState<number[]>([]);
     const[owner, setOwner]=useState(1);
     const[click, setClick]=useState(1);
-    const[commet, setComment]=useState('');
+    const[comment, setComment]=useState('');
+    const[chat, setChat]=useState(false);
 
     const scroll = useRef(new Animated.Value(0)).current;
     const OpacityHeader=scroll.interpolate({
@@ -77,11 +78,11 @@ export default function PostDetailScreen(){
             <View style={{flex:1}}/>
             <ProfileItem diameter={28}/>
           </area.RowArea>
-      
+       
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <KeyboardAvoidingView style={{flex:1}} behavior={'padding'} enabled>
+            <KeyboardAvoidingView style={{flex:1, flexDirection:'column', justifyContent:"center"}} behavior={'padding'} enabled>
               <Animated.ScrollView
-                contentContainerStyle={{marginHorizontal:30, flexGrow:1}}
+                contentContainerStyle={{marginHorizontal:30, flexGrow:1, flexDirection:'column'}}
                 showsVerticalScrollIndicator={false}
                 keyboardShouldPersistTaps={'always'}
                 onScroll={Animated.event(
@@ -90,7 +91,7 @@ export default function PostDetailScreen(){
                 <View style={{paddingTop: 20}}/>
 
                 <area.RowArea>
-                  <View style={{flex:1}}><ProfileButton diameter={30} account={0}/></View>
+                  <View style={{flex:1}}><ProfileButton diameter={30} account={0} name={"guswl"} profile={"https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg"}/></View>
                   {owner===1 ? 
                   <area.RowArea style={{paddingRight:1}}>
                     <LineButton press={()=>{}} content={i18n.t("수정")} color={colors.black} incolor={colors.gray2} outcolor={'transparent'}/>
@@ -132,7 +133,7 @@ export default function PostDetailScreen(){
             {user.isLogined ?
               <View style={{justifyContent:'flex-end'}}>
                 {selectId!==-1 ? <CommentInputComment setSelectId={setSelectId} comment={Data[selectId%10].id.toString()}/> : null}
-                <CommentInputBar selectId={selectId} value={commet} onChange={setComment}/>
+                <CommentInputBar selectId={selectId} value={comment} onChange={setComment}/>
               </View> : null}
             </KeyboardAvoidingView>
             </TouchableWithoutFeedback>

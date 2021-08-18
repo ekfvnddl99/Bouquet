@@ -3,7 +3,9 @@ import {
   View,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  Keyboard
+  Keyboard,
+  KeyboardAvoidingView,
+  ScrollView
 } from 'react-native';
 import i18n from 'i18n-js';
 import * as ImagePicker from 'expo-image-picker';
@@ -98,46 +100,50 @@ export default function SettingProfileScreen({navigation} : SettingProps){
 
   return(
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-    <area.Container>
-    <area.RowArea style={{paddingHorizontal:30, paddingVertical:16}}>
-        <BackButton/>
-        <View style={{flex:1}}/>
-        <ProfileItem diameter={28}/>
-      </area.RowArea>
+      <area.Container>
+        <area.RowArea style={{paddingHorizontal:30, paddingVertical:16}}>
+          <BackButton/>
+          <View style={{flex:1}}/>
+          <ProfileItem diameter={28}/>
+        </area.RowArea>
 
-      <area.ContainerBlank20>
-        <text.Subtitle1 color={colors.black} style={{marginBottom:32}}>{i18n.t('계정 프로필 수정')}</text.Subtitle1>
+        <KeyboardAvoidingView style={{flex:1}} behavior={'height'}>
+          <area.ContainerBlank20>
+            <ScrollView contentContainerStyle={{flexGrow:1}} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'always'}>
+              <text.Subtitle1 color={colors.black} style={{marginBottom:32}}>{i18n.t('계정 프로필 수정')}</text.Subtitle1>
 
-        <View style={{alignItems:'center', marginBottom:32}}>
-          <TouchableOpacity onPress={onPress}>
-          {profile ? <elses.CircleImg diameter={180} source={{ uri: profile }}/>
-            : <elses.Circle diameter={180}><GallerySvg w='24' h='24'/></elses.Circle>}
-          </TouchableOpacity>
-        </View>
+              <View style={{alignItems:'center', marginBottom:32}}>
+                <TouchableOpacity onPress={onPress}>
+                {profile ? <elses.CircleImg diameter={180} source={{ uri: profile }}/>
+                  : <elses.Circle diameter={180}><GallerySvg w='24' h='24'/></elses.Circle>}
+                </TouchableOpacity>
+              </View>
 
-        <ConditionTextInput height={44} placeholder={i18n.t("별명")}
-          onChange={(text: string) => setName(text)}
-          keyboard={'default'}
-          active={!(conArray[0]&&conArray[1]&&conArray[2])}
-          value={name}
-          warnText={!conArray[0] ? errText[0] : errText[1]}
-          conditions={
-            <View>
-              <ConditionText content={i18n.t("20 byte 이하")} active={conArray[1]}/>
-              <ConditionText content={i18n.t("중복되지 않는 이름")} active={conArray[2]}/>
-            </View>
-          }
-          byte={20}
-        />
+              <ConditionTextInput height={44} placeholder={i18n.t("별명")}
+                onChange={(text: string) => setName(text)}
+                keyboard={'default'}
+                active={!(conArray[0]&&conArray[1]&&conArray[2])}
+                value={name}
+                warnText={!conArray[0] ? errText[0] : errText[1]}
+                conditions={
+                  <View>
+                    <ConditionText content={i18n.t("20 byte 이하")} active={conArray[1]}/>
+                    <ConditionText content={i18n.t("중복되지 않는 이름")} active={conArray[2]}/>
+                  </View>
+                }
+                byte={20}
+              />
 
-        <area.BottomArea style={{marginBottom:16}}>
-          <TouchableOpacity style={{alignItems:'center'}} onPress={goDeletion}>
-            <text.Button3 color={colors.warning_red} style={{marginBottom:16}}>{i18n.t('계정 삭제')}</text.Button3>
-          </TouchableOpacity>
-          <ConditionButton active={IsOK} press={IsOK ? changeNgoProfile : ()=>{}} content={i18n.t("계정 프로필 수정 완료")} paddingH={0} paddingV={14} height={45}/>
-        </area.BottomArea>
-      </area.ContainerBlank20>
-    </area.Container>
+              <area.BottomArea style={{marginBottom:16}}>
+                <TouchableOpacity style={{alignItems:'center'}} onPress={goDeletion}>
+                  <text.Button3 color={colors.warning_red} style={{marginBottom:16}}>{i18n.t('계정 삭제')}</text.Button3>
+                </TouchableOpacity>
+                <ConditionButton active={IsOK} press={IsOK ? changeNgoProfile : ()=>{}} content={i18n.t("계정 프로필 수정 완료")} paddingH={0} paddingV={14} height={45}/>
+              </area.BottomArea>
+            </ScrollView>
+          </area.ContainerBlank20>
+        </KeyboardAvoidingView>
+      </area.Container>
     </TouchableWithoutFeedback>
   );
 }
