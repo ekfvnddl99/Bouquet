@@ -1,13 +1,52 @@
-import React from 'react';
-import {View} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, TextInput, TouchableOpacity } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import I18n from 'i18n-js';
 import { colors } from '../../styles/colors';
 import * as text from '../../styles/styled-components/text';
 import * as area from '../../styles/styled-components/area';
-
-export default function TextTemplate(){
+import * as elses from '../../styles/styled-components/elses';
+import * as input from '../../styles/styled-components/input';
+  
+  
+  
+function Text({ content, isMini, isEditMode }: {content?:string, isMini: boolean, isEditMode?: boolean}) {
   return(
-    <area.NoHeightArea marBottom={12} paddingH={20} paddingV={20}>
-      <text.Body2R color={colors.black}>이건 내용이라구용가릿!</text.Body2R>
+    <area.NoHeightArea
+      marBottom={0}
+      paddingH={15}
+      paddingV={15}
+    >
+      {isEditMode ? 
+      <input.TextTemplate placeholder={I18n.t("내용을 입력해 주세요")}/>
+      : 
+      <text.Body2R color={colors.black}>{content}</text.Body2R>}
     </area.NoHeightArea>
-  );
+  )
+}
+
+type TemplateProps = {
+  mode: string;
+  content?: string;
+}
+
+export default function TextTemplate({ mode, content }: TemplateProps) {
+  switch (mode) {
+    case 'mini':
+      return (
+        <Text content={content} isMini={true} isEditMode={false}/>
+      );
+    case 'detail':
+      return (
+        <Text content={content} isMini={false} isEditMode={false}/>
+      );
+    case 'ex':
+      return (
+        <Text content={'아 오늘 떡볶이 땡긴다!'} isMini={false} isEditMode={false}/>
+      );
+    default:
+      return (
+        <Text content={content} isMini={false} isEditMode={false}/>
+      );
+  }
 }

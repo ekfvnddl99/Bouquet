@@ -22,6 +22,8 @@ import SelectTemplateItem from '../components/SelectTemplateItem';
 import BackButton from '../components/BackButton';
 import ProfileItem from '../components/ProfileItem';
 
+import TextTemplate from '../template/TextTemplate';
+import ImageTemplate from '../template/ImageTemplate';
 import AlbumTemplate from '../template/AlbumTemplate';
 import DiaryTemplate from '../template/DiaryTemplate';
 import ListTemplate from '../template/ListTemplate';
@@ -41,9 +43,10 @@ export default function SelectTemplateScreen(){
       extrapolate: 'clamp',
     });
     const templates=[
-      {name : '선택 안 함.', explain : '텍스트로 승부한다.', svg : <View/>},
-      {name : '앨범', explain : '이건 앨범', svg : <AlbumTemplate mode='detail'/>},
-      {name : '일기', explain : '이건 일기', svg : <DiaryTemplate mode='detail'/>},
+      {name : '선택 안 함.', explain : '텍스트로 승부한다.', svg : <TextTemplate mode='ex'/>},
+      {name : '이미지', explain : '이미지로 승부한다.', svg : <ImageTemplate mode='ex'/>},
+      {name : '앨범', explain : '음악인이 되어 앨범을 발매할 수 있는 템플릿이에요. 소리는 없지만 가사와 앨범 소개까지 있는 충실한 앨범이랍니다.', svg : <AlbumTemplate mode='detail'/>},
+      {name : '일기', explain : '어릴 적 적었던 그림일기를 그릴 수 있는 템플릿이에요.', svg : <DiaryTemplate mode='detail'/>},
       {name : '리스트', explain : '이건 리스트', svg : <ListTemplate mode='detail'/>},
       ]
 

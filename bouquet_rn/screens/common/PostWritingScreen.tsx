@@ -31,6 +31,8 @@ import BackButton from '../components/BackButton';
 import LineButton from '../components/LineButton';
 import ProfileItem from '../components/ProfileItem';
 
+import TextTemplate from '../template/TextTemplate';
+import ImageTemplate from '../template/ImageTemplate';
 import AlbumTemplate from '../template/AlbumTemplate';
 import DiaryTemplate from '../template/DiaryTemplate';
 import ListTemplate from '../template/ListTemplate';
@@ -42,10 +44,12 @@ function setTemplate(idx : number){
     case 0:
       return null;
     case 1:
-      return <AlbumTemplate mode='edit'/>;
+      return <ImageTemplate mode='edit'/>;
     case 2:
-      return <DiaryTemplate mode='edit'/>;
+      return <AlbumTemplate mode='edit'/>;
     case 3:
+      return <DiaryTemplate mode='edit'/>;
+    case 4:
       return <ListTemplate mode='edit'/>;
   }
 }
@@ -100,7 +104,7 @@ export default function PostWritingScreen(){
           </button.AddTemplate> 
           : <View style={{marginTop:12}}>{setTemplate(select)}</View>}
 
-          <input.TextTemplate placeholder={I18n.t("내용을 입력해 주세요")}/>
+          <input.TextTemplate placeholder={I18n.t("내용을 입력해 주세요")} multiline={true}/>
           <View style={{marginTop:40}}/>
           <ConditionButton active={true} press={goUpload} content={I18n.t("게시글 올리기")} paddingH={0} paddingV={14} height={45}/>
         </area.ContainerBlank30>

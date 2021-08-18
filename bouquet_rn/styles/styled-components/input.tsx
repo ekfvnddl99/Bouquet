@@ -30,4 +30,5 @@ export const TextTemplate = styled.TextInput`
   justify-content:center;
   padding-horizontal: 10;
   padding-vertical:10;
+  flex-wrap:wrap;
 `

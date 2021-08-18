@@ -50,12 +50,12 @@ export const Rectangle = styled.View`
   background-color:${(props:RecProps) => props.color};
 `
 interface RecImgProps{
-  width : number | string,
-  height : number | string,
+  width? : number | string,
+  height? : number | string,
 }
 export const RectangleImg = styled.Image`
-  width:${(props:RecImgProps) => props.width};
-  height:${(props:RecImgProps) => props.height};
+  ${(props : RecImgProps)=>props.width ? `width: ${(props : RecImgProps)=>props.width}` : ''};
+  ${(props : RecImgProps)=>props.height ? `height: ${(props : RecImgProps)=>props.height}` : ''};
   border-radius:10;
 `
 
