@@ -13,7 +13,7 @@ import * as input from '../../styles/styled-components/input';
 function Text({ content, isMini, isEditMode }: {content?:string, isMini: boolean, isEditMode?: boolean}) {
   return(
     <area.NoHeightArea
-      marBottom={0}
+      marBottom={12}
       paddingH={15}
       paddingV={15}
     >

@@ -40,24 +40,104 @@ import ProfileItem from '../components/ProfileItem';
 
 // template
 import TextTemplate from '../template/TextTemplate';
+import { onChange } from 'react-native-reanimated';
+import useCharacter from '../logics/useCharacter';
 
 const HEADER_MAX_HEIGHT = 90;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
+const Post={
+  "id": 1,
+  "created_at": "2021-08-19T17:37:23",
+  "updated_at": "2021-08-19T17:37:23",
+  "character_id": 1,
+  "template": "None",
+  "text": "이것이 포스팅이다.",
+  "liked": false
+}
+const Writer={
+  "name": "오란지",
+  "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg"
+}
+const Data=[
+  {
+    "name": "오란지",
+    "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
+    "id": 1,
+    "comment": "이 노래를 불러보지만 내 진심이 닿을지 몰라",
+    "parent": 0,
+    "liked": false,
+    "children": [
+      {
+        "name": "오란지",
+        "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
+        "id": 2,
+        "comment": "Welcome to my 하늘궁",
+        "parent": 1,
+        "liked": false
+      },
+      {
+        "name": "오란지",
+        "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
+        "id": 7,
+        "comment": "합법 전까지 마약해",
+        "parent": 1,
+        "liked": false
+      }
+    ]
+  },
+  {
+    "name": "오란지",
+    "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
+    "id": 3,
+    "comment": "대기권 밖으로",
+    "parent": 0,
+    "liked": true,
+    "children": [
+      {
+        "name": "오란지",
+        "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
+        "id": 6,
+        "comment": "아빠 긴장타야해",
+        "parent": 3,
+        "liked": false
+      }
+    ]
+  },
+  {
+    "name": "오란지",
+    "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
+    "id": 4,
+    "comment": "온난화의 주범",
+    "parent": 0,
+    "liked": false,
+    "children": []
+  }
+]
 
 
 export default function PostDetailScreen(){
-    // dummy data - 서버에서 불러와야 함
-    let Data=[{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9}];
-    let data=[{id:1},{id:2}];
+    const[secComm, setSecComm]=useState([{comm:"1"},{comm:"2"}]);
+
     const user = useRecoilValue(userState);
+    const [character, setCharacter] = useCharacter();
     const[selectId, setSelectId]=useState(-1);
     const[clickedLowerId, setClickedLowerId]=useState<number[]>([]);
-    const[owner, setOwner]=useState(1);
+    const[postOwner, setPostOwner]=useState(false);
     const[click, setClick]=useState(1);
     const[comment, setComment]=useState('');
-    const[chat, setChat]=useState(false);
+
+    const onUpload=(comment:string)=>{
+      setSecComm([...secComm, {comm : comment}]);
+      setComment('')
+    }
+    useEffect(()=>{
+      console.log(secComm)
+    }, [secComm])
+    useEffect(()=>{
+      if(character.id===Post.character_id) setPostOwner(true)
+    }, [])
 
     const scroll = useRef(new Animated.Value(0)).current;
     const OpacityHeader=scroll.interpolate({
@@ -91,8 +171,8 @@ export default function PostDetailScreen(){
                 <View style={{paddingTop: 20}}/>
 
                 <area.RowArea>
-                  <View style={{flex:1}}><ProfileButton diameter={30} account={0} name={"guswl"} profile={"https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg"}/></View>
-                  {owner===1 ? 
+                  <View style={{flex:1}}><ProfileButton diameter={30} account={0} name={Writer.name} profile={Writer.profile_img}/></View>
+                  {postOwner ? 
                   <area.RowArea style={{paddingRight:1}}>
                     <LineButton press={()=>{}} content={i18n.t("수정")} color={colors.black} incolor={colors.gray2} outcolor={'transparent'}/>
                     <View style={{marginRight:4}}/>
@@ -100,7 +180,7 @@ export default function PostDetailScreen(){
                   </area.RowArea> : null}
                 </area.RowArea>
                 <View style={{marginBottom: 12}}/>
-                <TextTemplate/>
+                <TextTemplate mode={'detail'} content={'여기에 insert template'}/>
                 <View style={{alignItems:'flex-start'}}><SunButton sun={24}/></View>
                 <text.Subtitle3 color={colors.black} style={{marginTop:36}}>{i18n.t('반응')}</text.Subtitle3>
 
@@ -112,18 +192,18 @@ export default function PostDetailScreen(){
                   renderItem={(obj)=>{
                     return(
                       <>
-                      <TouchableOpacity activeOpacity={1} onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
-                        <CommentItem press={selectId} id={obj.index} owner={1} login={user.isLogined} IsMore={1} IsClick={setClick} AddClicks={setClickedLowerId} clicks={clickedLowerId}/>
+                      <TouchableOpacity activeOpacity={1} onPress={()=>{selectId===obj.item.id ? setSelectId(-1) : setSelectId(obj.item.id)}}>
+                        <CommentItem info={obj.item} press={selectId} owner={character.name===obj.item.name} login={user.isLogined} IsClick={setClick} AddClicks={setClickedLowerId} clicks={clickedLowerId} setSelect={setSelectId}/>
                       </TouchableOpacity>
-                      {clickedLowerId.includes(obj.index) ?
+                      {clickedLowerId.includes(obj.item.id) ?
                       <FlatList
                         style={{marginLeft:16}}
-                        data={data}
+                        data={obj.item.children}
                         keyExtractor={(item) => item.id.toString()}
                         renderItem={(lowerobj)=>{
                           return(
-                            <TouchableOpacity activeOpacity={1} onPress={()=>{selectId===((obj.index+1)*10)+lowerobj.index ? setSelectId(-1) : setSelectId(((obj.index+1)*10)+lowerobj.index)}}>
-                              <CommentItem press={selectId} id={((obj.index+1)*10)+lowerobj.index} owner={1} login={user.isLogined}/>
+                            <TouchableOpacity activeOpacity={1} onPress={()=>{selectId===lowerobj.item.id ? setSelectId(-1) : setSelectId(lowerobj.item.id)}}>
+                              <CommentItem info={lowerobj.item} press={selectId} owner={character.name===lowerobj.item.name} login={user.isLogined} setSelect={setSelectId}/>
                             </TouchableOpacity>
                           );}}/>: null}
                       </>
@@ -132,8 +212,8 @@ export default function PostDetailScreen(){
               </Animated.ScrollView>
             {user.isLogined ?
               <View style={{justifyContent:'flex-end'}}>
-                {selectId!==-1 ? <CommentInputComment setSelectId={setSelectId} comment={Data[selectId%10].id.toString()}/> : null}
-                <CommentInputBar selectId={selectId} value={comment} onChange={setComment}/>
+                {selectId!==-1 ? <CommentInputComment setSelectId={setSelectId} comment={Data[0].comment}/> : null}
+                <CommentInputBar selectId={selectId} value={comment} onChange={setComment} onUpload={onUpload}/>
               </View> : null}
             </KeyboardAvoidingView>
             </TouchableWithoutFeedback>

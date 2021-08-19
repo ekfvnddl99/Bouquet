@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, TextInput, TouchableOpacity, Image } from 'react-native';
+import { View, TextInput, TouchableOpacity, Image, Dimensions, StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
 import { colors } from '../../styles/colors';
-import * as text from '../../styles/styled-components/text';
-import * as area from '../../styles/styled-components/area';
-import * as elses from '../../styles/styled-components/elses';
 
 import GallerySvg from '../../assets/Gallery';
   
-  
-  
+const {height, width} = Dimensions.get('window');
 function Img({ img, isMini, isEditMode }: {img?:string, isMini: boolean, isEditMode?: boolean}) {
   const[image, setImage]=useState(img);
   const[edit, setEdit]=useState(isEditMode);
@@ -31,7 +27,7 @@ function Img({ img, isMini, isEditMode }: {img?:string, isMini: boolean, isEditM
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [1, 1],
+      aspect:[1,1],
       quality: 1,
     });
 
@@ -43,20 +39,14 @@ function Img({ img, isMini, isEditMode }: {img?:string, isMini: boolean, isEditM
 
 
   return(
-    <area.NoHeightArea
-      marBottom={isEditMode? 12 : 0}
-      paddingH={15}
-      paddingV={15}
-    >
+    <View style={{marginBottom: isEditMode ? 12 : 0, alignItems:'center'}}>
       {edit ? 
-      <TouchableOpacity onPress={onPress} style={{justifyContent:'center', alignItems:'center'}}>
-        <View style={{justifyContent:'center', alignItems:'center', backgroundColor:colors.black, width:'100%'}}>
-          <GallerySvg w="24" h="24"/>
-        </View>
+      <TouchableOpacity onPress={onPress} style={styles.selectImg}>
+        <GallerySvg w="24" h="24"/>
       </TouchableOpacity>
-      : image==='ex' ? <elses.RectangleImg source={require('../../assets/img.jpg')}/>:
-       <elses.RectangleImg source={{uri:image}}/>}
-    </area.NoHeightArea>
+      : image==='' ? <Image source={require('../../assets/img.jpg')} resizeMode={'cover'} style={styles.setImg}/>:
+       <Image source={{uri:image}} resizeMode={'cover'} style={styles.setImg}/>}
+    </View>
   )
 }
 
@@ -81,3 +71,19 @@ export default function ImageTemplate({ mode, img }: TemplateProps) {
       );
   }
 }
+
+const styles = StyleSheet.create({
+  selectImg:{
+    justifyContent:'center', 
+    alignItems:'center', 
+    width:'100%', 
+    height:200,
+    backgroundColor:colors.white,
+    borderRadius:10,
+  },
+  setImg:{
+    width:'100%',
+    borderRadius:10,
+    aspectRatio: 1/1
+  }
+})

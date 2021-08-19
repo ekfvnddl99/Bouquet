@@ -6,18 +6,27 @@ import * as elses from '../../styles/styled-components/elses';
 
 // icons
 import SendSvg from '../../assets/Send';
+import useCharacter from '../logics/useCharacter';
+
+type CommInputProps={
+  selectId:number, 
+  value:string, 
+  onChange:Function, 
+  onUpload:Function
+}
 
 
-export default function CommentInputBar({selectId, value, onChange}:{selectId:number, value:string, onChange:Function}){
+export default function CommentInputBar({selectId, value, onChange, onUpload}: CommInputProps){
+  const [character, setCharacter] = useCharacter();
   return(
     <View style={styles.commentLower}>
-      <View style={{marginBottom:3}}><elses.CircleImg diameter={30} source={require('../../assets/img.jpg')}/></View>
+      <View style={{marginBottom:3}}><elses.CircleImg diameter={30} source={{uri: character.profileImg}}/></View>
       <TextInput placeholder="어떤 반응을 남기고 싶나요?" placeholderTextColor={colors.gray5} 
         style={styles.commentInput} 
         value={value}
         onChangeText={(text:string)=>onChange(text)}
         multiline={true}/>
-      <TouchableOpacity activeOpacity={1} style={{marginBottom:3}}>
+      <TouchableOpacity style={{marginBottom:3}} onPress={()=>onUpload(value)}>
         <SendSvg w='30' h='30'/>
       </TouchableOpacity>
     </View>
