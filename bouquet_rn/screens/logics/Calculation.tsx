@@ -16,6 +16,14 @@ export function timeName(time : number){
   else return ((time/1440) | 0 )+i18n.t('일');
 }
 
+export function transferTime(timea:string, timeb:string){
+  let sec;
+  let min;
+  let hour;
+  let day;
+  return 0;
+}
+
 export function getByte(str : string){
   return (new Blob([str])).size;
 }
