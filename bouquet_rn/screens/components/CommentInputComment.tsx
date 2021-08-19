@@ -10,16 +10,17 @@ import * as elses from '../../styles/styled-components/elses';
 import SendSvg from '../../assets/Send';
 import CommetnInputSvg from '../../assets/CommentInput';
 import RoundXSvg from '../../assets/RoundX';
+import { Comment } from '../logics/Post';
 
 
-export default function CommentInputComment({setSelectId, comment}:{setSelectId : Function, comment:string}){
+export default function CommentInputComment({setParentComm, info}:{setParentComm : Function, info: Comment}){
   return(
     <area.RowArea style={styles.commentUpper}>
       <CommetnInputSvg w='18' h='18'/>
       <View style={{flex:1, marginHorizontal:8}}>
-        <text.Body3 color={colors.gray6} numberOfLines={1}>{comment}</text.Body3>
+        <text.Body3 color={colors.gray6} numberOfLines={1}>{info.comment}</text.Body3>
       </View>
-      <TouchableOpacity onPress={()=>setSelectId(-1)}><RoundXSvg w='18' h='18'/></TouchableOpacity>
+      <TouchableOpacity onPress={()=>setParentComm()}><RoundXSvg w='18' h='18'/></TouchableOpacity>
     </area.RowArea>
   );
 }
