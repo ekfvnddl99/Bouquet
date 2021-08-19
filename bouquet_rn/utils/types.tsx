@@ -136,5 +136,7 @@ export type Comment = {
   comment: string;
   parent: number;
   liked: boolean;
+  created_at:string,
+  updated_at:string,
   children?: Comment[];
 }

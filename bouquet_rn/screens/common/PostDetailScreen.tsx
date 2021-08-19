@@ -43,6 +43,7 @@ import ProfileItem from '../components/ProfileItem';
 import TextTemplate from '../template/TextTemplate';
 import { onChange } from 'react-native-reanimated';
 import useCharacter from '../logics/useCharacter';
+import { Comment } from '../../utils/types';
 
 const HEADER_MAX_HEIGHT = 90;
 const HEADER_MIN_HEIGHT = 60;
@@ -52,10 +53,9 @@ const Posting={
   "id": 1,
   "created_at": "2021-08-19T17:37:23",
   "updated_at": "2021-08-19T17:37:23",
-  "character_id": 1,
   "template": "None",
   "text": "이것이 포스팅이다.",
-  "liked": false
+  "liked": true
 }
 const Writer={
   "name": "오란지",
@@ -66,6 +66,8 @@ const Data=[
     "name": "오란지",
     "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
     "id": 1,
+    "created_at": "2021-08-19T17:37:59",
+    "updated_at": "2021-08-19T17:37:59",
     "comment": "이 노래를 불러보지만 내 진심이 닿을지 몰라",
     "parent": 0,
     "liked": false,
@@ -74,6 +76,8 @@ const Data=[
         "name": "오란지",
         "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
         "id": 2,
+        "created_at": "2021-08-19T17:38:50",
+        "updated_at": "2021-08-19T17:38:50",
         "comment": "Welcome to my 하늘궁",
         "parent": 1,
         "liked": false
@@ -82,6 +86,8 @@ const Data=[
         "name": "오란지",
         "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
         "id": 7,
+        "created_at": "2021-08-19T17:39:41",
+        "updated_at": "2021-08-19T17:39:41",
         "comment": "합법 전까지 마약해",
         "parent": 1,
         "liked": false
@@ -92,14 +98,18 @@ const Data=[
     "name": "오란지",
     "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
     "id": 3,
+    "created_at": "2021-08-19T17:38:59",
+    "updated_at": "2021-08-19T17:38:59",
     "comment": "대기권 밖으로",
     "parent": 0,
-    "liked": true,
+    "liked": false,
     "children": [
       {
         "name": "오란지",
         "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
         "id": 6,
+        "created_at": "2021-08-19T17:39:27",
+        "updated_at": "2021-08-19T17:39:27",
         "comment": "아빠 긴장타야해",
         "parent": 3,
         "liked": false
@@ -110,6 +120,8 @@ const Data=[
     "name": "오란지",
     "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
     "id": 4,
+    "created_at": "2021-08-19T17:39:09",
+    "updated_at": "2021-08-19T17:39:09",
     "comment": "온난화의 주범",
     "parent": 0,
     "liked": false,
@@ -128,16 +140,14 @@ export default function PostDetailScreen(){
     const[postOwner, setPostOwner]=useState(false);
     const[click, setClick]=useState(1);
     const[comment, setComment]=useState('');
+    const[parentComm, setParentComm]=useState<Comment>();
 
     const onUpload=(comment:string)=>{
       setSecComm([...secComm, {comm : comment}]);
       setComment('')
     }
     useEffect(()=>{
-      console.log(secComm)
-    }, [secComm])
-    useEffect(()=>{
-      if(character.id===Posting.character_id) setPostOwner(true)
+      if(character.name===Writer.name) setPostOwner(true)
     }, [])
 
     const scroll = useRef(new Animated.Value(0)).current;
@@ -182,7 +192,9 @@ export default function PostDetailScreen(){
                 </area.RowArea>
                 <View style={{marginBottom: 12}}/>
 
-                <View style={{alignItems:'flex-start'}}><SunButton sun={24}/></View>
+                <View style={{alignItems:'flex-start'}}>
+                  <SunButton sun={24} active={Posting.liked}/>
+                </View>
                 <text.Subtitle3 color={colors.black} style={{marginTop:36}}>{i18n.t('반응')}</text.Subtitle3>
 
                 <View style={{paddingTop: 12}}/>
@@ -194,7 +206,7 @@ export default function PostDetailScreen(){
                     return(
                       <>
                       <TouchableOpacity activeOpacity={1} onPress={()=>{selectId===obj.item.id ? setSelectId(-1) : setSelectId(obj.item.id)}}>
-                        <CommentItem info={obj.item} press={selectId} owner={character.name===obj.item.name} login={user.isLogined} IsClick={setClick} AddClicks={setClickedLowerId} clicks={clickedLowerId} setSelect={setSelectId}/>
+                        <CommentItem info={obj.item} press={selectId} owner={character.name===obj.item.name} login={user.isLogined} IsClick={setClick} AddClicks={setClickedLowerId} clicks={clickedLowerId} setSelect={setSelectId} setParentComm={setParentComm}/>
                       </TouchableOpacity>
                       {clickedLowerId.includes(obj.item.id) ?
                       <FlatList
@@ -204,7 +216,7 @@ export default function PostDetailScreen(){
                         renderItem={(lowerobj)=>{
                           return(
                             <TouchableOpacity activeOpacity={1} onPress={()=>{selectId===lowerobj.item.id ? setSelectId(-1) : setSelectId(lowerobj.item.id)}}>
-                              <CommentItem info={lowerobj.item} press={selectId} owner={character.name===lowerobj.item.name} login={user.isLogined} setSelect={setSelectId}/>
+                              <CommentItem info={lowerobj.item} press={selectId} owner={character.name===lowerobj.item.name} login={user.isLogined} setSelect={setSelectId} setParentComm={setParentComm}/>
                             </TouchableOpacity>
                           );}}/>: null}
                       </>
@@ -213,7 +225,7 @@ export default function PostDetailScreen(){
               </Animated.ScrollView>
             {user.isLogined ?
               <View style={{justifyContent:'flex-end'}}>
-                {selectId!==-1 ? <CommentInputComment setSelectId={setSelectId} comment={Data[0].comment}/> : null}
+                {parentComm ? <CommentInputComment setParentComm={setParentComm} info={parentComm}/> : null}
                 <CommentInputBar selectId={selectId} value={comment} onChange={setComment} onUpload={onUpload}/>
               </View> : null}
             </KeyboardAvoidingView>
