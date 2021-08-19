@@ -43,7 +43,7 @@ export interface DiaryPostRequestInterface extends PostRequestInterface {
   title: string,
   weather: string,
   img: string,
-  date: number,
+  date: string,
   content: string,
 }
 

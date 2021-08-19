@@ -106,7 +106,7 @@ function Diary({ isMini, isEditMode, diary, setPost }: DiaryProps) {
     title: "",
     weather: "",
     img: "",
-    date: 10000000,
+    date: "",
     content: "",
   });
 
@@ -152,10 +152,10 @@ function Diary({ isMini, isEditMode, diary, setPost }: DiaryProps) {
           <SmallInput
             placeholder="연도"
             placeholderTextColor={colors.gray5}
-            value={String(tmpPost.date).slice(0, 4)}
+            value={tmpPost.date[0] && tmpPost.date[1] && tmpPost.date[2] && tmpPost.date[3] ? tmpPost.date[0] + tmpPost.date[1] + tmpPost.date[2] + tmpPost.date[3] : ''}
             onChangeText={(text: string) => changePost({
               ...tmpPost,
-              date: Number(text + String(tmpPost.date).slice(2, 8))
+              date: text + tmpPost.date.slice(4, 8)
             })}
           />
           :
@@ -166,10 +166,10 @@ function Diary({ isMini, isEditMode, diary, setPost }: DiaryProps) {
           <SmallInput
             placeholder="월"
             placeholderTextColor={colors.gray5}
-            value={String(tmpPost.date).slice(4, 6)}
+            value={tmpPost.date[4] && tmpPost.date[5] ? tmpPost.date[4] + tmpPost.date[5] : ''}
             onChangeText={(text: string) => changePost({
               ...tmpPost,
-              date: Number(String(tmpPost.date).slice(0, 2) + text + String(tmpPost.date).slice(4, 8))
+              date: tmpPost.date.slice(0, 2) + text + tmpPost.date.slice(6, 8)
             })}
           />
           :
@@ -180,10 +180,10 @@ function Diary({ isMini, isEditMode, diary, setPost }: DiaryProps) {
           <SmallInput
             placeholder="일"
             placeholderTextColor={colors.gray5}
-            value={String(tmpPost.date).slice(6, 8)}
+            value={tmpPost.date[6] && tmpPost.date[7] ? tmpPost.date[6] + tmpPost.date[7] : ''}
             onChangeText={(text: string) => changePost({
               ...tmpPost,
-              date: Number(String(tmpPost.date).slice(0, 6) + text)
+              date: tmpPost.date.slice(0, 6) + text
             })}
           />
           :

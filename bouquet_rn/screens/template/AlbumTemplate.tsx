@@ -216,7 +216,7 @@ export default function AlbumTemplate({ mode, post }: TemplateProps) {
           artist={post ? post.characterName : ''}
           date={post ? String(post?.template.releaseDate) : ''}
           description={post ? post.template.description : ''}
-          songs={post ? post.template.tracks : ''}
+          songs={post ? post.template.tracks : []}
         />
       );
     case 'detail':
@@ -231,7 +231,7 @@ export default function AlbumTemplate({ mode, post }: TemplateProps) {
             artist={post ? post.characterName : ''}
             date={post ? String(post?.template.releaseDate) : ''}
             description={post ? post.template.description : ''}
-            songs={post ? post.template.tracks : ''}
+            songs={post ? post.template.tracks : []}
           />
         </area.NoHeightArea>
       );
@@ -247,7 +247,7 @@ export default function AlbumTemplate({ mode, post }: TemplateProps) {
             artist={post ? post.characterName : ''}
             date={post ? String(post?.template.releaseDate) : ''}
             description={post ? post.template.description : ''}
-            songs={post ? post.template.tracks : ''}
+            songs={post ? post.template.tracks : []}
           />
         </area.NoHeightArea>
       );
@@ -258,7 +258,7 @@ export default function AlbumTemplate({ mode, post }: TemplateProps) {
           artist={post ? post.characterName : ''}
           date={post ? String(post?.template.releaseDate) : ''}
           description={post ? post.template.description : ''}
-          songs={post ? post.template.tracks : ''}
+          songs={post ? post.template.tracks : []}
         />
       );
   }
