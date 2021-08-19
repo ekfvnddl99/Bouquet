@@ -9,6 +9,7 @@ import * as button from '../../styles/styled-components/button';
 // icons
 import CommentSvg from '../../assets/Comment';
 import SunSvg from '../../assets/Sun';
+import SunFocusPriSvg from '../../assets/SunFocusPri';
 import CommentUpArrowSvg from '../../assets/CommentUpArrow';
 import CommentDownArrowSvg from '../../assets/CommentDownArrow';
 import BinSvg from '../../assets/Bin';
@@ -19,25 +20,27 @@ import * as cal from '../logics/Calculation';
 // components
 import ProfileButton from './ProfileButton';
 import { indexOf } from 'lodash';
+import { Comment } from '../../utils/types';
+
 
 interface CommentItemProps{
+  info: Comment,
   press:number, 
-  id:number, 
-  owner:number, 
+  owner:boolean, 
   login:boolean,
-  IsMore?:number, 
+  setSelect:Function,
   IsClick? : Function, 
   AddClicks? : Function, 
   clicks?:number[]
 }
 
 
-export default function CommentItem({press, id, owner, login, IsMore, IsClick, AddClicks, clicks}  : CommentItemProps){
+export default function CommentItem({info, press, owner, login, setSelect, IsClick, AddClicks, clicks}  : CommentItemProps){
   const[more, setMore]=useState(-1);
   useEffect(()=>{
     if(IsClick){
       if(more===1) {
-        IsClick(id);
+        IsClick(info.id);
         inClick();
       }
       else {
@@ -50,24 +53,24 @@ export default function CommentItem({press, id, owner, login, IsMore, IsClick, A
   const inClick=()=>{
     if(clicks && AddClicks){
       let tmp : number[]=clicks;
-      if(tmp.includes(id)===false) tmp.push(id);
+      if(tmp.includes(info.id)===false) tmp.push(info.id);
       AddClicks(tmp);
     }
   }
   const outClick=()=>{
     if(clicks && AddClicks){
       let tmp : number[]=clicks;
-      let idx = tmp.indexOf(id);
+      let idx = tmp.indexOf(info.id);
       tmp.splice(idx,1);
       AddClicks(tmp);
     }
   }
 
   return(
-    <area.NoHeightArea marBottom={8} paddingH={16} paddingV={12} style={{backgroundColor: press===id && login ? colors.alpha10_primary : colors.white}}>
+    <area.NoHeightArea marBottom={8} paddingH={16} paddingV={12} style={{backgroundColor: press===info.id && login ? colors.alpha10_primary : colors.white}}>
       <area.RowArea style={{alignItems:'flex-start', marginBottom:8}}>
         <View style={styles.contentText}>
-          <text.Body2R color={colors.black}>qmffkqfmffkwkdskskdlsjfka; jf;asjdfasjficwfmqwe</text.Body2R>
+          <text.Body2R color={colors.black}>{info.comment}</text.Body2R>
         </View>
         <View style={styles.timeText}>
             <text.Caption color={colors.gray5}>{cal.timeName(57)} {i18n.t('전')}</text.Caption>
@@ -75,23 +78,30 @@ export default function CommentItem({press, id, owner, login, IsMore, IsClick, A
       </area.RowArea>
 
       <area.RowArea>
-        <ProfileButton diameter={20} account={0}/>
+        <ProfileButton diameter={20} account={0} name={info.name} profile={info.profile_img}/>
         <View style={{flex:1}}/>
         <area.RowArea>
-          {press===id && owner ? <TouchableOpacity><BinSvg w='18' h='18'/></TouchableOpacity> : null}
-          {IsMore===1 ? 
+          {press===info.id && owner ? <TouchableOpacity><BinSvg w='18' h='18'/></TouchableOpacity> : null}
+          {info.children?.length ? 
           <View style={{marginLeft:8}}>
             {more===1 ?<TouchableOpacity onPress={()=>setMore(-1)}><CommentDownArrowSvg w='18' h='18'/></TouchableOpacity> 
               : <TouchableOpacity onPress={()=>setMore(1)}><CommentUpArrowSvg w='18' h='18'/></TouchableOpacity>}
           </View>
             : null}
+
           <View style={{marginLeft:8}}/>
-          <CommentSvg w='18' h='18'/>
+          <TouchableOpacity onPress={()=>setSelect(info.id)}>
+            <CommentSvg w='18' h='18'/>
+          </TouchableOpacity>
+
           <View style={{marginLeft:8}}/>
           <area.RowArea>
-            <SunSvg w='18' h='18'/>
+          <TouchableOpacity>
+          {info.liked ? <SunFocusPriSvg w='18' h='18'/> : <SunSvg w='18' h='18'/>}
+          </TouchableOpacity>
             <text.Body3 color={colors.primary} style={{marginLeft:4}}>{cal.numName(14)}</text.Body3>
           </area.RowArea>
+
         </area.RowArea>
       </area.RowArea>
     </area.NoHeightArea>
