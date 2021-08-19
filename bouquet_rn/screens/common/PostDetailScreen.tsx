@@ -27,6 +27,7 @@ import { StatusBarHeight } from '../logics/StatusbarHeight';
 import { userState } from '../logics/atoms';
 import { useRecoilValue } from 'recoil';
 import * as Post from '../logics/Post';
+import useCharacter from '../logics/useCharacter';
 
 // components
 import ProfileButton from '../components/ProfileButton';
@@ -39,11 +40,7 @@ import LineButton from '../components/LineButton';
 import ConditionButton from '../components/ConditionButton';
 import ProfileItem from '../components/ProfileItem';
 
-// template
-import TextTemplate from '../template/TextTemplate';
-import { onChange } from 'react-native-reanimated';
-import useCharacter from '../logics/useCharacter';
-import { Comment } from '../../utils/types';
+
 
 const HEADER_MAX_HEIGHT = 90;
 const HEADER_MIN_HEIGHT = 60;
@@ -64,30 +61,30 @@ const Writer={
 const Data=[
   {
     "name": "오란지",
-    "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
+    "profileImg": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
     "id": 1,
-    "created_at": "2021-08-19T17:37:59",
-    "updated_at": "2021-08-19T17:37:59",
+    "createdAt": "2021-08-19T17:37:59",
+    "updatedAt": "2021-08-19T17:37:59",
     "comment": "이 노래를 불러보지만 내 진심이 닿을지 몰라",
     "parent": 0,
     "liked": false,
     "children": [
       {
         "name": "오란지",
-        "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
+        "profileImg": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
         "id": 2,
-        "created_at": "2021-08-19T17:38:50",
-        "updated_at": "2021-08-19T17:38:50",
+        "createdAt": "2021-08-19T17:38:50",
+        "updatedAt": "2021-08-19T17:38:50",
         "comment": "Welcome to my 하늘궁",
         "parent": 1,
         "liked": false
       },
       {
         "name": "오란지",
-        "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
+        "profileImg": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
         "id": 7,
-        "created_at": "2021-08-19T17:39:41",
-        "updated_at": "2021-08-19T17:39:41",
+        "createdAt": "2021-08-19T17:39:41",
+        "updatedAt": "2021-08-19T17:39:41",
         "comment": "합법 전까지 마약해",
         "parent": 1,
         "liked": false
@@ -96,20 +93,20 @@ const Data=[
   },
   {
     "name": "오란지",
-    "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
+    "profileImg": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
     "id": 3,
-    "created_at": "2021-08-19T17:38:59",
-    "updated_at": "2021-08-19T17:38:59",
+    "createdAt": "2021-08-19T17:38:59",
+    "updatedAt": "2021-08-19T17:38:59",
     "comment": "대기권 밖으로",
     "parent": 0,
     "liked": false,
     "children": [
       {
         "name": "오란지",
-        "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
+        "profileImg": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
         "id": 6,
-        "created_at": "2021-08-19T17:39:27",
-        "updated_at": "2021-08-19T17:39:27",
+        "createdAt": "2021-08-19T17:39:27",
+        "updatedAt": "2021-08-19T17:39:27",
         "comment": "아빠 긴장타야해",
         "parent": 3,
         "liked": false
@@ -118,10 +115,10 @@ const Data=[
   },
   {
     "name": "오란지",
-    "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
+    "profileImg": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
     "id": 4,
-    "created_at": "2021-08-19T17:39:09",
-    "updated_at": "2021-08-19T17:39:09",
+    "createdAt": "2021-08-19T17:39:09",
+    "updatedAt": "2021-08-19T17:39:09",
     "comment": "온난화의 주범",
     "parent": 0,
     "liked": false,
@@ -131,7 +128,7 @@ const Data=[
 
 
 export default function PostDetailScreen(){
-    const[secComm, setSecComm]=useState([{comm:"1"},{comm:"2"}]);
+    const[secComm, setSecComm]=useState<Post.Comment[]>([]);
 
     const user = useRecoilValue(userState);
     const [character, setCharacter] = useCharacter();
@@ -140,12 +137,17 @@ export default function PostDetailScreen(){
     const[postOwner, setPostOwner]=useState(false);
     const[click, setClick]=useState(1);
     const[comment, setComment]=useState('');
-    const[parentComm, setParentComm]=useState<Comment>();
+    const[parentComm, setParentComm]=useState<Post.Comment>();
 
-    const onUpload=(comment:string)=>{
-      setSecComm([...secComm, {comm : comment}]);
+    const onUpload=(newComm:string)=>{
+      let one : Post.Comment= {comment : newComm, createdAt:"2021-08-19T17:39:41", id:5, liked:false, name:"두리안",parent:1, profileImg : "", updatedAt:"2021-08-19T17:39:41"}
+      setSecComm([...secComm, one]);
       setComment('')
     }
+    // useEffect(()=>{
+    //   console.log("----------------------------")
+    //   console.log(secComm)
+    // }, [secComm])
     useEffect(()=>{
       if(character.name===Writer.name) setPostOwner(true)
     }, [])
@@ -209,6 +211,7 @@ export default function PostDetailScreen(){
                         <CommentItem info={obj.item} press={selectId} owner={character.name===obj.item.name} login={user.isLogined} IsClick={setClick} AddClicks={setClickedLowerId} clicks={clickedLowerId} setSelect={setSelectId} setParentComm={setParentComm}/>
                       </TouchableOpacity>
                       {clickedLowerId.includes(obj.item.id) ?
+                      <>{setSecComm(obj.item.children)}
                       <FlatList
                         style={{marginLeft:16}}
                         data={obj.item.children}
@@ -218,7 +221,7 @@ export default function PostDetailScreen(){
                             <TouchableOpacity activeOpacity={1} onPress={()=>{selectId===lowerobj.item.id ? setSelectId(-1) : setSelectId(lowerobj.item.id)}}>
                               <CommentItem info={lowerobj.item} press={selectId} owner={character.name===lowerobj.item.name} login={user.isLogined} setSelect={setSelectId} setParentComm={setParentComm}/>
                             </TouchableOpacity>
-                          );}}/>: null}
+                          );}}/></>: null}
                       </>
                     ); 
                   }}/>

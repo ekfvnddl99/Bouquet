@@ -10,7 +10,7 @@ import * as elses from '../../styles/styled-components/elses';
 import SendSvg from '../../assets/Send';
 import CommetnInputSvg from '../../assets/CommentInput';
 import RoundXSvg from '../../assets/RoundX';
-import { Comment } from '../../utils/types';
+import { Comment } from '../logics/Post';
 
 
 export default function CommentInputComment({setParentComm, info}:{setParentComm : Function, info: Comment}){

@@ -19,7 +19,7 @@ import * as cal from '../logics/Calculation';
 
 // components
 import ProfileButton from './ProfileButton';
-import { Comment } from '../../utils/types';
+import { Comment } from '../logics/Post';
 
 
 interface CommentItemProps{
@@ -78,11 +78,11 @@ export default function CommentItem({info, press, owner, login, setSelect, setPa
       </area.RowArea>
 
       <area.RowArea>
-        <ProfileButton diameter={20} account={0} name={info.name} profile={info.profile_img}/>
+        <ProfileButton diameter={20} account={0} name={info.name} profile={info.profileImg}/>
         <View style={{flex:1}}/>
         <area.RowArea>
           {press===info.id && owner ? <TouchableOpacity><BinSvg w='18' h='18'/></TouchableOpacity> : null}
-          {info.children?.length ? 
+          {info.children ? 
           <View style={{marginLeft:8}}>
             {more===1 ?<TouchableOpacity onPress={()=>setMore(-1)}><CommentDownArrowSvg w='18' h='18'/></TouchableOpacity> 
               : <TouchableOpacity onPress={()=>setMore(1)}><CommentUpArrowSvg w='18' h='18'/></TouchableOpacity>}

@@ -4,15 +4,14 @@ import { Character } from '../../utils/types';
 
 export interface Comment {
   name: string,
+  createdAt: string,
+  updatedAt: string,
   profileImg: string,
   id: number,
   comment: string,
   liked: boolean,
   parent: number,
-}
-
-export interface ParentComment extends Comment {
-  children: Array<Comment>,
+  children?: Array<Comment>,
 }
 
 export interface PostInterface<T extends PostRequestInterface> {
@@ -25,7 +24,7 @@ export interface PostInterface<T extends PostRequestInterface> {
     name: string,
     profileImg: string,
   },
-  comments: Array<Comment | ParentComment>,
+  comments: Array<Comment>,
 }
 
 // Template Request Types
