@@ -11,6 +11,8 @@ import LineButton from '../components/LineButton';
 import XSvg from '../../assets/X';
 import GallerySvg from '../../assets/Gallery';
 
+import * as Post from '../logics/Post';
+
 const MainPic = styled.Image<{ isMini: boolean }>`
   height: ${props => props.isMini ? 150 : 180};
   border-radius: 5;
@@ -64,7 +66,7 @@ type ListProps = {
   isEditMode?: boolean;
   title: string;
   description: string;
-  list: Array<{title: string; description: string; imageUrl: string;}>;
+  list: Array<{title: string; content: string; img: string;}>;
 }
 
 function List({ isMini, isEditMode, title, description, list }: ListProps) {
@@ -197,7 +199,7 @@ function List({ isMini, isEditMode, title, description, list }: ListProps) {
               <ContentWrap key={idx}>
                 <ContentPic
                   isMini={isMini}
-                  source={require('../../assets/img.jpg')}
+                  source={{ uri: content.img }}
                 />
                 <ContentTextWrap>
                   {isMini ?
@@ -205,7 +207,7 @@ function List({ isMini, isEditMode, title, description, list }: ListProps) {
                   :
                   <>
                     <text.Body2B color={colors.black}>{content.title}</text.Body2B>
-                    <text.Caption color={colors.gray6} style={{ marginTop: 4 }}>{content.description}</text.Caption>
+                    <text.Caption color={colors.gray6} style={{ marginTop: 4 }}>{content.content}</text.Caption>
                   </>
                   }
                   
@@ -223,34 +225,17 @@ function List({ isMini, isEditMode, title, description, list }: ListProps) {
 
 type TemplateProps = {
   mode: string;
+  post?: Post.PostInterface<any>;
 }
 
-export default function ListTemplate({ mode }: TemplateProps) {
-  const list = [
-    {
-      title: "아침 : 궁중떡볶이",
-      description: "아침에는 대접받는 기분으로 궁중떡볶이를 먹는다. 다이어트는 기분이 중요하다. 이 생각에 반대하고 싶다면 우선 나보다 약한 자가 아니어야 할 거다.",
-      imageUrl: '../../assets/img.jpg'
-    },
-    {
-      title: "점심 : 분식떡볶이",
-      description: "역시 떡볶이는 분식이 근본이다. 점심에는 근본을 영접한다.",
-      imageUrl: '../../assets/img.jpg'
-    },
-    {
-      title: "저녁 : 국물떡볶이",
-      description: "저녁에는 국물떡볶이에 밥을 비벼먹는다. 다이어트는 조금 먹어야 하는 게 아니다.",
-      imageUrl: '../../assets/img.jpg'
-    },
-  ]
-
+export default function ListTemplate({ mode, post }: TemplateProps) {
   switch (mode) {
     case 'mini':
       return (
         <List isMini={true} isEditMode={false}
-          title="현지의 떡볶이 다이어트 1일차"
-          description="떡볶이로도 다이어트가 된다? 당연하다. 아니라고 생각한다면 나보다 강해져서 와라. 오늘의 떡볶이 다이어트 식단이다."
-          list={list}
+          title={post ? post.template.title : ''}
+          description={post ? post.template.content : ''}
+          list={post ? post.template.components : []}
         />
       );
     case 'detail':
@@ -261,9 +246,9 @@ export default function ListTemplate({ mode }: TemplateProps) {
           paddingV={10}
         >
           <List isMini={false} isEditMode={false}
-            title="현지의 떡볶이 다이어트 1일차"
-            description="떡볶이로도 다이어트가 된다? 당연하다. 아니라고 생각한다면 나보다 강해져서 와라. 오늘의 떡볶이 다이어트 식단이다."
-            list={list}
+            title={post ? post.template.title : ''}
+            description={post ? post.template.content : ''}
+            list={post ? post.template.components : []}
           />
         </area.NoHeightArea>
       );
@@ -275,18 +260,18 @@ export default function ListTemplate({ mode }: TemplateProps) {
           paddingV={10}
         >
           <List isMini={false} isEditMode={true}
-            title="현지의 떡볶이 다이어트 1일차"
-            description="떡볶이로도 다이어트가 된다? 당연하다. 아니라고 생각한다면 나보다 강해져서 와라. 오늘의 떡볶이 다이어트 식단이다."
-            list={list}
+            title={post ? post.template.title : ''}
+            description={post ? post.template.content : ''}
+            list={post ? post.template.components : []}
           />
         </area.NoHeightArea>
       );
     default:
       return (
         <List isMini={true} isEditMode={false}
-          title="현지의 떡볶이 다이어트 1일차"
-          description="떡볶이로도 다이어트가 된다? 당연하다. 아니라고 생각한다면 나보다 강해져서 와라. 오늘의 떡볶이 다이어트 식단이다."
-          list={list}
+          title={post ? post.template.title : ''}
+          description={post ? post.template.content : ''}
+          list={post ? post.template.components : []}
         />
       );
   }

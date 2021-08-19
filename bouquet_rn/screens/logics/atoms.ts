@@ -2,6 +2,7 @@ import { atom, selector } from 'recoil';
 
 import { User, Character } from '../../utils/types';
 import { getCharacterListAsync, getCharacterAsync, responseToCharacter, CharacterResponseType } from './Character';
+import * as Post from './Post';
 
 export const guest: User = {
   isLogined: false,
@@ -74,4 +75,18 @@ export const viewCharacterSelector = selector({
     }
     return noCharacter;
   }
+})
+
+export const viewPostState = atom({
+  key: 'viewPostState',
+  default: < Post.PostInterface<any> >{
+    id: -1,
+    createdAt: '',
+    updatedAt: '',
+    template: undefined,
+    liked: false,
+    characterName: '',
+    characterImg: '',
+    comments: []
+  },
 })

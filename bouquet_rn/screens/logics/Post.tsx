@@ -2,6 +2,8 @@ import { serverAddress } from './ServerInfos';
 import * as SecureStore from 'expo-secure-store';
 import { Character } from '../../utils/types';
 
+import { getCharacterAsync, responseToCharacter } from './Character';
+
 export interface Comment {
   name: string,
   profileImg: string,
@@ -9,10 +11,9 @@ export interface Comment {
   comment: string,
   liked: boolean,
   parent: number,
-}
-
-export interface ParentComment extends Comment {
-  children: Array<Comment>,
+  createdAt: string,
+  updatedAt: string,
+  children?: Array<Comment>,
 }
 
 export interface PostInterface<T extends PostRequestInterface> {
@@ -21,11 +22,9 @@ export interface PostInterface<T extends PostRequestInterface> {
   updatedAt: string,
   template: T,
   liked: boolean,
-  characterInfo: {
-    name: string,
-    profileImg: string,
-  },
-  comments: Array<Comment | ParentComment>,
+  characterName: string,
+  characterImg: string,
+  comments: Array<Comment>,
 }
 
 // Template Request Types
@@ -68,6 +67,24 @@ ImagePostRequestInterface |
 DiaryPostRequestInterface |
 AlbumPostRequestInterface |
 ListPostRequestInterface;
+
+export async function RequestToPostAsync<T extends PostRequestInterface>(postRequest: T): Promise<PostInterface<T> | null> {
+  const result = await getCharacterAsync(postRequest.characterId);
+  if (typeof(result) !== "string") {
+    const character = responseToCharacter(result);
+    return {
+      id: -1,
+      createdAt: '',
+      updatedAt: '',
+      template: postRequest,
+      liked: false,
+      characterName: character.name,
+      characterImg: character.profileImg,
+      comments: []
+    }
+  }
+  else return null;
+}
 
 // POST
 export async function PostAsync<T extends PostRequestInterface>(body: T) {

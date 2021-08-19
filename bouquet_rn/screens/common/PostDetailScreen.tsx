@@ -1,4 +1,4 @@
-import React, {useRef, useState, useEffect} from 'react';
+import React, {useRef, useState, useEffect, useMemo, useCallback} from 'react';
 import {
     KeyboardAvoidingView,
     FlatList,
@@ -24,8 +24,8 @@ import * as elses from '../../styles/styled-components/elses';
 
 // props & logic
 import { StatusBarHeight } from '../logics/StatusbarHeight';
-import { userState } from '../logics/atoms';
-import { useRecoilValue } from 'recoil';
+import { userState, viewPostState } from '../logics/atoms';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import * as Post from '../logics/Post';
 
 // components
@@ -40,82 +40,87 @@ import ConditionButton from '../components/ConditionButton';
 import ProfileItem from '../components/ProfileItem';
 
 // template
-import TextTemplate from '../template/TextTemplate';
 import { onChange } from 'react-native-reanimated';
 import useCharacter from '../logics/useCharacter';
+
+import TextTemplate from '../template/TextTemplate';
+import ImageTemplate from '../template/ImageTemplate';
+import AlbumTemplate from '../template/AlbumTemplate';
+import DiaryTemplate from '../template/DiaryTemplate';
+import ListTemplate from '../template/ListTemplate';
 
 const HEADER_MAX_HEIGHT = 90;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
-const Posting={
-  "id": 1,
-  "created_at": "2021-08-19T17:37:23",
-  "updated_at": "2021-08-19T17:37:23",
-  "character_id": 1,
-  "template": "None",
-  "text": "이것이 포스팅이다.",
-  "liked": false
-}
-const Writer={
-  "name": "오란지",
-  "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg"
-}
-const Data=[
-  {
-    "name": "오란지",
-    "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
-    "id": 1,
-    "comment": "이 노래를 불러보지만 내 진심이 닿을지 몰라",
-    "parent": 0,
-    "liked": false,
-    "children": [
-      {
-        "name": "오란지",
-        "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
-        "id": 2,
-        "comment": "Welcome to my 하늘궁",
-        "parent": 1,
-        "liked": false
-      },
-      {
-        "name": "오란지",
-        "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
-        "id": 7,
-        "comment": "합법 전까지 마약해",
-        "parent": 1,
-        "liked": false
-      }
-    ]
-  },
-  {
-    "name": "오란지",
-    "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
-    "id": 3,
-    "comment": "대기권 밖으로",
-    "parent": 0,
-    "liked": true,
-    "children": [
-      {
-        "name": "오란지",
-        "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
-        "id": 6,
-        "comment": "아빠 긴장타야해",
-        "parent": 3,
-        "liked": false
-      }
-    ]
-  },
-  {
-    "name": "오란지",
-    "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
-    "id": 4,
-    "comment": "온난화의 주범",
-    "parent": 0,
-    "liked": false,
-    "children": []
-  }
-]
+// const Posting={
+//   "id": 1,
+//   "created_at": "2021-08-19T17:37:23",
+//   "updated_at": "2021-08-19T17:37:23",
+//   "character_id": 1,
+//   "template": "None",
+//   "text": "이것이 포스팅이다.",
+//   "liked": false
+// }
+// const Writer={
+//   "name": "오란지",
+//   "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg"
+// }
+// const Data=[
+//   {
+//     "name": "오란지",
+//     "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
+//     "id": 1,
+//     "comment": "이 노래를 불러보지만 내 진심이 닿을지 몰라",
+//     "parent": 0,
+//     "liked": false,
+//     "children": [
+//       {
+//         "name": "오란지",
+//         "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
+//         "id": 2,
+//         "comment": "Welcome to my 하늘궁",
+//         "parent": 1,
+//         "liked": false
+//       },
+//       {
+//         "name": "오란지",
+//         "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
+//         "id": 7,
+//         "comment": "합법 전까지 마약해",
+//         "parent": 1,
+//         "liked": false
+//       }
+//     ]
+//   },
+//   {
+//     "name": "오란지",
+//     "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
+//     "id": 3,
+//     "comment": "대기권 밖으로",
+//     "parent": 0,
+//     "liked": true,
+//     "children": [
+//       {
+//         "name": "오란지",
+//         "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
+//         "id": 6,
+//         "comment": "아빠 긴장타야해",
+//         "parent": 3,
+//         "liked": false
+//       }
+//     ]
+//   },
+//   {
+//     "name": "오란지",
+//     "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
+//     "id": 4,
+//     "comment": "온난화의 주범",
+//     "parent": 0,
+//     "liked": false,
+//     "children": []
+//   }
+// ]
 
 
 export default function PostDetailScreen(){
@@ -125,9 +130,10 @@ export default function PostDetailScreen(){
     const [character, setCharacter] = useCharacter();
     const[selectId, setSelectId]=useState(-1);
     const[clickedLowerId, setClickedLowerId]=useState<number[]>([]);
-    const[postOwner, setPostOwner]=useState(false);
     const[click, setClick]=useState(1);
     const[comment, setComment]=useState('');
+
+    const [viewPost, setViewPost] = useRecoilState(viewPostState);
 
     const onUpload=(comment:string)=>{
       setSecComm([...secComm, {comm : comment}]);
@@ -136,9 +142,11 @@ export default function PostDetailScreen(){
     useEffect(()=>{
       console.log(secComm)
     }, [secComm])
-    useEffect(()=>{
-      if(character.id===Posting.character_id) setPostOwner(true)
-    }, [])
+
+    const getIsPostOwner = useCallback(() => {
+      return character.name === viewPost.characterName;
+    }, [character, viewPost]);
+    const postOwner = useMemo(() => getIsPostOwner(), [getIsPostOwner]);
 
     const scroll = useRef(new Animated.Value(0)).current;
     const OpacityHeader=scroll.interpolate({
@@ -146,6 +154,32 @@ export default function PostDetailScreen(){
       outputRange: [0, 0.5, 1],
       extrapolate: 'clamp',
     });
+
+    const getSelectedComment = useCallback(() => {
+      for (const comment of viewPost.comments) {
+        if (comment.id === selectId) {
+          return comment.comment;
+        }
+      }
+      return '';
+    }, [viewPost, selectId]);
+    const selectedComment = useMemo(() => getSelectedComment(), [getSelectedComment]);
+
+    const getTemplate = useCallback(() => {
+      switch (viewPost.template.template) {
+        case "Image":
+          return <ImageTemplate mode="detail" post={viewPost} />;
+        case "Diary":
+          return <DiaryTemplate mode="detail" post={viewPost} />;
+        case "Album":
+          return <AlbumTemplate mode="detail" post={viewPost} />;
+        case "List":
+          return <ListTemplate mode="detail" post={viewPost} />;
+        default:
+          return null;
+      }
+    }, [viewPost]);
+    const template = useMemo(() => getTemplate(), [getTemplate]);
 
     return(
         <area.Container>
@@ -172,7 +206,7 @@ export default function PostDetailScreen(){
                 <View style={{paddingTop: 20}}/>
 
                 <area.RowArea>
-                  <View style={{flex:1}}><ProfileButton diameter={30} account={0} name={Writer.name} profile={Writer.profile_img}/></View>
+                  <View style={{flex:1}}><ProfileButton diameter={30} account={0} name={viewPost.characterName} profile={viewPost.characterImg}/></View>
                   {postOwner ? 
                   <area.RowArea style={{paddingRight:1}}>
                     <LineButton press={()=>{}} content={i18n.t("수정")} color={colors.black} incolor={colors.gray2} outcolor={'transparent'}/>
@@ -181,13 +215,18 @@ export default function PostDetailScreen(){
                   </area.RowArea> : null}
                 </area.RowArea>
                 <View style={{marginBottom: 12}}/>
-
+                {template}
+                {viewPost.template.text ?
+                <TextTemplate mode="detail" content={viewPost.template.text} />
+                :
+                null
+                }
                 <View style={{alignItems:'flex-start'}}><SunButton sun={24}/></View>
                 <text.Subtitle3 color={colors.black} style={{marginTop:36}}>{i18n.t('반응')}</text.Subtitle3>
 
                 <View style={{paddingTop: 12}}/>
                 <FlatList
-                  data={Data}
+                  data={viewPost.comments}
                   keyboardShouldPersistTaps={'always'}
                   keyExtractor={(item) => item.id.toString()}
                   renderItem={(obj)=>{
@@ -213,7 +252,7 @@ export default function PostDetailScreen(){
               </Animated.ScrollView>
             {user.isLogined ?
               <View style={{justifyContent:'flex-end'}}>
-                {selectId!==-1 ? <CommentInputComment setSelectId={setSelectId} comment={Data[0].comment}/> : null}
+                {selectId!==-1 ? <CommentInputComment setSelectId={setSelectId} comment={selectedComment}/> : null}
                 <CommentInputBar selectId={selectId} value={comment} onChange={setComment} onUpload={onUpload}/>
               </View> : null}
             </KeyboardAvoidingView>

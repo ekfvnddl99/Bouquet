@@ -16,15 +16,15 @@ import BinSvg from '../../assets/Bin';
 
 // props & logic
 import * as cal from '../logics/Calculation';
+import * as Post from '../logics/Post';
 
 // components
 import ProfileButton from './ProfileButton';
 import { indexOf } from 'lodash';
-import { Comment } from '../../utils/types';
 
 
 interface CommentItemProps{
-  info: Comment,
+  info: Post.Comment,
   press:number, 
   owner:boolean, 
   login:boolean,
@@ -78,7 +78,7 @@ export default function CommentItem({info, press, owner, login, setSelect, IsCli
       </area.RowArea>
 
       <area.RowArea>
-        <ProfileButton diameter={20} account={0} name={info.name} profile={info.profile_img}/>
+        <ProfileButton diameter={20} account={0} name={info.name} profile={info.profileImg}/>
         <View style={{flex:1}}/>
         <area.RowArea>
           {press===info.id && owner ? <TouchableOpacity><BinSvg w='18' h='18'/></TouchableOpacity> : null}

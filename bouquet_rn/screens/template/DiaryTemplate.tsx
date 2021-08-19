@@ -298,30 +298,25 @@ function Diary({ isMini, isEditMode, diary, setPost }: DiaryProps) {
 type TemplateProps = {
   mode: string;
   setPost?: React.Dispatch< React.SetStateAction<Post.AllPostRequestType> >;
+  post?: Post.PostInterface<any>;
 }
 
-export default function DiaryTemplate({ mode, setPost }: TemplateProps) {
-  const content = `오늘은 떡볶이를 실컷 먹었다.
-너무 맛있었다.
-다음에 또 먹어야지.
-맛있는 떡볶이 집을 찾아야겠다.
-하지만 이 주변엔 그런 게 없는걸...
-너무 슬프다.`;
-  const diaryExample = {
-    title: '떡볶이를 실컷 먹은 날',
-    year: 2021,
-    month: 8,
-    day: 1,
-    weather: '맑음☀️',
-    imageUrl: '',
-    content: content,
+export default function DiaryTemplate({ mode, setPost, post }: TemplateProps) {
+  const diaryData = {
+    title: post ? post.template.title : '',
+    year: post ? Number(String(post.template.date).slice(0, 4)) : 1000,
+    month: post ? Number(String(post.template.date).slice(4, 6)) : 10,
+    day: post ? Number(String(post.template.date).slice(6, 8)) : 10,
+    weather: post ? post.template.weather : '',
+    imageUrl: post ? post.template.img : '',
+    content: post ? post.template.content : '',
   };
 
   switch (mode) {
     case 'mini':
       return (
         <Diary isMini={true} isEditMode={false}
-          diary={diaryExample}
+          diary={diaryData}
           setPost={setPost}
         />
       );
@@ -333,7 +328,7 @@ export default function DiaryTemplate({ mode, setPost }: TemplateProps) {
           paddingV={10}
         >
           <Diary isMini={false} isEditMode={false}
-            diary={diaryExample}
+            diary={diaryData}
             setPost={setPost}
           />
         </area.NoHeightArea>
@@ -346,7 +341,7 @@ export default function DiaryTemplate({ mode, setPost }: TemplateProps) {
           paddingV={10}
         >
           <Diary isMini={false} isEditMode={true}
-            diary={diaryExample}
+            diary={diaryData}
             setPost={setPost}
           />
         </area.NoHeightArea>
@@ -354,7 +349,7 @@ export default function DiaryTemplate({ mode, setPost }: TemplateProps) {
     default:
       return (
         <Diary isMini={true} isEditMode={false}
-          diary={diaryExample}
+          diary={diaryData}
           setPost={setPost}
         />
       );

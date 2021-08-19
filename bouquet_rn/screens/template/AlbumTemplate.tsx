@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { View, TextInput } from 'react-native';
 import styled from 'styled-components/native';
 
@@ -14,6 +14,8 @@ import PlayFocusSvg from '../../assets/PlayFocus';
 import WriteSvg from '../../assets/Write';
 import XSvg from '../../assets/X';
 import GallerySvg from '../../assets/Gallery';
+
+import * as Post from '../logics/Post';
 
 const AlbumInfoWrap = styled.View`
   flex: 1;
@@ -58,7 +60,7 @@ type AlbumProps = {
   artist: string;
   date: string;
   description: string;
-  songs: Array<{title: string; lyricUrl: string;}>;
+  songs: Array<{title: string; lyric: string;}>;
 }
 
 function Album({ isMini, isEditMode, title, artist, date, description, songs }: AlbumProps) {
@@ -202,30 +204,19 @@ function Album({ isMini, isEditMode, title, artist, date, description, songs }: 
 
 type TemplateProps = {
   mode: string;
+  post?: Post.PostInterface<any>;
 }
 
-export default function AlbumTemplate({ mode }: TemplateProps) {
-  const songs = [
-    {
-      title: "안녕, 안녕",
-      lyricUrl: '',
-    },
-    {
-      title: "안녕, 안녕",
-      lyricUrl: '',
-    },
-  ]
-
+export default function AlbumTemplate({ mode, post }: TemplateProps) {
   switch (mode) {
     case 'mini':
       return (
         <Album isMini={true} isEditMode={false}
-          title="Spring Blossom"
-          artist="현지"
-          date="2021.06.15"
-          description="‘봄을 피우기 위한 기다림'
-봄을 기다리며 현지가 심혈을 기울인 앨범. 전체적으로 수록곡 모두 부드러운 선율과 싱그러운 멜로디가 마음을 간질이지만, 그 속에 들어 있는 기다림의 애처로움이 역설적으로 드러난다."
-          songs={songs}
+          title={post ? post.template.title : ''}
+          artist={post ? post.characterName : ''}
+          date={post ? String(post?.template.releaseDate) : ''}
+          description={post ? post.template.description : ''}
+          songs={post ? post.template.tracks : ''}
         />
       );
     case 'detail':
@@ -236,12 +227,11 @@ export default function AlbumTemplate({ mode }: TemplateProps) {
           paddingV={10}
         >
           <Album isMini={false} isEditMode={false}
-            title="Spring Blossom"
-            artist="현지"
-            date="2021.06.15"
-            description="‘봄을 피우기 위한 기다림'
-봄을 기다리며 현지가 심혈을 기울인 앨범. 전체적으로 수록곡 모두 부드러운 선율과 싱그러운 멜로디가 마음을 간질이지만, 그 속에 들어 있는 기다림의 애처로움이 역설적으로 드러난다."
-            songs={songs}
+            title={post ? post.template.title : ''}
+            artist={post ? post.characterName : ''}
+            date={post ? String(post?.template.releaseDate) : ''}
+            description={post ? post.template.description : ''}
+            songs={post ? post.template.tracks : ''}
           />
         </area.NoHeightArea>
       );
@@ -253,24 +243,22 @@ export default function AlbumTemplate({ mode }: TemplateProps) {
           paddingV={10}
         >
           <Album isMini={false} isEditMode={true}
-            title="Spring Blossom"
-            artist="현지"
-            date="2021.06.15"
-            description="‘봄을 피우기 위한 기다림'
-봄을 기다리며 현지가 심혈을 기울인 앨범. 전체적으로 수록곡 모두 부드러운 선율과 싱그러운 멜로디가 마음을 간질이지만, 그 속에 들어 있는 기다림의 애처로움이 역설적으로 드러난다."
-            songs={songs}
+            title={post ? post.template.title : ''}
+            artist={post ? post.characterName : ''}
+            date={post ? String(post?.template.releaseDate) : ''}
+            description={post ? post.template.description : ''}
+            songs={post ? post.template.tracks : ''}
           />
         </area.NoHeightArea>
       );
     default:
       return (
         <Album isMini={true} isEditMode={false}
-          title="Spring Blossom"
-          artist="현지"
-          date="2021.06.15"
-          description="‘봄을 피우기 위한 기다림'
-봄을 기다리며 현지가 심혈을 기울인 앨범. 전체적으로 수록곡 모두 부드러운 선율과 싱그러운 멜로디가 마음을 간질이지만, 그 속에 들어 있는 기다림의 애처로움이 역설적으로 드러난다."
-          songs={songs}
+          title={post ? post.template.title : ''}
+          artist={post ? post.characterName : ''}
+          date={post ? String(post?.template.releaseDate) : ''}
+          description={post ? post.template.description : ''}
+          songs={post ? post.template.tracks : ''}
         />
       );
   }

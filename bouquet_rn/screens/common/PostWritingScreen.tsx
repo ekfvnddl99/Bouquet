@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import I18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
@@ -21,7 +21,7 @@ import ArrowLeftSvg from '../../assets/ArrowLeft';
 
 // props & logic
 import { StatusBarHeight } from '../logics/StatusbarHeight';
-import { selectTemplate } from '../logics/atoms';
+import { selectTemplate, viewPostState } from '../logics/atoms';
 import useCharacter from '../logics/useCharacter';
 import * as Post from '../logics/Post';
 
@@ -60,6 +60,7 @@ export default function PostWritingScreen(){
   // 템플릿을 고른 상태라면 select에 1을 넣어줘야 한다.
   const select=useRecoilValue(selectTemplate);
   const setSelect=useSetRecoilState(selectTemplate);
+  const [viewPost, setViewPost] = useRecoilState(viewPostState);
   const [character, setCharacter] = useCharacter();
   const [post, setPost] = useState<Post.AllPostRequestType>({
     characterId: -1,
@@ -81,8 +82,10 @@ export default function PostWritingScreen(){
   const goSelect=()=>{
     navigation.navigate('SelectTemplate');
   }
-  const goUpload=()=>{
+  const goUpload= async () => {
     setSelect(-1);
+    const postToView = await Post.RequestToPostAsync(post);
+    if (postToView !== null) setViewPost(postToView);
     navigation.replace('PostItem');
   }
   return(

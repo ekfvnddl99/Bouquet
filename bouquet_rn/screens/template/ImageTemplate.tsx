@@ -5,6 +5,8 @@ import * as ImagePicker from 'expo-image-picker';
 import { colors } from '../../styles/colors';
 
 import GallerySvg from '../../assets/Gallery';
+
+import * as Post from '../logics/Post';
   
 function Img({ img, isMini, isEditMode }: {img?:string, isMini: boolean, isEditMode?: boolean}) {
   const[image, setImage]=useState(img);
@@ -51,10 +53,10 @@ function Img({ img, isMini, isEditMode }: {img?:string, isMini: boolean, isEditM
 
 type TemplateProps = {
   mode: string;
-  img?: string;
+  post?: Post.PostInterface<any>;
 }
 
-export default function ImageTemplate({ mode, img }: TemplateProps) {
+export default function ImageTemplate({ mode, post }: TemplateProps) {
   switch (mode) {
     case 'edit':
       return (
@@ -66,7 +68,7 @@ export default function ImageTemplate({ mode, img }: TemplateProps) {
       );
     default:
       return (
-        <Img img={img} isMini={true} isEditMode={false}/>
+        <Img img={post ? post.template.img : ''} isMini={true} isEditMode={false}/>
       );
   }
 }
