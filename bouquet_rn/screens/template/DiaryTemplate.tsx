@@ -99,6 +99,11 @@ const Line = styled.View`
 
 function Diary({ isMini, isEditMode, diary, setPost }: DiaryProps) {
   const [contentHeight, setContentHeight] = useState(20);
+  const [tmpDate, setTmpDate] = useState({
+    year: '',
+    month: '',
+    day: ''
+  });
   const [tmpPost, setTmpPost] = useState<Post.DiaryPostRequestInterface>({
     characterId: -1,
     template: "Diary",
@@ -140,6 +145,15 @@ function Diary({ isMini, isEditMode, diary, setPost }: DiaryProps) {
     }
   }
 
+  useEffect(() => {
+    if (tmpDate.year || tmpDate.month || tmpDate.day) {
+      changePost({
+        ...tmpPost,
+        date: Number(tmpDate.year + tmpDate.month + tmpDate.day)
+      });
+    }
+  }, [tmpDate]);
+
   return (
     <area.NoHeightArea
       marBottom={0}
@@ -152,11 +166,13 @@ function Diary({ isMini, isEditMode, diary, setPost }: DiaryProps) {
           <SmallInput
             placeholder="연도"
             placeholderTextColor={colors.gray5}
-            value={String(tmpPost.date).slice(0, 4)}
-            onChangeText={(text: string) => changePost({
-              ...tmpPost,
-              date: Number(text + String(tmpPost.date).slice(2, 8))
-            })}
+            value={tmpDate.year}
+            onChangeText={(text: string) => {
+              setTmpDate({
+                ...tmpDate,
+                year: text
+              });
+            }}
           />
           :
           <text.DiaryBody2R color={colors.diary}>{diary.year}</text.DiaryBody2R>
@@ -166,10 +182,10 @@ function Diary({ isMini, isEditMode, diary, setPost }: DiaryProps) {
           <SmallInput
             placeholder="월"
             placeholderTextColor={colors.gray5}
-            value={String(tmpPost.date).slice(4, 6)}
-            onChangeText={(text: string) => changePost({
-              ...tmpPost,
-              date: Number(String(tmpPost.date).slice(0, 2) + text + String(tmpPost.date).slice(4, 8))
+            value={tmpDate.month}
+            onChangeText={(text: string) => setTmpDate({
+              ...tmpDate,
+              month: text
             })}
           />
           :
@@ -180,10 +196,10 @@ function Diary({ isMini, isEditMode, diary, setPost }: DiaryProps) {
           <SmallInput
             placeholder="일"
             placeholderTextColor={colors.gray5}
-            value={String(tmpPost.date).slice(6, 8)}
-            onChangeText={(text: string) => changePost({
-              ...tmpPost,
-              date: Number(String(tmpPost.date).slice(0, 6) + text)
+            value={tmpDate.day}
+            onChangeText={(text: string) => setTmpDate({
+              ...tmpDate,
+              day: text
             })}
           />
           :
