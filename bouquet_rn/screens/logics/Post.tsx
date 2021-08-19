@@ -2,6 +2,32 @@ import { serverAddress } from './ServerInfos';
 import * as SecureStore from 'expo-secure-store';
 import { Character } from '../../utils/types';
 
+export interface Comment {
+  name: string,
+  profileImg: string,
+  id: number,
+  comment: string,
+  liked: boolean,
+  parent: number,
+}
+
+export interface ParentComment extends Comment {
+  children: Array<Comment>,
+}
+
+export interface PostInterface<T extends PostRequestInterface> {
+  id: number,
+  createdAt: string,
+  updatedAt: string,
+  template: T,
+  liked: boolean,
+  characterInfo: {
+    name: string,
+    profileImg: string,
+  },
+  comments: Array<Comment | ParentComment>,
+}
+
 // Template Request Types
 
 export interface PostRequestInterface {
@@ -35,6 +61,13 @@ export interface ListPostRequestInterface extends PostRequestInterface {
   content: string,
   components: Array<{ title: string, img: string, content: string }>,
 }
+
+export type AllPostRequestType =
+PostRequestInterface |
+ImagePostRequestInterface |
+DiaryPostRequestInterface |
+AlbumPostRequestInterface |
+ListPostRequestInterface;
 
 // POST
 export async function PostAsync<T extends PostRequestInterface>(body: T) {

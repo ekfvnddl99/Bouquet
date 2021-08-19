@@ -10,7 +10,6 @@ import * as elses from '../../styles/styled-components/elses';
 import GallerySvg from '../../assets/Gallery';
   
   
-  
 function Img({ img, isMini, isEditMode }: {img?:string, isMini: boolean, isEditMode?: boolean}) {
   const[image, setImage]=useState(img);
   const[edit, setEdit]=useState(isEditMode);

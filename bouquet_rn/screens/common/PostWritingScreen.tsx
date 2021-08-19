@@ -23,6 +23,7 @@ import ArrowLeftSvg from '../../assets/ArrowLeft';
 import { StatusBarHeight } from '../logics/StatusbarHeight';
 import { selectTemplate } from '../logics/atoms';
 import useCharacter from '../logics/useCharacter';
+import * as Post from '../logics/Post';
 
 // components
 import ConditionButton from '../components/ConditionButton';
@@ -39,16 +40,16 @@ import ListTemplate from '../template/ListTemplate';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { WritingStackParam } from '../../utils/types';
 
-function setTemplate(idx : number){
+function setTemplate(idx : number, setPost: React.Dispatch< React.SetStateAction<Post.AllPostRequestType> >) {
   switch(idx){
     case 0:
       return null;
     case 1:
-      return <ImageTemplate mode='edit'/>;
+      return <ImageTemplate mode='edit' />;
     case 2:
-      return <AlbumTemplate mode='edit'/>;
+      return <AlbumTemplate mode='edit' />;
     case 3:
-      return <DiaryTemplate mode='edit'/>;
+      return <DiaryTemplate mode='edit' setPost={setPost} />;
     case 4:
       return <ListTemplate mode='edit'/>;
   }
@@ -60,6 +61,10 @@ export default function PostWritingScreen(){
   const select=useRecoilValue(selectTemplate);
   const setSelect=useSetRecoilState(selectTemplate);
   const [character, setCharacter] = useCharacter();
+  const [post, setPost] = useState<Post.AllPostRequestType>({
+    characterId: -1,
+    template: "None",
+  });
 
   const backAction=()=>{
     setSelect(-1);
@@ -102,7 +107,7 @@ export default function PostWritingScreen(){
           <button.AddTemplate onPress={goSelect}>
             <text.Button2B color={colors.black}>{I18n.t('템플릿 선택')}</text.Button2B>
           </button.AddTemplate> 
-          : <View style={{marginTop:12}}>{setTemplate(select)}</View>}
+          : <View style={{marginTop:12}}>{setTemplate(select, setPost)}</View>}
 
           <input.TextTemplate placeholder={I18n.t("내용을 입력해 주세요")} multiline={true}/>
           <View style={{marginTop:40}}/>

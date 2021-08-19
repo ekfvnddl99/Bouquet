@@ -26,6 +26,7 @@ import * as elses from '../../styles/styled-components/elses';
 import { StatusBarHeight } from '../logics/StatusbarHeight';
 import { userState } from '../logics/atoms';
 import { useRecoilValue } from 'recoil';
+import * as Post from '../logics/Post';
 
 // components
 import ProfileButton from '../components/ProfileButton';
@@ -100,7 +101,6 @@ export default function PostDetailScreen(){
                   </area.RowArea> : null}
                 </area.RowArea>
                 <View style={{marginBottom: 12}}/>
-                <TextTemplate/>
                 <View style={{alignItems:'flex-start'}}><SunButton sun={24}/></View>
                 <text.Subtitle3 color={colors.black} style={{marginTop:36}}>{i18n.t('반응')}</text.Subtitle3>
 
