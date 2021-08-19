@@ -20,10 +20,6 @@ function Img({ img, isMini, isEditMode }: {img?:string, isMini: boolean, isEditM
     })();
   }, []);
 
-  useEffect(()=>{
-    console.log(edit)
-    console.log(image)
-  }, [image])
   const onPress = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,

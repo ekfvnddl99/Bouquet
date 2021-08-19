@@ -128,13 +128,3 @@ export type Character = {
   likes: Array<string>;
   hates: Array<string>;
 }
-
-export type Comment = {
-  name:string;
-  profile_img: string;
-  id: number;
-  comment: string;
-  parent: number;
-  liked: boolean;
-  children?: Comment[];
-}

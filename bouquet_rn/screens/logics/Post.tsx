@@ -6,13 +6,13 @@ import { getCharacterAsync, responseToCharacter } from './Character';
 
 export interface Comment {
   name: string,
+  createdAt: string,
+  updatedAt: string,
   profileImg: string,
   id: number,
   comment: string,
   liked: boolean,
   parent: number,
-  createdAt: string,
-  updatedAt: string,
   children?: Array<Comment>,
 }
 

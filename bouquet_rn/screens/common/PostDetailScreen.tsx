@@ -27,6 +27,7 @@ import { StatusBarHeight } from '../logics/StatusbarHeight';
 import { userState, viewPostState } from '../logics/atoms';
 import { useRecoilValue, useRecoilState } from 'recoil';
 import * as Post from '../logics/Post';
+import useCharacter from '../logics/useCharacter';
 
 // components
 import ProfileButton from '../components/ProfileButton';
@@ -39,10 +40,6 @@ import LineButton from '../components/LineButton';
 import ConditionButton from '../components/ConditionButton';
 import ProfileItem from '../components/ProfileItem';
 
-// template
-import { onChange } from 'react-native-reanimated';
-import useCharacter from '../logics/useCharacter';
-
 import TextTemplate from '../template/TextTemplate';
 import ImageTemplate from '../template/ImageTemplate';
 import AlbumTemplate from '../template/AlbumTemplate';
@@ -53,78 +50,9 @@ const HEADER_MAX_HEIGHT = 90;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
-// const Posting={
-//   "id": 1,
-//   "created_at": "2021-08-19T17:37:23",
-//   "updated_at": "2021-08-19T17:37:23",
-//   "character_id": 1,
-//   "template": "None",
-//   "text": "이것이 포스팅이다.",
-//   "liked": false
-// }
-// const Writer={
-//   "name": "오란지",
-//   "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg"
-// }
-// const Data=[
-//   {
-//     "name": "오란지",
-//     "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
-//     "id": 1,
-//     "comment": "이 노래를 불러보지만 내 진심이 닿을지 몰라",
-//     "parent": 0,
-//     "liked": false,
-//     "children": [
-//       {
-//         "name": "오란지",
-//         "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
-//         "id": 2,
-//         "comment": "Welcome to my 하늘궁",
-//         "parent": 1,
-//         "liked": false
-//       },
-//       {
-//         "name": "오란지",
-//         "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
-//         "id": 7,
-//         "comment": "합법 전까지 마약해",
-//         "parent": 1,
-//         "liked": false
-//       }
-//     ]
-//   },
-//   {
-//     "name": "오란지",
-//     "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
-//     "id": 3,
-//     "comment": "대기권 밖으로",
-//     "parent": 0,
-//     "liked": true,
-//     "children": [
-//       {
-//         "name": "오란지",
-//         "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
-//         "id": 6,
-//         "comment": "아빠 긴장타야해",
-//         "parent": 3,
-//         "liked": false
-//       }
-//     ]
-//   },
-//   {
-//     "name": "오란지",
-//     "profile_img": "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
-//     "id": 4,
-//     "comment": "온난화의 주범",
-//     "parent": 0,
-//     "liked": false,
-//     "children": []
-//   }
-// ]
-
 
 export default function PostDetailScreen(){
-    const[secComm, setSecComm]=useState([{comm:"1"},{comm:"2"}]);
+    const[secComm, setSecComm]=useState<Post.Comment[]>([]);
 
     const user = useRecoilValue(userState);
     const [character, setCharacter] = useCharacter();
@@ -132,21 +60,22 @@ export default function PostDetailScreen(){
     const[clickedLowerId, setClickedLowerId]=useState<number[]>([]);
     const[click, setClick]=useState(1);
     const[comment, setComment]=useState('');
+    const[parentComm, setParentComm]=useState<Post.Comment>();
 
     const [viewPost, setViewPost] = useRecoilState(viewPostState);
 
-    const onUpload=(comment:string)=>{
-      setSecComm([...secComm, {comm : comment}]);
+    const onUpload=(newComm:string)=>{
+      let one : Post.Comment= {comment : newComm, createdAt:"2021-08-19T17:39:41", id:5, liked:false, name:"두리안",parent:1, profileImg : "", updatedAt:"2021-08-19T17:39:41"}
+      setSecComm([...secComm, one]);
       setComment('')
     }
-    useEffect(()=>{
-      console.log(secComm)
-    }, [secComm])
 
     const getIsPostOwner = useCallback(() => {
       return character.name === viewPost.characterName;
     }, [character, viewPost]);
     const postOwner = useMemo(() => getIsPostOwner(), [getIsPostOwner]);
+
+
 
     const scroll = useRef(new Animated.Value(0)).current;
     const OpacityHeader=scroll.interpolate({
@@ -221,7 +150,7 @@ export default function PostDetailScreen(){
                 :
                 null
                 }
-                <View style={{alignItems:'flex-start'}}><SunButton sun={24}/></View>
+                <View style={{alignItems:'flex-start'}}><SunButton sun={24} active={viewPost.liked}/></View>
                 <text.Subtitle3 color={colors.black} style={{marginTop:36}}>{i18n.t('반응')}</text.Subtitle3>
 
                 <View style={{paddingTop: 12}}/>
@@ -233,9 +162,10 @@ export default function PostDetailScreen(){
                     return(
                       <>
                       <TouchableOpacity activeOpacity={1} onPress={()=>{selectId===obj.item.id ? setSelectId(-1) : setSelectId(obj.item.id)}}>
-                        <CommentItem info={obj.item} press={selectId} owner={character.name===obj.item.name} login={user.isLogined} IsClick={setClick} AddClicks={setClickedLowerId} clicks={clickedLowerId} setSelect={setSelectId}/>
+                        <CommentItem info={obj.item} press={selectId} owner={character.name===obj.item.name} login={user.isLogined} IsClick={setClick} AddClicks={setClickedLowerId} clicks={clickedLowerId} setSelect={setSelectId} setParentComm={setParentComm}/>
                       </TouchableOpacity>
-                      {clickedLowerId.includes(obj.item.id) ?
+                      {clickedLowerId.includes(obj.item.id) && obj.item.children?
+                      <>{setSecComm(obj.item.children)}
                       <FlatList
                         style={{marginLeft:16}}
                         data={obj.item.children}
@@ -243,16 +173,17 @@ export default function PostDetailScreen(){
                         renderItem={(lowerobj)=>{
                           return(
                             <TouchableOpacity activeOpacity={1} onPress={()=>{selectId===lowerobj.item.id ? setSelectId(-1) : setSelectId(lowerobj.item.id)}}>
-                              <CommentItem info={lowerobj.item} press={selectId} owner={character.name===lowerobj.item.name} login={user.isLogined} setSelect={setSelectId}/>
+                              <CommentItem info={lowerobj.item} press={selectId} owner={character.name===lowerobj.item.name} login={user.isLogined} setSelect={setSelectId} setParentComm={setParentComm}/>
                             </TouchableOpacity>
-                          );}}/>: null}
+                          );}}/></>: null}
                       </>
                     ); 
                   }}/>
               </Animated.ScrollView>
             {user.isLogined ?
               <View style={{justifyContent:'flex-end'}}>
-                {selectId!==-1 ? <CommentInputComment setSelectId={setSelectId} comment={selectedComment}/> : null}
+
+                {parentComm ? <CommentInputComment setParentComm={setParentComm} info={parentComm}/> : null}
                 <CommentInputBar selectId={selectId} value={comment} onChange={setComment} onUpload={onUpload}/>
               </View> : null}
             </KeyboardAvoidingView>

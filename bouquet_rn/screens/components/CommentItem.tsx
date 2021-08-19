@@ -20,7 +20,6 @@ import * as Post from '../logics/Post';
 
 // components
 import ProfileButton from './ProfileButton';
-import { indexOf } from 'lodash';
 
 
 interface CommentItemProps{
@@ -29,13 +28,14 @@ interface CommentItemProps{
   owner:boolean, 
   login:boolean,
   setSelect:Function,
+  setParentComm:Function,
   IsClick? : Function, 
   AddClicks? : Function, 
   clicks?:number[]
 }
 
 
-export default function CommentItem({info, press, owner, login, setSelect, IsClick, AddClicks, clicks}  : CommentItemProps){
+export default function CommentItem({info, press, owner, login, setSelect, setParentComm, IsClick, AddClicks, clicks}  : CommentItemProps){
   const[more, setMore]=useState(-1);
   useEffect(()=>{
     if(IsClick){
@@ -82,7 +82,7 @@ export default function CommentItem({info, press, owner, login, setSelect, IsCli
         <View style={{flex:1}}/>
         <area.RowArea>
           {press===info.id && owner ? <TouchableOpacity><BinSvg w='18' h='18'/></TouchableOpacity> : null}
-          {info.children?.length ? 
+          {info.children ? 
           <View style={{marginLeft:8}}>
             {more===1 ?<TouchableOpacity onPress={()=>setMore(-1)}><CommentDownArrowSvg w='18' h='18'/></TouchableOpacity> 
               : <TouchableOpacity onPress={()=>setMore(1)}><CommentUpArrowSvg w='18' h='18'/></TouchableOpacity>}
@@ -90,7 +90,7 @@ export default function CommentItem({info, press, owner, login, setSelect, IsCli
             : null}
 
           <View style={{marginLeft:8}}/>
-          <TouchableOpacity onPress={()=>setSelect(info.id)}>
+          <TouchableOpacity onPress={()=>setParentComm(info)}>
             <CommentSvg w='18' h='18'/>
           </TouchableOpacity>
 
