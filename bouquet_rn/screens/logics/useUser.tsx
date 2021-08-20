@@ -4,6 +4,7 @@ import * as SecureStore from 'expo-secure-store';
 import { serverAddress } from './ServerInfos';
 import { useRecoilState, SetterOrUpdater } from 'recoil';
 import { userState } from './atoms';
+import Base64 from 'js-base64';
 
 async function getUser(auth: string) {
   try {

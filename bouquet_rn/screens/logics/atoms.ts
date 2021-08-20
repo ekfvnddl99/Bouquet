@@ -87,6 +87,35 @@ export const viewPostState = atom({
     liked: false,
     characterName: '',
     characterImg: '',
-    comments: []
+    comments: [],
+    numSunshines: 0
   },
+})
+
+export const viewUserState = atom({
+  key: 'viewUserState',
+  default: {
+    name: '',
+    profileImg: ''
+  }
+})
+
+export const viewUserSelector = selector({
+  key: 'viewUserSelector',
+  get: async ({ get }) => {
+    const current = get(viewUserState);
+    const result = await getCharacterListAsync(current.name);
+    if (typeof(result) !== "string") {
+      return {
+        ...current,
+        characters: result.map((ch: CharacterResponseType) => {
+          return responseToCharacter(ch);
+        })
+      }
+    }
+    return {
+      ...current,
+      characters: []
+    }
+  }
 })

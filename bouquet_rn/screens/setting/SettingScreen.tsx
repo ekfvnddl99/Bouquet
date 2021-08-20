@@ -6,6 +6,7 @@ import {
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
 import * as SecureStore from 'expo-secure-store';
+import { useRecoilState } from 'recoil';
 
 import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
@@ -18,7 +19,7 @@ import BackButton from '../components/BackButton';
 import { SettingProps } from '../../utils/types';
 import ProfileItem from '../components/ProfileItem';
 
-import { guest, noCharacter } from '../logics/atoms';
+import { guest, noCharacter, characterListState } from '../logics/atoms';
 import useUser from '../logics/useUser';
 import useCharacter from '../logics/useCharacter';
 
@@ -26,6 +27,7 @@ export default function SettingScreen(){
   const [user, setUser] = useUser();
   const [character, setCharacter] = useCharacter();
   const navigation = useNavigation();
+  const [chList, setChList] = useRecoilState(characterListState);
 
   const logOut = async () => {
     const auth = await SecureStore.getItemAsync('auth');
@@ -35,6 +37,7 @@ export default function SettingScreen(){
     alert('로그아웃했습니다.');
     setUser(guest);
     setCharacter(noCharacter);
+    setChList([]);
   }
 
   return(

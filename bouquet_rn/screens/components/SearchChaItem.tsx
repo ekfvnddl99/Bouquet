@@ -9,18 +9,15 @@ import { Character, MiniCharacter } from '../../utils/types';
 import useCharacterView from '../logics/useCharacterView';
 
 
-export default function CharacterItem({press, id, character}  :{press:number, id?:number, character: Character }){
+export default function SearchChaItem({press, id, character}  :{press:number, id?:number, character: MiniCharacter }){
   const navigation = useNavigation();
-  const [viewCharacter, setViewCharacter] = useCharacterView();
   const goProfileDetail=()=>{
-    if (character.id !== -1) setViewCharacter(character.id);
-    else setViewCharacter(character.name);
     navigation.navigate('ProfileItem');
   }
   return(
     <button.MiniListButton isWidth={true} height={200} color={colors.white} paddingH={18} paddingV={18} 
-    style={{alignItems:'center', marginRight:10}} activeOpacity={1} onPress={goProfileDetail}>
-      <elses.CircleImg diameter={100} source={{uri:character.profileImg}}/>
+    style={{alignItems:'center', marginRight:10}} activeOpacity={1} onPress={()=>press===id ? goProfileDetail : {}}>
+      <elses.CircleImg diameter={100} source={{uri:character.profile_img}}/>
       <View style={{marginVertical:8}}><text.Body2B color={colors.black}>{character.name}</text.Body2B></View>
       <text.Caption color={colors.black} numberOfLines={2}>{character.intro}</text.Caption>
     </button.MiniListButton>

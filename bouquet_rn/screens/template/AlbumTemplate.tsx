@@ -61,9 +61,10 @@ type AlbumProps = {
   date: string;
   description: string;
   songs: Array<{title: string; lyric: string;}>;
+  img: string;
 }
 
-function Album({ isMini, isEditMode, title, artist, date, description, songs }: AlbumProps) {
+function Album({ isMini, isEditMode, title, artist, date, description, songs, img }: AlbumProps) {
   const [songsState, setSongsState] = useState(songs);
   useEffect(() => {
     if (isMini && (songs.length > 4)) {
@@ -89,7 +90,7 @@ function Album({ isMini, isEditMode, title, artist, date, description, songs }: 
         <AlbumPic
           width={isMini ? 80 : 100}
           height={isMini ? 80 : 100}
-          source={require('../../assets/img.jpg')}
+          source={img==='' ? require('../../assets/img.jpg') : { uri: img }}
         />
         }
         <AlbumTextInfoWrap>
@@ -209,6 +210,17 @@ type TemplateProps = {
 
 export default function AlbumTemplate({ mode, post }: TemplateProps) {
   switch (mode) {
+    case 'ex':
+      return (
+        <Album isMini={false} isEditMode={false}
+          title={'봄의 정원'}
+          artist={'달오떡'}
+          date={'20210814'}
+          description={'\‘봄을 피우기 위한 기다림\' 봄을 기다리며 달오떡이 심혈을 기울인 앨범. 전체적으로 수록곡 모두 부드러운 선율과 싱그러운 멜로디가 마음을 간질이지만, 그 속에 들어 있는 기다림의 애처로움이 역설적으로 드러난다.'}
+          songs={[{title:'안녕, 나의 봄', lyric:''}, {title:'파랑새', lyric:''}, {title:'꽃 피우다 보면', lyric:''}]}
+          img={''}
+        />
+      );
     case 'mini':
       return (
         <Album isMini={true} isEditMode={false}
@@ -217,6 +229,7 @@ export default function AlbumTemplate({ mode, post }: TemplateProps) {
           date={post ? String(post?.template.releaseDate) : ''}
           description={post ? post.template.description : ''}
           songs={post ? post.template.tracks : []}
+          img={post ? post.template.img : ''}
         />
       );
     case 'detail':
@@ -232,6 +245,7 @@ export default function AlbumTemplate({ mode, post }: TemplateProps) {
             date={post ? String(post?.template.releaseDate) : ''}
             description={post ? post.template.description : ''}
             songs={post ? post.template.tracks : []}
+            img={post ? post.template.img : ''}
           />
         </area.NoHeightArea>
       );
@@ -248,6 +262,7 @@ export default function AlbumTemplate({ mode, post }: TemplateProps) {
             date={post ? String(post?.template.releaseDate) : ''}
             description={post ? post.template.description : ''}
             songs={post ? post.template.tracks : []}
+            img={post ? post.template.img : ''}
           />
         </area.NoHeightArea>
       );
@@ -259,6 +274,7 @@ export default function AlbumTemplate({ mode, post }: TemplateProps) {
           date={post ? String(post?.template.releaseDate) : ''}
           description={post ? post.template.description : ''}
           songs={post ? post.template.tracks : []}
+          img={post ? post.template.img : ''}
         />
       );
   }

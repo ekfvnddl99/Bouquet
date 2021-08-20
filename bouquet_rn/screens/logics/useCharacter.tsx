@@ -52,7 +52,7 @@ export default function useCharacter() {
   }, [user]);
 
   const setCharacterFunc = async (ch: Character) => {
-    if (ch.id !== -1) await SecureStore.setItemAsync('lastCharacterId', String(ch.id));
+    if (ch.id !== -1 && user.isLogined) await SecureStore.setItemAsync('lastCharacterId', String(ch.id));
     setCharacter(ch);
   }
 

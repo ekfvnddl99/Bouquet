@@ -21,6 +21,7 @@ export interface PostInterface<T extends PostRequestInterface> {
   createdAt: string,
   updatedAt: string,
   template: T,
+  numSunshines:number,
   liked: boolean,
   characterName: string,
   characterImg: string,
@@ -58,6 +59,7 @@ export interface AlbumPostRequestInterface extends PostRequestInterface {
 export interface ListPostRequestInterface extends PostRequestInterface {
   title: string,
   content: string,
+  img: string,
   components: Array<{ title: string, img: string, content: string }>,
 }
 
@@ -68,6 +70,11 @@ DiaryPostRequestInterface |
 AlbumPostRequestInterface |
 ListPostRequestInterface;
 
+export interface PostResponseInterface {
+  msg: string,
+  posts: Array<any>,
+}
+
 export async function RequestToPostAsync<T extends PostRequestInterface>(postRequest: T): Promise<PostInterface<T> | null> {
   const result = await getCharacterAsync(postRequest.characterId);
   if (typeof(result) !== "string") {
@@ -77,6 +84,7 @@ export async function RequestToPostAsync<T extends PostRequestInterface>(postReq
       createdAt: '',
       updatedAt: '',
       template: postRequest,
+      numSunshines:0,
       liked: false,
       characterName: character.name,
       characterImg: character.profileImg,
@@ -84,6 +92,66 @@ export async function RequestToPostAsync<T extends PostRequestInterface>(postReq
     }
   }
   else return null;
+}
+
+export function PostListResponseToPost(postResponse: PostResponseInterface): Array< PostInterface<AllPostRequestType> > {
+  return postResponse.posts.map((post: any) => {
+    let template: AllPostRequestType = {
+      characterId: post.character_id ? post.character_id : -1,
+      template: post.template,
+      text: post.text
+    }
+
+    switch (post.template) {
+      case "Image":
+        template = {
+          ...template,
+          img: post.img
+        }
+        break;
+      case "Diary":
+        template = {
+          ...template,
+          title: post.title,
+          weather: post.weather,
+          img: post.img,
+          date: post.date,
+          content: post.content
+        }
+        break;
+      case "Album":
+        template = {
+          ...template,
+          description: post.description,
+          title: post.title,
+          img: post.img,
+          releaseDate: post.release_date,
+          tracks: post.tracks
+        }
+        break;
+      case "List":
+        template = {
+          ...template,
+          title: post.title,
+          content: post.content,
+          components: post.components,
+          img: post.img
+        }
+        break;
+    }
+
+    return {
+      id: post.id,
+      createdAt: post.created_at,
+      updatedAt: post.updated_at,
+      characterName: post.character_name,
+      characterImg: post.character_img,
+      liked: post.liked,
+      numSunshines: post.num_sunshines,
+      comments: post.comments,
+      template: template
+    }
+  })
 }
 
 // POST

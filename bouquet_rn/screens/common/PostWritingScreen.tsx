@@ -4,7 +4,10 @@ import {
     FlatList,
     View,
     BackHandler,
-    TouchableOpacity
+    TouchableOpacity,
+    KeyboardAvoidingView,
+    TouchableWithoutFeedback,
+    Keyboard
 } from 'react-native';
 import I18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
@@ -63,7 +66,7 @@ export default function PostWritingScreen(){
   const [viewPost, setViewPost] = useRecoilState(viewPostState);
   const [character, setCharacter] = useCharacter();
   const [post, setPost] = useState<Post.AllPostRequestType>({
-    characterId: -1,
+    characterId: character.id,
     template: "None",
   });
 
@@ -84,8 +87,12 @@ export default function PostWritingScreen(){
   }
   const goUpload= async () => {
     setSelect(-1);
-    const postToView = await Post.RequestToPostAsync(post);
-    if (postToView !== null) setViewPost(postToView);
+    console.log("에엑", character);
+    const postToView = await Post.RequestToPostAsync({...post, characterId: character.id});
+    if (postToView !== null) {
+      setViewPost(postToView);
+      console.log("으아악", postToView);
+    }
     navigation.replace('PostItem');
   }
   return(
@@ -95,10 +102,12 @@ export default function PostWritingScreen(){
           <ArrowLeftSvg w='24' h='24'/>
         </TouchableOpacity>
         <View style={{flex:1}}/>
-        <ProfileItem diameter={28}/>
+        <ProfileItem diameter={28} picUrl={character.profileImg} characterId={character.id}/>
       </area.RowArea>
 
-      <ScrollView>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView style={{flex:1}} behavior={'height'}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{flexGrow:1}} keyboardShouldPersistTaps={'always'}>
         <area.ContainerBlank30>
           <area.RowArea>
             <View style={{flex:1}}><ProfileButton diameter={30} account={0} name={character.name} profile={character.profileImg}/></View>
@@ -117,6 +126,8 @@ export default function PostWritingScreen(){
           <ConditionButton active={true} press={goUpload} content={I18n.t("게시글 올리기")} paddingH={0} paddingV={14} height={45}/>
         </area.ContainerBlank30>
       </ScrollView>
+      </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
     </area.Container>  
   )
 }

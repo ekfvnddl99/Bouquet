@@ -27,16 +27,27 @@ import NameNText from '../../components/NameNText';
 import NotLoginPrimaryButton from '../../components/NotLoginPrimaryButton';
 import ProfileItem from '../../components/ProfileItem';
 import { characterState } from '../../logics/atoms';
+import { Character } from '../../../utils/types';
 
 const HEADER_MAX_HEIGHT = 94;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
-function InNotificationScreen({name} : {name:string}){
-  let Data=[{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9}];
+function InNotificationScreen({character} : {character:Character}){
+  let Data=[{a : "오란지", b: "님이 당신을 팔로우해요."},
+  {a : "폭스처돌이1호님", b: "이 당신의 게시글을 좋아해요."},
+  {a : "비걸최고님", b: "이 당신의 게시글을 좋아해요."},
+  {a : "폭스럽님", b: "이 당신의 게시글에 댓글을 남겼어요."},
+  {a : "단호좌현지님", b: "님이 당신을 팔로우해요."},
+  {a : "러블리폭스님", b: "이 당신의 게시글에 댓글을 남겼어요."},
+  {a : "비스트걸스서포터", b: "님이 당신의 게시글에 댓글을 남겼어요."},
+  {a : "PO폭스WER님", b: "님이 당신의 게시글에 댓글을 남겼어요."},
+  {a : "PO폭스WER님", b: "이 당신의 게시글을 좋아해요."},
+  {a : "비걸핑크해", b: "님이 당신의 게시글에 댓글을 남겼어요."},
+  {a : "비걸핑크해", b: "님이 당신의 게시글을 좋아해요."},
+];
 
   const[selectId, setSelectId]=useState(-1);
-
   const scroll = useRef(new Animated.Value(0)).current;
   const ScaleImg = scroll.interpolate({
     inputRange: [0, HEADER_SCROLL_DISTANCE],
@@ -73,16 +84,17 @@ function InNotificationScreen({name} : {name:string}){
       </Animated.View>
       <area.RowArea style={{marginHorizontal:30, marginTop:30}}>
         <Animated.View style={[styles.a, {opacity : OpacityTitle}, {transform:[{translateY: TranslateImgY}]}]}>
-          < NameNText name={name} sub={i18n.t("의")}/>
+          < NameNText name={character.name} sub={i18n.t("의")}/>
           <text.Subtitle2R color={colors.black}>{i18n.t('알림')}</text.Subtitle2R>
         </Animated.View>
         <Animated.View style={[styles.b, {transform:[{scale: ScaleImg},{translateY: TranslateImgY}, {translateX:TranslateImgX}]}]}>
-          <ProfileItem diameter={40}/>
+          <ProfileItem diameter={40} picUrl={character.profileImg} characterId={character.id}/>
         </Animated.View>
       </area.RowArea>
       <Animated.ScrollView
         style={{marginTop: HEADER_MIN_HEIGHT-30}}
         showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps={'always'}
         scrollEventThrottle={1}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scroll } } }],
@@ -92,11 +104,11 @@ function InNotificationScreen({name} : {name:string}){
           <View style={{alignItems:'center'}}><text.Caption color={colors.gray6}>{i18n.t('이제 확인할 알림이 없어요')}</text.Caption></View>
           :<FlatList 
           data={Data} 
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item.a}
           renderItem={(obj)=>{
             return(
-              <TouchableWithoutFeedback onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
-                <NotificationItem press={selectId} id={obj.index} name={name} content={"이 "+"팔로우하자고!"}/>
+              <TouchableWithoutFeedback onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}} >
+                <NotificationItem press={selectId} id={obj.index} name={obj.item.a} content={obj.item.b}/>
               </TouchableWithoutFeedback>
             );}}>
           </FlatList>}
@@ -140,7 +152,7 @@ export default function NotificationScreen(){
   const [user, setUser]=useUser();
   return(
     <View style={{flex:1}}>
-      {user.isLogined && character.name!=='' ? <InNotificationScreen name={character.name}/> : <OutNotificationScreen/>}
+      {user.isLogined && character.name!=='' ? <InNotificationScreen character={character}/> : <OutNotificationScreen/>}
     </View>
   )
 }

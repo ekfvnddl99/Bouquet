@@ -22,12 +22,29 @@ import ProfileQnAScreen from './ProfileQnAScreen';
 import { StatusBarHeight } from '../../logics/StatusbarHeight';
 import useCharacterView from '../../logics/useCharacterView';
 import { noCharacter } from '../../logics/atoms';
+import useCharacter from '../../logics/useCharacter';
 
 // components
 import ProfileInfoText from '../../components/ProfileInfoText';
 import ProfileDetailItem from '../../components/ProfileDetailItem';
 import BackButton from '../../components/BackButton';
 import ProfileItem from '../../components/ProfileItem';
+
+const dummy={
+  id: 9,
+  name: "오란지",
+  profileImg: "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
+  birth: "19990601",
+  job: "과일",
+  nationality: "플로리다",
+  intro: "상금합니다.",
+  tmi: "당도가 높은 편입니다.",
+  likes:["햇빛","비옥한토양","해변가"],
+  hates: ["비오는곳","낮은당도","사과(라이벌)"],
+  num_follows:5,
+  num_followers:1201,
+  user_name:"태지니"
+}
 
 const HEADER_MAX_HEIGHT = 80;
 const HEADER_MIN_HEIGHT = 60;
@@ -36,6 +53,7 @@ const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 export default function ProfileDetailScreen({ route, navigation }: {route: any, navigation: any}){
   const [press, setPress] = useState(0);
   const [viewCharacter, setViewCharacterId] = useCharacterView();
+  const [character, setCharacter] = useState(dummy)
 
   const scroll = useRef(new Animated.Value(0)).current;
   const OpacityHeader=scroll.interpolate({
@@ -54,7 +72,7 @@ export default function ProfileDetailScreen({ route, navigation }: {route: any, 
         <area.RowArea style={{paddingHorizontal:30, paddingVertical:16}}>
           <BackButton/>
           <View style={{flex:1}}/>
-          <ProfileItem diameter={28}/>
+          <ProfileItem diameter={28} picUrl={character.profileImg} characterId={character.id}/>
         </area.RowArea>
 
         <Animated.ScrollView
@@ -65,7 +83,7 @@ export default function ProfileDetailScreen({ route, navigation }: {route: any, 
           [{ nativeEvent: { contentOffset: { y: scroll } } }],
           { useNativeDriver: true })}>
           <View style={{paddingTop: 20}}/>
-          <ProfileDetailItem mini={0} press={0} id={-1} character={viewCharacter.state === 'hasValue' ? viewCharacter.contents : noCharacter} />
+          <ProfileDetailItem mini={0} press={0} id={-1} character={viewCharacter.state === 'hasValue' ? character : noCharacter} />
 
           <View style={{marginTop:30}}>
             <area.RowArea>

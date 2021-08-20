@@ -3,11 +3,12 @@ import { View, TextInput, TouchableOpacity, Image, Dimensions, StyleSheet } from
 import * as ImagePicker from 'expo-image-picker';
 
 import { colors } from '../../styles/colors';
-
+import * as elses from '../../styles/styled-components/elses';
 import GallerySvg from '../../assets/Gallery';
 
 import * as Post from '../logics/Post';
   
+const windowWidth = Dimensions.get('window').width;
 function Img({ img, isMini, isEditMode }: {img?:string, isMini: boolean, isEditMode?: boolean}) {
   const[image, setImage]=useState(img);
   const[edit, setEdit]=useState(isEditMode);
@@ -30,19 +31,18 @@ function Img({ img, isMini, isEditMode }: {img?:string, isMini: boolean, isEditM
 
     if (!result.cancelled) {
       setImage(result.uri);
-      setEdit(false)
     }
   };
 
 
   return(
-    <View style={{marginBottom: isEditMode ? 12 : 0, alignItems:'center'}}>
+    <View style={{marginBottom: isMini ? 0 : 12, alignItems:'center'}}>
       {edit ? 
       <TouchableOpacity onPress={onPress} style={styles.selectImg}>
         <GallerySvg w="24" h="24"/>
       </TouchableOpacity>
-      : image==='' ? <Image source={require('../../assets/img.jpg')} resizeMode={'cover'} style={styles.setImg}/>:
-       <Image source={{uri:image}} resizeMode={'cover'} style={styles.setImg}/>}
+      : image==='' ? <elses.RectangleImg width={windowWidth/2} height={windowWidth/2} source={require('../../assets/img.jpg')}/>:
+       <Image source={{uri:img}} resizeMode={'cover'} style={styles.setImg}/>}
     </View>
   )
 }
@@ -56,7 +56,11 @@ export default function ImageTemplate({ mode, post }: TemplateProps) {
   switch (mode) {
     case 'edit':
       return (
-        <Img isMini={true} isEditMode={true}/>
+        <Img isMini={false} isEditMode={true}/>
+      );
+    case 'detail':
+      return (
+        <Img img={post ? post.template.img : ''} isMini={false} isEditMode={false}/>
       );
     case 'ex':
       return (

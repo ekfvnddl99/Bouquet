@@ -39,11 +39,11 @@ export default function ProfileChaItem({name, profile, introduction, id, select,
         <View style={{marginBottom:8}}/>
         <text.Body2B color={colors.black}>{name}</text.Body2B>
         <View style={{marginBottom:8}}/>
-        <text.Caption color={colors.black} numberOfLines={2}>{introduction}</text.Caption>
+        <text.Caption color={colors.black} numberOfLines={1}>{introduction}</text.Caption>
         {account ? null :
         <View style={{marginTop: 21}}>
         <ConditionButton active={!(select===id)} press={()=>press(idx, id)} 
-          content={select===id ? i18n.t("선택된 캐릭터") :i18n.t("캐릭터 선택")} paddingH={12} paddingV={4} height={22}/>
+          content={select===id ? i18n.t("선택된 캐릭터") :i18n.t("캐릭터 선택")} paddingH={12} paddingV={0} height={22}/>
         </View>}
     </button.MiniListButton>
   );

@@ -17,6 +17,7 @@ export default function QnATextInput(){
   const[upload, setUpload]=useState(false);
   const[answer, setAnswer]=useState('');
   const [character, setCharacter] = useCharacter();
+  let ques=["언니가 가장 좋아하는 꽃은?"]
 
   if(!upload){
     return(
@@ -25,7 +26,7 @@ export default function QnATextInput(){
           <View style={{flex:1}}><ProfileButton diameter={30} account={0} name={character.name} profile={character.profileImg}/></View>
           <LineButton press={()=>{}} content="질문 바꾸기" color={colors.black} incolor={colors.gray2} outcolor={'transparent'}/>
         </area.RowArea>
-        <QuestionItem/>
+        <QuestionItem q={ques[0]}/>
         <View style={{borderWidth:1, borderColor:colors.gray5, marginBottom:10, marginHorizontal:10}}/>
         <TextInput placeholder="답변을 입력해 보세요." multiline={true} onChangeText={(input)=>setAnswer(input)}
         style={{marginBottom:10, paddingHorizontal:10, paddingVertical:10}}/>
@@ -38,7 +39,7 @@ export default function QnATextInput(){
   else{
     return(
       // 여기로 질문이랑 답변 넘겨줘야 함!
-      <QnAItem/>
+      <QnAItem q={ques[0]} a={answer}/>
     )
   }
 }

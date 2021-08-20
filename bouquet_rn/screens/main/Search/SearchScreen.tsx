@@ -19,10 +19,11 @@ import SearchViewSvg from '../../../assets/SearchView';
 import SearchViewFocusSvg from '../../../assets/SearchViewFocus';
 
 // props & logic
-import type {SearchProps, Character} from '../../../utils/types';
+import type {SearchProps, MiniCharacter} from '../../../utils/types';
 import { StatusBarHeight } from '../../logics/StatusbarHeight';
-import { CharacterTopAsync } from '../../logics/Character';
 import { responseToCharacter, CharacterResponseType } from '../../logics/Character';
+import { SearchTopPost, SearchTopCharacter } from '../../logics/Search';
+import { PostInterface, AllPostRequestType, PostListResponseToPost } from '../../logics/Post';
 
 // components
 import TagModifyItem from '../../components/TagModifyItem';
@@ -31,15 +32,18 @@ import PostingItem from '../../components/PostingItem';
 import EpisodeMiniItem from '../../components/EpisodeMiniItem';
 import FloatingButton from '../../components/FloatingButton';
 import { useEffect } from 'react';
+import useCharacter from '../../logics/useCharacter';
+import SearchChaItem from '../../components/SearchChaItem';
 
 const HEADER_MAX_HEIGHT = 95;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 export default function SearchScreen({navigation} : SearchProps){
-    const[recentList, setRecentList]=useState([]);
-    const[chaList, setChaList]=useState<Character[]>([]);
-    const[postList, setPostList]=useState([]);
+    const[recentList, setRecentList]=useState(["단호", "귀여움", "아이돌", "파란색", "먹방", "유튜버"]);
+    const[chaList, setChaList]=useState<MiniCharacter[]>([]);
+    const[postList, setPostList]=useState< Array< PostInterface<AllPostRequestType> > >([]);
+    const[character, setCharacter]=useCharacter();
 
     const[selectIdCha, setSelectIdCha]=useState(-1);
     const[selectIdEpi, setSelectIdEpi]=useState(-1);
@@ -49,14 +53,25 @@ export default function SearchScreen({navigation} : SearchProps){
     const[searchText, setSearchText]=useState('');
 
     useEffect(()=>{
-      async function getTopCharacter(){
-        const result = await CharacterTopAsync();
-        const realList: Character[] = result.map((obj: CharacterResponseType) => {
-          return responseToCharacter(obj);
-        })
-        setChaList(realList);
+      async function getPosts() {
+        const result = await SearchTopPost(character.id);
+        if(typeof(result)!=="string"){
+          setPostList(PostListResponseToPost(result));
+        }
+        else alert(result);
       }
-      getTopCharacter();
+      getPosts();
+    }, [])
+
+    useEffect(()=>{
+      async function getChas() {
+        const result = await SearchTopCharacter();
+        if(typeof(result)!=="string"){
+          setChaList(result.characters)
+        }
+        else alert(result);
+      }
+      getChas();
     }, [])
 
     const scroll = useRef(new Animated.Value(0)).current;
@@ -138,7 +153,7 @@ export default function SearchScreen({navigation} : SearchProps){
                   renderItem={(obj)=>{
                     return(
                     <TouchableWithoutFeedback onPress={()=>{selectIdCha===obj.index ? setSelectIdCha(-1) : setSelectIdCha(obj.index)}}>
-                      <CharacterItem press={selectIdCha} id={obj.index} character={obj.item}/>
+                      <SearchChaItem press={selectIdCha} id={obj.index} character={obj.item}/>
                     </TouchableWithoutFeedback>
                     ); 
                   }}></FlatList>
@@ -168,12 +183,12 @@ export default function SearchScreen({navigation} : SearchProps){
             <FlatList
               style={{marginTop:12}}
               data={postList}
-              keyExtractor={(item) => item}
+              keyExtractor={(item, idx) => idx.toString()}
               showsVerticalScrollIndicator={false}
               renderItem={(obj)=>{
                 return(
                   <TouchableWithoutFeedback onPress={()=>{selectIdPost===obj.index ? setSelectIdPost(-1) : setSelectIdPost(obj.index)}}>
-                    <PostingItem press={selectIdPost} id={obj.index}/>
+                    <PostingItem press={selectIdPost} id={obj.index} info={obj.item}/>
                   </TouchableWithoutFeedback>
                 ); 
               }}/>

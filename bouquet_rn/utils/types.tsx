@@ -127,4 +127,15 @@ export type Character = {
   tmi: string;
   likes: Array<string>;
   hates: Array<string>;
+  num_follows?:number;
+  num_followers?:number;
+  user_name?: string;
+  user_id?: number;
+  user_profile_img?: string;
+}
+
+export type MiniCharacter = {
+  name: string;
+  profile_img: string;
+  intro: string;
 }

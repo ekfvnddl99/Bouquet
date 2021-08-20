@@ -10,6 +10,7 @@ import PagerView from 'react-native-pager-view';
 import { colors } from '../../../styles/colors';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useRecoilState } from 'recoil';
+import * as SecureStore from 'expo-secure-store';
 
 // props & logic
 import Carousel from '../../logics/Carousel';
@@ -26,8 +27,9 @@ export default function ProfileSwipeScreen({characterList}: {characterList: Char
   const [select, setSelect]=useState(-1);
   const [character, setCharacter] = useCharacter();
 
-  const onPress = () => {
+  const onPress = async() => {
     if (characterList.length > 0) {
+      if (characterList[page].name === "폭스") await SecureStore.setItemAsync('tmpPageNum', "1");
       setCharacter(characterList[page]);
       setSelect(page);
     }

@@ -9,11 +9,13 @@ import { useRecoilState } from 'recoil';
 
 import { characterListState } from '../logics/atoms';
 import useCharacterView from '../logics/useCharacterView';
+import useUserView from '../logics/useUserView';
 
 export default function ProfileButton({diameter, account, name, profile} : {diameter:number, account : number, name:string, profile:string}){
   const navigation = useNavigation();
   const [characterList, setCharacterList] = useRecoilState(characterListState);
   const [characterView, setCharacterView] = useCharacterView();
+  const [viewUser, setViewUser, isMe] = useUserView();
   const goProfileDetail=()=>{
     let characterToView: string|number = name;
     for (const ch of characterList) {
@@ -26,6 +28,7 @@ export default function ProfileButton({diameter, account, name, profile} : {diam
     navigation.navigate("ProfileItem");
   }
   const goAccount=()=>{
+    setViewUser({name: name, profileImg: profile});
     navigation.navigate('ProfileAccount');
   }
   return(

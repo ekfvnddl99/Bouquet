@@ -1,4 +1,4 @@
-import React, {Component, useState, useRef, useEffect} from 'react';
+import React, {Component, useState, useRef, useEffect, useCallback, useMemo} from 'react';
 import {
     ScrollView,
     FlatList,
@@ -18,10 +18,11 @@ import * as button from '../../styles/styled-components/button';
 import { StatusBarHeight } from '../logics/StatusbarHeight';
 import * as cal from '../logics/Calculation';
 import useUser from '../logics/useUser';
-import { characterListState, noCharacter } from '../logics/atoms';
+import { characterListState, noCharacter, viewUserState } from '../logics/atoms';
 import useCharacter from '../logics/useCharacter';
 import { useRecoilState } from 'recoil';
 import { Character } from '../../utils/types';
+import useUserView from '../logics/useUserView';
 
 // components
 import BackButton from '../components/BackButton';
@@ -33,13 +34,15 @@ const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 export default function AccountScreen(){
-  const [user, setUser] = useUser();
   const [characterList, setCharacterList] = useRecoilState(characterListState);
   const [character, setCharacter] = useCharacter();
   const[selectId, setSelectId]=useState(-1);
   const[chaList, setChaList]=useState<Character[]>(characterList);
   const[numOfCha, setNumOfCha]=useState(0);
+  const [viewUser, setViewUser, isMe] = useUserView();
+  const [user, setUser] = useUser();
   useEffect(()=>{
+    console.log("qqqqqq", viewUser);
     setNumOfCha(characterList.length)
     if(chaList.length%2===1) setChaList([...chaList, noCharacter]);
   }, []);
@@ -50,6 +53,22 @@ export default function AccountScreen(){
     outputRange: [0, 0.5, 1],
     extrapolate: 'clamp',
   });
+
+  const getTotalFollowers = useCallback(() => {
+    let cnt = 0;
+    if (isMe) {
+      for (const ch of characterList) {
+        cnt += ch.num_followers ? ch.num_followers : 0;
+      }
+    }
+    else {
+      for (const ch of viewUser.characters) {
+        cnt += ch.num_followers ? ch.num_followers : 0;
+      }
+    }
+    return cnt;
+  }, [isMe, characterList, viewUser]);
+  const totalFollowers = useMemo(() => getTotalFollowers(), [getTotalFollowers]);
   
   return(
       <area.Container>
@@ -74,12 +93,12 @@ export default function AccountScreen(){
           <View style={{paddingTop: 20}}/>
 
           <area.NoHeightArea marBottom={30} paddingH={20} paddingV={20} style={{alignItems:'center'}}>
-            <elses.CircleImg diameter={120} source={{uri:user.profileImg}}/>
-            <text.Subtitle2B color={colors.black} style={{marginVertical:8}}>{user.name}</text.Subtitle2B>
+            <elses.CircleImg diameter={120} source={{uri: isMe ? user.profileImg : viewUser.profileImg}}/>
+            <text.Subtitle2B color={colors.black} style={{marginVertical:8}}>{isMe ? user.name : viewUser.name}</text.Subtitle2B>
             <area.RowArea style={{justifyContent:'center'}}>
-              <ProfileInfoText bold={cal.numName(1200).toString()} regular={i18n.t("팔로워")} color={colors.primary} center={1}/>
+              <ProfileInfoText bold={cal.numName(totalFollowers).toString()} regular={i18n.t("팔로워")} color={colors.primary} center={1}/>
               <View style={{marginRight:32}}/>
-              <ProfileInfoText bold={numOfCha.toString()} regular={i18n.t("캐릭터")+(i18n.locale==='en' ? 's' : '')} color={colors.primary} center={1}/>
+              <ProfileInfoText bold={isMe ? characterList.length.toString() : viewUser.characters.length.toString()} regular={i18n.t("캐릭터")+(i18n.locale==='en' ? 's' : '')} color={colors.primary} center={1}/>
             </area.RowArea>
           </area.NoHeightArea>
 
@@ -87,13 +106,13 @@ export default function AccountScreen(){
 
           <area.RowArea style={{marginBottom:12}}>
             <text.Body2R color={colors.black}>{i18n.t('총')} </text.Body2R>
-            <text.Body2B color={colors.black}>{numOfCha}</text.Body2B>
+            <text.Body2B color={colors.black}>{isMe ? characterList.length.toString() : viewUser.characters.length.toString()}</text.Body2B>
             <text.Body2R color={colors.black}>{i18n.t('명')}</text.Body2R>
           </area.RowArea>
           <FlatList
               columnWrapperStyle={{justifyContent:'space-between'}}
               contentContainerStyle={{justifyContent:'center',}}
-              data={chaList}
+              data={isMe ? characterList : viewUser.characters}
               keyExtractor={(item) => item.name.toString()}
               numColumns={2}
               showsHorizontalScrollIndicator={false}
@@ -103,7 +122,7 @@ export default function AccountScreen(){
                     {obj.item.name==='' ? <View/>
                     : 
                     <TouchableWithoutFeedback onPress={()=>setSelectId(obj.index)}>
-                      <ProfileChaItem name={obj.item.name} profile={obj.item.profileImg} introduction={obj.item.intro} idx={obj.index} select={selectId} press={setSelectId} account={true}/>
+                      <ProfileChaItem name={obj.item.name} profile={obj.item.profileImg} introduction={obj.item.intro} idx={obj.index} select={selectId} press={setSelectId} account={true} id={obj.item.id}/>
                     </TouchableWithoutFeedback>}
                   </View>
                 ); }}/>

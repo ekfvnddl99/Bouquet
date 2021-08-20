@@ -13,6 +13,11 @@ export type CharacterResponseType = {
   tmi: string;
   likes: Array<string>;
   hates: Array<string>;
+  num_followers?: number;
+  num_follows?: number;
+  user_name?: string;
+  user_id?: number;
+  user_profile_img?: string;
 }
 
 export type CharacterRequestType = {
@@ -39,7 +44,12 @@ export function responseToCharacter(response: CharacterResponseType, id?: number
     intro: response.intro,
     tmi: response.tmi,
     likes: response.likes,
-    hates: response.hates
+    hates: response.hates,
+    num_followers: response.num_followers,
+    num_follows: response.num_follows,
+    user_name: response.user_name,
+    user_id: response.user_id,
+    user_profile_img: response.user_profile_img,
   }
 
   return newObj;
@@ -153,31 +163,6 @@ export async function getCharacterAsync(characterId?: number, characterName?: st
     }
   }
   else return "로그인되어 있지 않아요.";
-}
-
-export async function CharacterTopAsync() {
-  try {
-    let path = "/character/top";
-    let header: {'accept': string}
-    = {
-      'accept': 'application/json',
-    };
-
-    let response = await fetch(serverAddress + path, {
-      method: 'GET',
-      headers: header
-    });
-    let result = await response.json();
-
-    if (response.status === 200) {
-      return result.result;
-    }
-    else return "문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.";
-  }
-  catch (err) {
-    console.log("error: " + err);
-    return "서버와 연결할 수 없어요. 다시 시도해 보거나, 문의해 주세요.";
-  }
 }
 
 // POST

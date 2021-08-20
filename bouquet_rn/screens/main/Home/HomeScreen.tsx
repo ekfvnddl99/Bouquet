@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import {
     View,
     FlatList,
@@ -20,6 +20,8 @@ import { StatusBarHeight } from '../../logics/StatusbarHeight';
 import type {HomeProps, Character} from '../../../utils/types';
 import useUser from '../../logics/useUser';
 import useCharacter from '../../logics/useCharacter';
+import { PostInterface, AllPostRequestType, PostListResponseToPost } from '../../logics/Post';
+import { SearchTopPost, SearchTopCharacter } from '../../logics/Search';
 
 // components
 import PostingItem from '../../components/PostingItem';
@@ -33,10 +35,7 @@ const HEADER_MAX_HEIGHT = 94;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
-function InHomeScreen({ character }: { character: Character }){
-  // dummy data - 서버에서 불러와야 함
-  let Data=[{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9}];
-
+function InHomeScreen({ character, posts}: { character: Character, posts: Array< PostInterface<AllPostRequestType>> }){
   const[selectId, setSelectId]=useState(-1);
 
   const scroll = useRef(new Animated.Value(0)).current;
@@ -106,13 +105,13 @@ function InHomeScreen({ character }: { character: Character }){
         <View style={{paddingTop: 20+14}}/>
         <QnATextInput/>
         <FlatList
-          data={Data}
+          data={posts}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item) => item.id.toString()}
           renderItem={(obj)=>{
             return(
               <TouchableWithoutFeedback onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
-                <PostingItem press={selectId} id={obj.index}/>
+                <PostingItem press={selectId} id={obj.index} info={obj.item}/>
               </TouchableWithoutFeedback>
             ); 
           }}/>
@@ -122,10 +121,7 @@ function InHomeScreen({ character }: { character: Character }){
   )
 }
 
-function OutHomeScreen(){
-  // dummy data - 서버에서 불러와야 함
-  let Data=[{id:1},{id:2},{id:3},{id:4},{id:5},{id:6},{id:7},{id:8},{id:9}];
-
+function OutHomeScreen({posts}: {posts: Array< PostInterface<AllPostRequestType>>}){
   const[selectId, setSelectId]=useState(-1);
 
   const scroll = useRef(new Animated.Value(0)).current;
@@ -170,13 +166,13 @@ function OutHomeScreen(){
           { useNativeDriver: true })}>
         <View style={{paddingTop: 20+14}}/>
         <FlatList
-          data={Data}
+          data={posts}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item) => item.id.toString()}
           renderItem={(obj)=>{
             return(
               <TouchableWithoutFeedback onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
-                <PostingItem press={selectId} id={obj.index}/>
+                <PostingItem press={selectId} id={obj.index} info={obj.item}/>
               </TouchableWithoutFeedback>
             ); 
           }}/>
@@ -192,9 +188,22 @@ export default function HomeScreen(){
   // dummy data - 서버에서 불러와야 함
   const [user, setUser] = useUser();
   const [character, setCharacter] = useCharacter();
+  const[postList, setPostList]=useState< Array< PostInterface<AllPostRequestType> > >([]);
+
+  useEffect(()=>{
+    async function getPosts() {
+      const result = await SearchTopPost(undefined, true);
+      if(typeof(result)!=="string"){
+        setPostList(PostListResponseToPost(result));
+      }
+      else alert(result);
+    }
+    getPosts()
+  }, [])
+
   return(
     <View style={{flex:1}}>
-      {character.id !== -1 ? <InHomeScreen character={character}/> : <OutHomeScreen/>}
+      {character.id !== -1 ? <InHomeScreen character={character} posts={postList}/> : <OutHomeScreen posts={postList}/>}
     </View>
   )
 }

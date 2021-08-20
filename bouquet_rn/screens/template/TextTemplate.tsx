@@ -7,13 +7,13 @@ import * as text from '../../styles/styled-components/text';
 import * as area from '../../styles/styled-components/area';
 import * as elses from '../../styles/styled-components/elses';
 import * as input from '../../styles/styled-components/input';
-  
+import * as Post from '../logics/Post';
   
   
 function Text({ content, isMini, isEditMode }: {content?:string, isMini: boolean, isEditMode?: boolean}) {
   return(
     <area.NoHeightArea
-      marBottom={12}
+      marBottom={isMini ? 0 : 12}
       paddingH={15}
       paddingV={15}
     >

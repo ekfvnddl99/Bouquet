@@ -11,7 +11,7 @@ export async function UserDupAsync(name: string) {
       headers: {
         'Content-Type': 'application/json',
         'accept': 'application/json',
-        'user-name' : Base64.encode(name)
+        'user-name' : name
       },
     });
     let result = await response.json();

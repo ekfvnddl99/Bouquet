@@ -67,9 +67,10 @@ type ListProps = {
   title: string;
   description: string;
   list: Array<{title: string; content: string; img: string;}>;
+  img: string;
 }
 
-function List({ isMini, isEditMode, title, description, list }: ListProps) {
+function List({ isMini, isEditMode, title, description, list, img }: ListProps) {
   const [listState, setListState] = useState(list);
   useEffect(() => {
     if (isMini && (list.length > 3)) {
@@ -89,7 +90,7 @@ function List({ isMini, isEditMode, title, description, list }: ListProps) {
           />
         </MainBlankPic>
         :
-        <MainPic isMini={isMini} source={require('../../assets/img.jpg')} />
+        <MainPic isMini={isMini} source={img==='' ? require('../../assets/img.jpg') : { uri: img }} />
         }
         
       </>
@@ -100,7 +101,7 @@ function List({ isMini, isEditMode, title, description, list }: ListProps) {
         paddingV={15}
       >
         {isMini ? 
-        <MainPic isMini={isMini} source={require('../../assets/img.jpg')} />
+        <MainPic isMini={isMini} source={{ uri: img }} />
         : null
         }
         {isMini ?
@@ -199,7 +200,7 @@ function List({ isMini, isEditMode, title, description, list }: ListProps) {
               <ContentWrap key={idx}>
                 <ContentPic
                   isMini={isMini}
-                  source={{ uri: content.img }}
+                  source={img==='' ? require('../../assets/img.jpg') : { uri: content.img }}
                 />
                 <ContentTextWrap>
                   {isMini ?
@@ -230,12 +231,26 @@ type TemplateProps = {
 
 export default function ListTemplate({ mode, post }: TemplateProps) {
   switch (mode) {
+    case 'ex':
+      return (
+        <List isMini={false} isEditMode={false}
+          title={'현지의 떡볶이 다이어트 1일차'}
+          description={'떡볶이로도 다이어트가 된다? 당연하다. 아니라고 생각한다면 나보다 강해져서 와라. 오늘의 떡볶이 다이어트 식단이다.'}
+          list={[
+            {title:"아침 : 궁중떡볶이", content:"아침에는 대접받는 기분으로 궁중떡볶이를 먹는다. 다이어트는 기분이 중요하다. 이 생각에 반대하고 싶다면 우선 나보다 약한 자가 아니어야 할 거다.",img:""},
+            {title:"점심 : 분식떡볶이", content:"역시 떡볶이는 분식이 근본이다. 점심에는 근본을 영접한다.",img:""},
+            {title:"저녁 : 국물떡볶이", content:"저녁에는 국물떡볶이에 밥을 비벼먹는다. 다이어트는 조금 먹어야 하는 게 아니다.",img:""},
+          ]}
+          img={''}
+        />
+      );
     case 'mini':
       return (
         <List isMini={true} isEditMode={false}
           title={post ? post.template.title : ''}
           description={post ? post.template.content : ''}
           list={post ? post.template.components : []}
+          img={post ? post.template.img : ''}
         />
       );
     case 'detail':
@@ -249,6 +264,7 @@ export default function ListTemplate({ mode, post }: TemplateProps) {
             title={post ? post.template.title : ''}
             description={post ? post.template.content : ''}
             list={post ? post.template.components : []}
+            img={post ? post.template.img : ''}
           />
         </area.NoHeightArea>
       );
@@ -263,6 +279,7 @@ export default function ListTemplate({ mode, post }: TemplateProps) {
             title={post ? post.template.title : ''}
             description={post ? post.template.content : ''}
             list={post ? post.template.components : []}
+            img={post ? post.template.img : ''}
           />
         </area.NoHeightArea>
       );
@@ -272,6 +289,7 @@ export default function ListTemplate({ mode, post }: TemplateProps) {
           title={post ? post.template.title : ''}
           description={post ? post.template.content : ''}
           list={post ? post.template.components : []}
+          img={post ? post.template.img : ''}
         />
       );
   }

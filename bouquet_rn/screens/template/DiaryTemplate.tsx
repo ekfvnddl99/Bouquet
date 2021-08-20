@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, TextInput, LayoutChangeEvent, TouchableOpacity } from 'react-native';
+import { View, TextInput, LayoutChangeEvent, TouchableOpacity, Platform } from 'react-native';
 import styled from 'styled-components/native';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -17,6 +17,8 @@ import XSvg from '../../assets/X';
 import GallerySvg from '../../assets/Gallery';
 
 import * as Post from '../logics/Post';
+
+const LINE_HEIGHT = Platform.OS === "ios" ? 20 : 22;
 
 type DiaryInfo = {
   title: string;
@@ -92,7 +94,7 @@ const LineBackground = styled.View`
 `;
 
 const Line = styled.View`
-  height: 20;
+  height: ${LINE_HEIGHT};
   border-bottom-width: 1;
   border-bottom-color: ${colors.diary};
 `;
@@ -253,7 +255,6 @@ function Diary({ isMini, isEditMode, diary, setPost }: DiaryProps) {
             source={{ uri: tmpPost.img }}
           />
         </TouchableOpacity>
-        
         :
         <MainBlankPic onPress={changeImage}>
           <GallerySvg
@@ -262,6 +263,12 @@ function Diary({ isMini, isEditMode, diary, setPost }: DiaryProps) {
           />
         </MainBlankPic>
 
+        :
+        diary.imageUrl ?
+        <MainImage
+          isMini={isMini}
+          source={diary.imageUrl==='' ? require('../../assets/img.jpg') : { uri: diary.imageUrl }}
+        />
         :
         <MainImage
           isMini={isMini}
@@ -301,7 +308,7 @@ function Diary({ isMini, isEditMode, diary, setPost }: DiaryProps) {
           </text.DiaryBody2R>
           }
           <LineBackground>
-            {[...Array(Math.round(contentHeight / 20))].map((n, idx) => (
+            {[...Array(Math.round(contentHeight / LINE_HEIGHT))].map((n, idx) => (
               <Line key={idx} />
             ))}
           </LineBackground>
@@ -327,8 +334,24 @@ export default function DiaryTemplate({ mode, setPost, post }: TemplateProps) {
     imageUrl: post ? post.template.img : '',
     content: post ? post.template.content : '',
   };
+  const diaryDataEx = {
+    title: '떡볶이를 실컷 먹은 날',
+    year: 2021,
+    month: 8,
+    day: 1,
+    weather: '맑음☀️',
+    imageUrl: '',
+    content: '오늘은 떡볶이를 실컷 먹었다. 너무 맛있었다. 다음에 또 먹어야지. 맛있는 떡볶이 집을 찾아야겠다. 하지만 이 주변엔 그런 게 없는걸... 너무 슬프다.',
+  };
 
   switch (mode) {
+    case 'ex':
+      return (
+        <Diary isMini={false} isEditMode={false}
+          diary={diaryDataEx}
+          setPost={setPost}
+        />
+      );
     case 'mini':
       return (
         <Diary isMini={true} isEditMode={false}

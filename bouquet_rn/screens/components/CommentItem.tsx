@@ -73,7 +73,7 @@ export default function CommentItem({info, press, owner, login, setSelect, setPa
           <text.Body2R color={colors.black}>{info.comment}</text.Body2R>
         </View>
         <View style={styles.timeText}>
-            <text.Caption color={colors.gray5}>{cal.timeName(57)} {i18n.t('전')}</text.Caption>
+            <text.Caption color={colors.gray5}>{cal.timeName(Number(info.createdAt))} {i18n.t('전')}</text.Caption>
         </View>
       </area.RowArea>
 
@@ -99,7 +99,7 @@ export default function CommentItem({info, press, owner, login, setSelect, setPa
           <TouchableOpacity>
           {info.liked ? <SunFocusPriSvg w='18' h='18'/> : <SunSvg w='18' h='18'/>}
           </TouchableOpacity>
-            <text.Body3 color={colors.primary} style={{marginLeft:4}}>{cal.numName(14)}</text.Body3>
+            <text.Body3 color={colors.primary} style={{marginLeft:4}}>{cal.numName(0)}</text.Body3>
           </area.RowArea>
 
         </area.RowArea>
