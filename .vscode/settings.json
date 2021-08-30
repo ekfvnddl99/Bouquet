@@ -1,0 +1,9 @@
+{
+  "eslint.workingDirectories": [
+    "./bouquet_landing",
+    "./bouquet_rn",
+    "./bouquet_web"
+  ],
+  "editor.formatOnSave": true,
+  "eslint.lintTask.enable": true
+}

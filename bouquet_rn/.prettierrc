@@ -1,0 +1,6 @@
+{
+  "singleQuote": true,
+  "traillingComma": "all",
+  "tabWidth": 2,
+  "semi": true
+}
