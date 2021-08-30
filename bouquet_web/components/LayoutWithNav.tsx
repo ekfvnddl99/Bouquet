@@ -10,6 +10,7 @@ import { motion } from 'framer-motion';
 
 const Wrap = styled.div`
   display: flex;
+  min-height: 100%;
   @media (min-width: 320px) and (max-width: 519px) {
     flex-direction: column;
     width: 100%;
@@ -35,26 +36,24 @@ const NavWrap = styled.div`
     width: 100%;
     height: 60px;
     bottom: 0;
-    z-index: 30;
   }
 
   @media (min-width: 520px) and (max-width: 729px) {
     width: 60px;
     height: 100%;
-    z-index: 10;
+    left: 0;
   }
 
   @media (min-width: 730px) and (max-width: 1279px) {
     width: 170px;
     height: 100%;
-    z-index: 10;
+    left: 0;
   }
 
   @media (min-width: 1280px) {
-    width: 980px;
+    width: 170px;
     height: 100%;
-    padding-right: 810px;
-    z-index: 10;
+    left: calc((100% - 980px) / 2);
   }
 `;
 
@@ -62,45 +61,42 @@ const RightWrap = styled.div`
   height: 100%;
   display: flex;
   position: fixed;
-  z-index: 6;
 
   justify-content: flex-end;
 
-  @media (max-width: 979px) {
-    display: none;
-  }
-
   @media (min-width: 980px) and (max-width: 1279px) {
-    width: 100%;
+    width: 250px;
+    right: 0;
+    z-index: 6;
   }
 
   @media (min-width: 1280px) {
-    width: 980px;
+    width: 250px;
+    right: calc((100% - 980px) / 2);
+    z-index: 25;
   }
 `;
 
 const ContentWrap = styled.div`
-  z-index: 20;
-
   @media (min-width: 320px) and (max-width: 519px) {
-    width: 100%;
     padding-bottom: 60px;
+    width: 100%;
   }
 
   @media (min-width: 520px) and (max-width: 729px) {
+    padding-left: 60px;
     width: 100%;
-    margin-left: 60px;
   }
 
   @media (min-width: 730px) and (max-width: 979px) {
+    padding-left: 170px;
     width: 100%;
-    margin-left: 170px;
   }
 
   @media (min-width: 980px) and (max-width: 1279px) {
-    width: 100%;
     margin-left: 170px;
     margin-right: 250px;
+    width: 100%;
   }
 
   @media (min-width: 1280px) {
@@ -113,23 +109,6 @@ const ContentWrap = styled.div`
 
     background-color: ${colors.grayscale.gray0};
   }
-`;
-
-const Background = styled.div`
-  width: 100%;
-  height: 100%;
-  background-color: ${colors.grayscale.white};
-
-  position: fixed;
-  z-index: 0;
-  display: flex;
-  justify-content: center;
-`;
-
-const Gray0 = styled.div`
-  width: 980px;
-  height: 100%;
-  background-color: ${colors.grayscale.gray0};
 `;
 
 const InWrap = styled.div`
@@ -171,6 +150,7 @@ export default function LayoutWithNav({ setScrolled, topElement, children }: Pro
             padding: "0 30px 20px 30px",
             display: "flex",
             justifyContent: "center",
+            overflowX: 'hidden',
           }}
         >
           <InWrap>
@@ -184,9 +164,6 @@ export default function LayoutWithNav({ setScrolled, topElement, children }: Pro
       <RightWrap>
         <RightBar />
       </RightWrap>
-      <Background>
-        <Gray0 />
-      </Background>
     </Wrap>
   )
 }

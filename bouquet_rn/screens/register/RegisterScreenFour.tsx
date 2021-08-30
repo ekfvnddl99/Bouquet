@@ -3,44 +3,41 @@ import {
   View,
   StyleSheet,
 } from 'react-native';
+import i18n from 'i18n-js';
 import { colors } from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
 import * as elses from '../../styles/styled-components/elses';
 
 // props & logic
-import type {RegisterProps} from '../../utils/types';
+import type { WelcomeProps} from '../../utils/types';
 
 // components
 import ProgressArea from '../components/ProgressArea';
 import ConditionButton from '../components/ConditionButton';
 import NameNText from '../components/NameNText';
 
-export default function RegisterScreenFour({navigation} : RegisterProps){
-  const[name,setName]=useState('undefined');
-
+export default function RegisterScreenFour({name, profile, navigation} : {name:string, profile:string, navigation : any}){
   const goNext=()=>{
-    navigation.navigate("RegisterFour");
+    navigation.popToTop();
+    navigation.navigate('Tab');
   }
 
   return(
-    <area.Container>
-      <area.ContainerBlank20>
-        <ProgressArea navigation={navigation} title="회원가입 완료!" step={4}/>
-      </area.ContainerBlank20>
-
+    <View style={{flex:1}}>
+      
       <View style={styles.middleArea}>
-        <elses.Circle radius={120} vertical={16}/>
+        <elses.CircleImg diameter={120} source={{uri:profile}} style={{marginBottom:16}}/>
         <NameNText name={name} sub="님,"/>
-        <text.Subtitle2R color={colors.black}>환영합니다!</text.Subtitle2R>
+        <text.Subtitle2R color={colors.black}>{i18n.t('환영합니다')}</text.Subtitle2R>
       </View>
 
       <area.ContainerBlank20>
-        <area.BottomArea>
-          <ConditionButton active={1} press={goNext} content="시작"/>
+        <area.BottomArea style={{marginBottom:16}}>
+          <ConditionButton active={true} press={goNext} content={i18n.t("시작")} paddingH={0} paddingV={14} height={45}/>
         </area.BottomArea>
       </area.ContainerBlank20>
-    </area.Container>
+    </View>
   );
 }
 

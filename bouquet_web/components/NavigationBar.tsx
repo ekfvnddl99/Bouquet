@@ -12,7 +12,6 @@ import { pageState } from '../features/atoms';
 
 const Wrap = styled.div`
   display: flex;
-  position: fixed;
 
   background-color: ${colors.grayscale.white};
 
@@ -49,7 +48,7 @@ const IconWrap = styled.div`
 
   @media (min-width: 520px) and (max-width: 729px) {
     width: 100%;
-    height: 300px;
+    height: 240px;
     margin-top: 18px;
 
     flex-direction: column;
@@ -57,7 +56,7 @@ const IconWrap = styled.div`
 
   @media (min-width: 730px) {
     width: 100%;
-    height: 300px;
+    height: 240px;
     margin-top: 18px;
 
     flex-direction: column;
@@ -132,21 +131,20 @@ const CustomA = styled.a`
   align-items: center;
 
   @media (min-width: 320px) and (max-width: 519px) {
-    width: 20%;
+    width: 25%;
     height: 100%;
   }
 
   @media (min-width: 520px) and (max-width: 729px) {
     width: 100%;
-    height: 20%;
+    height: 25%;
   }
 
   @media (min-width: 730px) {
     width: 100%;
-    height: 20%;
+    height: 25%;
   }
 `;
-
 
 type MenuProps = {
   name: string;
@@ -201,7 +199,6 @@ export default function NavigationBar() {
       <IconWrap>
         <Menu name="home" korName="홈" />
         <Menu name="search" korName="검색" />
-        <Menu name="crew" korName="크루" />
         <Menu name="notifications" korName="알림" />
         <Menu name="profile" korName="프로필" />
       </IconWrap>

@@ -1,9 +1,16 @@
-import React, {Component, useState} from 'react';
+import React, {Component, useState, useEffect} from 'react';
 import {
     View,
     TextInput,
     TouchableOpacity,
+    TouchableWithoutFeedback,
+    Keyboard,
+    ScrollView
 } from 'react-native';
+import i18n from 'i18n-js';
+import {useNavigation} from '@react-navigation/native';
+import { useRecoilValue } from 'recoil';
+import { viewBottom, viewTop } from './WelcomeScreen';
 import {colors} from '../styles/colors';
 import * as area from '../styles/styled-components/area';
 import * as text from '../styles/styled-components/text';
@@ -16,19 +23,19 @@ import GoogleSvg from '../assets/Google';
 import AppleSvg from '../assets/Apple';
 
 // props & logic
-import type {WelcomeProps} from '../utils/types'
+import type {WelcomeProps, WelcomeStackParam} from '../utils/types'
 import GoogleSignInAsync from './logics/GoogleLogin';
+import AppleSignInAsync from './logics/AppleLogin';
+import { EmailLoginAsync } from './logics/EmailLogin';
+import useUser from './logics/useUser';
 
 // components
 import LoginButton from './components/LoginButton';
 import BackButton from './components/BackButton';
 import ConditionButton from './components/ConditionButton';
 import PrimaryTextButton from './components/PrimaryTextButton';
-
-function CheckErr(mail:string){
-  if(mail==='456') return '메일이나 비밀번호가 틀렸나 봐요.';
-}
-
+import WarningText from './components/WarningText';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 function EyeSelect(eye : number){
   if(eye===1){
@@ -39,9 +46,15 @@ function EyeSelect(eye : number){
   }
 }
 
-export default function LoginScreen({navigation} : WelcomeProps){
+export default function LoginScreen(){
     const[mail, setMail]=useState('456');
+    const [password, setPassword] = useState('');
+    const[err, setErr] = useState('');
     const[eye, setEye]=useState(1);
+    const top=useRecoilValue(viewTop);
+    const bottom = useRecoilValue(viewBottom);
+    const navigation = useNavigation<StackNavigationProp<WelcomeStackParam>>();
+    const [user, setUser] = useUser();
 
     const goTabs =()=>{
       navigation.replace("Tab");
@@ -51,48 +64,67 @@ export default function LoginScreen({navigation} : WelcomeProps){
       navigation.navigate("Register");
     }
 
+    const emailLogin = async () => {
+      const errorMessage = await EmailLoginAsync(mail, password);
+      setErr(errorMessage);
+      if (!errorMessage) navigation.navigate("Tab");
+    }
+
     return(
-    <area.Container>
-      <area.ContainerBlank20>
-        <BackButton navigation={navigation}/>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={{flex:1, backgroundColor:colors.gray0, paddingTop:top}}>
+          <area.ContainerBlank20>
+            <ScrollView keyboardShouldPersistTaps={'handled'}>
+            <BackButton/>
+            <View style={{marginTop:30}}/>
+            <text.Subtitle1 color={colors.black}>{i18n.t('로그인')}</text.Subtitle1>
+            <View style={{marginTop:32}}/>
+            <input.FormInput height='44' placeholder={i18n.t('메일')} onChangeText={(mail)=>setMail(mail)} keyboardType='email-address'/>
+            <area.FormArea height='44' style={{marginTop:16}}>
+              <TextInput style={{flex: 1}} placeholder={i18n.t('비밀번호')} secureTextEntry={eye===1? true : false}
+              onChangeText={text => setPassword(text)}
+              />
+              <TouchableOpacity onPress={()=>{setEye(eye*(-1))}}>
+                  {EyeSelect(eye)}
+              </TouchableOpacity>
+            </area.FormArea>
 
-        <text.Subtitle1 color={colors.black}>로그인</text.Subtitle1>
+            <View style={{alignItems:'center'}}>
+              {err ? <WarningText content={err} marginTop={16}/> : null}
+              <View style={{marginTop:16}}>
+                <ConditionButton active={true} press={emailLogin} content={i18n.t("로그인")} paddingH={40} paddingV={14} height={45}/>
+              </View>
+            </View>
 
-        <input.FormInput height='44' placeholder='메일' onChangeText={(mail)=>setMail(mail)}/>
-        <area.FormArea height='44'>
-          <TextInput style={{flex: 1}} placeholder='비밀번호'/>
-          <TouchableOpacity onPress={()=>{setEye(eye*(-1))}}>
-              {EyeSelect(eye)}
-          </TouchableOpacity>
-        </area.FormArea>
+            <area.TextBtnArea style={{marginTop:16}}>
+              <text.Caption color={colors.black}>{i18n.t('비밀번호를 잊었나요')} </text.Caption>
+              <PrimaryTextButton press={()=>{}} content={i18n.t("비밀번호 찾기")} level={2}/>
+            </area.TextBtnArea>
+            </ScrollView>
 
-        <View style={{alignItems:'center'}}>
-          <View><text.Caption color={colors.primary}>{CheckErr(mail)}</text.Caption></View>
+            <area.BottomArea style={{overflow:'hidden'}}>
+              <LoginButton sentence={i18n.t('Google로 계속하기')} tag={<GoogleSvg w='15' h='15'/>} press={GoogleSignInAsync}/>
+              <LoginButton sentence={i18n.t("Apple로 계속하기")} tag={<AppleSvg w='15' h='15'/>} press={()=>{}}/>
 
-          <ConditionButton active={1} press={()=>{}} content="로그인"/>
+              <area.TextBtnArea style={{marginTop:15, overflow:'hidden'}}>
+                <text.Body2R color={colors.black}>{i18n.t("계정이 없다면")} </text.Body2R>
+                <PrimaryTextButton press={goRegister} content={i18n.t("회원가입")} level={1}/>
+              </area.TextBtnArea>
+            </area.BottomArea>
+
+
+
+          </area.ContainerBlank20>
+
+          <area.TextBackgroundBtnArea style={{overflow:'hidden'}}>
+            <text.Body2R color={colors.black}>{i18n.t('우선 알아보고 싶다면')} </text.Body2R>
+            <PrimaryTextButton press={goTabs} content={i18n.t("미리보기")} level={1}/>
+            <View style={{height: 1}} />
+          </area.TextBackgroundBtnArea>
+
+          <View style={{paddingBottom: bottom, backgroundColor:colors.white}}/>
         </View>
-
-        <area.TextBtnArea>
-          <text.Caption color={colors.black}>비밀번호를 잊었나요? </text.Caption>
-          <PrimaryTextButton press={()=>{}} content="계정 찾기" level={2}/>
-        </area.TextBtnArea>
-
-        <area.BottomArea>
-          <LoginButton sentence="Google로 계속하기" tag={<GoogleSvg w='15' h='15'/>} press={GoogleSignInAsync}/>
-          <LoginButton sentence="Apple로 계속하기" tag={<AppleSvg w='15' h='15'/>} press={GoogleSignInAsync}/>
-        </area.BottomArea>
-
-        <area.TextBtnArea>
-          <text.Body2R color={colors.black}>계정이 없다면? </text.Body2R>
-          <PrimaryTextButton press={goRegister} content="회원가입" level={1}/>
-        </area.TextBtnArea>
-
-      </area.ContainerBlank20>
-
-      <area.TextBackgroundBtnArea>
-        <text.Body2R color={colors.black}>우선 알아보고 싶다면? </text.Body2R>
-        <PrimaryTextButton press={goTabs} content="미리보기" level={1}/>
-      </area.TextBackgroundBtnArea>
-    </area.Container>
+      </TouchableWithoutFeedback>
     );
 }
+

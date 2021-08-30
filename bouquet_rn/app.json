@@ -19,7 +19,7 @@
     "ios": {
       "supportsTablet": true,
       "usesAppleSignIn" : true,
-      "bundleIdentifier" : "com.webiosandroid.all",
+      "bundleIdentifier" : "com.bouquet.bouquet",
       "config":{
         "googleSignIn":{
           "reservedClientId" : "com.googleusercontent.apps.828159899837-kcksemp2itup93uk6bdic66cubug5go8"
@@ -30,7 +30,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/png/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "softwareKeyboardLayoutMode": "pan"
     },
     "web": {
       "favicon": "./assets/png/favicon.png"

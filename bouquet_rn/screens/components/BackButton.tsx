@@ -1,14 +1,15 @@
 import React from 'react';
-import * as button from '../../styles/styled-components/button';
-
+import { TouchableOpacity } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 // icons
 import ArrowLeftSvg from '../../assets/ArrowLeft';
 
 
-export default function BackButton({navigation} : {navigation : any}){
+export default function BackButton(){
+  const navigation = useNavigation();
   return(
-    <button.BackButton onPress={()=>navigation.goBack()}>
+    <TouchableOpacity onPress={()=>navigation.goBack()}>
       <ArrowLeftSvg w='24' h='24'/>
-    </button.BackButton>
+    </TouchableOpacity>
   );
 }

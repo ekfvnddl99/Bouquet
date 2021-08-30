@@ -32,4 +32,7 @@ export const GlobalStyle = createGlobalStyle`
     text-decoration: none;
   }
 
+  input {
+    font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+  }
 `;

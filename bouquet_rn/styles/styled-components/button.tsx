@@ -2,132 +2,140 @@ import styled from 'styled-components/native';
 import {colors} from '../colors';
 
 interface BtnProps{
-  height : number,
+  height : number|undefined,
+  color : string,
+  paddingH:number,
+  paddingV:number,
+}
+export const ConditionButton = styled.TouchableOpacity`
+  height:${(props : BtnProps)=>props.height};
+  border-width:1;
+  border-color:${(props : BtnProps)=>props.color};
+  border-radius:25;
+  align-items:center;
+  justify-content:center;
+  padding-horizontal: ${(props : BtnProps)=>props.paddingH};
+  padding-vertical: ${(props : BtnProps)=>props.paddingV};
+`
+
+interface LineBtnProps{
+  color : string,
+  paddingH:number,
+  paddingV:number,
 }
 
-export const PrimaryButton = styled.TouchableOpacity`
+export const LineButton = styled.TouchableOpacity`
+  border-width:1;
+  border-color:${(props : LineBtnProps)=>props.color};
+  border-radius:25;
+  align-items:center;
+  justify-content:center;
+  padding-horizontal: ${(props : LineBtnProps)=>props.paddingH};
+  padding-vertical: ${(props : LineBtnProps)=>props.paddingV};
+`
+
+export const BackgroundButton = styled.TouchableOpacity`
+  background-color:${(props : BtnProps)=>props.color};
   height:${(props : BtnProps)=>props.height};
   border-radius:25;
-  border-width:1;
-  border-color:${colors.primary};
   align-items:center;
   justify-content:center;
-  margin-top:16;
-  padding-horizontal: 40;
-  padding-vertical: 14;
-`
-
-export const PrimaryBgButton = styled.TouchableOpacity`
-  height:${(props : BtnProps)=>props.height};
-  border-radius:25;
-  background-color:${colors.primary};
-  align-items:center;
-  justify-content:center;
-  padding-horizontal: 40;
-  padding-vertical: 14;
-`
-
-export const BlackButton = styled.TouchableOpacity`
-  border-radius:25;
-  border-width:1;
-  border-color:${colors.black};
-  align-items:center;
-  padding-horizontal: 12;
-  padding-vertical: 4;
-`
-
-export const GrayBtnButton = styled.TouchableOpacity`
-  height:45;
-  border-radius:25;
-  border-width:1;
-  border-color:${colors.gray2};
-  align-items:center;
-  justify-content:center;
-  margin-top:16;
-  padding-horizontal: 40;
-`
-
-export const BackButton = styled.TouchableOpacity`
-  margin-top:20;
+  padding-horizontal: ${(props : BtnProps)=>props.paddingH};
+  padding-vertical: ${(props : BtnProps)=>props.paddingV};
 `
 
 export const SocialButton =styled.TouchableOpacity`
   background-color:${colors.white};
-  border-radius:25;
   height:45;
-  margin-top:10;
+  border-radius:25;
   align-items:center;
   justify-content:center;
   padding-horizontal:18;
+  margin-top:10;
   flex-direction: row;
   width: 100%;
 `
 
-export const ListButton = styled.TouchableOpacity`
+interface MiniListBtnProps{
+  height:number,
+  color : string,
+  paddingH:number,
+  paddingV:number,
+  isWidth : boolean,
+}
+export const MiniListButton = styled.TouchableOpacity`
+  flex:1;
+  ${(props : MiniListBtnProps)=>props.isWidth ? `width: 150;` : ''};
+  height: ${(props : MiniListBtnProps)=>props.height};
+  background-color: ${(props : MiniListBtnProps)=>props.color};
+  border-radius: 10;
+  padding-horizontal: ${(props : MiniListBtnProps)=>props.paddingH};
+  padding-vertical: ${(props : MiniListBtnProps)=>props.paddingV};
+`
+interface BigListBtnProps{
+  color : string,
+  paddingH:number,
+  paddingV:number,
+}
+export const BigListButton = styled.TouchableOpacity`
+  flex:1;
+  width:100%;
+  background-color: ${(props : BigListBtnProps)=>props.color};
+  border-radius: 10;
+  padding-horizontal:${(props : BigListBtnProps)=>props.paddingH};
+  padding-vertical: ${(props : BigListBtnProps)=>props.paddingV};
+  margin-bottom: 10;
+`
+
+export const NotificationButton = styled.TouchableOpacity`
   flex:1;
   flex-direction:row;
+  background-color: ${colors.white};
+  border-radius: 10;
   align-items: center;
-  background-color: ${colors.white};
-  border-radius: 10;
-  margin-top: 10;
-  padding-horizontal: 20;
-  padding-vertical: 10;
+  padding-horizontal: 18;
+  padding-vertical: 12;
+  margin-bottom: 10;
 `
 
-export const CharacterButton = styled.TouchableOpacity`
-  flex:1;
-  align-items: center;
-  background-color: ${colors.white};
-  border-radius: 10;
-  margin-right:10;
-  padding-horizontal: 25;
-  padding-vertical: 18;
-  width:150;
-`
-
-export const PostButton = styled.TouchableOpacity`
-  flex:1;
-  width:100%;
-  background-color: ${colors.white};
-  border-radius: 10;
-  margin-top: 10;
-  padding-horizontal:10;
-  padding-vertical: 10;
-`
-
-interface EpiBtn{
-  color: string,
+interface colorProps{
+  color:string
 }
-
-export const EpisodeButton = styled.TouchableOpacity`
-  flex:1;
-  width:100%;
-  height:149;
-  background-color: ${(props : EpiBtn)=>props.color};
+export const TagModifyButton = styled.TouchableOpacity`
+  background-color: ${(props:colorProps)=> props.color};
   border-radius: 10;
-  margin-top: 10;
-  padding-horizontal:16;
-  padding-vertical:16;
-`
-
-export const EpisodeMiniButton = styled.TouchableOpacity`
-  flex:1;
-  width:150;
-  background-color: ${colors.white};
-  border-radius: 10;
-  margin-right: 10;
-  padding-horizontal:16;
-  padding-vertical:16;
-`
-
-export const RecentSearchButton = styled.TouchableOpacity`
-  height: 28;
-  background-color: ${colors.white};
-  border-radius: 10;
-  margin-right: 5;
+  margin-right: 4;
+  margin-bottom : 2;
   flex-direction:row;
   align-items:center;
-  padding-left: 10;
+  padding-left: 8;
+  padding-vertical: 5;
+`
+
+export const AddTemplate = styled.TouchableOpacity`
+  height:77;
+  background-color: transparent;
+  border-radius: 10;
+  border-color:${colors.black};
+  border-style: dashed;
+  border-width:1;
+  margin-vertical: 12;
+  align-items:center;
+  justify-content:center;
+`
+
+interface noHeightProps{
+  marBottom: number,
+  paddingH: number,
+  paddingV: number,
+}
+export const NoHeightButton = styled.TouchableOpacity`
+  width: 100%;
+  background-color: ${colors.white};
+  border-radius: 10;
+  margin-bottom: ${(props:noHeightProps)=> props.marBottom};
+  padding-horizontal: ${(props:noHeightProps)=> props.paddingH};
+  padding-vertical:${(props:noHeightProps)=> props.paddingV};
 `
 
 export const SunButton = styled.TouchableOpacity`
@@ -135,7 +143,15 @@ export const SunButton = styled.TouchableOpacity`
   border-width:1;
   border-color:${colors.primary};
   border-radius:10;
+  background-color:${(props:colorProps)=> props.color};
   align-items:center;
-  padding-vertical:7;
+  padding-vertical:4;
   padding-horizontal:8;
+`
+
+export const ProfileDetailButton = styled.TouchableOpacity`
+  border-radius:10;
+  background-color: ${colors.white};
+  padding-horizontal:20;
+  padding-vertical:20;
 `
