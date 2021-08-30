@@ -12,10 +12,10 @@ import * as text from '../../styles/styled-components/text';
 import * as elses from '../../styles/styled-components/elses';
 
 // components
-import SettingItem from '../components/SettingItem';
-import BackButton from '../components/BackButton';
-import ProfileItem from '../components/ProfileItem';
-import { SettingProps } from '../../utils/types';
+import SettingItem from '../../components/item/SettingItem';
+import BackButton from '../../components/button/BackButton';
+import ProfileItem from '../../components/item/ProfileItem';
+import { SettingProps } from '../../utils/types/types';
 
 export default function SettingAlarmScreen(){
   const[name,setName]=useState('undefined');

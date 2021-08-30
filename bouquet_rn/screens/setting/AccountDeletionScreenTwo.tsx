@@ -14,13 +14,13 @@ import * as elses from '../../styles/styled-components/elses';
 
 // props && logic
 import { useRecoilState } from 'recoil';
-import { bottomBarHideState } from '../logics/atoms';
+import { bottomBarHideState } from '../../logics/atoms';
 
 // components
-import ConditionButton from '../components/ConditionButton';
-import NameNText from '../components/NameNText';
-import BackButton from '../components/BackButton';
-import { WelcomeStackParam } from '../../utils/types';
+import ConditionButton from '../../components/button/ConditionButton';
+import NameNText from '../../components/text/NameNText';
+import BackButton from '../../components/button/BackButton';
+import { WelcomeStackParam } from '../../utils/types/types';
 
 export default function AccountDeletionScreenTwo(){
   const[name,setName]=useState('undefined');

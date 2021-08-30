@@ -7,8 +7,8 @@ import i18n from 'i18n-js';
 import {RecoilRoot, atom, useRecoilState} from 'recoil';
 import AppLoading from 'expo-app-loading';
 
-import AppStack from './screens/'
-import SplashScreen from './screens/SplashScreen';
+import AppStack from '.'
+import SplashScreen from './screens/former/SplashScreen';
 
 async function getFonts() {
   return await Font.loadAsync({

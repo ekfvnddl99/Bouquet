@@ -12,12 +12,12 @@ import * as elses from '../../styles/styled-components/elses';
 
 // props & logic
 import { useRecoilState } from 'recoil';
-import { bottomBarHideState } from '../logics/atoms';
+import { bottomBarHideState } from '../../logics/atoms';
 
 // components
-import ProgressArea from '../components/ProgressArea';
-import ConditionButton from '../components/ConditionButton';
-import NameNText from '../components/NameNText';
+import ProgressArea from '../../components/item/ProgressArea';
+import ConditionButton from '../../components/button/ConditionButton';
+import NameNText from '../../components/text/NameNText';
 
 export default function ChaGenerationScreenFour({profile, name, modify, navigation} : {profile:string, name:string, modify : number, navigation:any}){
   const [hide, setHide] = useRecoilState(bottomBarHideState);

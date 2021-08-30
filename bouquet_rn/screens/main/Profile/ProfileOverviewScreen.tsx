@@ -21,19 +21,19 @@ import SwipeSvg from '../../../assets/Swipe';
 import SettingSvg from '../../../assets/Setting';
 
 // props & logic
-import { StatusBarHeight } from '../../logics/StatusbarHeight';
-import useCharacter from '../../logics/useCharacter';
-import { characterListState, noCharacter } from '../../logics/atoms';
+import { StatusBarHeight } from '../../../logics/non-server/StatusbarHeight';
+import useCharacter from '../../../logics/hooks/useCharacter';
+import { characterListState, noCharacter } from '../../../logics/atoms';
 import { useRecoilState } from 'recoil';
-import { Character } from '../../../utils/types';
+import { Character } from '../../../utils/types/types';
 
 // components
-import BgButton from '../../components/BackgroundButton';
+import BgButton from '../../../components/button/BackgroundButton';
 import ProfileSwipeScreen from './ProfileSwipeScreen';
 import ProfileGridScreen from './ProfileGridScreen';
 import { useState } from 'react';
-import FloatingButton from '../../components/FloatingButton';
-import { ProfileProps } from '../../../utils/types';
+import FloatingButton from '../../../components/button/FloatingButton';
+import { ProfileProps } from '../../../utils/types/types';
 
 const HEADER_MAX_HEIGHT = 90;
 const HEADER_MIN_HEIGHT = 60;

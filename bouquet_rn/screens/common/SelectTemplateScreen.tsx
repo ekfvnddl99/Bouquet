@@ -13,15 +13,15 @@ import {colors} from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 
 // props & logic
-import { StatusBarHeight } from '../logics/StatusbarHeight';
-import { selectTemplate } from '../logics/atoms';
-import useCharacter from '../logics/useCharacter';
+import { StatusBarHeight } from '../../logics/non-server/StatusbarHeight';
+import { selectTemplate } from '../../logics/atoms';
+import useCharacter from '../../logics/hooks/useCharacter';
 
 // components
-import PostingItem from '../components/PostingItem';
-import SelectTemplateItem from '../components/SelectTemplateItem';
-import BackButton from '../components/BackButton';
-import ProfileItem from '../components/ProfileItem';
+import PostingItem from '../../components/item/PostingItem';
+import SelectTemplateItem from '../../components/item/SelectTemplateItem';
+import BackButton from '../../components/button/BackButton';
+import ProfileItem from '../../components/item/ProfileItem';
 
 import TextTemplate from '../template/TextTemplate';
 import ImageTemplate from '../template/ImageTemplate';

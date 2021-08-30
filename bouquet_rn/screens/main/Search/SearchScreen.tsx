@@ -19,21 +19,21 @@ import SearchViewSvg from '../../../assets/SearchView';
 import SearchViewFocusSvg from '../../../assets/SearchViewFocus';
 
 // props & logic
-import type {SearchProps, MiniCharacter} from '../../../utils/types';
-import { StatusBarHeight } from '../../logics/StatusbarHeight';
-import { responseToCharacter, CharacterResponseType } from '../../logics/Character';
-import { SearchTopPost, SearchTopCharacter } from '../../logics/Search';
-import { PostInterface, AllPostRequestType, PostListResponseToPost } from '../../logics/Post';
+import type {SearchProps, MiniCharacter} from '../../../utils/types/types';
+import { StatusBarHeight } from '../../../logics/non-server/StatusbarHeight';
+import { responseToCharacter, CharacterResponseType } from '../../../logics/server/Character';
+import { SearchTopPost, SearchTopCharacter } from '../../../logics/Search';
+import { PostInterface, AllPostRequestType, PostListResponseToPost } from '../../../logics/Post';
 
 // components
-import TagModifyItem from '../../components/TagModifyItem';
-import CharacterItem from '../../components/CharacterItem';
-import PostingItem from '../../components/PostingItem';
-import EpisodeMiniItem from '../../components/EpisodeMiniItem';
-import FloatingButton from '../../components/FloatingButton';
+import TagModifyItem from '../../../components/item/TagModifyItem';
+import CharacterItem from '../../../components/item/CharacterItem';
+import PostingItem from '../../../components/item/PostingItem';
+import EpisodeMiniItem from '../../../components/item/EpisodeMiniItem';
+import FloatingButton from '../../../components/button/FloatingButton';
 import { useEffect } from 'react';
-import useCharacter from '../../logics/useCharacter';
-import SearchChaItem from '../../components/SearchChaItem';
+import useCharacter from '../../../logics/hooks/useCharacter';
+import SearchChaItem from '../../../components/item/SearchChaItem';
 
 const HEADER_MAX_HEIGHT = 95;
 const HEADER_MIN_HEIGHT = 60;

@@ -15,14 +15,14 @@ import * as area from '../../styles/styled-components/area';
 import * as input from '../../styles/styled-components/input';
 
 // props & logic
-import type {ChaGenerationProps, Character} from '../../utils/types';
+import type {ChaGenerationProps, Character} from '../../utils/types/types';
 
 // components
-import ProgressArea from '../components/ProgressArea';
-import ConditionButton from '../components/ConditionButton';
-import ConditionTextInput from '../components/ConditionTextInput';
-import WarningText from '../components/WarningText';
-import TagModifyItem from '../components/TagModifyItem';
+import ProgressArea from '../../components/item/ProgressArea';
+import ConditionButton from '../../components/button/ConditionButton';
+import ConditionTextInput from '../../components/input/ConditionTextInput';
+import WarningText from '../../components/text/WarningText';
+import TagModifyItem from '../../components/item/TagModifyItem';
 
 
 export default function ChaGenerationScreenThree({modify, onChange, characterToCreate, setCharacterToCreate} : {modify : number, onChange:any, characterToCreate: Character, setCharacterToCreate: Function}){

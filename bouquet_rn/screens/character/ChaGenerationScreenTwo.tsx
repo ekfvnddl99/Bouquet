@@ -17,16 +17,16 @@ import EyeSvg from '../../assets/Eye';
 import EyeFocusSvg from '../../assets/EyeFocus';
 
 // props & logic
-import type {ChaGenerationProps, Character} from '../../utils/types';
-import {getByte} from '../logics/Calculation';
-import { CharacterDupAsync } from '../logics/Auth';
+import type {ChaGenerationProps, Character} from '../../utils/types/types';
+import {getByte} from '../../logics/non-server/Calculation';
+import { CharacterDupAsync } from '../../logics/server/Auth';
 
 // components
-import ProgressArea from '../components/ProgressArea';
-import ConditionText from '../components/ConditionText';
-import ConditionButton from '../components/ConditionButton';
-import ConditionTextInput from '../components/ConditionTextInput';
-import WarningText from '../components/WarningText';
+import ProgressArea from '../../components/item/ProgressArea';
+import ConditionText from '../../components/text/ConditionText';
+import ConditionButton from '../../components/button/ConditionButton';
+import ConditionTextInput from '../../components/input/ConditionTextInput';
+import WarningText from '../../components/text/WarningText';
 
 
 export default function ChaGenerationScreenTwo({modify, onChange, characterToCreate, setCharacterToCreate} : {modify : number, onChange:any, characterToCreate: Character, setCharacterToCreate: Function}){

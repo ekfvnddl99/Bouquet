@@ -12,11 +12,11 @@ import * as elses from '../../styles/styled-components/elses';
 import GallerySvg from '../../assets/Gallery';
 
 // props & logic
-import type {ChaGenerationProps, Character} from '../../utils/types';
+import type {ChaGenerationProps, Character} from '../../utils/types/types';
 
 // components
-import ProgressArea from '../components/ProgressArea';
-import ConditionButton from '../components/ConditionButton';
+import ProgressArea from '../../components/item/ProgressArea';
+import ConditionButton from '../../components/button/ConditionButton';
 
 export default function ChaGenerationScreenOne({modify, onChange, characterToCreate, setCharacterToCreate} : {modify : number, onChange:any, characterToCreate: Character, setCharacterToCreate: Function}){
   const[IsOK, setIsOK]=useState(false);

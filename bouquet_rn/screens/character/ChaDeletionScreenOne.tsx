@@ -11,9 +11,9 @@ import * as text from '../../styles/styled-components/text';
 import * as elses from '../../styles/styled-components/elses';
 
 // components
-import ConditionButton from '../components/ConditionButton';
-import NameNText from '../components/NameNText';
-import BackButton from '../components/BackButton';
+import ConditionButton from '../../components/button/ConditionButton';
+import NameNText from '../../components/text/NameNText';
+import BackButton from '../../components/button/BackButton';
 import { onChange } from 'react-native-reanimated';
 
 export default function ChaDeletionScreenOne({profile, name, onChange}:{profile:string, name:string, onChange:Function}){

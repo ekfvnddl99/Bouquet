@@ -7,7 +7,7 @@ import * as text from '../../styles/styled-components/text';
 import * as area from '../../styles/styled-components/area';
 import * as elses from '../../styles/styled-components/elses';
 
-import LineButton from '../components/LineButton';
+import LineButton from '../../components/button/LineButton';
 
 import PlaySvg from '../../assets/Play';
 import PlayFocusSvg from '../../assets/PlayFocus';
@@ -15,7 +15,7 @@ import WriteSvg from '../../assets/Write';
 import XSvg from '../../assets/X';
 import GallerySvg from '../../assets/Gallery';
 
-import * as Post from '../logics/Post';
+import * as Post from '../../logics/Post';
 
 const AlbumInfoWrap = styled.View`
   flex: 1;

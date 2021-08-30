@@ -6,7 +6,7 @@ import { colors } from '../../styles/colors';
 import * as elses from '../../styles/styled-components/elses';
 import GallerySvg from '../../assets/Gallery';
 
-import * as Post from '../logics/Post';
+import * as Post from '../../logics/Post';
   
 const windowWidth = Dimensions.get('window').width;
 function Img({ img, isMini, isEditMode }: {img?:string, isMini: boolean, isEditMode?: boolean}) {

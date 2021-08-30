@@ -15,19 +15,19 @@ import * as elses from '../../styles/styled-components/elses';
 import * as button from '../../styles/styled-components/button';
 
 // props & logic
-import { StatusBarHeight } from '../logics/StatusbarHeight';
-import * as cal from '../logics/Calculation';
-import useUser from '../logics/useUser';
-import { characterListState, noCharacter, viewUserState } from '../logics/atoms';
-import useCharacter from '../logics/useCharacter';
+import { StatusBarHeight } from '../../logics/non-server/StatusbarHeight';
+import * as cal from '../../logics/non-server/Calculation';
+import useUser from '../../logics/useUser';
+import { characterListState, noCharacter, viewUserState } from '../../logics/atoms';
+import useCharacter from '../../logics/hooks/useCharacter';
 import { useRecoilState } from 'recoil';
-import { Character } from '../../utils/types';
-import useUserView from '../logics/useUserView';
+import { Character } from '../../utils/types/types';
+import useUserView from '../../logics/useUserView';
 
 // components
-import BackButton from '../components/BackButton';
-import ProfileChaItem from '../components/ProfileChaItem';
-import ProfileInfoText from '../components/ProfileInfoText';
+import BackButton from '../../components/button/BackButton';
+import ProfileChaItem from '../../components/item/ProfileChaItem';
+import ProfileInfoText from '../../components/text/ProfileInfoText';
 
 const HEADER_MAX_HEIGHT = 80;
 const HEADER_MIN_HEIGHT = 60;

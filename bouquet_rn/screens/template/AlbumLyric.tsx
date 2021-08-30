@@ -7,10 +7,10 @@ import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
 import * as elses from '../../styles/styled-components/elses';
 
-import { StatusBarHeight } from '../logics/StatusbarHeight';
+import { StatusBarHeight } from '../../logics/non-server/StatusbarHeight';
 
-import NameNText from '../components/NameNText';
-import BackButton from '../components/BackButton';
+import NameNText from '../../components/text/NameNText';
+import BackButton from '../../components/button/BackButton';
 
 const HEADER_MAX_HEIGHT = 90;
 const HEADER_MIN_HEIGHT = 60;

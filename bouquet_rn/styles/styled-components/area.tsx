@@ -2,7 +2,7 @@ import styled from 'styled-components/native';
 import {colors} from '../colors';
 
 // props & logic
-import { StatusBarHeight } from '../../screens/logics/StatusbarHeight';
+import { StatusBarHeight } from '../../logics/non-server/StatusbarHeight';
 
 export const RowArea = styled.View`
   align-items:center;

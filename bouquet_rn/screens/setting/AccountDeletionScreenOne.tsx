@@ -13,14 +13,14 @@ import * as text from '../../styles/styled-components/text';
 import * as elses from '../../styles/styled-components/elses';
 
 // props && logic
-import { deleteUserAsync } from '../logics/User';
+import { deleteUserAsync } from '../../logics/User';
 
 // components
-import ConditionButton from '../components/ConditionButton';
-import NameNText from '../components/NameNText';
-import BackButton from '../components/BackButton';
-import { SettingStackParam } from '../../utils/types';
-import ProfileItem from '../components/ProfileItem';
+import ConditionButton from '../../components/button/ConditionButton';
+import NameNText from '../../components/text/NameNText';
+import BackButton from '../../components/button/BackButton';
+import { SettingStackParam } from '../../utils/types/types';
+import ProfileItem from '../../components/item/ProfileItem';
 
 export default function AccountDeletionScreenOne(){
   const[name,setName]=useState('undefined');

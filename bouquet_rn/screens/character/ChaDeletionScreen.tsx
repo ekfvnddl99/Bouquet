@@ -16,12 +16,12 @@ import * as input from '../../styles/styled-components/input';
 import * as elses from '../../styles/styled-components/elses';
 
 // components
-import ProfileItem from '../components/ProfileItem';
-import BackButton from '../components/BackButton';
+import ProfileItem from '../../components/item/ProfileItem';
+import BackButton from '../../components/button/BackButton';
 
 // props & logic
-import { deleteCharacterAsync } from '../logics/Character';
-import { characterState } from '../logics/atoms';
+import { deleteCharacterAsync } from '../../logics/server/Character';
+import { characterState } from '../../logics/atoms';
 import { useRecoilValue } from 'recoil';
 
 // screens

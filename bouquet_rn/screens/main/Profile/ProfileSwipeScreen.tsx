@@ -13,13 +13,13 @@ import { useRecoilState } from 'recoil';
 import * as SecureStore from 'expo-secure-store';
 
 // props & logic
-import Carousel from '../../logics/Carousel';
-import { characterListState } from '../../logics/atoms';
-import useCharacter from '../../logics/useCharacter';
+import Carousel from '../../../components/view/Carousel';
+import { characterListState } from '../../../logics/atoms';
+import useCharacter from '../../../logics/hooks/useCharacter';
 
 // components
-import BackgroundButton from '../../components/BackgroundButton';
-import { ProfileProps, Character } from '../../../utils/types';
+import BackgroundButton from '../../../components/button/BackgroundButton';
+import { ProfileProps, Character } from '../../../utils/types/types';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 export default function ProfileSwipeScreen({characterList}: {characterList: Character[]}){

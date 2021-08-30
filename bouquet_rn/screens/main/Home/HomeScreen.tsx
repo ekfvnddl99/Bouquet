@@ -16,20 +16,20 @@ import * as text from '../../../styles/styled-components/text';
 import * as elses from '../../../styles/styled-components/elses';
 
 // props & logic
-import { StatusBarHeight } from '../../logics/StatusbarHeight';
-import type {HomeProps, Character} from '../../../utils/types';
-import useUser from '../../logics/useUser';
-import useCharacter from '../../logics/useCharacter';
-import { PostInterface, AllPostRequestType, PostListResponseToPost } from '../../logics/Post';
-import { SearchTopPost, SearchTopCharacter } from '../../logics/Search';
+import { StatusBarHeight } from '../../../logics/non-server/StatusbarHeight';
+import type {HomeProps, Character} from '../../../utils/types/types';
+import useUser from '../../../logics/useUser';
+import useCharacter from '../../../logics/hooks/useCharacter';
+import { PostInterface, AllPostRequestType, PostListResponseToPost } from '../../../logics/Post';
+import { SearchTopPost, SearchTopCharacter } from '../../../logics/Search';
 
 // components
-import PostingItem from '../../components/PostingItem';
-import NameNText from '../../components/NameNText';
-import NotLoginPrimaryButton from '../../components/NotLoginPrimaryButton';
-import FloatingButton from '../../components/FloatingButton';
-import QnATextInput from '../../components/QnATextInput';
-import ProfileItem from '../../components/ProfileItem';
+import PostingItem from '../../../components/item/PostingItem';
+import NameNText from '../../../components/text/NameNText';
+import NotLoginPrimaryButton from '../../../components/button/NotLoginPrimaryButton';
+import FloatingButton from '../../../components/button/FloatingButton';
+import QnATextInput from '../../../components/input/QnATextInput';
+import ProfileItem from '../../../components/item/ProfileItem';
 
 const HEADER_MAX_HEIGHT = 94;
 const HEADER_MIN_HEIGHT = 60;

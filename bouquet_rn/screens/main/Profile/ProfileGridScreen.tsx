@@ -9,11 +9,11 @@ import {
 } from 'react-native';
 
 // props && logic
-import { Character } from '../../../utils/types';
-import useCharacter from '../../logics/useCharacter';
+import { Character } from '../../../utils/types/types';
+import useCharacter from '../../../logics/hooks/useCharacter';
 
 // components
-import ProfileChaItem from '../../components/ProfileChaItem';
+import ProfileChaItem from '../../../components/item/ProfileChaItem';
 
 export default function ProfileGridScreen({scroll, characterList}: {scroll:any, characterList:Character[]}){
   const [character, setCharacter] = useCharacter();

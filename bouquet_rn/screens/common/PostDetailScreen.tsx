@@ -23,22 +23,22 @@ import * as button from '../../styles/styled-components/button';
 import * as elses from '../../styles/styled-components/elses';
 
 // props & logic
-import { StatusBarHeight } from '../logics/StatusbarHeight';
-import { userState, viewPostState } from '../logics/atoms';
+import { StatusBarHeight } from '../../logics/non-server/StatusbarHeight';
+import { userState, viewPostState } from '../../logics/atoms';
 import { useRecoilValue, useRecoilState } from 'recoil';
-import * as Post from '../logics/Post';
-import useCharacter from '../logics/useCharacter';
+import * as Post from '../../logics/Post';
+import useCharacter from '../../logics/hooks/useCharacter';
 
 // components
-import ProfileButton from '../components/ProfileButton';
-import BackButton from '../components/BackButton';
-import SunButton from '../components/SunButton';
-import CommentItem from '../components/CommentItem';
-import CommentInputBar from '../components/CommentInputBar';
-import CommentInputComment from '../components/CommentInputComment';
-import LineButton from '../components/LineButton';
-import ConditionButton from '../components/ConditionButton';
-import ProfileItem from '../components/ProfileItem';
+import ProfileButton from '../../components/button/ProfileButton';
+import BackButton from '../../components/button/BackButton';
+import SunButton from '../../components/button/SunButton';
+import CommentItem from '../../components/item/CommentItem';
+import CommentInputBar from '../../components/CommentInputBar';
+import CommentInputComment from '../../components/CommentInputComment';
+import LineButton from '../../components/button/LineButton';
+import ConditionButton from '../../components/button/ConditionButton';
+import ProfileItem from '../../components/item/ProfileItem';
 
 import TextTemplate from '../template/TextTemplate';
 import ImageTemplate from '../template/ImageTemplate';

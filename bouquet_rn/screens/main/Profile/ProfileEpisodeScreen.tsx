@@ -11,8 +11,8 @@ import * as text from '../../../styles/styled-components/text';
 import * as elses from '../../../styles/styled-components/elses';
 
 // components
-import EpisodeItem from '../../components/EpisodeItem';
-import TagItem from '../../components/TagItem';
+import EpisodeItem from '../../../components/item/EpisodeItem';
+import TagItem from '../../../components/item/TagItem';
 
 export default function ProfileEpisodeScreen(){
   // dummy data - 서버에서 불러와야 함

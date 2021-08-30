@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import {colors} from '../colors';
 
 // props & logic
-import { StatusBarHeight } from '../../screens/logics/StatusbarHeight';
+import { StatusBarHeight } from '../../logics/non-server/StatusbarHeight';
 
 interface BarProps{
   width : string,

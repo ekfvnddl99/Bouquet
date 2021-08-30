@@ -7,7 +7,7 @@ import * as text from '../../styles/styled-components/text';
 import * as area from '../../styles/styled-components/area';
 import * as elses from '../../styles/styled-components/elses';
 import * as input from '../../styles/styled-components/input';
-import * as Post from '../logics/Post';
+import * as Post from '../../logics/Post';
   
   
 function Text({ content, isMini, isEditMode }: {content?:string, isMini: boolean, isEditMode?: boolean}) {

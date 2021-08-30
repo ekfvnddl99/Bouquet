@@ -16,7 +16,7 @@ import * as text from '../../../styles/styled-components/text';
 import * as elses from '../../../styles/styled-components/elses';
 
 // components
-import PostingItem from '../../components/PostingItem';
+import PostingItem from '../../../components/item/PostingItem';
 
 export default function ProfileFeedScreen(){
   // dummy data - 서버에서 불러와야 함

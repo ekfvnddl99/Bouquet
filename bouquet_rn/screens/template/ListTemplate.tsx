@@ -6,12 +6,12 @@ import { colors } from '../../styles/colors';
 import * as text from '../../styles/styled-components/text';
 import * as area from '../../styles/styled-components/area';
 
-import LineButton from '../components/LineButton';
+import LineButton from '../../components/button/LineButton';
 
 import XSvg from '../../assets/X';
 import GallerySvg from '../../assets/Gallery';
 
-import * as Post from '../logics/Post';
+import * as Post from '../../logics/Post';
 
 const MainPic = styled.Image<{ isMini: boolean }>`
   height: ${props => props.isMini ? 150 : 180};

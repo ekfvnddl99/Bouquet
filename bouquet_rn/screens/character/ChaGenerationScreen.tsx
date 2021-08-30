@@ -15,14 +15,14 @@ import { useRecoilState } from 'recoil';
 
 
 // props & logic
-import type {ChaGenerationProps} from '../../utils/types';
-import { bottomBarHideState, noCharacter, characterListState } from '../logics/atoms';
-import { createCharacterAsync, editCharacterAsync } from '../logics/Character';
-import useCharacter, { setCharacterListAsync } from '../logics/useCharacter';
-import UploadImageAsync from '../logics/UploadImage';
+import type {ChaGenerationProps} from '../../utils/types/types';
+import { bottomBarHideState, noCharacter, characterListState } from '../../logics/atoms';
+import { createCharacterAsync, editCharacterAsync } from '../../logics/server/Character';
+import useCharacter, { setCharacterListAsync } from '../../logics/hooks/useCharacter';
+import UploadImageAsync from '../../logics/server/UploadImage';
 
 // components
-import ProgressArea from '../components/ProgressArea';
+import ProgressArea from '../../components/item/ProgressArea';
 // screens
 import ChaGenerationScreenOne from './ChaGenerationScreenOne';
 import ChaGenerationScreenTwo from './ChaGenerationScreenTwo';

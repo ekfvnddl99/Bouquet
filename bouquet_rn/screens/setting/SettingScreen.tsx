@@ -14,14 +14,14 @@ import * as text from '../../styles/styled-components/text';
 import * as elses from '../../styles/styled-components/elses';
 
 // components
-import SettingItem from '../components/SettingItem';
-import BackButton from '../components/BackButton';
-import { SettingProps } from '../../utils/types';
-import ProfileItem from '../components/ProfileItem';
+import SettingItem from '../../components/item/SettingItem';
+import BackButton from '../../components/button/BackButton';
+import { SettingProps } from '../../utils/types/types';
+import ProfileItem from '../../components/item/ProfileItem';
 
-import { guest, noCharacter, characterListState } from '../logics/atoms';
-import useUser from '../logics/useUser';
-import useCharacter from '../logics/useCharacter';
+import { guest, noCharacter, characterListState } from '../../logics/atoms';
+import useUser from '../../logics/useUser';
+import useCharacter from '../../logics/hooks/useCharacter';
 
 export default function SettingScreen(){
   const [user, setUser] = useUser();

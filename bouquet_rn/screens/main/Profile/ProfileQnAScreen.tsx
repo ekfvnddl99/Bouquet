@@ -12,7 +12,7 @@ import * as text from '../../../styles/styled-components/text';
 import * as elses from '../../../styles/styled-components/elses';
 
 // components
-import QnAItem from '../../components/QnAItem';
+import QnAItem from '../../../components/item/QnAItem';
 
 export default function ProfileQnAScreen(){
   // dummy data - 서버에서 불러와야 함

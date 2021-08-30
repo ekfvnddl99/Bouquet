@@ -17,17 +17,17 @@ import * as text from '../../../styles/styled-components/text';
 import * as elses from '../../../styles/styled-components/elses';
 
 // props & logic
-import { StatusBarHeight } from '../../logics/StatusbarHeight';
-import useCharacter from '../../logics/useCharacter';
-import useUser from '../../logics/useUser';
+import { StatusBarHeight } from '../../../logics/non-server/StatusbarHeight';
+import useCharacter from '../../../logics/hooks/useCharacter';
+import useUser from '../../../logics/useUser';
 
 // components
-import NotificationItem from '../../components/NotificationItem';
-import NameNText from '../../components/NameNText';
-import NotLoginPrimaryButton from '../../components/NotLoginPrimaryButton';
-import ProfileItem from '../../components/ProfileItem';
-import { characterState } from '../../logics/atoms';
-import { Character } from '../../../utils/types';
+import NotificationItem from '../../../components/item/NotificationItem';
+import NameNText from '../../../components/text/NameNText';
+import NotLoginPrimaryButton from '../../../components/button/NotLoginPrimaryButton';
+import ProfileItem from '../../../components/item/ProfileItem';
+import { characterState } from '../../../logics/atoms';
+import { Character } from '../../../utils/types/types';
 
 const HEADER_MAX_HEIGHT = 94;
 const HEADER_MIN_HEIGHT = 60;

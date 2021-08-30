@@ -23,17 +23,17 @@ import * as input from '../../styles/styled-components/input';
 import ArrowLeftSvg from '../../assets/ArrowLeft';
 
 // props & logic
-import { StatusBarHeight } from '../logics/StatusbarHeight';
-import { selectTemplate, viewPostState } from '../logics/atoms';
-import useCharacter from '../logics/useCharacter';
-import * as Post from '../logics/Post';
+import { StatusBarHeight } from '../../logics/non-server/StatusbarHeight';
+import { selectTemplate, viewPostState } from '../../logics/atoms';
+import useCharacter from '../../logics/hooks/useCharacter';
+import * as Post from '../../logics/Post';
 
 // components
-import ConditionButton from '../components/ConditionButton';
-import ProfileButton from '../components/ProfileButton';
-import BackButton from '../components/BackButton';
-import LineButton from '../components/LineButton';
-import ProfileItem from '../components/ProfileItem';
+import ConditionButton from '../../components/button/ConditionButton';
+import ProfileButton from '../../components/button/ProfileButton';
+import BackButton from '../../components/button/BackButton';
+import LineButton from '../../components/button/LineButton';
+import ProfileItem from '../../components/item/ProfileItem';
 
 import TextTemplate from '../template/TextTemplate';
 import ImageTemplate from '../template/ImageTemplate';
@@ -41,7 +41,7 @@ import AlbumTemplate from '../template/AlbumTemplate';
 import DiaryTemplate from '../template/DiaryTemplate';
 import ListTemplate from '../template/ListTemplate';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { WritingStackParam } from '../../utils/types';
+import { WritingStackParam } from '../../utils/types/types';
 
 function setTemplate(idx : number, setPost: React.Dispatch< React.SetStateAction<Post.AllPostRequestType> >) {
   switch(idx){

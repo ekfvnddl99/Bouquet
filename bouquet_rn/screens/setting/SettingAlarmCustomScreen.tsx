@@ -13,13 +13,13 @@ import * as text from '../../styles/styled-components/text';
 import * as elses from '../../styles/styled-components/elses';
 
 // props & logic
-import type {ChaGenerationProps, SettingProps} from '../../utils/types';
+import type {ChaGenerationProps, SettingProps} from '../../utils/types/types';
 
 // components
-import SettingItem from '../components/SettingItem';
-import BackButton from '../components/BackButton';
-import SettingToggleItem from '../components/SettingToggleItem';
-import ProfileItem from '../components/ProfileItem';
+import SettingItem from '../../components/item/SettingItem';
+import BackButton from '../../components/button/BackButton';
+import SettingToggleItem from '../../components/item/SettingToggleItem';
+import ProfileItem from '../../components/item/ProfileItem';
 
 type ParamList = {
   SettingAlarm: {

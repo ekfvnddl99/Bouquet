@@ -19,21 +19,21 @@ import * as elses from '../../styles/styled-components/elses';
 import GallerySvg from '../../assets/Gallery';
 
 // props & logic
-import {getByte} from '../logics/Calculation';
-import { UserDupAsync } from '../logics/Auth';
-import { editUserAsync } from '../logics/User';
+import {getByte} from '../../logics/non-server/Calculation';
+import { UserDupAsync } from '../../logics/server/Auth';
+import { editUserAsync } from '../../logics/User';
 
 // components
-import ProgressArea from '../components/ProgressArea';
-import ConditionText from '../components/ConditionText';
-import ConditionButton from '../components/ConditionButton';
-import PrimaryTextButton from '../components/PrimaryTextButton';
-import ConditionTextInput from '../components/ConditionTextInput';
-import WarningText from '../components/WarningText';
-import BackButton from '../components/BackButton';
-import { SettingProps } from '../../utils/types';
-import ProfileItem from '../components/ProfileItem';
-import useUser from '../logics/useUser';
+import ProgressArea from '../../components/item/ProgressArea';
+import ConditionText from '../../components/text/ConditionText';
+import ConditionButton from '../../components/button/ConditionButton';
+import PrimaryTextButton from '../../components/button/PrimaryTextButton';
+import ConditionTextInput from '../../components/input/ConditionTextInput';
+import WarningText from '../../components/text/WarningText';
+import BackButton from '../../components/button/BackButton';
+import { SettingProps } from '../../utils/types/types';
+import ProfileItem from '../../components/item/ProfileItem';
+import useUser from '../../logics/useUser';
 
 export default function SettingProfileScreen({navigation} : SettingProps){
   const[name, setName]=useState('');

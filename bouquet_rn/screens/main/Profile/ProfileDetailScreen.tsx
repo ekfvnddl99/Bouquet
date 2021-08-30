@@ -19,16 +19,16 @@ import ProfileEpisodeScreen from './ProfileEpisodeScreen';
 import ProfileQnAScreen from './ProfileQnAScreen';
 
 // props & logic
-import { StatusBarHeight } from '../../logics/StatusbarHeight';
-import useCharacterView from '../../logics/useCharacterView';
-import { noCharacter } from '../../logics/atoms';
-import useCharacter from '../../logics/useCharacter';
+import { StatusBarHeight } from '../../../logics/non-server/StatusbarHeight';
+import useCharacterView from '../../../logics/useCharacterView';
+import { noCharacter } from '../../../logics/atoms';
+import useCharacter from '../../../logics/hooks/useCharacter';
 
 // components
-import ProfileInfoText from '../../components/ProfileInfoText';
-import ProfileDetailItem from '../../components/ProfileDetailItem';
-import BackButton from '../../components/BackButton';
-import ProfileItem from '../../components/ProfileItem';
+import ProfileInfoText from '../../../components/text/ProfileInfoText';
+import ProfileDetailItem from '../../../components/item/ProfileDetailItem';
+import BackButton from '../../../components/button/BackButton';
+import ProfileItem from '../../../components/item/ProfileItem';
 
 const dummy={
   id: 9,
