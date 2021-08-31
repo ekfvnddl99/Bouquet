@@ -326,8 +326,8 @@ import SettingScreen from './screens/setting/SettingScreen';
 import SettingProfileScreen from './screens/setting/SettingProfileScreen';
 import SettingAlarmScreen from './screens/setting/SettingAlarmScreen';
 import SettingAlarmCustomScreen from './screens/setting/SettingAlarmCustomScreen';
-import AccountDeletionScreenOne from './screens/setting/AccountDeletionScreenOne';
-import AccountDeletionScreenTwo from './screens/setting/AccountDeletionScreenTwo';
+import AccountDeletionScreenOne from './screens/setting/AccountDeletionScreen1';
+import AccountDeletionScreenTwo from './screens/setting/AccountDeletionScreen2';
 
 import PostWritingScreen from './screens/common/PostWritingScreen';
 import SelectTemplateScreen from './screens/common/SelectTemplateScreen';

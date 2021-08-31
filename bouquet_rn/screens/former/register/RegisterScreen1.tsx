@@ -17,7 +17,7 @@ import * as input from '../../../styles/styled-components/input';
 import { EmailDupAsync } from '../../../logics/server/EmailLogin';
 
 // components
-import ProgressArea from '../../../components/item/ProgressArea';
+import ProgressArea from '../../../components/item/ProgressItem';
 import ConditionButton from '../../../components/button/ConditionButton';
 import PrimaryTextButton from '../../../components/button/PrimaryTextButton';
 import WarningText from '../../../components/text/WarningText';

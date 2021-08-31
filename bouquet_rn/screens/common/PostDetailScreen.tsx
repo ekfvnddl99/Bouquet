@@ -34,8 +34,7 @@ import ProfileButton from '../../components/button/ProfileButton';
 import BackButton from '../../components/button/BackButton';
 import SunButton from '../../components/button/SunButton';
 import CommentItem from '../../components/item/CommentItem';
-import CommentInputBar from '../../components/CommentInputBar';
-import CommentInputComment from '../../components/CommentInputComment';
+import CommentInput from '../../components/input/CommentTextInput';
 import LineButton from '../../components/button/LineButton';
 import ConditionButton from '../../components/button/ConditionButton';
 import ProfileItem from '../../components/item/ProfileItem';
@@ -45,68 +44,6 @@ import ImageTemplate from '../template/ImageTemplate';
 import AlbumTemplate from '../template/AlbumTemplate';
 import DiaryTemplate from '../template/DiaryTemplate';
 import ListTemplate from '../template/ListTemplate';
-
-const dummy_c : Post.Comment[]=[
-    {name: "오란지",
-  createdAt: "120",
-  updatedAt: "3",
-  profileImg: "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
-  id: 2,
-  comment: "뭐야 두리안씨 냄새나염",
-  liked: false,
-  parent: 1,}, 
-  {name: "두리안",
-  createdAt: "60",
-  updatedAt: "3",
-  profileImg: "https://img3.daumcdn.net/thumb/R658x0.q70/?fname=https://t1.daumcdn.net/news/202105/21/dailylife/20210521214351768duii.jpg",
-  id: 3,
-  comment: "무엄하다. 감히 A+ 주제에 과일들이 뽑은 최고의 향을 가진 나에게 냄새라니.",
-  liked: false,
-  parent: 1,},
-  {name: "오란지",
-  createdAt: "60",
-  updatedAt: "3",
-  profileImg: "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
-  id: 4,
-  comment: "안쓰러워서 못봐주겠어용ㅠㅠ",
-  liked: false,
-  parent: 1,}
-  ]
-  const dummy_a : Post.Comment[]=[{
-    name: "두리안",
-    createdAt: "120",
-    "updatedAt": "3",
-    "profileImg": "https://img3.daumcdn.net/thumb/R658x0.q70/?fname=https://t1.daumcdn.net/news/202105/21/dailylife/20210521214351768duii.jpg",
-    "id": 1,
-    "comment": "나약한 녀석. A+ 밖에 안되다니. 난 S급이라서 우습고 유치하군.",
-    "liked": false,
-    "parent": 0,
-    children:[],
-  },
-  {name: "사과",
-  createdAt: "60",
-  updatedAt: "3",
-  profileImg: "https://lh3.googleusercontent.com/proxy/23GhlGE_ZlNQvAiMj-2kBTOxNlmVDx4y7cXRCcSYW3UiFm1DqbaQ5UW-BOFvLCLohq0v6uqQ-6og6PqWuHYXwyeG3v0p2U40gZa6665zYoMeB5Mf5dnDdMcxGFQvuPXRENvZ",
-  id: 5,
-  comment: "우와 둘이 싸운다",
-  liked: false,
-  parent: 0,},
-  {name: "블루베리",
-  createdAt: "45",
-  updatedAt: "3",
-  profileImg: "https://imagescdn.gettyimagesbank.com/500/19/328/458/0/1161802142.jpg",
-  id: 6,
-  comment: "이기는 편 우리 편~~",
-  liked: false,
-  parent: 0,},
-  {name: "자몽",
-  createdAt: "39",
-  updatedAt: "3",
-  profileImg: "https://t1.daumcdn.net/cfile/blog/99DE2C4F5BC8432617",
-  id: 7,
-  comment: "두리안이랑 둘이안 싸우면 안돼?",
-  liked: false,
-  parent: 0,}]
 
   
 const HEADER_MAX_HEIGHT = 90;
@@ -249,9 +186,7 @@ export default function PostDetailScreen(){
               </Animated.ScrollView>
             {user.isLogined ?
               <View style={{justifyContent:'flex-end'}}>
-
-                {parentComm ? <CommentInputComment setParentComm={setParentComm} info={parentComm}/> : null}
-                <CommentInputBar selectId={selectId} value={comment} onChange={setComment} onUpload={onUpload}/>
+                <CommentInput selectId={selectId} value={comment} onChange={setComment} onUpload={onUpload} isChild={parentComm}/>
               </View> : null}
             </KeyboardAvoidingView>
         </area.Container>
@@ -269,10 +204,4 @@ const styles=StyleSheet.create({
     height: HEADER_MIN_HEIGHT+StatusBarHeight,
     borderRadius:15
   },
-  input:{
-    position:'absolute',
-    bottom:0,
-    left:0,
-    right:0,
-  }
 })

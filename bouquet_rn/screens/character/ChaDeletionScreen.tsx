@@ -25,8 +25,8 @@ import { characterState } from '../../logics/atoms';
 import { useRecoilValue } from 'recoil';
 
 // screens
-import ChaDeletionScreenOne from './ChaDeletionScreenOne';
-import ChaDeletionScreenTwo from './ChaDeletionScreenTwo';
+import ChaDeletionScreenOne from './ChaDeletionScreen1';
+import ChaDeletionScreenTwo from './ChaDeletionScreen2';
 
 function setTitle(step:number){
   if(step===1) return i18n.t("캐릭터 삭제");

@@ -14,9 +14,9 @@ import * as text from '../../../styles/styled-components/text';
 import * as elses from '../../../styles/styled-components/elses';
 import * as button from '../../../styles/styled-components/button';
 
-import ProfileFeedScreen from './ProfileFeedScreen';
-import ProfileEpisodeScreen from './ProfileEpisodeScreen';
-import ProfileQnAScreen from './ProfileQnAScreen';
+import ProfileFeedScreen from './ProfileFeedView';
+import ProfileEpisodeScreen from './ProfileEpisodeView';
+import ProfileQnAScreen from './ProfileQnAView';
 
 // props & logic
 import { StatusBarHeight } from '../../../logics/non-server/StatusbarHeight';

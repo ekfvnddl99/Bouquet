@@ -23,7 +23,7 @@ import {getByte} from '../../../logics/non-server/Calculation';
 import { UserDupAsync } from '../../../logics/server/Auth';
 
 // components
-import ProgressArea from '../../../components/item/ProgressArea';
+import ProgressArea from '../../../components/item/ProgressItem';
 import ConditionText from '../../../components/text/ConditionText';
 import ConditionButton from '../../../components/button/ConditionButton';
 import PrimaryTextButton from '../../../components/button/PrimaryTextButton';

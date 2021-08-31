@@ -23,7 +23,7 @@ import { characterListState } from '../../logics/atoms';
 // components
 import ProfileInfoText from '../text/ProfileInfoText';
 import ProfileButton from '../button/ProfileButton';
-import ProfileInfoTag from './ProfileInfoTag';
+import ProfileInfoTag from './ProfileInfoTagItem';
 import LineButton from '../button/LineButton';
 
 export default function ProfileDetailItem({mini, press, id, character} : {mini:number, press:number, id?:number, character: Character}){

@@ -29,8 +29,8 @@ import { Character } from '../../../utils/types/types';
 
 // components
 import BgButton from '../../../components/button/BackgroundButton';
-import ProfileSwipeScreen from './ProfileSwipeScreen';
-import ProfileGridScreen from './ProfileGridScreen';
+import ProfileSwipeView from './ProfileSwipeView';
+import ProfileGridView from './ProfileGridView';
 import { useState } from 'react';
 import FloatingButton from '../../../components/button/FloatingButton';
 import { ProfileProps } from '../../../utils/types/types';
@@ -90,7 +90,7 @@ export default function ProfileOverviewScreen(){
           </TouchableOpacity>
         </area.RowArea>
         
-        {swipe===1 ? <ProfileSwipeScreen characterList={characterList}/> : <ProfileGridScreen scroll={scroll} characterList={characterList}/>}
+        {swipe===1 ? <ProfileSwipeView characterList={characterList}/> : <ProfileGridView scroll={scroll} characterList={characterList}/>}
         <FloatingButton/>
       </area.Container>
   )

@@ -11,16 +11,16 @@ import { useNavigation } from '@react-navigation/native';
 import * as area from '../../../styles/styled-components/area';
 
 // components
-import ProgressArea from '../../../components/item/ProgressArea';
+import ProgressArea from '../../../components/item/ProgressItem';
 
 // props && logic
 import { EmailRegisterAsync, EmailDupAsync } from '../../../logics/server/EmailLogin';
 
 // screens
-import RegisterScreenOne from './RegisterScreenOne';
+import RegisterScreenOne from './RegisterScreen1';
 import RegisterScreenTwo from './RegisterScreenTwo';
-import RegisterScreenThree from './RegisterScreenThree';
-import RegisterScreenFour from './RegisterScreenFour';
+import RegisterScreenThree from './RegisterScreen3';
+import RegisterScreenFour from './RegisterScreen4';
 
 function setTitle(step:number){
   if(step===1) return i18n.t("메일로 회원가입");

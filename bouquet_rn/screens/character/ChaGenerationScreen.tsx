@@ -22,12 +22,12 @@ import useCharacter, { setCharacterListAsync } from '../../logics/hooks/useChara
 import UploadImageAsync from '../../logics/server/UploadImage';
 
 // components
-import ProgressArea from '../../components/item/ProgressArea';
+import ProgressArea from '../../components/item/ProgressItem';
 // screens
-import ChaGenerationScreenOne from './ChaGenerationScreenOne';
-import ChaGenerationScreenTwo from './ChaGenerationScreenTwo';
-import ChaGenerationScreenThree from './ChaGenerationScreenThree';
-import ChaGenerationScreenFour from './ChaGenerationScreenFour';
+import ChaGenerationScreenOne from './ChaGenerationScreen1';
+import ChaGenerationScreenTwo from './ChaGenerationScreen2';
+import ChaGenerationScreenThree from './ChaGenerationScreen3';
+import ChaGenerationScreenFour from './ChaGenerationScreen4';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 function setTitle(step:number){

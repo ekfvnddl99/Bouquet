@@ -13,7 +13,7 @@ import * as elses from '../../../styles/styled-components/elses';
 import type { WelcomeProps} from '../../../utils/types/types';
 
 // components
-import ProgressArea from '../../../components/item/ProgressArea';
+import ProgressArea from '../../../components/item/ProgressItem';
 import ConditionButton from '../../../components/button/ConditionButton';
 import NameNText from '../../../components/text/NameNText';
 

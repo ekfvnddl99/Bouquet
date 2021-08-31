@@ -15,7 +15,7 @@ import GallerySvg from '../../assets/Gallery';
 import type {ChaGenerationProps, Character} from '../../utils/types/types';
 
 // components
-import ProgressArea from '../../components/item/ProgressArea';
+import ProgressArea from '../../components/item/ProgressItem';
 import ConditionButton from '../../components/button/ConditionButton';
 
 export default function ChaGenerationScreenOne({modify, onChange, characterToCreate, setCharacterToCreate} : {modify : number, onChange:any, characterToCreate: Character, setCharacterToCreate: Function}){

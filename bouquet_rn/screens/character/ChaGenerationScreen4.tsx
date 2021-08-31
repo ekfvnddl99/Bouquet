@@ -15,7 +15,7 @@ import { useRecoilState } from 'recoil';
 import { bottomBarHideState } from '../../logics/atoms';
 
 // components
-import ProgressArea from '../../components/item/ProgressArea';
+import ProgressArea from '../../components/item/ProgressItem';
 import ConditionButton from '../../components/button/ConditionButton';
 import NameNText from '../../components/text/NameNText';
 

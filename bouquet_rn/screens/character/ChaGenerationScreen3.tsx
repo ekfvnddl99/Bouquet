@@ -18,7 +18,7 @@ import * as input from '../../styles/styled-components/input';
 import type {ChaGenerationProps, Character} from '../../utils/types/types';
 
 // components
-import ProgressArea from '../../components/item/ProgressArea';
+import ProgressArea from '../../components/item/ProgressItem';
 import ConditionButton from '../../components/button/ConditionButton';
 import ConditionTextInput from '../../components/input/ConditionTextInput';
 import WarningText from '../../components/text/WarningText';
