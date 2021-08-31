@@ -88,7 +88,7 @@ function ProfileDetailStackNavigator(){
         component={PostStackNavigator}
         options={{headerShown : false}}/>
       <ProfileDetailStack.Screen 
-        name="ProfileAccount"
+        name="AccountStack"
         component={AccountStackNavigator}
         options={{headerShown : false}}/>
     </ProfileDetailStack.Navigator>
@@ -117,16 +117,16 @@ function SettingnStackNavigator(){
         component={SettingProfileScreen}
         options={{headerShown : false}}/>
       <SettingStack.Screen 
-        name="SettingAccount" 
+        name="AccountStack" 
         component={AccountStackNavigator}
         options={{headerShown : false}}/>
       <SettingStack.Screen 
-        name="SettingAccountDeletionOne" 
-        component={AccountDeletionScreenOne}
+        name="SettingAccountDeletion1" 
+        component={AccountDeletionScreen1}
         options={{headerShown : false}}/>
       <SettingStack.Screen
-        name="SettingAccountDeletionTwo" 
-        component={AccountDeletionScreenTwo}
+        name="SettingAccountDeletion2" 
+        component={AccountDeletionScreen2}
         options={{headerShown : false}}/>
     </SettingStack.Navigator>
   );
@@ -172,11 +172,11 @@ function HomeStackNavigator(){
         component={PostStackNavigator}
         options={{headerShown : false}}/>
       <HomeStack.Screen  
-        name="Floating" 
+        name="WritingStack" 
         component={WritingStackNavigator}
         options={{headerShown : false}}/>
       <HomeStack.Screen 
-        name="ChaGeneration" 
+        name="CharacterGeneration" 
         component={ChaGenerationScreen}
         options={{headerShown : false}}/>
     </HomeStack.Navigator>
@@ -201,7 +201,7 @@ function SearchStackNavigator(){
         component={PostStackNavigator}
         options={{headerShown : false}}/>
       <SearchStack.Screen 
-        name="Floating" 
+        name="WritingStack" 
         component={WritingStackNavigator}
         options={{headerShown : false}}/>
     </SearchStack.Navigator>
@@ -222,7 +222,7 @@ function NotificationStackNavigator(){
         component={ProfileDetailStackNavigator}
         options={{headerShown : false}}/>
       <NotificationStack.Screen 
-        name="ChaGeneration" 
+        name="CharacterGeneration" 
         component={ChaGenerationScreen}
         options={{headerShown : false}}/>
     </NotificationStack.Navigator>
@@ -243,15 +243,15 @@ function ProfileStackNavigator(){
         component={ProfileDetailStackNavigator}
         options={{headerShown : false}}/>
       <ProfileStack.Screen 
-        name="Setting"
+        name="SettingStack"
         component={SettingnStackNavigator}
         options={{headerShown : false}}/>
       <ProfileStack.Screen 
-        name="Floating" 
+        name="WritingStack" 
         component={WritingStackNavigator}
         options={{headerShown : false}}/>
       <ProfileStack.Screen 
-        name="ChaGeneration" 
+        name="CharacterGeneration" 
         component={ChaGenerationScreen}
         options={{headerShown : false}}/>
     </ProfileStack.Navigator>
@@ -326,8 +326,8 @@ import SettingScreen from './screens/setting/SettingScreen';
 import SettingProfileScreen from './screens/setting/SettingProfileScreen';
 import SettingAlarmScreen from './screens/setting/SettingAlarmScreen';
 import SettingAlarmCustomScreen from './screens/setting/SettingAlarmCustomScreen';
-import AccountDeletionScreenOne from './screens/setting/AccountDeletionScreen1';
-import AccountDeletionScreenTwo from './screens/setting/AccountDeletionScreen2';
+import AccountDeletionScreen1 from './screens/setting/AccountDeletionScreen1';
+import AccountDeletionScreen2 from './screens/setting/AccountDeletionScreen2';
 
 import PostWritingScreen from './screens/common/PostWritingScreen';
 import SelectTemplateScreen from './screens/common/SelectTemplateScreen';
@@ -338,7 +338,7 @@ import ChaDeletionScreen from './screens/character/ChaDeletionScreen';
 
 
 //// tab
-function CustomTabBar({ state, navigation, hide} : {state:any, navigation:any, hide:boolean}){
+function customTabBar({ state, navigation, hide} : {state:any, navigation:any, hide:boolean}){
   if (hide) {
     return null;
   }
@@ -387,18 +387,18 @@ function TabNavigator(){
   return(
     <>
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="HomeStack"
       backBehavior='none'
-      tabBar={({state, navigation})=>CustomTabBar({state, navigation, hide})}
+      tabBar={({state, navigation})=>customTabBar({state, navigation, hide})}
       lazy = {false}
       tabBarOptions={{
         showLabel : false,
         keyboardHidesTabBar: true,
       }}>
-      <Tab.Screen name="Home" component={HomeStackNavigator}/>
-      <Tab.Screen name="Search" component={SearchStackNavigator}/>
-      <Tab.Screen name="Notification" component={NotificationStackNavigator}/>
-      <Tab.Screen name="Profile" component={ProfileStackNavigator}/>
+      <Tab.Screen name="HomeStack" component={HomeStackNavigator}/>
+      <Tab.Screen name="SearchStack" component={SearchStackNavigator}/>
+      <Tab.Screen name="NotificationStack" component={NotificationStackNavigator}/>
+      <Tab.Screen name="ProfileStack" component={ProfileStackNavigator}/>
     </Tab.Navigator>
     </>
   );

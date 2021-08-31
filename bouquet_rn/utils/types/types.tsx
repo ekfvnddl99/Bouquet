@@ -2,12 +2,12 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 
 export type TabParam = {
-  Home: undefined,
-  Search: undefined,
-  Notification: undefined,
-  Profile: undefined,
+  HomeStack: undefined,
+  SearchStack: undefined,
+  NotificationStack: undefined,
+  ProfileStack: undefined,
 }
-export type TabProps = BottomTabScreenProps<TabParam, "Home">
+export type TabProps = BottomTabScreenProps<TabParam, "HomeStack">
 
 //// basics
 // writing - fab
@@ -29,7 +29,7 @@ export type ProfileDetailStackParam = {
   ProfileModification : undefined,
   ProfileDeletion : undefined,
   PostStack : undefined,
-  ProfileAccount : undefined,
+  AccountStack : undefined,
 }
 export type ProfileDetailStackProps = StackScreenProps<ProfileDetailStackParam, "ProfileDetail">;
 // setting
@@ -38,9 +38,9 @@ export type SettingStackParam = {
   SettingAlarm : undefined,
   SettingAlarmCustom : undefined,
   SettingProfile : undefined,
-  SettingAccount : undefined,
-  SettingAccountDeletionOne : undefined,
-  SettingAccountDeletionTwo : undefined,
+  AccountStack : undefined,
+  SettingAccountDeletion1 : undefined,
+  SettingAccountDeletion2 : undefined,
 }
 export type SettingProps = StackScreenProps<SettingStackParam, "Setting">;
 // character generation
@@ -62,8 +62,8 @@ export type HomeStackParam = {
   Home : undefined,
   ProfileDetailStack : undefined,
   PostStack : undefined,
-  Floating : undefined,
-  ChaGeneration : undefined,
+  WritingStack : undefined,
+  CharacterGeneration : undefined,
 }
 export type HomeProps = StackScreenProps<HomeStackParam, "Home">;
 // search
@@ -71,7 +71,7 @@ export type SearchStackParam = {
   Search : undefined,
   ProfileDetailStack : undefined,
   PostStack  :undefined,
-  Floating : undefined,
+  WritingStack : undefined,
 }
 export type SearchProps = StackScreenProps<SearchStackParam, "Search">;
 // noti
@@ -79,16 +79,16 @@ export type NotificationStackParam = {
   Notification : undefined,
   ProfileDetailStack : undefined,
   PostStack : undefined,
-  ChaGeneration : undefined,
+  CharacterGeneration : undefined,
 }
 export type NotificationProps = StackScreenProps<NotificationStackParam, "Notification">;
 // profile
 export type ProfileStackParam = {
   ProfileOverview : undefined,
   ProfileDetailStack : undefined,
-  Setting : undefined,
-  Floating : undefined,
-  ChaGeneration : undefined,
+  SettingStack : undefined,
+  WritingStack : undefined,
+  CharacterGeneration : undefined,
 }
 export type ProfileProps = StackScreenProps<ProfileStackParam, "ProfileOverview">;
 // welcome
