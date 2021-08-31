@@ -42,7 +42,7 @@ function WritingStackNavigator(){
         component={SelectTemplateScreen}
         options={{headerShown : false}}/>
       <WritingStack.Screen 
-        name="PostItem"
+        name="PostStack"
         component={PostItemStackNavigator}
         options={{headerShown : false}}/>
     </WritingStack.Navigator>
