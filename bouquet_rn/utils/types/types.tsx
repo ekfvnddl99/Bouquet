@@ -14,29 +14,29 @@ export type TabProps = BottomTabScreenProps<TabParam, "Home">
 export type WritingStackParam = {
   PostWriting : undefined,
   SelectTemplate:undefined,
-  PostItem : undefined,
+  PostStack : undefined,
 }
 export type WritingProps = StackScreenProps<WritingStackParam, "PostWriting">;
 // post item
-export type PostItemStackParam = {
+export type PostStackParam = {
   PostDetail : undefined,
-  ProfileItem : undefined,
+  ProfileStack : undefined,
 }
-export type PostItemProps = StackScreenProps<PostItemStackParam, "PostDetail">;
+export type PostStackProps = StackScreenProps<PostStackParam, "PostDetail">;
 // profile item - profileoverview, character item
-export type ProfileItemStackParam = {
+export type ProfileDetailStackParam = {
   ProfileDetail : undefined,
   ProfileModification : undefined,
   ProfileDeletion : undefined,
-  PostItem : undefined,
+  PostStack : undefined,
   ProfileAccount : undefined,
 }
-export type ProfileItemProps = StackScreenProps<ProfileItemStackParam, "ProfileDetail">;
+export type ProfileDetailStackProps = StackScreenProps<ProfileDetailStackParam, "ProfileDetail">;
 // setting
 export type SettingStackParam = {
   Setting : undefined,
   SettingAlarm : undefined,
-  SettingAlarmCustom : object,
+  SettingAlarmCustom : undefined,
   SettingProfile : undefined,
   SettingAccount : undefined,
   SettingAccountDeletionOne : undefined,

@@ -43,14 +43,14 @@ function WritingStackNavigator(){
         options={{headerShown : false}}/>
       <WritingStack.Screen 
         name="PostStack"
-        component={PostItemStackNavigator}
+        component={PostStackNavigator}
         options={{headerShown : false}}/>
     </WritingStack.Navigator>
   );
 }
 // post item
 const PostStack = createStackNavigator<Types.PostStackParam>();
-function PostItemStackNavigator(){
+function PostStackNavigator(){
   return(
     <PostStack.Navigator
       initialRouteName="PostDetail">
@@ -85,7 +85,7 @@ function ProfileDetailStackNavigator(){
         options={{headerShown : false}}/>
       <ProfileDetailStack.Screen 
         name="PostStack"
-        component={PostItemStackNavigator}
+        component={PostStackNavigator}
         options={{headerShown : false}}/>
       <ProfileDetailStack.Screen 
         name="ProfileAccount"
@@ -169,7 +169,7 @@ function HomeStackNavigator(){
         options={{headerShown : false}}/>
       <HomeStack.Screen 
         name="PostItem" 
-        component={PostItemStackNavigator}
+        component={PostStackNavigator}
         options={{headerShown : false}}/>
       <HomeStack.Screen  
         name="Floating" 
@@ -198,7 +198,7 @@ function SearchStackNavigator(){
         options={{headerShown : false}}/>
       <SearchStack.Screen 
         name="PostItem" 
-        component={PostItemStackNavigator}
+        component={PostStackNavigator}
         options={{headerShown : false}}/>
       <SearchStack.Screen 
         name="Floating" 
