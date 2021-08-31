@@ -49,49 +49,49 @@ function WritingStackNavigator(){
   );
 }
 // post item
-const PostItemStack = createStackNavigator<Types.PostItemStackParam>();
+const PostStack = createStackNavigator<Types.PostStackParam>();
 function PostItemStackNavigator(){
   return(
-    <PostItemStack.Navigator
+    <PostStack.Navigator
       initialRouteName="PostDetail">
-      <PostItemStack.Screen 
+      <PostStack.Screen 
         name="PostDetail"
         component={PostDetailScreen}
         options={{headerShown : false}}/>
-      <PostItemStack.Screen 
-        name="ProfileItem"
-        component={ProfileItemStackNavigator}
+      <PostStack.Screen 
+        name="ProfileStack"
+        component={ProfileDetailStackNavigator}
         options={{headerShown : false}}/>
-    </PostItemStack.Navigator>
+    </PostStack.Navigator>
   );
 }
 // profile item - profileoverview, character item
-const ProfileItemStack = createStackNavigator<Types.ProfileItemStackParam>();
-function ProfileItemStackNavigator(){
+const ProfileDetailStack = createStackNavigator<Types.ProfileDetailStackParam>();
+function ProfileDetailStackNavigator(){
   return(
-    <ProfileItemStack.Navigator
+    <ProfileDetailStack.Navigator
       initialRouteName="ProfileDetail">
-      <ProfileItemStack.Screen 
+      <ProfileDetailStack.Screen 
         name="ProfileDetail"
         component={ProfileDetailScreen}
         options={{headerShown : false}}/>
-      <ProfileItemStack.Screen 
+      <ProfileDetailStack.Screen 
         name="ProfileModification"
         component={ChaGenerationScreen}
         options={{headerShown : false}}/>
-      <ProfileItemStack.Screen 
+      <ProfileDetailStack.Screen 
         name="ProfileDeletion"
         component={ChaDeletionScreen}
         options={{headerShown : false}}/>
-      <ProfileItemStack.Screen 
-        name="PostItem"
+      <ProfileDetailStack.Screen 
+        name="PostStack"
         component={PostItemStackNavigator}
         options={{headerShown : false}}/>
-      <ProfileItemStack.Screen 
+      <ProfileDetailStack.Screen 
         name="ProfileAccount"
         component={AccountStackNavigator}
         options={{headerShown : false}}/>
-    </ProfileItemStack.Navigator>
+    </ProfileDetailStack.Navigator>
   );
 }
 // setting
@@ -143,7 +143,7 @@ function AccountStackNavigator(){
         options={{headerShown : false}}/>
       <AccountStack.Screen 
         name="ProfileItem"
-        component={ProfileItemStackNavigator}
+        component={ProfileDetailStackNavigator}
         options={{headerShown : false}}/>
     </AccountStack.Navigator>
   );
@@ -165,7 +165,7 @@ function HomeStackNavigator(){
         options={{headerShown : false}}/>
       <HomeStack.Screen 
         name="ProfileItem" 
-        component={ProfileItemStackNavigator}
+        component={ProfileDetailStackNavigator}
         options={{headerShown : false}}/>
       <HomeStack.Screen 
         name="PostItem" 
@@ -194,7 +194,7 @@ function SearchStackNavigator(){
         options={{headerShown : false}}/>
       <SearchStack.Screen 
         name="ProfileItem" 
-        component={ProfileItemStackNavigator}
+        component={ProfileDetailStackNavigator}
         options={{headerShown : false}}/>
       <SearchStack.Screen 
         name="PostItem" 
@@ -219,7 +219,7 @@ function NotificationStackNavigator(){
         options={{headerShown : false}}/>
       <NotificationStack.Screen 
         name="ProfileItem" 
-        component={ProfileItemStackNavigator}
+        component={ProfileDetailStackNavigator}
         options={{headerShown : false}}/>
       <NotificationStack.Screen 
         name="ChaGeneration" 
@@ -240,7 +240,7 @@ function ProfileStackNavigator(){
         options={{headerShown : false}}/>
       <ProfileStack.Screen 
         name="ProfileItem"
-        component={ProfileItemStackNavigator}
+        component={ProfileDetailStackNavigator}
         options={{headerShown : false}}/>
       <ProfileStack.Screen 
         name="Setting"
@@ -342,14 +342,14 @@ function CustomTabBar({ state, navigation, hide} : {state:any, navigation:any, h
   if (hide) {
     return null;
   }
-  else return(
+  return(
     <TabBarArea style={{height : Platform.OS==='ios' ? 60+18: 60}}>
       {state.routes.map((route : any, index: number) => {
         const isFocused = state.index === index;
 
         const setIcon=()=>{
           let icon;
-          let len = String(24);
+          const len = String(24);
           if (route.name === "Home") {
             if(isFocused) icon = <HomeFocusSvg w={len} h={len}/>;
             else icon = <HomeSvg w={len} h={len}/>;
