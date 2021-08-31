@@ -59,7 +59,7 @@ function PostStackNavigator(){
         component={PostDetailScreen}
         options={{headerShown : false}}/>
       <PostStack.Screen 
-        name="ProfileStack"
+        name="ProfileDetailStack"
         component={ProfileDetailStackNavigator}
         options={{headerShown : false}}/>
     </PostStack.Navigator>
@@ -142,7 +142,7 @@ function AccountStackNavigator(){
         component={AccountScreen}
         options={{headerShown : false}}/>
       <AccountStack.Screen 
-        name="ProfileItem"
+        name="ProfileDetailStack"
         component={ProfileDetailStackNavigator}
         options={{headerShown : false}}/>
     </AccountStack.Navigator>
@@ -164,11 +164,11 @@ function HomeStackNavigator(){
         component={HomeScreen}
         options={{headerShown : false}}/>
       <HomeStack.Screen 
-        name="ProfileItem" 
+        name="ProfileDetailStack" 
         component={ProfileDetailStackNavigator}
         options={{headerShown : false}}/>
       <HomeStack.Screen 
-        name="PostItem" 
+        name="PostStack" 
         component={PostStackNavigator}
         options={{headerShown : false}}/>
       <HomeStack.Screen  
@@ -193,11 +193,11 @@ function SearchStackNavigator(){
         component={SearchScreen}
         options={{headerShown : false}}/>
       <SearchStack.Screen 
-        name="ProfileItem" 
+        name="ProfileDetailStack" 
         component={ProfileDetailStackNavigator}
         options={{headerShown : false}}/>
       <SearchStack.Screen 
-        name="PostItem" 
+        name="PostStack" 
         component={PostStackNavigator}
         options={{headerShown : false}}/>
       <SearchStack.Screen 
@@ -218,7 +218,7 @@ function NotificationStackNavigator(){
         component={NotificationScreen}
         options={{headerShown : false}}/>
       <NotificationStack.Screen 
-        name="ProfileItem" 
+        name="ProfileDetailStack" 
         component={ProfileDetailStackNavigator}
         options={{headerShown : false}}/>
       <NotificationStack.Screen 
@@ -239,7 +239,7 @@ function ProfileStackNavigator(){
         component={ProfileOverviewScreen}
         options={{headerShown : false}}/>
       <ProfileStack.Screen 
-        name="ProfileItem"
+        name="ProfileDetailStack"
         component={ProfileDetailStackNavigator}
         options={{headerShown : false}}/>
       <ProfileStack.Screen 
