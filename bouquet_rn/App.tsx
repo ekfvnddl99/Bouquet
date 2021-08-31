@@ -11,7 +11,7 @@ import AppStack from '.'
 import SplashScreen from './screens/former/SplashScreen';
 
 async function getFonts() {
-  return await Font.loadAsync({
+  const font = await Font.loadAsync({
     'bold': require('./assets/fonts/Pretendard-Bold.otf'),
     'light': require('./assets/fonts/Pretendard-Light.otf'),
     'regular': require('./assets/fonts/Pretendard-Regular.otf'),
@@ -19,6 +19,7 @@ async function getFonts() {
     'Bbold': require('./assets/fonts/NanumBarunpenB.otf'),
     'Bregular': require('./assets/fonts/NanumBarunpenR.otf'),
   });
+  return font;
 }
 
 const translationGetters = {
