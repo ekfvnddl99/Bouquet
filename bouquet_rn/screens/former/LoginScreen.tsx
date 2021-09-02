@@ -30,7 +30,7 @@ import { EmailLoginAsync } from '../../logics/server/EmailLogin';
 import useUser from '../../logics/useUser';
 
 // components
-import LoginButton from '../../components/button/loginButton';
+import LoginButton from '../../components/button/LoginButton';
 import BackButton from '../../components/button/BackButton';
 import ConditionButton from '../../components/button/ConditionButton';
 import PrimaryTextButton from '../../components/button/PrimaryTextButton';

@@ -1,7 +1,7 @@
 import React from 'react';
-import {View, TouchableWithoutFeedback} from 'react-native';
+import { View, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import {colors} from '../../styles/colors';
+import { colors } from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as elses from '../../styles/styled-components/elses';
 import * as text from '../../styles/styled-components/text';
@@ -11,13 +11,25 @@ import { characterListState } from '../../logics/atoms';
 import useCharacterView from '../../logics/useCharacterView';
 import useUserView from '../../logics/useUserView';
 
-export default function ProfileButton({diameter, account, name, profile} : {diameter:number, account : number, name:string, profile:string}){
+type ProfileButtonProps = {
+  diameter: number;
+  isAccount: boolean;
+  name: string;
+  profile: string;
+};
+export default function ProfileButton({
+  diameter,
+  isAccount,
+  name,
+  profile,
+}: ProfileButtonProps): React.ReactElement {
   const navigation = useNavigation();
   const [characterList, setCharacterList] = useRecoilState(characterListState);
   const [characterView, setCharacterView] = useCharacterView();
   const [viewUser, setViewUser, isMe] = useUserView();
-  const goProfileDetail=()=>{
-    let characterToView: string|number = name;
+
+  function goProfileDetail() {
+    let characterToView: string | number = name;
     for (const ch of characterList) {
       if (ch.name === name) {
         characterToView = ch.id;
@@ -25,19 +37,20 @@ export default function ProfileButton({diameter, account, name, profile} : {diam
       }
     }
     setCharacterView(characterToView);
-    navigation.navigate("ProfileItem");
+    navigation.navigate('ProfileItem');
   }
-  const goAccount=()=>{
-    setViewUser({name: name, profileImg: profile});
+  function goAccount() {
+    setViewUser({ name: name, profileImg: profile });
     navigation.navigate('ProfileAccount');
   }
-  return(
-    <TouchableWithoutFeedback onPress={account===1 ? goAccount : goProfileDetail}>
+
+  return (
+    <TouchableWithoutFeedback onPress={isAccount ? goAccount : goProfileDetail}>
       <area.RowArea>
-        <elses.CircleImg diameter={diameter} source={{uri:profile}}/>
-        <View style={{marginLeft:8}}/>
+        <elses.CircleImg diameter={diameter} source={{ uri: profile }} />
+        <View style={{ marginLeft: 8 }} />
         <text.Body2B color={colors.black}>{name}</text.Body2B>
-    </area.RowArea>
+      </area.RowArea>
     </TouchableWithoutFeedback>
   );
 }

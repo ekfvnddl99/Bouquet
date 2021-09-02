@@ -8,17 +8,18 @@ import * as elses from '../../styles/styled-components/elses';
 import { Character, MiniCharacter } from '../../utils/types/types';
 import useCharacterView from '../../logics/useCharacterView';
 
-type CharacterItemProps = {
-  character: Character;
+type SearchCharacterItemProps = {
+  press: number;
+  character: MiniCharacter;
+  id?: number;
 };
-export default function CharacterItem({
+export default function SearchCharacterItem({
+  press,
   character,
-}: CharacterItemProps): React.ReactElement {
+  id,
+}: SearchCharacterItemProps): React.ReactElement {
   const navigation = useNavigation();
-  const [viewCharacter, setViewCharacter] = useCharacterView();
   function goProfileDetail() {
-    if (character.id !== -1) setViewCharacter(character.id);
-    else setViewCharacter(character.name);
     navigation.navigate('ProfileItem');
   }
 
@@ -30,10 +31,9 @@ export default function CharacterItem({
       paddingH={18}
       paddingV={18}
       style={{ alignItems: 'center', marginRight: 10 }}
-      activeOpacity={1}
-      onPress={() => goProfileDetail}
+      onPress={() => (press === id ? goProfileDetail : {})}
     >
-      <elses.CircleImg diameter={100} source={{ uri: character.profileImg }} />
+      <elses.CircleImg diameter={100} source={{ uri: character.profile_img }} />
       <View style={{ marginVertical: 8 }}>
         <text.Body2B color={colors.black}>{character.name}</text.Body2B>
       </View>

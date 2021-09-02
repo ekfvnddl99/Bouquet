@@ -60,12 +60,12 @@ export const RectangleImg = styled.Image`
 `
 
 interface TagProps{
-  color : string,
+  backgroundColor : string,
 }
 export const Tag = styled.View`
   height:25;
   border-radius:10;
-  background-color:${(props : TagProps)=> props.color};
+  background-color:${(props : TagProps)=> props.backgroundColor};
   margin-right:4;
   padding-horizontal:8;
   padding-vertical:4;

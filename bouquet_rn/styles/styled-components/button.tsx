@@ -1,89 +1,74 @@
 import styled from 'styled-components/native';
 import {colors} from '../colors';
 
-interface BtnProps{
-  height : number|undefined,
-  color : string,
+interface ButtonProps{
+  height? : number|undefined,
+  backgroundColor? : string,
+  borderColor? : string,
   paddingH:number,
   paddingV:number,
 }
 export const ConditionButton = styled.TouchableOpacity`
-  height:${(props : BtnProps)=>props.height};
+  height:${(props : ButtonProps)=>props.height};
   border-width:1;
-  border-color:${(props : BtnProps)=>props.color};
+  border-color:${(props : ButtonProps)=>props.borderColor};
+  background-color:${(props : ButtonProps)=>props.backgroundColor};
   border-radius:25;
   align-items:center;
   justify-content:center;
-  padding-horizontal: ${(props : BtnProps)=>props.paddingH};
-  padding-vertical: ${(props : BtnProps)=>props.paddingV};
-`
-
-interface LineBtnProps{
-  color : string,
-  paddingH:number,
-  paddingV:number,
-}
-
-export const LineButton = styled.TouchableOpacity`
-  border-width:1;
-  border-color:${(props : LineBtnProps)=>props.color};
-  border-radius:25;
-  align-items:center;
-  justify-content:center;
-  padding-horizontal: ${(props : LineBtnProps)=>props.paddingH};
-  padding-vertical: ${(props : LineBtnProps)=>props.paddingV};
+  padding-horizontal: ${(props : ButtonProps)=>props.paddingH};
+  padding-vertical: ${(props : ButtonProps)=>props.paddingV};
 `
 
 export const BackgroundButton = styled.TouchableOpacity`
-  background-color:${(props : BtnProps)=>props.color};
-  height:${(props : BtnProps)=>props.height};
+  background-color:${(props : ButtonProps)=>props.backgroundColor};
+  height:${(props : ButtonProps)=>props.height};
   border-radius:25;
   align-items:center;
   justify-content:center;
-  padding-horizontal: ${(props : BtnProps)=>props.paddingH};
-  padding-vertical: ${(props : BtnProps)=>props.paddingV};
+  padding-horizontal: ${(props : ButtonProps)=>props.paddingH};
+  padding-vertical: ${(props : ButtonProps)=>props.paddingV};
 `
 
-export const SocialButton =styled.TouchableOpacity`
-  background-color:${colors.white};
-  height:45;
+export const LineButton = styled.TouchableOpacity`
+  border-width:1;
+  border-color:${(props : ButtonProps)=>props.borderColor};
+  background-color:${(props : ButtonProps)=>props.backgroundColor};
   border-radius:25;
   align-items:center;
   justify-content:center;
-  padding-horizontal:18;
-  margin-top:10;
-  flex-direction: row;
-  width: 100%;
+  padding-horizontal: ${(props : ButtonProps)=>props.paddingH};
+  padding-vertical: ${(props : ButtonProps)=>props.paddingV};
 `
 
-interface MiniListBtnProps{
+interface MiniListButtonProps{
   height:number,
-  color : string,
+  backgroundColor : string,
   paddingH:number,
   paddingV:number,
   isWidth : boolean,
 }
 export const MiniListButton = styled.TouchableOpacity`
   flex:1;
-  ${(props : MiniListBtnProps)=>props.isWidth ? `width: 150;` : ''};
-  height: ${(props : MiniListBtnProps)=>props.height};
-  background-color: ${(props : MiniListBtnProps)=>props.color};
+  ${(props : MiniListButtonProps)=>props.isWidth ? `width: 150;` : ''};
+  height: ${(props : MiniListButtonProps)=>props.height};
+  background-color: ${(props : MiniListButtonProps)=>props.backgroundColor};
   border-radius: 10;
-  padding-horizontal: ${(props : MiniListBtnProps)=>props.paddingH};
-  padding-vertical: ${(props : MiniListBtnProps)=>props.paddingV};
+  padding-horizontal: ${(props : MiniListButtonProps)=>props.paddingH};
+  padding-vertical: ${(props : MiniListButtonProps)=>props.paddingV};
 `
-interface BigListBtnProps{
-  color : string,
+interface BigListButtonProps{
+  backgroundColor : string,
   paddingH:number,
   paddingV:number,
 }
 export const BigListButton = styled.TouchableOpacity`
   flex:1;
   width:100%;
-  background-color: ${(props : BigListBtnProps)=>props.color};
+  background-color: ${(props : BigListButtonProps)=>props.backgroundColor};
   border-radius: 10;
-  padding-horizontal:${(props : BigListBtnProps)=>props.paddingH};
-  padding-vertical: ${(props : BigListBtnProps)=>props.paddingV};
+  padding-horizontal:${(props : BigListButtonProps)=>props.paddingH};
+  padding-vertical: ${(props : BigListButtonProps)=>props.paddingV};
   margin-bottom: 10;
 `
 
@@ -98,11 +83,11 @@ export const NotificationButton = styled.TouchableOpacity`
   margin-bottom: 10;
 `
 
-interface colorProps{
-  color:string
+interface ButtonColorProps{
+  backgroundColor:string
 }
 export const TagModifyButton = styled.TouchableOpacity`
-  background-color: ${(props:colorProps)=> props.color};
+  background-color: ${(props:ButtonColorProps)=> props.backgroundColor};
   border-radius: 10;
   margin-right: 4;
   margin-bottom : 2;
@@ -110,6 +95,17 @@ export const TagModifyButton = styled.TouchableOpacity`
   align-items:center;
   padding-left: 8;
   padding-vertical: 5;
+`
+
+export const SunButton = styled.TouchableOpacity`
+  flex-direction:row;
+  border-width:1;
+  border-color:${colors.primary};
+  border-radius:10;
+  background-color:${(props:ButtonColorProps)=> props.backgroundColor};
+  align-items:center;
+  padding-vertical:4;
+  padding-horizontal:8;
 `
 
 export const AddTemplate = styled.TouchableOpacity`
@@ -136,17 +132,6 @@ export const NoHeightButton = styled.TouchableOpacity`
   margin-bottom: ${(props:noHeightProps)=> props.marBottom};
   padding-horizontal: ${(props:noHeightProps)=> props.paddingH};
   padding-vertical:${(props:noHeightProps)=> props.paddingV};
-`
-
-export const SunButton = styled.TouchableOpacity`
-  flex-direction:row;
-  border-width:1;
-  border-color:${colors.primary};
-  border-radius:10;
-  background-color:${(props:colorProps)=> props.color};
-  align-items:center;
-  padding-vertical:4;
-  padding-horizontal:8;
 `
 
 export const ProfileDetailButton = styled.TouchableOpacity`

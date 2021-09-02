@@ -2,15 +2,32 @@ import React, {useState} from 'react';
 import { colors } from '../../styles/colors';
 import * as text from '../../styles/styled-components/text';
 import * as button from '../../styles/styled-components/button';
+import * as type from '../type';
 
-type ConditionProps={active : boolean, press: any, content : string, paddingH:number, paddingV:number, height:number}
-export default function ConditionButton({active, press, content, paddingH, paddingV, height} : ConditionProps){
-  const[color, setColor]=useState('transparent');
+type ConditionButtonProps={
+  isActive : boolean, 
+  press: Function, 
+  content : string, 
+  paddingH:number, 
+  paddingV:number, 
+  height:number
+}
+export default function ConditionButton({isActive, press, content, paddingH, paddingV, height} : ConditionButtonProps): React.ReactElement{
+  const[backgroundColor, setBackgroundColor]=useState('transparent');
   return(
-    <button.ConditionButton onPress={press} height={height} color={active===true ? colors.primary : colors.gray2} paddingH={paddingH} paddingV={paddingV} activeOpacity={1}
-    onPressIn={()=>active===true ? setColor(colors.alpha20_primary) : null} onPressOut={()=>active===true ? setColor('transparent') : null} style={{backgroundColor:color}}>
-      {height===45 ? <text.Button2B color={active===true ? colors.primary : colors.gray5}>{content}</text.Button2B>
-      : <text.Button3 color={active===true ? colors.primary : colors.gray5}>{content}</text.Button3>}
+    <button.ConditionButton 
+      onPress={press} 
+      height={height} 
+      backgroundColor={backgroundColor}
+      borderColor={isActive ? colors.primary : colors.gray2} 
+      paddingH={paddingH} 
+      paddingV={paddingV} 
+      activeOpacity={1}
+      onPressIn={()=>isActive ? setBackgroundColor(colors.alpha20_primary) : null} 
+      onPressOut={()=>isActive ? setBackgroundColor('transparent') : null}>
+      {height===45 ? 
+      <text.Button2B color={isActive ? colors.primary : colors.gray5}>{content}</text.Button2B>
+      : <text.Button3 color={isActive ? colors.primary : colors.gray5}>{content}</text.Button3>}
     </button.ConditionButton>
   );
 }

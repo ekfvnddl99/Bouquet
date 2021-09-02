@@ -5,20 +5,20 @@ import * as elses from '../../styles/styled-components/elses';
 import {colors} from '../../styles/colors';
 
 // icons
-import WriteWhiteSvg from '../../assets/WriteWhite';
+import Icon from '../../assets/Icon';
 
-// props & logic
-import type {WritingProps} from '../../utils/types/types';
 
-export default function FloatingButton(){
+export default function FloatingButton(): React.ReactElement{
   const navigation = useNavigation();
-  const goPostWriting=()=>{
+
+  function goPostWriting(){
     navigation.navigate("Floating");
   }
+
   return(
-    <TouchableOpacity style={styles.floating} onPress={goPostWriting}>
+    <TouchableOpacity style={styles.floating} onPress={()=>goPostWriting}>
       <elses.Circle diameter={50} style={{backgroundColor:colors.primary}}>
-        <WriteWhiteSvg w='24' h='24'/>
+        <Icon icon="writeWhite" size={24}/>
       </elses.Circle>
     </TouchableOpacity>
   );
@@ -26,8 +26,8 @@ export default function FloatingButton(){
 
 const styles=StyleSheet.create({
   floating:{
-    position:'absolute',
     bottom:20,
+    position:'absolute',
     right:20,
   }
 })

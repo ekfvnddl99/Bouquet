@@ -1,5 +1,5 @@
-import React, {Component, useState, useRef, useEffect} from 'react';
-import { View, Platform, TouchableOpacity, ScrollView} from 'react-native';
+import React, { Component, useState, useRef, useEffect } from 'react';
+import { View, Platform, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { TabBarArea } from './styles/styled-components/area';
 import { useRecoilState } from 'recoil';
@@ -29,285 +29,312 @@ import useCharacter from './logics/hooks/useCharacter';
 //// basics
 // writing - fab
 const WritingStack = createStackNavigator<Types.WritingStackParam>();
-function WritingStackNavigator(){
-  return(
-    <WritingStack.Navigator
-      initialRouteName="PostWriting">
-      <WritingStack.Screen 
+function WritingStackNavigator() {
+  return (
+    <WritingStack.Navigator initialRouteName="PostWriting">
+      <WritingStack.Screen
         name="PostWriting"
         component={PostWritingScreen}
-        options={{headerShown : false}}/>
-      <WritingStack.Screen 
+        options={{ headerShown: false }}
+      />
+      <WritingStack.Screen
         name="SelectTemplate"
         component={SelectTemplateScreen}
-        options={{headerShown : false}}/>
-      <WritingStack.Screen 
+        options={{ headerShown: false }}
+      />
+      <WritingStack.Screen
         name="PostStack"
         component={PostStackNavigator}
-        options={{headerShown : false}}/>
+        options={{ headerShown: false }}
+      />
     </WritingStack.Navigator>
   );
 }
 // post item
 const PostStack = createStackNavigator<Types.PostStackParam>();
-function PostStackNavigator(){
-  return(
-    <PostStack.Navigator
-      initialRouteName="PostDetail">
-      <PostStack.Screen 
+function PostStackNavigator() {
+  return (
+    <PostStack.Navigator initialRouteName="PostDetail">
+      <PostStack.Screen
         name="PostDetail"
         component={PostDetailScreen}
-        options={{headerShown : false}}/>
-      <PostStack.Screen 
+        options={{ headerShown: false }}
+      />
+      <PostStack.Screen
         name="ProfileDetailStack"
         component={ProfileDetailStackNavigator}
-        options={{headerShown : false}}/>
+        options={{ headerShown: false }}
+      />
     </PostStack.Navigator>
   );
 }
 // profile item - profileoverview, character item
-const ProfileDetailStack = createStackNavigator<Types.ProfileDetailStackParam>();
-function ProfileDetailStackNavigator(){
-  return(
-    <ProfileDetailStack.Navigator
-      initialRouteName="ProfileDetail">
-      <ProfileDetailStack.Screen 
+const ProfileDetailStack =
+  createStackNavigator<Types.ProfileDetailStackParam>();
+function ProfileDetailStackNavigator() {
+  return (
+    <ProfileDetailStack.Navigator initialRouteName="ProfileDetail">
+      <ProfileDetailStack.Screen
         name="ProfileDetail"
         component={ProfileDetailScreen}
-        options={{headerShown : false}}/>
-      <ProfileDetailStack.Screen 
+        options={{ headerShown: false }}
+      />
+      <ProfileDetailStack.Screen
         name="ProfileModification"
         component={ChaGenerationScreen}
-        options={{headerShown : false}}/>
-      <ProfileDetailStack.Screen 
+        options={{ headerShown: false }}
+      />
+      <ProfileDetailStack.Screen
         name="ProfileDeletion"
         component={ChaDeletionScreen}
-        options={{headerShown : false}}/>
-      <ProfileDetailStack.Screen 
+        options={{ headerShown: false }}
+      />
+      <ProfileDetailStack.Screen
         name="PostStack"
         component={PostStackNavigator}
-        options={{headerShown : false}}/>
-      <ProfileDetailStack.Screen 
+        options={{ headerShown: false }}
+      />
+      <ProfileDetailStack.Screen
         name="AccountStack"
         component={AccountStackNavigator}
-        options={{headerShown : false}}/>
+        options={{ headerShown: false }}
+      />
     </ProfileDetailStack.Navigator>
   );
 }
 // setting
 const SettingStack = createStackNavigator<Types.SettingStackParam>();
-function SettingnStackNavigator(){
-  return(
-    <SettingStack.Navigator
-      initialRouteName="Setting">
-      <SettingStack.Screen 
-        name="Setting" 
-        component={SettingScreen}
-        options={{headerShown : false}}/>
-      <SettingStack.Screen 
-        name="SettingAlarm" 
-        component={SettingAlarmScreen}
-        options={{headerShown : false}}/>
-      <SettingStack.Screen 
-        name="SettingAlarmCustom" 
-        component={SettingAlarmCustomScreen}
-        options={{headerShown : false}}/>
-      <SettingStack.Screen 
-        name="SettingProfile" 
-        component={SettingProfileScreen}
-        options={{headerShown : false}}/>
-      <SettingStack.Screen 
-        name="AccountStack" 
-        component={AccountStackNavigator}
-        options={{headerShown : false}}/>
-      <SettingStack.Screen 
-        name="SettingAccountDeletion1" 
-        component={AccountDeletionScreen1}
-        options={{headerShown : false}}/>
+function SettingnStackNavigator() {
+  return (
+    <SettingStack.Navigator initialRouteName="Setting">
       <SettingStack.Screen
-        name="SettingAccountDeletion2" 
+        name="Setting"
+        component={SettingScreen}
+        options={{ headerShown: false }}
+      />
+      <SettingStack.Screen
+        name="SettingAlarm"
+        component={SettingAlarmScreen}
+        options={{ headerShown: false }}
+      />
+      <SettingStack.Screen
+        name="SettingAlarmCustom"
+        component={SettingAlarmCustomScreen}
+        options={{ headerShown: false }}
+      />
+      <SettingStack.Screen
+        name="SettingProfile"
+        component={SettingProfileScreen}
+        options={{ headerShown: false }}
+      />
+      <SettingStack.Screen
+        name="AccountStack"
+        component={AccountStackNavigator}
+        options={{ headerShown: false }}
+      />
+      <SettingStack.Screen
+        name="SettingAccountDeletion1"
+        component={AccountDeletionScreen1}
+        options={{ headerShown: false }}
+      />
+      <SettingStack.Screen
+        name="SettingAccountDeletion2"
         component={AccountDeletionScreen2}
-        options={{headerShown : false}}/>
+        options={{ headerShown: false }}
+      />
     </SettingStack.Navigator>
   );
 }
 // account
 const AccountStack = createStackNavigator<Types.AccountStackParam>();
-function AccountStackNavigator(){
-  return(
-    <AccountStack.Navigator
-      initialRouteName="Account">
-      <AccountStack.Screen 
+function AccountStackNavigator() {
+  return (
+    <AccountStack.Navigator initialRouteName="Account">
+      <AccountStack.Screen
         name="Account"
         component={AccountScreen}
-        options={{headerShown : false}}/>
-      <AccountStack.Screen 
+        options={{ headerShown: false }}
+      />
+      <AccountStack.Screen
         name="ProfileDetailStack"
         component={ProfileDetailStackNavigator}
-        options={{headerShown : false}}/>
+        options={{ headerShown: false }}
+      />
     </AccountStack.Navigator>
   );
 }
 
-
-
-
 //// tab screens
 // home
 const HomeStack = createStackNavigator<Types.HomeStackParam>();
-function HomeStackNavigator(){
-  return(
-    <HomeStack.Navigator
-      initialRouteName="Home">
-      <HomeStack.Screen 
-        name="Home" 
+function HomeStackNavigator() {
+  return (
+    <HomeStack.Navigator initialRouteName="Home">
+      <HomeStack.Screen
+        name="Home"
         component={HomeScreen}
-        options={{headerShown : false}}/>
-      <HomeStack.Screen 
-        name="ProfileDetailStack" 
+        options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
+        name="ProfileDetailStack"
         component={ProfileDetailStackNavigator}
-        options={{headerShown : false}}/>
-      <HomeStack.Screen 
-        name="PostStack" 
+        options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
+        name="PostStack"
         component={PostStackNavigator}
-        options={{headerShown : false}}/>
-      <HomeStack.Screen  
-        name="WritingStack" 
+        options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
+        name="WritingStack"
         component={WritingStackNavigator}
-        options={{headerShown : false}}/>
-      <HomeStack.Screen 
-        name="CharacterGeneration" 
+        options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
+        name="CharacterGeneration"
         component={ChaGenerationScreen}
-        options={{headerShown : false}}/>
+        options={{ headerShown: false }}
+      />
     </HomeStack.Navigator>
   );
 }
 // search
 const SearchStack = createStackNavigator<Types.SearchStackParam>();
-function SearchStackNavigator(){
-  return(
-    <SearchStack.Navigator
-      initialRouteName="Search">
-      <SearchStack.Screen 
-        name="Search" 
+function SearchStackNavigator() {
+  return (
+    <SearchStack.Navigator initialRouteName="Search">
+      <SearchStack.Screen
+        name="Search"
         component={SearchScreen}
-        options={{headerShown : false}}/>
-      <SearchStack.Screen 
-        name="ProfileDetailStack" 
+        options={{ headerShown: false }}
+      />
+      <SearchStack.Screen
+        name="ProfileDetailStack"
         component={ProfileDetailStackNavigator}
-        options={{headerShown : false}}/>
-      <SearchStack.Screen 
-        name="PostStack" 
+        options={{ headerShown: false }}
+      />
+      <SearchStack.Screen
+        name="PostStack"
         component={PostStackNavigator}
-        options={{headerShown : false}}/>
-      <SearchStack.Screen 
-        name="WritingStack" 
+        options={{ headerShown: false }}
+      />
+      <SearchStack.Screen
+        name="WritingStack"
         component={WritingStackNavigator}
-        options={{headerShown : false}}/>
+        options={{ headerShown: false }}
+      />
     </SearchStack.Navigator>
   );
 }
 // noti
 const NotificationStack = createStackNavigator<Types.NotificationStackParam>();
-function NotificationStackNavigator(){
-  return(
-    <NotificationStack.Navigator
-      initialRouteName="Notification">
-      <NotificationStack.Screen 
-        name="Notification" 
+function NotificationStackNavigator() {
+  return (
+    <NotificationStack.Navigator initialRouteName="Notification">
+      <NotificationStack.Screen
+        name="Notification"
         component={NotificationScreen}
-        options={{headerShown : false}}/>
-      <NotificationStack.Screen 
-        name="ProfileDetailStack" 
+        options={{ headerShown: false }}
+      />
+      <NotificationStack.Screen
+        name="ProfileDetailStack"
         component={ProfileDetailStackNavigator}
-        options={{headerShown : false}}/>
-      <NotificationStack.Screen 
+        options={{ headerShown: false }}
+      />
+      {/* <NotificationStack.Screen 
         name="CharacterGeneration" 
         component={ChaGenerationScreen}
-        options={{headerShown : false}}/>
+        options={{headerShown : false}}/> */}
     </NotificationStack.Navigator>
   );
 }
 // profile
 const ProfileStack = createStackNavigator<Types.ProfileStackParam>();
-function ProfileStackNavigator(){
-  return(
-    <ProfileStack.Navigator
-      initialRouteName="ProfileOverview">
-      <ProfileStack.Screen 
+function ProfileStackNavigator() {
+  return (
+    <ProfileStack.Navigator initialRouteName="ProfileOverview">
+      <ProfileStack.Screen
         name="ProfileOverview"
         component={ProfileOverviewScreen}
-        options={{headerShown : false}}/>
-      <ProfileStack.Screen 
+        options={{ headerShown: false }}
+      />
+      <ProfileStack.Screen
         name="ProfileDetailStack"
         component={ProfileDetailStackNavigator}
-        options={{headerShown : false}}/>
-      <ProfileStack.Screen 
+        options={{ headerShown: false }}
+      />
+      <ProfileStack.Screen
         name="SettingStack"
         component={SettingnStackNavigator}
-        options={{headerShown : false}}/>
-      <ProfileStack.Screen 
-        name="WritingStack" 
+        options={{ headerShown: false }}
+      />
+      <ProfileStack.Screen
+        name="WritingStack"
         component={WritingStackNavigator}
-        options={{headerShown : false}}/>
-      <ProfileStack.Screen 
-        name="CharacterGeneration" 
+        options={{ headerShown: false }}
+      />
+      <ProfileStack.Screen
+        name="CharacterGeneration"
         component={ChaGenerationScreen}
-        options={{headerShown : false}}/>
+        options={{ headerShown: false }}
+      />
     </ProfileStack.Navigator>
   );
 }
 
-
 const WelcomeStack = createStackNavigator<Types.WelcomeStackParam>();
-function WelcomeStackNavigator(){
-  return(
-    <WelcomeStack.Navigator
-    initialRouteName="Welcome">
+function WelcomeStackNavigator() {
+  return (
+    <WelcomeStack.Navigator initialRouteName="Welcome">
       <WelcomeStack.Screen
         name="Welcome"
         component={WelcomeScreen}
-        options={{headerShown: false}}/>
+        options={{ headerShown: false }}
+      />
       <WelcomeStack.Screen
         name="Login"
         component={LoginScreen}
-        options={{headerShown: false}}/>
+        options={{ headerShown: false }}
+      />
       <WelcomeStack.Screen
         name="Register"
         component={RegisterScreen}
-        options={{headerShown : false}}/>
+        options={{ headerShown: false }}
+      />
       <WelcomeStack.Screen
         name="Tab"
         component={TabNavigator}
-        options={{headerShown : false}}/>
+        options={{ headerShown: false }}
+      />
     </WelcomeStack.Navigator>
   );
 }
 
-export default function AppStack(){
-  const[splash, setSplash]=useState(true);
+export default function AppStack() {
+  const [splash, setSplash] = useState(true);
   const [user, setUser] = useUser();
   const [character, setCharacter] = useCharacter();
 
-  useEffect(()=>{
-    setTimeout( () => {
+  useEffect(() => {
+    setTimeout(() => {
       setSplash(false);
-    },2000);
-  })
-  return(
+    }, 2000);
+  });
+
+  return (
     <SafeAreaProvider>
       <NavigationContainer>
-        {splash===true ? <SplashScreen/> :
-        user.isLogined ?
-        <TabNavigator />
-        :
-        <WelcomeStackNavigator/>
-        }
+        {splash === true ? (
+          <SplashScreen />
+        ) : user.isLogined ? (
+          <TabNavigator />
+        ) : (
+          <WelcomeStackNavigator />
+        )}
       </NavigationContainer>
     </SafeAreaProvider>
-  )
+  );
 }
-
 
 // screens
 import SplashScreen from './SplashScreen';
@@ -336,70 +363,84 @@ import PostDetailScreen from './screens/common/PostDetailScreen';
 import ChaGenerationScreen from './screens/character/ChaGenerationScreen';
 import ChaDeletionScreen from './screens/character/ChaDeletionScreen';
 
-
 //// tab
-function customTabBar({ state, navigation, hide} : {state:any, navigation:any, hide:boolean}){
+function customTabBar({
+  state,
+  navigation,
+  hide,
+}: {
+  state: any;
+  navigation: any;
+  hide: boolean;
+}) {
   if (hide) {
     return null;
   }
-  return(
-    <TabBarArea style={{height : Platform.OS==='ios' ? 60+18: 60}}>
-      {state.routes.map((route : any, index: number) => {
+  return (
+    <TabBarArea style={{ height: Platform.OS === 'ios' ? 60 + 18 : 60 }}>
+      {state.routes.map((route: any, index: number) => {
         const isFocused = state.index === index;
 
-        const setIcon=()=>{
+        const setIcon = () => {
           let icon;
           const len = String(24);
-          if (route.name === "Home") {
-            if(isFocused) icon = <HomeFocusSvg w={len} h={len}/>;
-            else icon = <HomeSvg w={len} h={len}/>;
-          } else if (route.name === "Search") {
-            if(isFocused) icon = <SearchFocusSvg w={len} h={len}/>;
-            else icon = <SearchSvg w={len} h={len}/>;
-          }else if (route.name === "Crew") {
-            if(isFocused) icon = <CrewFocusSvg w={len} h={len}/>;
-            else icon = <CrewSvg w={len} h={len}/>;
-          }else if (route.name === "Notification") {
-            if(isFocused) icon = <NotificationFocusSvg w={len} h={len}/>;
-            else icon = <NotificationSvg w={len} h={len}/>;
-          }else if (route.name === "Profile") {
-            if(isFocused) icon = <ProfileFocusSvg w={len} h={len}/>;
-            else icon = <ProfileSvg w={len} h={len}/>;
+          if (route.name === 'Home') {
+            if (isFocused) icon = <HomeFocusSvg w={len} h={len} />;
+            else icon = <HomeSvg w={len} h={len} />;
+          } else if (route.name === 'Search') {
+            if (isFocused) icon = <SearchFocusSvg w={len} h={len} />;
+            else icon = <SearchSvg w={len} h={len} />;
+          } else if (route.name === 'Crew') {
+            if (isFocused) icon = <CrewFocusSvg w={len} h={len} />;
+            else icon = <CrewSvg w={len} h={len} />;
+          } else if (route.name === 'Notification') {
+            if (isFocused) icon = <NotificationFocusSvg w={len} h={len} />;
+            else icon = <NotificationSvg w={len} h={len} />;
+          } else if (route.name === 'Profile') {
+            if (isFocused) icon = <ProfileFocusSvg w={len} h={len} />;
+            else icon = <ProfileSvg w={len} h={len} />;
           }
 
           // You can return any component that you like here!
           return <View>{icon}</View>;
-        }
+        };
         return (
-          <TouchableOpacity 
-              onPress={()=>navigation.navigate(route.name)}
-              style={{paddingHorizontal:20}}>
-              {setIcon()}
-            </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate(route.name)}
+            style={{ paddingHorizontal: 20 }}
+          >
+            {setIcon()}
+          </TouchableOpacity>
         );
       })}
     </TabBarArea>
   );
 }
 const Tab = createBottomTabNavigator<Types.TabParam>();
-function TabNavigator(){
+function TabNavigator() {
   const [hide, setHide] = useRecoilState(bottomBarHideState);
-  return(
+  return (
     <>
-    <Tab.Navigator
-      initialRouteName="HomeStack"
-      backBehavior='none'
-      tabBar={({state, navigation})=>customTabBar({state, navigation, hide})}
-      lazy = {false}
-      tabBarOptions={{
-        showLabel : false,
-        keyboardHidesTabBar: true,
-      }}>
-      <Tab.Screen name="HomeStack" component={HomeStackNavigator}/>
-      <Tab.Screen name="SearchStack" component={SearchStackNavigator}/>
-      <Tab.Screen name="NotificationStack" component={NotificationStackNavigator}/>
-      <Tab.Screen name="ProfileStack" component={ProfileStackNavigator}/>
-    </Tab.Navigator>
+      <Tab.Navigator
+        initialRouteName="HomeStack"
+        backBehavior="none"
+        tabBar={({ state, navigation }) =>
+          customTabBar({ state, navigation, hide })
+        }
+        lazy={false}
+        tabBarOptions={{
+          showLabel: false,
+          keyboardHidesTabBar: true,
+        }}
+      >
+        <Tab.Screen name="HomeStack" component={HomeStackNavigator} />
+        <Tab.Screen name="SearchStack" component={SearchStackNavigator} />
+        <Tab.Screen
+          name="NotificationStack"
+          component={NotificationStackNavigator}
+        />
+        <Tab.Screen name="ProfileStack" component={ProfileStackNavigator} />
+      </Tab.Navigator>
     </>
   );
 }

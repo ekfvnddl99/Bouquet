@@ -2,10 +2,10 @@ import React from "react";
 import { SvgXml } from "react-native-svg";
 import { iconList, iconType } from './IconList';
 
-function svg<T extends keyof iconType>({ icon, size } : { icon: T, size: number }) {
+function Svg<T extends keyof iconType>({ icon, size } : { icon: T, size: number }): JSX.Element {
   const xmlString = iconList[icon];
-  const Svg = () => <SvgXml xml={xmlString} width={size} height={size}/>;
-  return <Svg/>;
+  const SvgTag = () => <SvgXml xml={xmlString} width={size} height={size}/>;
+  return <SvgTag/>;
 };
 
-export default svg;
+export default Svg;
