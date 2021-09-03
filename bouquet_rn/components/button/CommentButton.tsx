@@ -1,22 +1,33 @@
 import React from 'react';
-import {colors} from '../../styles/colors';
+
+// styles
+import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
 
-// icons
-import Icon from '../../assets/Icon';
+// assets
+import Svg from '../../assets/Icon';
 
-// props & logic
+// logics
 import * as cal from '../../logics/non-server/Calculation';
 
-type CommentButtonProps={
-  commentNum: number,
-}
-export default function CommentButton({commentNum} : CommentButtonProps): React.ReactElement{
-  return(
+/**
+ * 아 버튼은 아니고 그냥 (댓글 아이콘, 댓글 개수) 컴포넌트
+ *
+ * @param commentNum 댓글 개수
+ */
+type CommentButtonProps = {
+  commentNum: number;
+};
+export default function CommentButton({
+  commentNum,
+}: CommentButtonProps): React.ReactElement {
+  return (
     <area.RowArea>
-      <Icon icon="comment" size={20}/>
-      <text.Body3 color={colors.primary}>{cal.numName(commentNum)}</text.Body3>
+      <Svg icon="comment" size={20} />
+      <text.Body3 textColor={colors.primary}>
+        {cal.numName(commentNum)}
+      </text.Body3>
     </area.RowArea>
   );
 }

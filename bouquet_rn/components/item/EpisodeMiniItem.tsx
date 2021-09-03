@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { colors } from '../../styles/colors';
+import colors from '../../styles/colors';
 import * as button from '../../styles/styled-components/button';
 import * as text from '../../styles/styled-components/text';
 import * as elses from '../../styles/styled-components/elses';
@@ -36,11 +36,11 @@ export default function EpisodeMiniItem({
         />
       </View>
       <View style={{ marginTop: 16, marginBottom: 8 }}>
-        <text.Subtitle3 color={colors.black} numberOfLines={2}>
+        <text.Subtitle3 textColor={colors.black} numberOfLines={2}>
           asdf
         </text.Subtitle3>
       </View>
-      <ProfileButton diameter={20} isAccount={false} />
+      <ProfileButton diameter={20} isAccount={false} name="" profile="" />
     </button.MiniListButton>
   );
 }

@@ -1,29 +1,37 @@
-import React, { Component, useState, useMemo, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import i18n from 'i18n-js';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { useRecoilState } from 'recoil';
+import { useNavigation } from '@react-navigation/native';
 
-import { colors } from '../../styles/colors';
-import * as area from '../../styles/styled-components/area';
-import * as text from '../../styles/styled-components/text';
-import * as button from '../../styles/styled-components/button';
+// styles
+import colors from '../../styles/colors';
 import * as elses from '../../styles/styled-components/elses';
+import * as button from '../../styles/styled-components/button';
+import * as text from '../../styles/styled-components/text';
+import * as area from '../../styles/styled-components/area';
 
-// props & logic
-import * as cal from '../../logics/non-server/Calculation';
-import { Character } from '../../utils/types/types';
-import useCharacterView from '../../logics/useCharacterView';
+// logics
+import useCharacterView from '../../logics/hooks/useCharacterView';
 import { followCharacterAsync } from '../../logics/server/Character';
-import useUser from '../../logics/useUser';
-import { characterListState } from '../../logics/atoms';
+import useUser from '../../logics/hooks/useUser';
+import * as cal from '../../logics/non-server/Calculation';
+
+// utils
+import { Character } from '../../utils/types/UserTypes';
 
 // components
-import ProfileInfoText from '../text/ProfileInfoText';
+import BoldNRegularText from '../text/BoldNRegularText';
 import ProfileButton from '../button/ProfileButton';
-import ProfileInfoTag from './ProfileInfoTagItem';
+import ProfileInfoTagItem from './ProfileInfoTagItem';
 import LineButton from '../button/LineButton';
 
+/**
+ * Profile의 swipe view 캐릭터 컴포넌트 && '상세 프로필'의 캐릭터 정보
+ *
+ * @param isMini swipe view에 사용되는지 아닌지
+ * @param isOwner 해당 캐릭터가 내 캐릭터인지 아닌지
+ * @param character 캐릭터
+ */
 type ProfileDetailItemProps = {
   isMini: boolean;
   isOwner: boolean;
@@ -36,47 +44,40 @@ export default function ProfileDetailItem({
 }: ProfileDetailItemProps): React.ReactElement {
   const navigation = useNavigation();
   const [viewCharacter, setViewCharacter] = useCharacterView();
-  const [user, setUser] = useUser();
-  const [characterList, setCharacterList] = useRecoilState(characterListState);
+  const [user, isLogined] = useUser();
 
+  /**
+   * '상세 프로필' 화면으로 이동하는 함수
+   */
   function goProfileDetail() {
-    if (character.id !== -1) setViewCharacter(character.id);
-    else setViewCharacter(character.name);
-    navigation.navigate('ProfileItem');
+    setViewCharacter(character.name);
+    navigation.navigate('ProfileDetailStack');
   }
+  /**
+   * '캐릭터 프로필 수정' 화면으로 이동하는 함수
+   * modify는 수정한다는 의미의 param
+   */
   function goChaModification() {
     navigation.navigate('ProfileModification', { modify: 1 });
   }
+  /**
+   * '캐릭터 삭제' 화면으로 이동하는 함수
+   */
   function goChaDeletion() {
     navigation.navigate('ProfileDeletion');
   }
 
   const realCharacter = useMemo(() => {
-    if (character.name) {
-      return character;
-    } else if (viewCharacter.state === 'hasValue') {
+    if (viewCharacter.state === 'hasValue') {
       return viewCharacter.contents;
-    } else return character;
-  }, [character, viewCharacter]);
-
-  const isMyCharacter = useMemo(() => {
-    for (const ch of characterList) {
-      if (realCharacter.name === ch.name) {
-        return true;
-      }
     }
-
-    return false;
-  }, [characterList, realCharacter]);
+    return character;
+  }, [character, viewCharacter]);
 
   async function follow() {
     const result = await followCharacterAsync(character.id, character.id);
     return result;
   }
-
-  useEffect(() => {
-    console.log('dsafssdf', realCharacter);
-  }, [realCharacter]);
 
   return (
     <button.ProfileDetailButton
@@ -89,11 +90,11 @@ export default function ProfileDetailItem({
           source={{ uri: realCharacter.profileImg }}
         />
         <View style={{ marginTop: 8 }} />
-        <text.Subtitle2B color={colors.black}>
+        <text.Subtitle2B textColor={colors.black}>
           {realCharacter.name}
         </text.Subtitle2B>
         <View style={{ marginTop: 8 }} />
-        <text.Body2R color={colors.gray5} numberOfLines={1}>
+        <text.Body2R textColor={colors.gray5} numberOfLines={1}>
           {realCharacter.intro}
         </text.Body2R>
       </View>
@@ -105,54 +106,48 @@ export default function ProfileDetailItem({
           {isOwner ? (
             <area.RowArea>
               <LineButton
-                press={() => goChaModification}
+                onPress={() => goChaModification}
                 content={i18n.t('정보 수정')}
-                color={colors.primary}
-                incolor={colors.alpha20_primary}
-                outcolor="transparent"
+                borderColor={colors.primary}
               />
               <View style={{ marginLeft: 8 }} />
               <LineButton
-                press={() => goChaDeletion}
+                onPress={() => goChaDeletion}
                 content={i18n.t('삭제')}
-                color={colors.warning_red}
-                incolor={colors.alpha20_primary}
-                outcolor="transparent"
+                borderColor={colors.warning_red}
               />
             </area.RowArea>
           ) : (
             <LineButton
-              press={() => follow}
+              onPress={() => follow}
               content={i18n.t('팔로우')}
-              color={colors.primary}
-              incolor={colors.alpha20_primary}
-              outcolor="transparent"
+              borderColor={colors.primary}
             />
           )}
 
           <area.RowArea
             style={{ justifyContent: 'center', marginTop: 8, marginBottom: 24 }}
           >
-            <ProfileInfoText
-              bold={cal
+            <BoldNRegularText
+              boldContent={cal
                 .numName(
                   realCharacter.num_followers ? realCharacter.num_followers : 0,
                 )
                 .toString()}
-              regular={i18n.t('팔로워')}
-              color={colors.primary}
-              center={1}
+              regularContent={i18n.t('팔로워')}
+              textColor={colors.primary}
+              isCenter
             />
             <View style={{ marginRight: 32 }} />
-            <ProfileInfoText
-              bold={
+            <BoldNRegularText
+              boldContent={
                 realCharacter.num_follows
                   ? String(realCharacter.num_follows)
                   : '0'
               }
-              regular={i18n.t('팔로우')}
-              color={colors.primary}
-              center={1}
+              regularContent={i18n.t('팔로우')}
+              textColor={colors.primary}
+              isCenter
             />
           </area.RowArea>
           <area.RowArea style={{ marginBottom: 24 }}>
@@ -160,9 +155,9 @@ export default function ProfileDetailItem({
               diameter={20}
               isAccount
               name={realCharacter.user_name ? realCharacter.user_name : ''}
-              profile={user.profileImg}
+              img={user.profileImg}
             />
-            <text.Body2R color={colors.black}>
+            <text.Body2R textColor={colors.black}>
               {i18n.t('의')} {i18n.t('캐릭터')}
             </text.Body2R>
           </area.RowArea>
@@ -171,46 +166,46 @@ export default function ProfileDetailItem({
 
       <area.RowArea style={{ justifyContent: 'center' }}>
         <View style={{ flex: 1 }}>
-          <ProfileInfoText
-            bold={i18n.t('직업')}
-            regular={realCharacter.job}
-            color={colors.black}
-            center={1}
+          <BoldNRegularText
+            boldContent={i18n.t('직업')}
+            regularContent={realCharacter.job}
+            textColor={colors.black}
+            isCenter
           />
         </View>
         <View style={{ flex: isMini ? 1.5 : 1 }}>
-          <ProfileInfoText
-            bold={i18n.t('생년월일')}
-            regular={`${realCharacter.birth}`}
-            color={colors.black}
-            center={1}
+          <BoldNRegularText
+            boldContent={i18n.t('생년월일')}
+            regularContent={`${realCharacter.birth}`}
+            textColor={colors.black}
+            isCenter
           />
         </View>
         <View style={{ flex: 1 }}>
-          <ProfileInfoText
-            bold={i18n.t('국적')}
-            regular={realCharacter.nationality}
-            color={colors.black}
-            center={1}
+          <BoldNRegularText
+            boldContent={i18n.t('국적')}
+            regularContent={realCharacter.nationality}
+            textColor={colors.black}
+            isCenter
           />
         </View>
       </area.RowArea>
       <View style={{ marginTop: 16, flexWrap: 'wrap' }} />
-      <ProfileInfoTag
+      <ProfileInfoTagItem
         title={i18n.t('좋아하는 것')}
         tags={realCharacter.likes}
       />
       <View style={{ marginTop: 16, flexWrap: 'wrap' }} />
-      <ProfileInfoTag
+      <ProfileInfoTagItem
         title={i18n.t('싫어하는 것')}
         tags={realCharacter.hates}
       />
       <View style={{ marginTop: 16 }} />
-      <ProfileInfoText
-        bold={i18n.t('특이사항')}
-        regular={realCharacter.tmi}
-        color={colors.black}
-        center={0}
+      <BoldNRegularText
+        boldContent={i18n.t('특이사항')}
+        regularContent={realCharacter.tmi}
+        textColor={colors.black}
+        isCenter={false}
       />
     </button.ProfileDetailButton>
   );

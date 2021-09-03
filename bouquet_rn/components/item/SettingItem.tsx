@@ -1,27 +1,33 @@
 import React from 'react';
-import { View, TouchableOpacity } from 'react-native';
-import { colors } from '../../styles/colors';
+import { TouchableOpacity } from 'react-native';
+import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
 
-// icons
+// assets
 import Icon from '../../assets/Icon';
 
+/**
+ * '설정' 화면에서 설정 항목 컴포넌트
+ *
+ * @param content 설정 항목 내용
+ * @param onPress 항목 눌렀을 때 실행되는 함수
+ */
 type SettingItemProps = {
   content: string;
-  press: Function;
+  onPress: () => void;
 };
 export default function SettingItem({
   content,
-  press,
+  onPress,
 }: SettingItemProps): React.ReactElement {
   return (
     <TouchableOpacity
-      onPress={press}
+      onPress={onPress}
       style={{ paddingVertical: 8, paddingHorizontal: 8 }}
     >
       <area.RowArea>
-        <text.Body2B color={colors.black} style={{ flex: 1 }}>
+        <text.Body2B textColor={colors.black} style={{ flex: 1 }}>
           {content}
         </text.Body2B>
         <Icon icon="arrowRight" size={16} />

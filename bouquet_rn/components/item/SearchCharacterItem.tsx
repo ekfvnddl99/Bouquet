@@ -1,26 +1,36 @@
-import React, { Component, useState } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { colors } from '../../styles/colors';
+
+// styles
+import colors from '../../styles/colors';
 import * as button from '../../styles/styled-components/button';
 import * as text from '../../styles/styled-components/text';
 import * as elses from '../../styles/styled-components/elses';
-import { Character, MiniCharacter } from '../../utils/types/types';
-import useCharacterView from '../../logics/useCharacterView';
 
+// logics
+import useCharacterView from '../../logics/hooks/useCharacterView';
+
+// utils
+import { Character } from '../../utils/types/UserTypes';
+
+/**
+ * Search에 보이는 캐릭터 리스트 컴포넌트
+ *
+ * @param character 해당 캐릭터
+ */
 type SearchCharacterItemProps = {
-  press: number;
-  character: MiniCharacter;
-  id?: number;
+  character: Character;
 };
 export default function SearchCharacterItem({
-  press,
   character,
-  id,
 }: SearchCharacterItemProps): React.ReactElement {
   const navigation = useNavigation();
+  const [viewCharacter, setViewCharacter] = useCharacterView();
+
   function goProfileDetail() {
-    navigation.navigate('ProfileItem');
+    setViewCharacter(character.name);
+    navigation.navigate('ProfileDetailStack');
   }
 
   return (
@@ -31,13 +41,13 @@ export default function SearchCharacterItem({
       paddingH={18}
       paddingV={18}
       style={{ alignItems: 'center', marginRight: 10 }}
-      onPress={() => (press === id ? goProfileDetail : {})}
+      onPress={() => goProfileDetail}
     >
       <elses.CircleImg diameter={100} source={{ uri: character.profile_img }} />
       <View style={{ marginVertical: 8 }}>
-        <text.Body2B color={colors.black}>{character.name}</text.Body2B>
+        <text.Body2B textColor={colors.black}>{character.name}</text.Body2B>
       </View>
-      <text.Caption color={colors.black} numberOfLines={2}>
+      <text.Caption textColor={colors.black} numberOfLines={2}>
         {character.intro}
       </text.Caption>
     </button.MiniListButton>

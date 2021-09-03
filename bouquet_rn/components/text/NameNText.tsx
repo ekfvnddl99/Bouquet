@@ -1,21 +1,28 @@
 import React from 'react';
 
 // styles
-import { colors } from '../../styles/colors';
+import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
 
+/**
+ * 이름과 그 옆에 붙는 자잘한 말을 나타내는 컴포넌트
+ *
+ * @param name 이름
+ * @param sub '-의'처럼 이름 옆에 붙는 말
+ */
+type NameNTextProps = {
+  name: string;
+  sub: string;
+};
 export default function NameNText({
   name,
   sub,
-}: {
-  name: string;
-  sub: string;
-}): React.ReactElement {
+}: NameNTextProps): React.ReactElement {
   return (
     <area.RowArea>
-      <text.Subtitle2B color={colors.black}>{name}</text.Subtitle2B>
-      <text.Subtitle2R color={colors.black}>{sub}</text.Subtitle2R>
+      <text.Subtitle2B textColor={colors.black}>{name}</text.Subtitle2B>
+      <text.Subtitle2R textColor={colors.black}>{sub}</text.Subtitle2R>
     </area.RowArea>
   );
 }

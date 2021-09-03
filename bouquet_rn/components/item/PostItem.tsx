@@ -1,45 +1,41 @@
-import React, { Component, useState, useCallback, useMemo } from 'react';
-import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useCallback, useMemo } from 'react';
+import { View } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
-import { colors } from '../../styles/colors';
+import { useRecoilState } from 'recoil';
+
+// styles
+import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
 import * as button from '../../styles/styled-components/button';
-import { useRecoilState } from 'recoil';
 
-// props & logic
+// logics
 import * as cal from '../../logics/non-server/Calculation';
-import {
-  PostInterface,
-  AllPostRequestType,
-  RequestToPostAsync,
-} from '../../logics/Post';
 import { viewPostState } from '../../logics/atoms';
+import { Post } from '../../utils/types/PostTypes';
 
 // components
 import SunButton from '../button/SunButton';
 import ProfileButton from '../button/ProfileButton';
 
+// templates
 import TextTemplate from '../../screens/template/TextTemplate';
 import ImageTemplate from '../../screens/template/ImageTemplate';
 import AlbumTemplate from '../../screens/template/AlbumTemplate';
 import DiaryTemplate from '../../screens/template/DiaryTemplate';
 import ListTemplate from '../../screens/template/ListTemplate';
-import { useEffect } from 'react';
 
-type PostingItemProps = {
-  info?: PostInterface<AllPostRequestType>;
+type PostItemProps = {
+  info?: Post;
 };
-export default function PostingItem({
-  info,
-}: PostingItemProps): React.ReactElement {
+export default function PostItem({ info }: PostItemProps): React.ReactElement {
   const navigation = useNavigation();
   const [viewPost, setViewPost] = useRecoilState(viewPostState);
-  function goPosting() {
+  function goPostStack() {
     if (info) {
       setViewPost(info);
-      navigation.navigate('PostItem');
+      navigation.navigate('PostStack');
     }
   }
 
@@ -68,7 +64,7 @@ export default function PostingItem({
       backgroundColor={colors.white}
       paddingH={10}
       paddingV={10}
-      onPress={() => goPosting}
+      onPress={() => goPostStack}
       activeOpacity={1}
     >
       <area.RowArea>
@@ -77,11 +73,11 @@ export default function PostingItem({
             diameter={30}
             isAccount={false}
             name={info ? info.characterName : ''}
-            profile={info ? info.characterImg : ''}
+            img={info ? info.characterImg : ''}
           />
         </View>
         <View style={{ alignItems: 'flex-end', flex: 1 }}>
-          <text.Caption color={colors.gray5}>
+          <text.Caption textColor={colors.gray5}>
             {cal.timeName(1)} {i18n.t('전')}
           </text.Caption>
         </View>

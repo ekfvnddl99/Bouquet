@@ -2,19 +2,26 @@ import React from 'react';
 import { View } from 'react-native';
 
 // styles
-import { colors } from '../../styles/colors';
+import colors from '../../styles/colors';
 import * as text from '../../styles/styled-components/text';
 
+/**
+ * 경고 문구 텍스트
+ *
+ * @param content 경고 문구
+ * @param marginTop marginTop의 값
+ */
+type WarningTextProps = {
+  content: string;
+  marginTop: number;
+};
 export default function WarningText({
   content,
   marginTop,
-}: {
-  content?: string;
-  marginTop: number;
-}): React.ReactElement {
+}: WarningTextProps): React.ReactElement {
   return (
     <View style={{ marginTop }}>
-      <text.Caption color={colors.warning_red}>{content || ''}</text.Caption>
+      <text.Caption textColor={colors.warning_red}>{content}</text.Caption>
     </View>
   );
 }

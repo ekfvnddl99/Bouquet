@@ -1,30 +1,53 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
+
+// styles
 import * as text from '../../styles/styled-components/text';
 import * as button from '../../styles/styled-components/button';
-import * as type from '../type';
 
-type LineButtonProps={
-  press: Function, 
-  content : string, 
-  color : string, 
-  incolor:string, 
-  outcolor:string
+/**
+ *
+ * @param color 버튼 색
+ * @returns 버튼 눌렀을 때 나오는 색을 버튼 색에 따라서 반환
+ */
+function setInColor(color: string) {
+  if (color === 'primary') return 'alpha20_primary';
+  if (color === 'black') return 'gray2';
+  return 'transparent';
 }
 
-export default function LineButton({press, content, color, incolor, outcolor} : LineButtonProps): React.ReactElement{
-  const[backgroundColor, setBackgroundColor]=useState('transparent');
+/**
+ * 배경색 없이 테두리만 있는 버튼
+ *
+ * @param onPress 버튼 눌렀을 때 실행되는 함수
+ * @param content 버튼 이름
+ * @param borderColor
+ */
+type LineButtonProps = {
+  onPress: () => void;
+  content: string;
+  borderColor: string;
+};
 
-  return(
-    <button.LineButton 
-      borderColor={color} 
+export default function LineButton({
+  onPress,
+  content,
+  borderColor,
+}: LineButtonProps): React.ReactElement {
+  const [backgroundColor, setBackgroundColor] = useState('transparent');
+  const pressInColor = setInColor(borderColor);
+
+  return (
+    <button.LineButton
+      borderColor={borderColor}
       backgroundColor={backgroundColor}
-      paddingH={12} 
-      paddingV={4} 
+      paddingH={12}
+      paddingV={4}
       activeOpacity={1}
-      onPress={ㅔress} 
-      onPressIn={()=>setBackgroundColor(incolor)} 
-      onPressOut={()=>setBackgroundColor(outcolor)}>
-      <text.Button3 color={color}>{content}</text.Button3>
+      onPress={onPress}
+      onPressIn={() => setBackgroundColor(pressInColor)}
+      onPressOut={() => setBackgroundColor('transparent')}
+    >
+      <text.Button3 textColor={borderColor}>{content}</text.Button3>
     </button.LineButton>
   );
 }

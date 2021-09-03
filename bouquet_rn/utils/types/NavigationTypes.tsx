@@ -9,7 +9,6 @@ export type TabParam = {
 };
 export type TabProps = BottomTabScreenProps<TabParam, 'HomeStack'>;
 
-//// basics
 // writing - fab
 export type WritingStackParam = {
   PostWriting: undefined;
@@ -61,7 +60,6 @@ export type AccountStackParam = {
 };
 export type AccountProps = StackScreenProps<AccountStackParam, 'Account'>;
 
-//// tab screens
 // home
 export type HomeStackParam = {
   Home: undefined;

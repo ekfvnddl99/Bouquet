@@ -1,25 +1,33 @@
 import React, { useState, useRef } from 'react';
-import {
-  View,
-  TouchableOpacity,
-  Pressable,
-  Animated,
-  Easing,
-  PanResponder,
-} from 'react-native';
-import { colors } from '../../styles/colors';
+import { View, TouchableOpacity, Animated } from 'react-native';
+import styled from 'styled-components/native';
+
+// styles
+import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
-import * as text from '../../styles/styled-components/text';
-import * as elses from '../../styles/styled-components/elses';
-import * as type from '../type';
+
+// logics
+import useCharacter from '../../logics/hooks/useCharacter';
 
 // components
 import ProfileButton from '../button/ProfileButton';
 
-const TOGGLE = 20;
+/**
+ * 알람 설정을 위한 toggle 컴포넌트
+ */
 export default function SettingToggleItem(): React.ReactElement {
   const [isOn, setIsOn] = useState(false);
+  const [character, setCharacter] = useCharacter();
 
+  /**
+   * toggle의 animation 관련
+   *
+   * TOGGLE 토글 움직이는 정도
+   * drag animation 변수
+   * TranslateXLeft x축의 왼쪽 방향으로 움직이는 animation
+   * TranslateXRight x축의 오른쪽 방향으로 움직이는 animation
+   */
+  const TOGGLE = 20;
   const drag = useRef(new Animated.Value(0)).current;
   const TranslateXLeft = drag.interpolate({
     inputRange: [-1, 0],
@@ -32,26 +40,16 @@ export default function SettingToggleItem(): React.ReactElement {
     extrapolate: 'clamp',
   });
 
+  // toggle의 on/off를 관여하는 함수
+  // 색 변화, 토글 공 위치 변화
   function Toggle() {
     return (
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <TouchableOpacity onPress={() => setIsOn(!isOn)}>
-          <View
-            style={{
-              backgroundColor: colors.gray0,
-              borderRadius: 10,
-              width: 40,
-              height: 20,
-            }}
-          >
-            <Animated.View
+          <ToggleArea>
+            <ToggleBall
               style={[
-                {
-                  backgroundColor: isOn ? colors.primary : colors.gray5,
-                  width: 20,
-                  height: 20,
-                  borderRadius: 20 / 2,
-                },
+                {},
                 {
                   transform: [
                     { translateX: isOn ? TranslateXRight : TranslateXLeft },
@@ -59,7 +57,7 @@ export default function SettingToggleItem(): React.ReactElement {
                 },
               ]}
             />
-          </View>
+          </ToggleArea>
         </TouchableOpacity>
       </View>
     );
@@ -68,10 +66,28 @@ export default function SettingToggleItem(): React.ReactElement {
   return (
     <View style={{ paddingVertical: 8, paddingHorizontal: 8 }}>
       <area.RowArea>
-        <ProfileButton diameter={20} />
+        <ProfileButton
+          diameter={20}
+          isAccount={false}
+          name={character.name}
+          img={character.profileImg}
+        />
         <View style={{ flex: 1 }} />
         <Toggle />
       </area.RowArea>
     </View>
   );
 }
+
+const ToggleArea = styled.View`
+  background-color: ${colors.gray0};
+  border-radius: 10;
+  width: 40;
+  height: 20;
+`;
+const ToggleBall = styled(Animated.View)`
+  background-color: ${colors.gray0};
+  border-radius: 10;
+  width: 40;
+  height: 20;
+`;

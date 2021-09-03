@@ -1,53 +1,60 @@
-import React, {Component, useState} from 'react';
-import {
-    View,
-    FlatList,
-    StyleSheet,
-    TouchableWithoutFeedback
-} from 'react-native';
-import { colors } from '../../styles/colors';
+import React from 'react';
+import { View, FlatList, TouchableWithoutFeedback } from 'react-native';
 
 // components
 import ProfileDetailItem from '../item/ProfileDetailItem';
 
-import { Character } from '../../utils/types/types';
+// utils
+import { Character } from '../../utils/types/UserTypes';
 
-interface carouselProps{
-  pages: Array<Character>,
-  offset:number,
-  gap:number,
-  pageWidth:number,
-  setPage: Function
+/**
+ * '캐릭터 스와이프 뷰'에서 옆으로 넘기는 뷰
+ *
+ * @param pages 구성하는 페이지
+ * @param offset 옆에 살짝 보이는 다른 페이지의 너비
+ * @param gap 옆의 페이지와의 간격
+ * @param pageWidth 페이지 너비
+ * @param setPage 페이지 set 함수
+ */
+interface carouselProps {
+  pages: Array<Character>;
+  offset: number;
+  gap: number;
+  pageWidth: number;
+  setPage: (param: number) => void;
 }
-
-export default function  Carousel({pages, offset, gap, pageWidth, setPage} : carouselProps){
-  const[selectId, setSelectId]=useState(-1);
+export default function Carousel({
+  pages,
+  offset,
+  gap,
+  pageWidth,
+  setPage,
+}: carouselProps): React.ReactElement {
   const onScroll = (e: any) => {
     const newPage = Math.round(
       e.nativeEvent.contentOffset.x / (pageWidth + gap),
     );
     setPage(newPage);
   };
-  return(
-    <View style={{justifyContent:'center', alignItems:'center'}}>
+  return (
+    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
       <FlatList
-        contentContainerStyle={{paddingHorizontal: offset + gap / 2}}
+        contentContainerStyle={{ paddingHorizontal: offset + gap / 2 }}
         data={pages}
         onScroll={onScroll}
-        decelerationRate='fast'
+        decelerationRate="fast"
         horizontal
         pagingEnabled
         snapToInterval={pageWidth + gap}
         showsHorizontalScrollIndicator={false}
-        renderItem={(obj)=>{
-          return(
-            <TouchableWithoutFeedback onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
-              <View style={{width: pageWidth, marginHorizontal: gap / 2}}>
-                <ProfileDetailItem mini={1} press={selectId} id={obj.index} character={obj.item}/>
-              </View>
-            </TouchableWithoutFeedback>
-          );
-        }}/>
+        renderItem={(obj) => (
+          <TouchableWithoutFeedback>
+            <View style={{ width: pageWidth, marginHorizontal: gap / 2 }}>
+              <ProfileDetailItem isMini character={obj.item} isOwner />
+            </View>
+          </TouchableWithoutFeedback>
+        )}
+      />
     </View>
-  )
+  );
 }

@@ -1,6 +1,6 @@
-import React, { Component, useState } from 'react';
-import { View, FlatList } from 'react-native';
-import { colors } from '../../styles/colors';
+import React from 'react';
+import { View } from 'react-native';
+import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as button from '../../styles/styled-components/button';
 import * as text from '../../styles/styled-components/text';
@@ -10,10 +10,10 @@ import * as elses from '../../styles/styled-components/elses';
 import ProfileButton from '../button/ProfileButton';
 import TagItem from './TagItem';
 
-function Inner(mini: number) {
+function Inner(isMini: boolean) {
   return (
     <View style={{ flexDirection: 'row' }}>
-      {mini === 1 ? (
+      {isMini ? (
         <elses.RectangleImg
           width={90}
           height={117}
@@ -27,28 +27,27 @@ function Inner(mini: number) {
         />
       )}
       <View style={{ marginLeft: 16 }}>
-        <text.Subtitle3 color={colors.black}>EjrqhRdl wjswod</text.Subtitle3>
+        <text.Subtitle3 textColor={colors.black}>
+          EjrqhRdl wjswod
+        </text.Subtitle3>
         <area.RowArea style={{ marginVertical: 8 }}>
           <TagItem content="크루참여" isActive />
           <TagItem content="전체공개" isActive />
         </area.RowArea>
-        <ProfileButton diameter={30} isAccount={false} />
+        <ProfileButton diameter={30} isAccount={false} name="" img="" />
       </View>
     </View>
   );
 }
 
+type EpisodeItemProps = {
+  color: string;
+  isMini: boolean;
+};
 export default function EpisodeItem({
   color,
-  mini,
-  press,
-  id,
-}: {
-  color: string;
-  mini: number;
-  press: number;
-  id: number;
-}) {
+  isMini,
+}: EpisodeItemProps): React.ReactElement {
   return (
     <View>
       {color === colors.white ? (
@@ -57,10 +56,10 @@ export default function EpisodeItem({
           paddingH={16}
           paddingV={16}
         >
-          {Inner(mini)}
+          {Inner(isMini)}
         </button.BigListButton>
       ) : (
-        <View>{Inner(mini)}</View>
+        <View>{Inner(isMini)}</View>
       )}
     </View>
   );

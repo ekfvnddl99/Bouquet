@@ -3,11 +3,13 @@ import { View, TouchableWithoutFeedback } from 'react-native';
 import styled from 'styled-components/native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
-import { colors } from '../../styles/colors';
+
+// styles
+import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
 
-// props & logic
+// logics
 import * as cal from '../../logics/non-server/Calculation';
 
 // components
@@ -16,6 +18,12 @@ import QuestionItem from './QuestionItem';
 import SunButton from '../button/SunButton';
 import useCharacter from '../../logics/hooks/useCharacter';
 
+/**
+ * 질답 게시물 컴포넌트
+ *
+ * @param question 질문
+ * @param answer 대답
+ */
 type QnAItemProps = {
   question: string;
   answer: string;
@@ -26,11 +34,14 @@ export default function QnAItem({
 }: QnAItemProps): React.ReactElement {
   const navigation = useNavigation();
   const [character, setCharacter] = useCharacter();
-  function goPosting() {
-    navigation.navigate('Posting');
+
+  // '상세 게시물' 화면으로 가는 함수
+  function goPostStack() {
+    navigation.navigate('PostStack');
   }
+
   return (
-    <TouchableWithoutFeedback onPress={() => goPosting}>
+    <TouchableWithoutFeedback onPress={() => goPostStack}>
       <WholeArea>
         <area.RowArea style={{ marginBottom: 10 }}>
           <View style={{ flex: 1 }}>
@@ -38,17 +49,17 @@ export default function QnAItem({
               diameter={30}
               isAccount={false}
               name={character.name}
-              profile={character.profileImg}
+              img={character.profileImg}
             />
           </View>
-          <text.Caption color={colors.gray5}>
+          <text.Caption textColor={colors.gray5}>
             {cal.timeName(57)} {i18n.t('전')}
           </text.Caption>
         </area.RowArea>
         <QuestionItem question={question} />
         <MiddleLine />
         <text.Body2R
-          color={colors.black}
+          textColor={colors.black}
           style={{
             marginBottom: 10,
             paddingHorizontal: 10,
