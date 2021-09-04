@@ -11,10 +11,11 @@ export type Post<T extends AllTemplates> = {
   template: T;
   text: string;
   num_sunshines: number;
-  character_name: string;
-  character_img: string;
+  character_info: {
+    character_name: string;
+    character_img: string;
+  };
   liked: boolean;
-  type: keyof typeof templates;
   comments: Array<PostComment>;
 };
 
@@ -24,8 +25,6 @@ export type Post<T extends AllTemplates> = {
  * @description 하위 댓글이 없는 경우 children === undefined 또는 []
  */
 export type PostComment = {
-  name: string;
-  profile_img: string;
   id: number;
   created_at: string;
   updated_at: string;
@@ -33,6 +32,10 @@ export type PostComment = {
   parent: number;
   deleted: boolean;
   num_sunshines: number;
+  character_info: {
+    name: string;
+    profile_img: string;
+  };
   liked: boolean;
   children?: Array<PostComment>;
 };
@@ -44,30 +47,27 @@ export type PostComment = {
  */
 
 /**
- * 모든 템플릿 리스트를 나타내는 enum
- */
-export const enum templates {
-  None,
-  Image,
-  Diary,
-  Album,
-  List,
-}
-
-/**
  * 모든 템플릿 type을 엮은 Union Type (템플릿이 없는 경우(빈 객체)도 포함)
  */
 export type AllTemplates =
-  | Record<string, never>
+  | PlainTemplate
   | ImageTemplate
   | DiaryTemplate
   | AlbumTemplate
   | ListTemplate;
 
 /**
+ * 템플릿이 없는 경우의 Type
+ */
+export type PlainTemplate = {
+  type: 'None';
+};
+
+/**
  * "Image" 템플릿 Type
  */
 export type ImageTemplate = {
+  type: 'Image';
   img: string;
 };
 
@@ -75,6 +75,7 @@ export type ImageTemplate = {
  * "Diary" 템플릿 Type
  */
 export type DiaryTemplate = {
+  type: 'Diary';
   title: string;
   weather: string;
   img: string;
@@ -86,9 +87,11 @@ export type DiaryTemplate = {
  * "Album" 템플릿 Type
  */
 export type AlbumTemplate = {
+  type: 'Album';
   description: string;
   title: string;
   img: string;
+  artist: string;
   release_date: string;
   tracks: Array<{
     title: string;
@@ -100,6 +103,7 @@ export type AlbumTemplate = {
  * "List" 템플릿 Type
  */
 export type ListTemplate = {
+  type: 'List';
   title: string;
   content: string;
   img: string;
