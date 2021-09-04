@@ -43,7 +43,6 @@ export default function ProfileDetailItem({
 }: ProfileDetailItemProps): React.ReactElement {
   const navigation = useNavigation();
   const [viewCharacter, setViewCharacter] = useCharacterView();
-  const [user, isLogined] = useUser();
   const [characterList, setCharacterList] = useRecoilState(characterListState);
 
   /**
@@ -164,8 +163,14 @@ export default function ProfileDetailItem({
             <ProfileButton
               diameter={20}
               isAccount
-              name={realCharacter.user.name ? realCharacter.user.name : ''}
-              img={user.profileImg}
+              name={
+                realCharacter.user_info.name ? realCharacter.user_info.name : ''
+              }
+              img={
+                realCharacter.user_info.profile_img
+                  ? realCharacter.user_info.profile_img
+                  : ''
+              }
             />
             <text.Body2R textColor={colors.black}>
               {i18n.t('의')} {i18n.t('캐릭터')}
@@ -186,7 +191,7 @@ export default function ProfileDetailItem({
         <View style={{ flex: isMini ? 1.5 : 1 }}>
           <BoldNRegularText
             boldContent={i18n.t('생년월일')}
-            regularContent={`${realCharacter.birth}`}
+            regularContent={realCharacter.birth}
             textColor={colors.black}
             isCenter
           />

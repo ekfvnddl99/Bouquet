@@ -55,7 +55,7 @@ export default function QnAItem({
               diameter={30}
               isAccount={false}
               name={character.name}
-              img={character.profileImg}
+              img={character.profile_img}
             />
           </View>
           <text.Caption textColor={colors.gray5}>

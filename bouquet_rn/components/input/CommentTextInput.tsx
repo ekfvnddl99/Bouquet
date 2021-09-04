@@ -65,7 +65,7 @@ export default function CommentTextInput({
         <View style={{ marginBottom: 3 }}>
           <elses.CircleImg
             diameter={30}
-            source={{ uri: character.profileImg }}
+            source={{ uri: character.profile_img }}
           />
         </View>
         <CommentInput

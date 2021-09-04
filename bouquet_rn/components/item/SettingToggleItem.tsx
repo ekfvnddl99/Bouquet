@@ -71,7 +71,7 @@ export default function SettingToggleItem(): React.ReactElement {
           diameter={20}
           isAccount={false}
           name={character.name}
-          img={character.profileImg}
+          img={character.profile_img}
         />
         <View style={{ flex: 1 }} />
         <Toggle />

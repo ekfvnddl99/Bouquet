@@ -96,7 +96,7 @@ export default function CommentItem({
           }}
         >
           <text.Caption textColor={colors.gray5}>
-            {cal.timeName(Number(commentInfo.created_at))} {i18n.t('전')}
+            {cal.timeName(commentInfo.created_at)} {i18n.t('전')}
           </text.Caption>
         </View>
       </area.RowArea>
@@ -105,13 +105,13 @@ export default function CommentItem({
         <ProfileButton
           diameter={20}
           isAccount={false}
-          name={commentInfo.name}
-          img={commentInfo.profile_img}
+          name={commentInfo.character_info.name}
+          img={commentInfo.character_info.profile_img}
         />
         <View style={{ flex: 1 }} />
         <area.RowArea>
           {selectId === commentInfo.id &&
-          character.name === commentInfo.name ? (
+          character.name === commentInfo.character_info.name ? (
             <TouchableOpacity>
               <Icon icon="bin" size={18} />
             </TouchableOpacity>

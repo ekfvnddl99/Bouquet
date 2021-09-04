@@ -55,7 +55,7 @@ export default function PostItem({
    */
   const getTemplate = useCallback(() => {
     if (postInfo) {
-      switch (postInfo.type) {
+      switch (postInfo.template.type) {
         case 'None':
           return <TextTemplate mode="mini" post={postInfo.text} />;
         case 'Image':
@@ -87,8 +87,8 @@ export default function PostItem({
           <ProfileButton
             diameter={30}
             isAccount={false}
-            name={postInfo ? postInfo.character_name : ''}
-            img={postInfo ? postInfo.character_img : ''}
+            name={postInfo ? postInfo.character_info.name : ''}
+            img={postInfo ? postInfo.character_info.profile_img : ''}
           />
         </View>
         <View style={{ alignItems: 'flex-end', flex: 1 }}>

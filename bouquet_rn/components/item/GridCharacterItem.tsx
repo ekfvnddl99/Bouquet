@@ -16,30 +16,24 @@ import useCharacterView from '../../logics/hooks/useCharacterView';
 // components
 import ConditionButton from '../button/ConditionButton';
 
+// utils
+import { Character } from '../../utils/types/UserTypes';
+
 interface GridCharacterItemProps {
-  name: string;
-  img: string;
-  introduction: string;
-  idx: number;
+  characterInfo: Character;
   isAccount: boolean;
   onPress: (param: number) => void;
 }
 /**
  * Profile, Account의 grid view의 캐릭터 컴포넌트
  *
- * @param name 캐릭터 이름
- * @param img 캐릭터 이미지
- * @param introduction 캐릭터 한 줄 소개
- * @param idx grid view의 항목의 인덱스
+ * @param characterInfo 캐릭터 객체
  * @param isAccount '계정' 화면의 grid view인지 아닌지
  * @param onPress 캐릭터 컴포넌트 눌렀을 때 실행되는 함수
  */
 export default function GridCharacterItem({
-  name,
-  img,
-  introduction,
+  characterInfo,
   onPress,
-  idx,
   isAccount,
 }: GridCharacterItemProps): React.ReactElement {
   const navigation = useNavigation();
@@ -49,7 +43,7 @@ export default function GridCharacterItem({
    * '상세 프로필' 화면으로 이동하는 함수
    */
   function goProfileDetail() {
-    setViewCharacter(name);
+    setViewCharacter(characterInfo.name);
     navigation.navigate('ProfileDetailStack');
   }
 
@@ -64,20 +58,23 @@ export default function GridCharacterItem({
       activeOpacity={1}
       onPress={() => goProfileDetail}
     >
-      <elses.CircleImg diameter={100} source={{ uri: img }} />
+      <elses.CircleImg
+        diameter={100}
+        source={{ uri: characterInfo.profile_img }}
+      />
       <View style={{ marginBottom: 8 }} />
-      <text.Body2B textColor={colors.black}>{name}</text.Body2B>
+      <text.Body2B textColor={colors.black}>{characterInfo.name}</text.Body2B>
       <View style={{ marginBottom: 8 }} />
       <text.Caption textColor={colors.black} numberOfLines={1}>
-        {introduction}
+        {characterInfo.intro}
       </text.Caption>
       {isAccount ? null : (
         <View style={{ marginTop: 21 }}>
           <ConditionButton
-            isActive={!(character.id === idx)}
-            onPress={() => onPress(idx)}
+            isActive={!(character.id === characterInfo.id)}
+            onPress={() => onPress(characterInfo.id ? characterInfo.id : -1)}
             content={
-              character.id === idx
+              character.id === characterInfo.id
                 ? i18n.t('선택된 캐릭터')
                 : i18n.t('캐릭터 선택')
             }
