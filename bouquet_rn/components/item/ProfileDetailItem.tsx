@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
+import { useRecoilState } from 'recoil';
 
 // styles
 import colors from '../../styles/colors';
@@ -24,33 +25,32 @@ import BoldNRegularText from '../text/BoldNRegularText';
 import ProfileButton from '../button/ProfileButton';
 import ProfileInfoTagItem from './ProfileInfoTagItem';
 import LineButton from '../button/LineButton';
+import { characterListState } from '../../logics/atoms';
 
+type ProfileDetailItemProps = {
+  isMini: boolean;
+  characterInfo: Character;
+};
 /**
  * Profile의 swipe view 캐릭터 컴포넌트 && '상세 프로필'의 캐릭터 정보
  *
  * @param isMini swipe view에 사용되는지 아닌지
- * @param isOwner 해당 캐릭터가 내 캐릭터인지 아닌지
- * @param character 캐릭터
+ * @param characterInfo 캐릭터
  */
-type ProfileDetailItemProps = {
-  isMini: boolean;
-  isOwner: boolean;
-  character: Character;
-};
 export default function ProfileDetailItem({
   isMini,
-  isOwner,
-  character,
+  characterInfo,
 }: ProfileDetailItemProps): React.ReactElement {
   const navigation = useNavigation();
   const [viewCharacter, setViewCharacter] = useCharacterView();
   const [user, isLogined] = useUser();
+  const [characterList, setCharacterList] = useRecoilState(characterListState);
 
   /**
    * '상세 프로필' 화면으로 이동하는 함수
    */
   function goProfileDetail() {
-    setViewCharacter(character.name);
+    setViewCharacter(characterInfo.name);
     navigation.navigate('ProfileDetailStack');
   }
   /**
@@ -67,15 +67,27 @@ export default function ProfileDetailItem({
     navigation.navigate('ProfileDeletion');
   }
 
+  /**
+   * 내가 지금 보고 있는 캐릭터 객체
+   */
   const realCharacter = useMemo(() => {
     if (viewCharacter.state === 'hasValue') {
       return viewCharacter.contents;
     }
-    return character;
-  }, [character, viewCharacter]);
+    return characterInfo;
+  }, [characterInfo, viewCharacter]);
 
+  /**
+   * 내가 다른 캐릭터를 follow하는 함수
+   * @returns followCharacterAsync 함수 결과
+   */
   async function follow() {
-    const result = await followCharacterAsync(character.id, character.id);
+    let characterInfoId = -1;
+    if (characterInfo.id) characterInfoId = characterInfo.id;
+    const result = await followCharacterAsync(
+      realCharacter.id,
+      characterInfoId,
+    );
     return result;
   }
 
@@ -87,7 +99,7 @@ export default function ProfileDetailItem({
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
         <elses.CircleImg
           diameter={120}
-          source={{ uri: realCharacter.profileImg }}
+          source={{ uri: realCharacter.profile_img }}
         />
         <View style={{ marginTop: 8 }} />
         <text.Subtitle2B textColor={colors.black}>
@@ -103,7 +115,7 @@ export default function ProfileDetailItem({
         <View style={{ marginTop: 34 }} />
       ) : (
         <View style={{ marginTop: 8, alignItems: 'center' }}>
-          {isOwner ? (
+          {characterList.includes(characterInfo) ? (
             <area.RowArea>
               <LineButton
                 onPress={() => goChaModification}
@@ -141,9 +153,7 @@ export default function ProfileDetailItem({
             <View style={{ marginRight: 32 }} />
             <BoldNRegularText
               boldContent={
-                realCharacter.num_follows
-                  ? String(realCharacter.num_follows)
-                  : '0'
+                realCharacter.num_follows ? realCharacter.num_follows : 0
               }
               regularContent={i18n.t('팔로우')}
               textColor={colors.primary}
@@ -154,7 +164,7 @@ export default function ProfileDetailItem({
             <ProfileButton
               diameter={20}
               isAccount
-              name={realCharacter.user_name ? realCharacter.user_name : ''}
+              name={realCharacter.user.name ? realCharacter.user.name : ''}
               img={user.profileImg}
             />
             <text.Body2R textColor={colors.black}>

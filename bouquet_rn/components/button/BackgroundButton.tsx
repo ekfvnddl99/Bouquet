@@ -5,6 +5,14 @@ import colors from '../../styles/colors';
 import * as text from '../../styles/styled-components/text';
 import * as button from '../../styles/styled-components/button';
 
+type BackgroundButtonProps = {
+  onPress: () => void;
+  content: string;
+  height: number;
+  isActive: boolean;
+  paddingH: number;
+  paddingV: number;
+};
 /**
  * 뒤에 배경색 있는 버튼
  *
@@ -15,14 +23,6 @@ import * as button from '../../styles/styled-components/button';
  * @param paddingH 버튼 가로 패딩
  * @param paddingV 버튼 세로 패딩
  */
-type BackgroundButtonProps = {
-  onPress: () => void;
-  content: string;
-  height: number;
-  isActive: boolean;
-  paddingH: number;
-  paddingV: number;
-};
 export default function BackgroundButton({
   onPress,
   content,

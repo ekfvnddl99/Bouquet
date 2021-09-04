@@ -16,18 +16,21 @@ import Icon from '../../assets/Icon';
 // logics
 import * as cal from '../../logics/non-server/Calculation';
 
-/**
- * Notification 알람 컴포넌트
- * 누구에게, 어떤 내용이 왔는지
- * ! 뭔가 서버에서 사진, 이름, 내용 한 번에 다 보내줄 것 같아서 인자 바꿔야 할 듯
- *
- * @param name 알람 원인이 되는 이의 이름
- * @param content 알람 내용
- */
 type NotificationItemProps = {
   name: string;
   content: string;
 };
+/**
+ * Notification 알람 컴포넌트
+ * 누구에게, 어떤 내용이 왔는지
+ * ! 뭔가 서버에서 사진, 이름, 내용 한 번에 다 보내줄 것 같아서 인자 바꿔야 할 듯
+ * TODO 알림 삭제 함수
+ * TODO 알림 프로필 사진 넣기
+ * TODO 알림 시간 넣기
+ *
+ * @param name 알람 원인이 되는 이의 이름
+ * @param content 알람 내용
+ */
 export default function NotificationItem({
   name,
   content,
@@ -64,19 +67,12 @@ export default function NotificationItem({
   ).current;
 
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        flex: 1,
-        marginHorizontal: 30,
-      }}
-    >
-      <BinArea>
+    <WholeArea>
+      <BinButton>
         <View style={{ alignItems: 'center' }}>
           <Icon icon="binWhite" size={24} />
         </View>
-      </BinArea>
+      </BinButton>
       <Animated.View
         {...panResponder.panHandlers}
         style={[{ width: '100%' }, { transform: [{ translateX: TranslateX }] }]}
@@ -103,16 +99,22 @@ export default function NotificationItem({
             }}
           >
             <text.Caption textColor={colors.gray5}>
-              {cal.timeName(57)} {i18n.t('전')}
+              {cal.timeName('')} {i18n.t('전')}
             </text.Caption>
           </View>
         </button.NotificationButton>
       </Animated.View>
-    </View>
+    </WholeArea>
   );
 }
 
-const BinArea = styled.View`
+const WholeArea = styled.View`
+  flex-direction: row;
+  align-items: center;
+  flex: 1;
+  margin-horizontal: 30;
+`;
+const BinButton = styled.TouchableOpacity`
   align-items: center;
   background-color: ${colors.warning_red};
   border-radius: 11;

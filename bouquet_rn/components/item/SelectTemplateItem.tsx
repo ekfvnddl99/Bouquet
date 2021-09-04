@@ -9,6 +9,14 @@ import * as area from '../../styles/styled-components/area';
 // components
 import ConditionButton from '../button/ConditionButton';
 
+type SelectTemplateProps = {
+  templateName: string;
+  explain: string;
+  exampleSvg: JSX.Element;
+  selectId: number;
+  setSelectId: (param: number) => void;
+  thisId: number;
+};
 /**
  * '템플릿 선택 화면'에 있는 템플릿 선택지 컴포넌트
  *
@@ -19,14 +27,6 @@ import ConditionButton from '../button/ConditionButton';
  * @param setSelectId 고른 템플릿 아이디 set 함수
  * @param thisId 해당 템플릿 아이디
  */
-type SelectTemplateProps = {
-  templateName: string;
-  explain: string;
-  exampleSvg: JSX.Element;
-  selectId: number;
-  setSelectId: (param: number) => void;
-  thisId: number;
-};
 export default function SelectTemplateItem({
   templateName,
   explain,

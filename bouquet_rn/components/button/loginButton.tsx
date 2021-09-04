@@ -6,6 +6,11 @@ import styled from 'styled-components/native';
 import colors from '../../styles/colors';
 import * as text from '../../styles/styled-components/text';
 
+type LoginButtonProps = {
+  content: string;
+  icon: JSX.Element;
+  onPress: () => void;
+};
 /**
  * 메일 / 구글 / 애플 로그인 버튼
  *
@@ -13,11 +18,6 @@ import * as text from '../../styles/styled-components/text';
  * @param icon 로그인 종류에 따른 아이콘
  * @param onPress 버튼 눌렀을 때 실행되는 함수
  */
-type LoginButtonProps = {
-  content: string;
-  icon: JSX.Element;
-  onPress: () => void;
-};
 export default function LoginButton({
   content,
   icon,

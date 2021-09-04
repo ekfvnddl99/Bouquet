@@ -5,15 +5,15 @@ import { View } from 'react-native';
 import colors from '../../styles/colors';
 import * as text from '../../styles/styled-components/text';
 
+type QuestionItemProps = {
+  question: string;
+};
 /**
  * 질문만 있는 컴포넌트
  * Q. (질문) 형태
  *
  * @param question 질문
  */
-type QuestionItemProps = {
-  question: string;
-};
 export default function QuestionItem({
   question,
 }: QuestionItemProps): React.ReactElement {

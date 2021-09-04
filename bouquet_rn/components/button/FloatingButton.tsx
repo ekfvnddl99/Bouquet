@@ -14,18 +14,17 @@ import Svg from '../../assets/Icon';
  */
 export default function FloatingButton(): React.ReactElement {
   const navigation = useNavigation();
-
   /**
    * '글쓰기' 화면으로 이동하는 함수
    */
-  function goPostWriting() {
+  function goWritingStack() {
     navigation.navigate('WritingStack');
   }
 
   return (
     <TouchableOpacity
       style={{ bottom: 20, position: 'absolute', right: 20 }}
-      onPress={() => goPostWriting}
+      onPress={() => goWritingStack}
     >
       <elses.Circle diameter={50} backgroundColor={colors.primary}>
         <Svg icon="writeWhite" size={24} />

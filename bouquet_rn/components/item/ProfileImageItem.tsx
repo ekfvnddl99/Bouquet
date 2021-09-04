@@ -4,6 +4,11 @@ import { useNavigation } from '@react-navigation/native';
 import * as elses from '../../styles/styled-components/elses';
 import useCharacterView from '../../logics/hooks/useCharacterView';
 
+type ProfileImageItemProps = {
+  diameter: number;
+  img: string;
+  name: number;
+};
 /**
  * 원형의 프로필 사진 컴포넌트
  *
@@ -11,11 +16,6 @@ import useCharacterView from '../../logics/hooks/useCharacterView';
  * @param img 프로필 사진
  * @param name 프로필의 이름
  */
-type ProfileImageItemProps = {
-  diameter: number;
-  img: string;
-  name?: number;
-};
 export default function ProfileImageItem({
   diameter,
   img,
@@ -27,7 +27,7 @@ export default function ProfileImageItem({
    * '상세 프로필' 화면으로 이동하는 함수
    */
   function goProfileDetail() {
-    if (name) setViewCharacter(name);
+    setViewCharacter(name);
     navigation.navigate('ProfileDetailStack');
   }
   return (

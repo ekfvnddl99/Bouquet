@@ -9,6 +9,14 @@ import * as button from '../../styles/styled-components/button';
 // assets
 import Icon from '../../assets/Icon';
 
+type TagArrayItemProps = {
+  content: string;
+  tagArray: string[];
+  tagIndex: number;
+  isSearching: boolean;
+  setTagArray: (param: string[]) => void;
+  setSearch?: (param: string) => void;
+};
 /**
  * 삭제 가능한 버튼이 있는 tag 컴포넌트
  *
@@ -19,14 +27,6 @@ import Icon from '../../assets/Icon';
  * @param setTagArray 태그 배열 set 함수
  * @param setSearch Search에서 검색어 set 함수
  */
-type TagArrayItemProps = {
-  content: string;
-  tagArray: string[];
-  tagIndex: number;
-  isSearching: boolean;
-  setTagArray: (param: string[]) => void;
-  setSearch?: (param: string) => void;
-};
 export default function TagModifyingItem({
   content,
   tagIndex,
@@ -48,11 +48,7 @@ export default function TagModifyingItem({
     <button.TagModifyButton
       backgroundColor={isSearching ? colors.white : colors.alpha10_primary}
       activeOpacity={1}
-      onPress={() =>
-        isSearching && typeof setSearch !== 'undefined'
-          ? setSearch(content)
-          : {}
-      }
+      onPress={() => (isSearching && setSearch ? setSearch(content) : {})}
     >
       <text.Caption
         textColor={isSearching ? colors.black : colors.primary}

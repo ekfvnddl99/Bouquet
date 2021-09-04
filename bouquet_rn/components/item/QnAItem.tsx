@@ -18,16 +18,20 @@ import QuestionItem from './QuestionItem';
 import SunButton from '../button/SunButton';
 import useCharacter from '../../logics/hooks/useCharacter';
 
-/**
- * 질답 게시물 컴포넌트
- *
- * @param question 질문
- * @param answer 대답
- */
 type QnAItemProps = {
   question: string;
   answer: string;
 };
+/**
+ * 질답 게시물 컴포넌트
+ * ! 뭔가 객체 자체를 반환할 것 같다.
+ * TODO 햇살
+ * TODO 햇살 set 함수
+ * TODO 시간
+ *
+ * @param question 질문
+ * @param answer 대답
+ */
 export default function QnAItem({
   question,
   answer,
@@ -35,7 +39,9 @@ export default function QnAItem({
   const navigation = useNavigation();
   const [character, setCharacter] = useCharacter();
 
-  // '상세 게시물' 화면으로 가는 함수
+  /**
+   * '상세 게시물' 화면으로 가는 함수
+   * */
   function goPostStack() {
     navigation.navigate('PostStack');
   }
@@ -53,7 +59,7 @@ export default function QnAItem({
             />
           </View>
           <text.Caption textColor={colors.gray5}>
-            {cal.timeName(57)} {i18n.t('전')}
+            {cal.timeName('')} {i18n.t('전')}
           </text.Caption>
         </area.RowArea>
         <QuestionItem question={question} />
@@ -69,7 +75,7 @@ export default function QnAItem({
           {answer}
         </text.Body2R>
         <View style={{ alignItems: 'flex-start' }}>
-          <SunButton sun={0} active={false} />
+          <SunButton sunNum={0} setSunNum={() => undefined} active={false} />
         </View>
       </WholeArea>
     </TouchableWithoutFeedback>

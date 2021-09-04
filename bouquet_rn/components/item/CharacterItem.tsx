@@ -14,21 +14,20 @@ import useCharacterView from '../../logics/hooks/useCharacterView';
 // utils
 import { Character } from '../../utils/types/UserTypes';
 
+type CharacterItemProps = {
+  character: Character;
+};
 /**
  * 캐릭터 리스트의 컴포넌트
  * 캐릭터 고를 때 보이는 컴포넌트
  *
  * @param character 캐릭터 unit
  */
-type CharacterItemProps = {
-  character: Character;
-};
 export default function CharacterItem({
   character,
 }: CharacterItemProps): React.ReactElement {
   const navigation = useNavigation();
   const [viewCharacter, setViewCharacter] = useCharacterView();
-
   /**
    * '상세 프로필' 화면으로 이동하는 함수
    * 보여지는 캐릭터를 설정하고 나서 넘어간다.

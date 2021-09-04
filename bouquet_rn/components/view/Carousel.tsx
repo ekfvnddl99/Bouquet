@@ -7,6 +7,13 @@ import ProfileDetailItem from '../item/ProfileDetailItem';
 // utils
 import { Character } from '../../utils/types/UserTypes';
 
+type carouselProps = {
+  pages: Array<Character>;
+  offset: number;
+  gap: number;
+  pageWidth: number;
+  setPage: (param: number) => void;
+};
 /**
  * '캐릭터 스와이프 뷰'에서 옆으로 넘기는 뷰
  *
@@ -16,13 +23,6 @@ import { Character } from '../../utils/types/UserTypes';
  * @param pageWidth 페이지 너비
  * @param setPage 페이지 set 함수
  */
-interface carouselProps {
-  pages: Array<Character>;
-  offset: number;
-  gap: number;
-  pageWidth: number;
-  setPage: (param: number) => void;
-}
 export default function Carousel({
   pages,
   offset,
@@ -30,18 +30,18 @@ export default function Carousel({
   pageWidth,
   setPage,
 }: carouselProps): React.ReactElement {
-  const onScroll = (e: any) => {
+  function onScroll(e: any) {
     const newPage = Math.round(
       e.nativeEvent.contentOffset.x / (pageWidth + gap),
     );
     setPage(newPage);
-  };
+  }
   return (
     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
       <FlatList
         contentContainerStyle={{ paddingHorizontal: offset + gap / 2 }}
         data={pages}
-        onScroll={onScroll}
+        onScroll={() => onScroll}
         decelerationRate="fast"
         horizontal
         pagingEnabled
@@ -50,7 +50,7 @@ export default function Carousel({
         renderItem={(obj) => (
           <TouchableWithoutFeedback>
             <View style={{ width: pageWidth, marginHorizontal: gap / 2 }}>
-              <ProfileDetailItem isMini character={obj.item} isOwner />
+              <ProfileDetailItem isMini characterInfo={obj.item} />
             </View>
           </TouchableWithoutFeedback>
         )}

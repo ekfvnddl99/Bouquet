@@ -11,14 +11,15 @@ import Svg from '../../assets/Icon';
 // logics
 import * as cal from '../../logics/non-server/Calculation';
 
-/**
- * 아 버튼은 아니고 그냥 (댓글 아이콘, 댓글 개수) 컴포넌트
- *
- * @param commentNum 댓글 개수
- */
 type CommentButtonProps = {
   commentNum: number;
 };
+/**
+ * 아 버튼은 아니고 그냥 (댓글 아이콘, 댓글 개수) 컴포넌트
+ * 나중에... 버튼에 생길 수도 있지 않을꽈....
+ *
+ * @param commentNum 댓글 개수
+ */
 export default function CommentButton({
   commentNum,
 }: CommentButtonProps): React.ReactElement {

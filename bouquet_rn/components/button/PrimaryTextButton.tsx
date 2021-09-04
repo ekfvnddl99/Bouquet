@@ -5,6 +5,11 @@ import { TouchableOpacity } from 'react-native';
 import colors from '../../styles/colors';
 import * as text from '../../styles/styled-components/text';
 
+type PrimaryTextButtonProps = {
+  onPress: () => void;
+  content: string;
+  isBold: boolean;
+};
 /**
  * primary 색 텍스트인 버튼
  *
@@ -12,11 +17,6 @@ import * as text from '../../styles/styled-components/text';
  * @param content 버튼에 써진 텍스트
  * @param isBold 버튼 텍스트가 bold인지 아닌지
  */
-type PrimaryTextButtonProps = {
-  onPress: () => void;
-  content: string;
-  isBold: boolean;
-};
 export default function PrimaryTextButton({
   onPress,
   content,

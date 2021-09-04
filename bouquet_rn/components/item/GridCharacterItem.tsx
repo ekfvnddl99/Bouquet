@@ -16,17 +16,7 @@ import useCharacterView from '../../logics/hooks/useCharacterView';
 // components
 import ConditionButton from '../button/ConditionButton';
 
-/**
- * Profile, Account의 grid view의 캐릭터 컴포넌트
- *
- * @param name 캐릭터 이름
- * @param img 캐릭터 이미지
- * @param introduction 캐릭터 한 줄 소개
- * @param idx grid view의 항목 중 해당 캐릭터의 인덱스
- * @param isAccount '계정' 화면의 grid view인지 아닌지
- * @param onPress 캐릭터 컴포넌트 눌렀을 때 실행되는 함수
- */
-interface GridItemProps {
+interface GridCharacterItemProps {
   name: string;
   img: string;
   introduction: string;
@@ -34,14 +24,24 @@ interface GridItemProps {
   isAccount: boolean;
   onPress: (param: number) => void;
 }
-export default function GridItem({
+/**
+ * Profile, Account의 grid view의 캐릭터 컴포넌트
+ *
+ * @param name 캐릭터 이름
+ * @param img 캐릭터 이미지
+ * @param introduction 캐릭터 한 줄 소개
+ * @param idx grid view의 항목의 인덱스
+ * @param isAccount '계정' 화면의 grid view인지 아닌지
+ * @param onPress 캐릭터 컴포넌트 눌렀을 때 실행되는 함수
+ */
+export default function GridCharacterItem({
   name,
   img,
   introduction,
   onPress,
   idx,
   isAccount,
-}: GridItemProps): React.ReactElement {
+}: GridCharacterItemProps): React.ReactElement {
   const navigation = useNavigation();
   const [character, setCharacter] = useCharacter();
   const [viewCharacter, setViewCharacter] = useCharacterView();
@@ -52,6 +52,7 @@ export default function GridItem({
     setViewCharacter(name);
     navigation.navigate('ProfileDetailStack');
   }
+
   return (
     <button.MiniListButton
       isWidth={false}
