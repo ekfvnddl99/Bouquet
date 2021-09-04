@@ -62,18 +62,21 @@ export async function getUserAsync(): APIs.ServerResult<User> {
 
 /**
  * 서버에서 유저 정보를 수정하는 함수
+ * @param name 수정하려는 별명
+ * @param profileImg 수정하려는 프로필 사진
+ *
  * @returns [null, true] 또는 [에러 객체, false] : 2번째 boolean은 정보 불러오기 성공 여부
  */
 export async function editUserAsync(
-  name: string,
-  profile: string,
+  name?: string,
+  profileImg?: string,
 ): APIs.ServerResult<null> {
   // 서버 응답 타입 정의
   type EditUserAsyncOutput = null;
 
   const tmpResult = await APIs.patchAsync<EditUserAsyncOutput>(
     '/user/',
-    JSON.stringify({ profile_img: profile, name }),
+    JSON.stringify({ profile_img: profileImg, name }),
     true,
   );
 

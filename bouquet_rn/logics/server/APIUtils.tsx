@@ -46,7 +46,7 @@ export type ServerError422 = {
 
 /**
  * 서버 요청 함수들의 반환 Type
- * @returns 요청이 이루어졌으면 [결과, status code], 다른 문제(auth 정보 없음, 서버 연결 실패 등)가 발생했으면 에러 객체
+ * @returns 요청이 이루어졌으면 [결과, Response 객체], 다른 문제(auth 정보 없음, 서버 연결 실패 등)가 발생했으면 에러 객체
  */
 type ServerOutput<Result> = Promise<
   [Result | ServerError | ServerError422, Response] | ServerErrorOutput
@@ -67,7 +67,7 @@ export function isServerErrorOutput(arg: any): arg is ServerErrorOutput {
  * @param arg Type을 결정할 result
  * @param response Response 객체
  *
- * @description 성공한 서버 요청이면 해당 요청의 result(arg)는 타입 T
+ * @description 성공한 서버 요청(response.ok)이면 해당 요청의 result(arg)는 타입 T
  */
 /* eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types */
 export function isSuccess<T>(arg: any, response: Response): arg is T {
@@ -80,7 +80,7 @@ export function isSuccess<T>(arg: any, response: Response): arg is T {
  * @param response Response 객체
  * @param statusCode 체크하고 싶은 오류의 status code
  *
- * @description 주어진 statusCode를 status code로 하는 error이면 해당 요청의 result(arg)는 타입 T
+ * @description response.status === statusCode이면 해당 요청의 result(arg)는 타입 T
  */
 export function isError<T>(
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types */
