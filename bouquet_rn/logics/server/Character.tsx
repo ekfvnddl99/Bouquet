@@ -31,7 +31,7 @@ export async function createCharacterAsync(
   const [result, response] = tmpResult;
 
   // 202 : Given character name already exists
-  if (response.status === 202) {
+  if (APIs.isError<APIs.ServerError>(result, response, 202)) {
     /**
      * 캐릭터 생성 과정에서 이름 중복을 체크함에도 불구하고 중복이어서 캐릭터 생성을 완료할 수 없는 경우이므로,
      * * status code가 200번대이지만 에러로 간주
@@ -41,6 +41,7 @@ export async function createCharacterAsync(
         statusCode: 202,
         errorMsg:
           '이미 있는 캐릭터 이름이에요. 이름을 정하고 나서 생성을 누른 사이에 해당 캐릭터가 만들어졌나 봐요. 다른 이름으로 시도해 보세요!',
+        info: result.msg,
       },
       false,
     ];
@@ -76,7 +77,7 @@ export async function createCharacterAsync(
 
 /**
  * 서버에 캐릭터 정보 수정 요청을 보내는 함수
- * @param character 만들 캐릭터 정보를 담은 OptionalCharacter 객체
+ * @param character 수정할 정보를 담은 OptionalCharacter 객체
  *
  * @returns [null, true] 또는 [에러 객체, false] : 2번째 boolean은 정보 불러오기 성공 여부
  */
