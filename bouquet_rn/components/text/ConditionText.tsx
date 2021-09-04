@@ -8,6 +8,10 @@ import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
 
+type ConditionTextProps = {
+  content: string;
+  isActive: boolean;
+};
 /**
  * 조건을 보여 주고 조건의 충족 여부를 표시하는 컴포넌트
  * 회원가입, 캐릭터 생성 등 input 형태에 조건이 있는 경우 사용
@@ -18,10 +22,7 @@ import * as text from '../../styles/styled-components/text';
 export default function ConditionText({
   content,
   isActive,
-}: {
-  content: string;
-  isActive: boolean;
-}): React.ReactElement {
+}: ConditionTextProps): React.ReactElement {
   return (
     <area.RowArea style={{ marginTop: 8 }}>
       {isActive ? (

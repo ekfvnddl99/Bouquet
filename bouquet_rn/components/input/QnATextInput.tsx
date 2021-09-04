@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput } from 'react-native';
+import { View } from 'react-native';
 import styled from 'styled-components/native';
 
 // styles
@@ -15,16 +15,17 @@ import LineButton from '../button/LineButton';
 import QuestionItem from '../item/QuestionItem';
 import QnAItem from '../item/QnAItem';
 
-/**
- * Home의 피드 상단에 있는 질답
- *
- * @param question 질문
- * @param onChangeQuestion '질문 바꾸기' 버튼 눌렀을 때 실행되는 함수
- */
 type QnATextInputProps = {
   question: string;
   onChangeQuestion: () => void;
 };
+/**
+ * Home의 피드 상단에 있는 질답
+ * TODO 질문에 답하면 업로드 하는 함수를 연결해야 함
+ *
+ * @param question 질문
+ * @param onChangeQuestion '질문 바꾸기' 버튼 눌렀을 때 실행되는 함수
+ */
 export default function QnATextInput({
   question,
   onChangeQuestion,
@@ -56,15 +57,10 @@ export default function QnATextInput({
         <QuestionItem question={question} />
 
         <MiddleLine />
-        <TextInput
+        <AnswerTextInput
           placeholder="답변을 입력해 보세요."
           multiline
           onChangeText={(input) => setAnswer(input)}
-          style={{
-            marginBottom: 10,
-            paddingHorizontal: 10,
-            paddingVertical: 10,
-          }}
         />
         <View style={{ alignItems: 'flex-end' }}>
           <LineButton
@@ -87,4 +83,9 @@ const MiddleLine = styled.View`
   border-color: ${colors.gray5};
   margin-bottom: 10;
   margin-horizontal: 10;
+`;
+const AnswerTextInput = styled.TextInput`
+  margin-bottom: 10;
+  padding-horizontal: 10;
+  padding-vertical: 10;
 `;

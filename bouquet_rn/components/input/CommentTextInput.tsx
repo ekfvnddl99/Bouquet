@@ -14,6 +14,14 @@ import Svg from '../../assets/Icon';
 import useCharacter from '../../logics/hooks/useCharacter';
 import { PostComment } from '../../utils/types/PostTypes';
 
+type CommInputProps = {
+  textValue: string;
+  onChanageText: (param: string) => void;
+  onPress: (param: string) => void;
+  isChild: boolean;
+  targetComment?: PostComment;
+  setTargetComment?: () => void;
+};
 /**
  * 댓글 입력하는 textinput
  *
@@ -21,46 +29,39 @@ import { PostComment } from '../../utils/types/PostTypes';
  * @param onChanageText textinput의 onChangeText 함수 역할을 할 것
  * @param onPress '전송' 버튼 누르면 실행되는 함수
  * @param isChild 대댓글인지 아닌지
- * @param setParentComment 대댓글의 대상이 되는 부모댓글 set 함수 (대상이 되는 부모댓글을 x버튼으로 누를 때 삭제하기 위해 사용됨)
- * @param parentComment 대댓글의 대상이 되는 부모댓글 Comment 객체
+ * ---------------
+ * @param targetComment 대댓글의 대상이 되는 댓글 Comment 객체
+ * @param setTargetComment 대댓글의 대상이 되는 댓글 set 함수 (대상이 되는 부모댓글을 x버튼으로 누를 때 삭제하기 위해 사용됨)
  */
-type CommInputProps = {
-  textValue: string;
-  onChanageText: (param: string) => void;
-  onPress: (param: string) => void;
-  isChild: boolean;
-  setParentComment?: () => void;
-  parentComment?: PostComment;
-};
 export default function CommentTextInput({
   textValue,
   onChanageText,
   onPress,
   isChild,
-  setParentComment,
-  parentComment,
+  targetComment,
+  setTargetComment,
 }: CommInputProps): React.ReactElement {
   const [character, setCharacter] = useCharacter();
 
   return (
     <View>
       {isChild ? (
-        <CommentUpperArea>
+        <TargetCommentArea>
           <Svg icon="commentInput" size={18} />
           <View style={{ flex: 1, marginHorizontal: 8 }}>
             <text.Body3 textColor={colors.gray6} numberOfLines={1}>
-              {parentComment ? parentComment.comment : parentComment}
+              {targetComment ? targetComment.comment : ''}
             </text.Body3>
           </View>
           <TouchableOpacity
-            onPress={setParentComment ? () => setParentComment : undefined}
+            onPress={setTargetComment ? () => setTargetComment : undefined}
           >
             <Svg icon="roundX" size={18} />
           </TouchableOpacity>
-        </CommentUpperArea>
+        </TargetCommentArea>
       ) : null}
 
-      <CommentLowerArea>
+      <CommentInputArea>
         <View style={{ marginBottom: 3 }}>
           <elses.CircleImg
             diameter={30}
@@ -80,22 +81,22 @@ export default function CommentTextInput({
         >
           <Svg icon="send" size={30} />
         </TouchableOpacity>
-      </CommentLowerArea>
+      </CommentInputArea>
     </View>
   );
 }
 
-const CommentUpperArea = styled.View`
+const TargetCommentArea = styled.View`
   background-color: ${colors.gray1};
   height: 32;
   justify-content: center;
   align-item
   padding-horizontal: 15;
   padding-vertical: 7;
-  align-items:center;
-  flex-direction:row;
+  align-items: center;
+  flex-direction: row;
 `;
-const CommentLowerArea = styled.View`
+const CommentInputArea = styled.View`
   align-items: flex-end;
   background-color: ${colors.white};
   flex-direction: row;

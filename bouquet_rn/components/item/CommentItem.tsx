@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import i18n from 'i18n-js';
 
@@ -11,66 +11,62 @@ import * as text from '../../styles/styled-components/text';
 import Icon from '../../assets/Icon';
 
 // logics
+import useUser from '../../logics/hooks/useUser';
+import useCharacter from '../../logics/hooks/useCharacter';
 import * as cal from '../../logics/non-server/Calculation';
-import * as Post from '../../logics/server/Post';
+
+// utils
+import { PostComment } from '../../utils/types/PostTypes';
 
 // components
 import ProfileButton from '../button/ProfileButton';
 
+/**
+ * 댓글 컴포넌트
+ * TODO 댓글 삭제 함수
+ * TODO 햇살 set 함수
+ *
+ * @param commentInfo 댓글 객체. 서버에서 불러온다.
+ * @param selectId 사용자가 클릭한 댓글.
+ * @param setTargetComment 대댓글 대상이 되는 댓글의 set 함수
+ * ---------------
+ * @param OpeningCommentArray 대댓글이 보이는 댓글들의 아이디가 담긴 배열
+ * @param setOpeningCommentArray 대댓글이 보이는 댓글들의 아이디가 담긴 배열의 set 함수
+ */
 interface CommentItemProps {
-  info: Post.Comment;
-  press: number;
-  isOwner: boolean;
-  isLogin: boolean;
-  setParentComment: (param: Post.Comment) => void;
-  setClickId?: (param: number) => void;
-  setClickArray?: (param: number[]) => void;
-  clickArray?: number[];
+  commentInfo: PostComment;
+  selectId: number;
+  setTargetComment: (param: PostComment) => void;
+  OpeningCommentArray?: number[];
+  setOpeningCommentArray?: (param: number[]) => void;
 }
-
 export default function CommentItem({
-  info,
-  press,
-  isOwner,
-  isLogin,
-  setParentComment,
-  setClickId,
-  setClickArray,
-  clickArray,
+  commentInfo,
+  selectId,
+  setTargetComment,
+  OpeningCommentArray,
+  setOpeningCommentArray,
 }: CommentItemProps): React.ReactElement {
-  // 대댓글이 있는지
-  const [isMoreComments, setIsMoreComments] = useState(false);
-  useEffect(() => {
-    if (setClickId) {
-      if (isMoreComments) {
-        setClickId(info.id);
-        manageClickArray('add');
-      } else {
-        setClickId(-1);
-        manageClickArray('subtract');
-      }
-    }
-  }, [isMoreComments]);
+  // 얘가 부모 댓글일 때, 대댓글이 있는지
+  const [isOpeningCommentComment, setIsOpeningCommentComment] = useState(false);
+  const [user, isLogined] = useUser();
+  const [character, setCharacter] = useCharacter();
 
   /**
    * 대댓글이 보여지는 댓글들을 배열로 관리하는 함수
    * 대댓글이 보여지는 댓글들은 함수에 넣고, 아니면 뺀다.
-   *
-   * @param mode 클릭한 댓글을 추가/삭제 어떤 상황인지 나타내는 문자열 값
    */
-  function manageClickArray(mode: string) {
-    if (
-      typeof clickArray !== 'undefined' &&
-      typeof setClickArray !== 'undefined'
-    ) {
-      const tmp: number[] = clickArray;
-      if (mode === 'add') {
-        if (!tmp.includes(info.id)) tmp.push(info.id);
+  function manageOpeningCommentArray() {
+    if (OpeningCommentArray && setOpeningCommentArray) {
+      const tmp: number[] = OpeningCommentArray;
+      // 대댓글이 열린 상태의 댓글이라면 '추가'
+      if (isOpeningCommentComment) {
+        if (!tmp.includes(commentInfo.id)) tmp.push(commentInfo.id);
       } else {
-        const idx = tmp.indexOf(info.id);
+        const idx = tmp.indexOf(commentInfo.id);
         tmp.splice(idx, 1);
       }
-      setClickArray(tmp);
+      setOpeningCommentArray(tmp);
     }
   }
 
@@ -81,12 +77,16 @@ export default function CommentItem({
       paddingV={12}
       style={{
         backgroundColor:
-          press === info.id && isLogin ? colors.alpha10_primary : colors.white,
+          selectId === commentInfo.id && isLogined
+            ? colors.alpha10_primary
+            : colors.white,
       }}
     >
       <area.RowArea style={{ alignItems: 'flex-start', marginBottom: 8 }}>
         <View style={{ flex: 2 }}>
-          <text.Body2R textColor={colors.black}>{info.comment}</text.Body2R>
+          <text.Body2R textColor={colors.black}>
+            {commentInfo.comment}
+          </text.Body2R>
         </View>
         <View
           style={{
@@ -96,7 +96,7 @@ export default function CommentItem({
           }}
         >
           <text.Caption textColor={colors.gray5}>
-            {cal.timeName(Number(info.createdAt))} {i18n.t('전')}
+            {cal.timeName(Number(commentInfo.created_at))} {i18n.t('전')}
           </text.Caption>
         </View>
       </area.RowArea>
@@ -105,24 +105,36 @@ export default function CommentItem({
         <ProfileButton
           diameter={20}
           isAccount={false}
-          name={info.name}
-          img={info.profileImg}
+          name={commentInfo.name}
+          img={commentInfo.profile_img}
         />
         <View style={{ flex: 1 }} />
         <area.RowArea>
-          {press === info.id && isOwner ? (
+          {selectId === commentInfo.id &&
+          character.name === commentInfo.name ? (
             <TouchableOpacity>
               <Icon icon="bin" size={18} />
             </TouchableOpacity>
           ) : null}
-          {info.children ? (
+
+          {commentInfo.parent === 0 ? (
             <View style={{ marginLeft: 8 }}>
-              {isMoreComments ? (
-                <TouchableOpacity onPress={() => setIsMoreComments(false)}>
+              {isOpeningCommentComment ? (
+                <TouchableOpacity
+                  onPress={() => [
+                    setIsOpeningCommentComment(false),
+                    manageOpeningCommentArray,
+                  ]}
+                >
                   <Icon icon="commentDownArrow" size={18} />
                 </TouchableOpacity>
               ) : (
-                <TouchableOpacity onPress={() => setIsMoreComments(true)}>
+                <TouchableOpacity
+                  onPress={() => [
+                    setIsOpeningCommentComment(true),
+                    manageOpeningCommentArray,
+                  ]}
+                >
                   <Icon icon="commentUpArrow" size={18} />
                 </TouchableOpacity>
               )}
@@ -130,21 +142,21 @@ export default function CommentItem({
           ) : null}
 
           <View style={{ marginLeft: 8 }} />
-          <TouchableOpacity onPress={() => setParentComment(info)}>
+          <TouchableOpacity onPress={() => setTargetComment(commentInfo)}>
             <Icon icon="comment" size={18} />
           </TouchableOpacity>
 
           <View style={{ marginLeft: 8 }} />
           <area.RowArea>
             <TouchableOpacity>
-              {info.liked ? (
-                <Icon icon="sunFocusPri" size={18} />
+              {commentInfo.liked ? (
+                <Icon icon="sunFocusPrimary" size={18} />
               ) : (
                 <Icon icon="sun" size={18} />
               )}
             </TouchableOpacity>
             <text.Body3 textColor={colors.primary} style={{ marginLeft: 4 }}>
-              {cal.numName(0)}
+              {cal.numName(commentInfo.num_sunshines)}
             </text.Body3>
           </area.RowArea>
         </area.RowArea>

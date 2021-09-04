@@ -12,6 +12,12 @@ import * as text from '../../styles/styled-components/text';
 import useCharacterView from '../../logics/hooks/useCharacterView';
 import useUserView from '../../logics/hooks/useUserView';
 
+type ProfileButtonProps = {
+  diameter: number;
+  isAccount: boolean;
+  name: string;
+  img: string;
+};
 /**
  * (원형 모양의 프로필 사진, 해당 이름) 버튼
  *
@@ -20,12 +26,6 @@ import useUserView from '../../logics/hooks/useUserView';
  * @param name 프로필 이름
  * @param img 프로필 사진
  */
-type ProfileButtonProps = {
-  diameter: number;
-  isAccount: boolean;
-  name: string;
-  img: string;
-};
 export default function ProfileButton({
   diameter,
   isAccount,
@@ -34,8 +34,7 @@ export default function ProfileButton({
 }: ProfileButtonProps): React.ReactElement {
   const navigation = useNavigation();
   const [characterView, setCharacterView] = useCharacterView();
-  const [viewUser, setViewUser, isMe] = useUserView();
-
+  const [userView, setUserView, isMe] = useUserView();
   /**
    * '상세 프로필' 화면으로 이동하는 함수
    * 캐릭터 프로필을 눌렀을 때
@@ -49,7 +48,7 @@ export default function ProfileButton({
    * 계정 프로필을 눌렀을 때
    */
   function goAccount() {
-    setViewUser({ name, profileImg: img });
+    setUserView({ name, profileImg: img });
     navigation.navigate('AccountStack');
   }
 

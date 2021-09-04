@@ -8,6 +8,13 @@ import * as elses from '../../styles/styled-components/elses';
 // icons
 import Icon from '../../assets/Icon';
 
+type ProgressItemProps = {
+  stepBack: () => void;
+  step: number;
+  title: string;
+  subtitle: string;
+  navigation: any;
+};
 /**
  * progress bar 컴포넌트
  * 진행정도를 표시한다.
@@ -18,13 +25,6 @@ import Icon from '../../assets/Icon';
  * @param subtitle 해당 step 화면의 부제목
  * @param navigation navigation 값
  */
-type ProgressItemProps = {
-  stepBack: () => void;
-  step: number;
-  title: string;
-  subtitle: string;
-  navigation: any;
-};
 export default function ProgressItem({
   stepBack,
   step,

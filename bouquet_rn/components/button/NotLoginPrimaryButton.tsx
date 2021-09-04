@@ -19,12 +19,11 @@ export default function NotLoginPrimaryButton(): React.ReactElement {
   const [color, setColor] = useState(colors.primary);
   const user = useRecoilValue(userState);
   const navigation = useNavigation();
-
   /**
    * '캐릭터 생성' 화면으로 이동하는 함수
    */
-  function goChaGeneration() {
-    navigation.navigate('ChaGeneration');
+  function goCharacterGeneration() {
+    navigation.navigate('CharacterGeneration');
   }
   /**
    * '로그인' 화면으로 이동하는 함수
@@ -38,7 +37,7 @@ export default function NotLoginPrimaryButton(): React.ReactElement {
       onPressIn={() => setColor(colors.pressed_primary)}
       onPressOut={() => setColor(colors.primary)}
       activeOpacity={1}
-      onPress={() => (user.isLogined ? goChaGeneration : goLogin)}
+      onPress={() => (user.isLogined ? goCharacterGeneration : goLogin)}
     >
       <WholeArea backgroundColor={color}>
         <text.Button2R textColor={colors.white}>

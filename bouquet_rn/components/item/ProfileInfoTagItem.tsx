@@ -7,6 +7,10 @@ import * as text from '../../styles/styled-components/text';
 // components
 import TagItem from './TagItem';
 
+type ProfileInfoTagProps = {
+  title: string;
+  tags: string[];
+};
 /**
  * '상세 프로필' 화면의 캐릭터 정보에서 tag 배열 컴포넌트
  * ex : title(좋아하는 것) tags(비옥한 토양, 햇살)
@@ -14,10 +18,6 @@ import TagItem from './TagItem';
  * @param title tag 배열 주제
  * @param tags tag 배열
  */
-type ProfileInfoTagProps = {
-  title: string;
-  tags: string[];
-};
 export default function ProfileInfoTag({
   title,
   tags,

@@ -13,7 +13,9 @@ import * as button from '../../styles/styled-components/button';
 // logics
 import * as cal from '../../logics/non-server/Calculation';
 import { viewPostState } from '../../logics/atoms';
-import { Post } from '../../utils/types/PostTypes';
+
+// utils
+import { AllTemplates, Post } from '../../utils/types/PostTypes';
 
 // components
 import SunButton from '../button/SunButton';
@@ -27,36 +29,49 @@ import DiaryTemplate from '../../screens/template/DiaryTemplate';
 import ListTemplate from '../../screens/template/ListTemplate';
 
 type PostItemProps = {
-  info?: Post;
+  postInfo: Post<AllTemplates>;
 };
-export default function PostItem({ info }: PostItemProps): React.ReactElement {
+/**
+ * 피드에 보이는 게시글 컴포넌트
+ * TODO 햇살 set 함수
+ *
+ * @param postInfo 게시글 객체
+ */
+export default function PostItem({
+  postInfo,
+}: PostItemProps): React.ReactElement {
   const navigation = useNavigation();
   const [viewPost, setViewPost] = useRecoilState(viewPostState);
+  /**
+   * '상세 게시글' 화면으로 이동하는 함수
+   */
   function goPostStack() {
-    if (info) {
-      setViewPost(info);
-      navigation.navigate('PostStack');
-    }
+    setViewPost(postInfo);
+    navigation.navigate('PostStack');
   }
 
+  /**
+   * 해당 게시글의 template과 그에 맞는 내용들을 가져오는 함수
+   */
   const getTemplate = useCallback(() => {
-    if (info) {
-      switch (info.template.template) {
+    if (postInfo) {
+      switch (postInfo.type) {
         case 'None':
-          return <TextTemplate mode="mini" content={info.template.text} />;
+          return <TextTemplate mode="mini" post={postInfo.text} />;
         case 'Image':
-          return <ImageTemplate mode="mini" post={info} />;
+          return <ImageTemplate mode="mini" post={postInfo.template} />;
         case 'Diary':
-          return <DiaryTemplate mode="mini" post={info} />;
+          return <DiaryTemplate mode="mini" post={postInfo.template} />;
         case 'Album':
-          return <AlbumTemplate mode="mini" post={info} />;
+          return <AlbumTemplate mode="mini" post={postInfo.template} />;
         case 'List':
-          return <ListTemplate mode="mini" post={info} />;
+          return <ListTemplate mode="mini" post={postInfo.template} />;
         default:
           return null;
       }
     } else return null;
-  }, [info]);
+  }, [postInfo]);
+  // 위의 함수 getTemplate에서 가져온 template 객체
   const template = useMemo(() => getTemplate(), [getTemplate]);
 
   return (
@@ -72,21 +87,22 @@ export default function PostItem({ info }: PostItemProps): React.ReactElement {
           <ProfileButton
             diameter={30}
             isAccount={false}
-            name={info ? info.characterName : ''}
-            img={info ? info.characterImg : ''}
+            name={postInfo ? postInfo.character_name : ''}
+            img={postInfo ? postInfo.character_img : ''}
           />
         </View>
         <View style={{ alignItems: 'flex-end', flex: 1 }}>
           <text.Caption textColor={colors.gray5}>
-            {cal.timeName(1)} {i18n.t('전')}
+            {cal.timeName(postInfo.created_at)} {i18n.t('전')}
           </text.Caption>
         </View>
       </area.RowArea>
       <View style={{ marginVertical: 10 }}>{template}</View>
       <View style={{ alignItems: 'flex-start' }}>
         <SunButton
-          active={info ? info.liked : false}
-          sun={info ? info.numSunshines : 0}
+          active={postInfo ? postInfo.liked : false}
+          sunNum={postInfo ? postInfo.num_sunshines : 0}
+          setSunNum={() => undefined}
         />
       </View>
     </button.BigListButton>

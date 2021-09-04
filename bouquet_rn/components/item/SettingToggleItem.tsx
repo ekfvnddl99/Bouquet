@@ -21,6 +21,7 @@ export default function SettingToggleItem(): React.ReactElement {
 
   /**
    * toggle의 animation 관련
+   * TODO 알람 set 함수
    *
    * TOGGLE 토글 움직이는 정도
    * drag animation 변수

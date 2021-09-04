@@ -5,6 +5,14 @@ import colors from '../../styles/colors';
 import * as text from '../../styles/styled-components/text';
 import * as button from '../../styles/styled-components/button';
 
+type ConditionButtonProps = {
+  isActive: boolean;
+  onPress: () => void;
+  content: string;
+  paddingH: number;
+  paddingV: number;
+  height: number;
+};
 /**
  * 조건이 만족되면 primary, 아니면 회색으로 색이 변하는 버튼
  *
@@ -15,14 +23,6 @@ import * as button from '../../styles/styled-components/button';
  * @param paddingV 버튼 세로 패딩
  * @param height 버튼 높이
  */
-type ConditionButtonProps = {
-  isActive: boolean;
-  onPress: () => void;
-  content: string;
-  paddingH: number;
-  paddingV: number;
-  height: number;
-};
 export default function ConditionButton({
   isActive,
   onPress,
