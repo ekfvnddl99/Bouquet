@@ -35,46 +35,46 @@ export default function QnATextInput({
   const [answer, setAnswer] = useState('');
   const [character, setCharacter] = useCharacter();
 
-  if (!isUpload) {
+  if (isUpload) {
     return (
-      <area.NoHeightArea paddingH={10} paddingV={10} marBottom={10}>
-        <area.RowArea style={{ marginBottom: 10 }}>
-          <View style={{ flex: 1 }}>
-            <ProfileButton
-              diameter={30}
-              isAccount={false}
-              name={character.name}
-              img={character.profileImg}
-            />
-          </View>
-          <LineButton
-            onPress={onChangeQuestion}
-            content="질문 바꾸기"
-            borderColor={colors.black}
-          />
-        </area.RowArea>
-
-        <QuestionItem question={question} />
-
-        <MiddleLine />
-        <AnswerTextInput
-          placeholder="답변을 입력해 보세요."
-          multiline
-          onChangeText={(input) => setAnswer(input)}
-        />
-        <View style={{ alignItems: 'flex-end' }}>
-          <LineButton
-            onPress={() => setIsUpload(true)}
-            content="올리기"
-            borderColor={colors.primary}
-          />
-        </View>
-      </area.NoHeightArea>
+      // 여기로 질문이랑 답변 넘겨줘야 함!
+      <QnAItem question={question} answer={answer} />
     );
   }
   return (
-    // 여기로 질문이랑 답변 넘겨줘야 함!
-    <QnAItem question={question} answer={answer} />
+    <area.NoHeightArea paddingH={10} paddingV={10} marBottom={10}>
+      <area.RowArea style={{ marginBottom: 10 }}>
+        <View style={{ flex: 1 }}>
+          <ProfileButton
+            diameter={30}
+            isAccount={false}
+            name={character.name}
+            img={character.profileImg}
+          />
+        </View>
+        <LineButton
+          onPress={onChangeQuestion}
+          content="질문 바꾸기"
+          borderColor={colors.black}
+        />
+      </area.RowArea>
+
+      <QuestionItem question={question} />
+
+      <MiddleLine />
+      <AnswerTextInput
+        placeholder="답변을 입력해 보세요."
+        multiline
+        onChangeText={(input) => setAnswer(input)}
+      />
+      <View style={{ alignItems: 'flex-end' }}>
+        <LineButton
+          onPress={() => setIsUpload(true)}
+          content="올리기"
+          borderColor={colors.primary}
+        />
+      </View>
+    </area.NoHeightArea>
   );
 }
 

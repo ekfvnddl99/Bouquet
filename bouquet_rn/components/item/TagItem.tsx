@@ -11,7 +11,7 @@ type TagItemProps = {
 };
 /**
  * 해시태그처럼 tag 컴포넌트
- * 그냥 단순한 tag 그 자체. 배열로 표현되지 않는 tag.
+ * @description 그냥 단순한 tag 그 자체. 배열로 표현되지 않는 tag.
  *
  * @param content 태그 내용
  * @param isActive 태그가 활성화 됐는지

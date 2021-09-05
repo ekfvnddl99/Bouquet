@@ -54,20 +54,19 @@ export default function CommentItem({
 
   /**
    * 대댓글이 보여지는 댓글들을 배열로 관리하는 함수
-   * 대댓글이 보여지는 댓글들은 함수에 넣고, 아니면 뺀다.
+   * @description 대댓글이 보여지는 댓글들은 함수에 넣고, 아니면 뺀다.
    */
   function manageOpeningCommentArray() {
-    if (OpeningCommentArray && setOpeningCommentArray) {
-      const tmp: number[] = OpeningCommentArray;
-      // 대댓글이 열린 상태의 댓글이라면 '추가'
-      if (isOpeningCommentComment) {
-        if (!tmp.includes(commentInfo.id)) tmp.push(commentInfo.id);
-      } else {
-        const idx = tmp.indexOf(commentInfo.id);
-        tmp.splice(idx, 1);
-      }
-      setOpeningCommentArray(tmp);
+    if (!(OpeningCommentArray && setOpeningCommentArray)) return;
+    const tmp: number[] = OpeningCommentArray;
+    // 대댓글이 열린 상태의 댓글이라면 배열에 '추가'
+    if (isOpeningCommentComment) {
+      if (!tmp.includes(commentInfo.id)) tmp.push(commentInfo.id);
+    } else {
+      const idx = tmp.indexOf(commentInfo.id);
+      tmp.splice(idx, 1);
     }
+    setOpeningCommentArray(tmp);
   }
 
   return (

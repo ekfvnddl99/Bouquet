@@ -19,7 +19,7 @@ type CharacterItemProps = {
 };
 /**
  * 캐릭터 리스트의 컴포넌트
- * 캐릭터 고를 때 보이는 컴포넌트
+ * @description 캐릭터 고를 때 보이는 컴포넌트
  *
  * @param character 캐릭터 unit
  */
@@ -30,7 +30,7 @@ export default function CharacterItem({
   const [viewCharacter, setViewCharacter] = useCharacterView();
   /**
    * '상세 프로필' 화면으로 이동하는 함수
-   * 보여지는 캐릭터를 설정하고 나서 넘어간다.
+   * @description 보여지는 캐릭터를 설정하고 나서 넘어간다.
    */
   function goProfileDetail() {
     setViewCharacter(character.name);

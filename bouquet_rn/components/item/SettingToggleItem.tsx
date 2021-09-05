@@ -41,8 +41,11 @@ export default function SettingToggleItem(): React.ReactElement {
     extrapolate: 'clamp',
   });
 
-  // toggle의 on/off를 관여하는 함수
-  // 색 변화, 토글 공 위치 변화
+  /**
+   * toggle의 on/off를 관여하는 함수
+   * @description 색 변화, 토글 공 위치 변화
+   * @returns toggle
+   */
   function Toggle() {
     return (
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>

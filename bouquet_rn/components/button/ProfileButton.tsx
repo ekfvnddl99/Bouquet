@@ -37,7 +37,7 @@ export default function ProfileButton({
   const [userView, setUserView, isMe] = useUserView();
   /**
    * '상세 프로필' 화면으로 이동하는 함수
-   * 캐릭터 프로필을 눌렀을 때
+   * @description 캐릭터 프로필을 눌렀을 때
    */
   function goProfileDetail() {
     setCharacterView(name);
@@ -45,7 +45,7 @@ export default function ProfileButton({
   }
   /**
    * '계정' 화면으로 이동하는 함수
-   * 계정 프로필을 눌렀을 때
+   * @description 계정 프로필을 눌렀을 때
    */
   function goAccount() {
     setUserView({ name, profileImg: img });

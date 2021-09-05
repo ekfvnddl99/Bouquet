@@ -22,7 +22,7 @@ type NotificationItemProps = {
 };
 /**
  * Notification 알람 컴포넌트
- * 누구에게, 어떤 내용이 왔는지
+ * @description 누구에게, 어떤 내용이 왔는지
  * ! 뭔가 서버에서 사진, 이름, 내용 한 번에 다 보내줄 것 같아서 인자 바꿔야 할 듯
  * TODO 알림 삭제 함수
  * TODO 알림 프로필 사진 넣기

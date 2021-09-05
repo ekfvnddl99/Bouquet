@@ -14,7 +14,6 @@ import * as area from '../../styles/styled-components/area';
 // logics
 import useCharacterView from '../../logics/hooks/useCharacterView';
 import { followCharacterAsync } from '../../logics/server/Character';
-import useUser from '../../logics/hooks/useUser';
 import * as cal from '../../logics/non-server/Calculation';
 
 // utils
@@ -54,7 +53,7 @@ export default function ProfileDetailItem({
   }
   /**
    * '캐릭터 프로필 수정' 화면으로 이동하는 함수
-   * modify는 수정한다는 의미의 param
+   * @description modify는 수정한다는 의미의 param
    */
   function goChaModification() {
     navigation.navigate('ProfileModification', { modify: 1 });

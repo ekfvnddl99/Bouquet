@@ -11,8 +11,8 @@ type BoldNRegularTextProps = {
   isCenter: boolean;
 };
 /**
- * '상세 프로필' 화면에서 bold 글자, regular 글자 같이 되어있는 거 나타내느 컴포넌트
- * ex : bold(국적) regular(대한민국)
+ * '상세 프로필' 화면에서 bold 글자, regular 글자 같이 되어있는 거 나타내는 컴포넌트
+ * @description ex : bold(국적) regular(대한민국)
  *
  * @param boldContent bold 글자 내용
  * @param regularContent regular 글자 내용

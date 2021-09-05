@@ -17,7 +17,7 @@ type ProgressItemProps = {
 };
 /**
  * progress bar 컴포넌트
- * 진행정도를 표시한다.
+ * @description 진행정도를 표시한다.
  *
  * @param stepBack step 뒤로가기 할 때 실행되는 함수
  * @param step step의 값
