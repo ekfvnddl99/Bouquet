@@ -20,6 +20,16 @@ export type Post<T extends AllTemplates> = {
 };
 
 /**
+ * (POST 요청용) 게시글 Type
+ * @description T는 템플릿 Type을 나타냄
+ */
+export type PostRequest<T extends AllTemplates> = {
+  character_id: number;
+  text: string;
+  template: T;
+};
+
+/**
  * 게시글의 댓글 Type
  * @description 상위 댓글이 없는 경우 parent === 0
  * @description 하위 댓글이 없는 경우 children === undefined 또는 []
@@ -38,6 +48,17 @@ export type PostComment = {
   };
   liked: boolean;
   children?: Array<PostComment>;
+};
+
+/**
+ * (POST 요청용) 댓글 Type
+ * @description 상위 댓글이 없는 경우 parent === 0
+ */
+export type PostCommentRequest = {
+  post_id: number;
+  character_id: number;
+  comment: string;
+  parent: number;
 };
 
 /**

@@ -25,6 +25,21 @@ export type Character = {
   tmi: string;
   likes: Array<string>;
   hates: Array<string>;
+  num_follows: number;
+  num_followers: number;
+  user_info: {
+    name: string;
+    profile_img: string;
+  };
+};
+
+/**
+ * 캐릭터 미리보기용 Type
+ */
+export type CharacterMini = {
+  name: string;
+  profile_img: string;
+  intro: string;
 };
 
 /**
