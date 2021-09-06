@@ -120,10 +120,12 @@ export type ServerResult<T> = Promise<[T | ServerErrorOutput, boolean]>;
 export async function getAsync<Result>(
   route: string,
   isAuth: boolean,
-  info?: Record<string, string>,
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  info?: Record<string, any>,
 ): ServerOutput<Result> {
   // 요청 header 설정
-  let header: Record<string, string> = {
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  let header: Record<string, any> = {
     ...info,
     'Content-Type': 'application/json',
     accept: 'application/json',
@@ -296,10 +298,12 @@ export async function putAsync<Result>(
 export async function deleteAsync<Result>(
   route: string,
   isAuth: boolean,
-  info?: Record<string, string>,
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  info?: Record<string, any>,
 ): ServerOutput<Result> {
   // 요청 header 설정
-  let header: Record<string, string> = {
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  let header: Record<string, any> = {
     ...info,
     accept: 'application/json',
     'Content-Type': 'application/json',
@@ -356,10 +360,12 @@ export async function patchAsync<Result>(
   route: string,
   body: string,
   isAuth: boolean,
-  info?: Record<string, string>,
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  info?: Record<string, any>,
 ): ServerOutput<Result> {
   // 요청 header 설정
-  let header: Record<string, string> = {
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  let header: Record<string, any> = {
     ...info,
     accept: 'application/json',
     'Content-Type': 'application/json',
