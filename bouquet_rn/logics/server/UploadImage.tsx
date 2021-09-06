@@ -18,7 +18,7 @@ declare global {
  * 서버에 이미지를 업로드하는 함수
  * @param uri 업로드하려는 이미지의 uri
  *
- * @returns [이미지 링크, true] 또는 [에러 객체, false] : 2번째 boolean은 정보 불러오기 성공 여부
+ * @returns -{result: 이미지 링크, isSuccess: true} 또는 {result: 에러 객체, isSuccess: false}
  */
 export default async function uploadImageAsync(
   uri: string,
@@ -47,13 +47,14 @@ export default async function uploadImageAsync(
   } else if (extension === '.gif') {
     type = 'image/gif';
   } else {
-    return [
-      {
+    // 인식할 수 없는 확장자는 에러 처리
+    return {
+      result: {
         statusCode: -1,
         errorMsg: '지원하지 않는 형식이거나, 파일 이름이 잘못되었어요.',
       },
-      false,
-    ];
+      isSuccess: false,
+    };
   }
 
   // 이미지를 담은 FormData 생성
@@ -73,35 +74,35 @@ export default async function uploadImageAsync(
 
   // 사전 처리된 에러는 바로 반환
   if (APIs.isServerErrorOutput(tmpResult)) {
-    return [tmpResult, false];
+    return { result: tmpResult, isSuccess: false };
   }
 
   const [result, response] = tmpResult;
 
   // 요청 성공 : 이미지 url 반환
   if (APIs.isSuccess<UploadImageAsyncOutput>(result, response)) {
-    return [result.url, true];
+    return { result: result.url, isSuccess: true };
   }
 
   // 422 : Validation Error
   if (APIs.isError<APIs.ServerError422>(result, response, 422)) {
-    return [
-      {
+    return {
+      result: {
         statusCode: 422,
         errorMsg:
           '이미지가 잘못되었어요. 바꿔서 다시 시도해 보거나, 문의해 주세요.',
         info: result.detail,
       },
-      false,
-    ];
+      isSuccess: false,
+    };
   }
   // 나머지 에러
-  return [
-    {
+  return {
+    result: {
       statusCode: response.status,
       errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
       info: response,
     },
-    false,
-  ];
+    isSuccess: false,
+  };
 }

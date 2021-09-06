@@ -5,7 +5,7 @@ import * as APIs from './APIUtils';
  * @param email 로그인하려는 메일
  * @param password 로그인하려는 비밀번호
  *
- * @returns [auth 키, true] 또는 [에러 객체, false] : 2번째 boolean은 정보 불러오기 성공 여부
+ * @returns -{result: auth 키, isSuccess: true} 또는 {result: 에러 객체, isSuccess: false}
  */
 export async function loginEmailAsync(
   email: string,
@@ -28,61 +28,61 @@ export async function loginEmailAsync(
 
   // 사전 처리된 에러는 바로 반환
   if (APIs.isServerErrorOutput(tmpResult)) {
-    return [tmpResult, false];
+    return { result: tmpResult, isSuccess: false };
   }
 
   const [result, response] = tmpResult;
 
   // 요청 성공 : auth 키 반환
   if (APIs.isSuccess<LoginEmailAsyncOutput>(result, response)) {
-    return [result.Authorization, true];
+    return { result: result.Authorization, isSuccess: true };
   }
 
   // 400 : Wrong ID or PW
   if (APIs.isError<APIs.ServerError>(result, response, 400)) {
-    return [
-      {
+    return {
+      result: {
         statusCode: 400,
         errorMsg: '메일이나 비밀번호가 틀렸나 봐요.',
         info: result.msg,
       },
-      false,
-    ];
+      isSuccess: false,
+    };
   }
 
   // 404 : Given SNS type is not supported
   if (APIs.isError<APIs.ServerError>(result, response, 404)) {
-    return [
-      {
+    return {
+      result: {
         statusCode: 404,
         errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
         info: result.msg,
       },
-      false,
-    ];
+      isSuccess: false,
+    };
   }
 
   // 422 : Validation Error
   if (APIs.isError<APIs.ServerError422>(result, response, 422)) {
-    return [
-      {
+    return {
+      result: {
         statusCode: 422,
         errorMsg:
           '로그인 정보가 잘못되었어요. 다시 시도해 보거나, 문의해 주세요.',
         info: result.detail,
       },
-      false,
-    ];
+      isSuccess: false,
+    };
   }
   // 나머지 에러
-  return [
-    {
+  return {
+    result: {
       statusCode: response.status,
       errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
       info: response,
     },
-    false,
-  ];
+    isSuccess: false,
+  };
 }
 
 /**
@@ -92,7 +92,7 @@ export async function loginEmailAsync(
  * @param name 생성하려는 계정 별명
  * @param profilePic 생성하려는 프로필 사진
  *
- * @returns [auth 키, true] 또는 [에러 객체, false] : 2번째 boolean은 정보 불러오기 성공 여부
+ * @returns -{result: auth 키, isSuccess: true} 또는 {result: 에러 객체, isSuccess: false}
  */
 export async function registerEmailAsync(
   email: string,
@@ -119,7 +119,7 @@ export async function registerEmailAsync(
 
   // 사전 처리된 에러는 바로 반환
   if (APIs.isServerErrorOutput(tmpResult)) {
-    return [tmpResult, false];
+    return { result: tmpResult, isSuccess: false };
   }
 
   const [result, response] = tmpResult;
@@ -130,62 +130,62 @@ export async function registerEmailAsync(
      * 계정 생성 과정에서 이름 중복을 체크함에도 불구하고 중복이어서 계정 생성을 완료할 수 없는 경우이므로,
      * * status code가 200번대이지만 에러로 간주
      */
-    return [
-      {
+    return {
+      result: {
         statusCode: 202,
         errorMsg:
           '이미 있는 이름이에요. 이름을 정하고 나서 생성을 누른 사이에 해당 계정이 만들어졌나 봐요. 다른 이름으로 시도해 보세요!',
         info: result.msg,
       },
-      false,
-    ];
+      isSuccess: false,
+    };
   }
 
   // 요청 성공 : auth 키 반환
   if (APIs.isSuccess<RegisterEmailAsyncOutput>(result, response)) {
-    return [result.Authorization, true];
+    return { result: result.Authorization, isSuccess: true };
   }
 
   // 404 : Given SNS type is not supported
   if (APIs.isError<APIs.ServerError>(result, response, 404)) {
-    return [
-      {
+    return {
+      result: {
         statusCode: 404,
         errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
         info: result.msg,
       },
-      false,
-    ];
+      isSuccess: false,
+    };
   }
 
   // 422 : Validation Error
   if (APIs.isError<APIs.ServerError422>(result, response, 422)) {
-    return [
-      {
+    return {
+      result: {
         statusCode: 422,
         errorMsg:
           '입력한 계정 정보가 잘못되었어요. 수정해서 다시 시도해 보거나, 문의해 주세요.',
         info: result.detail,
       },
-      false,
-    ];
+      isSuccess: false,
+    };
   }
   // 나머지 에러
-  return [
-    {
+  return {
+    result: {
       statusCode: response.status,
       errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
       info: response,
     },
-    false,
-  ];
+    isSuccess: false,
+  };
 }
 
 /**
  * 메일 주소의 중복 여부를 서버에서 불러오는 함수
  * @param email 확인하려는 메일 주소
  *
- * @returns [중복 여부, true] 또는 [에러 객체, false] : 2번째 boolean은 정보 불러오기 성공 여부
+ * @returns -{result: 중복 여부, isSuccess: true} 또는 {result: 에러 객체, isSuccess: false}
  * @description 중복 여부가 true이면 중복, false이면 중복되지 않은 것
  */
 export async function checkEmailAsync(
@@ -207,35 +207,35 @@ export async function checkEmailAsync(
 
   // 사전 처리된 에러는 바로 반환
   if (APIs.isServerErrorOutput(tmpResult)) {
-    return [tmpResult, false];
+    return { result: tmpResult, isSuccess: false };
   }
 
   const [result, response] = tmpResult;
 
   // 요청 성공 : 중복 여부 반환
   if (APIs.isSuccess<CheckEmailAsyncOutput>(result, response)) {
-    return [result.duplicated, true];
+    return { result: result.duplicated, isSuccess: true };
   }
 
   // 422 : Validation Error
   if (APIs.isError<APIs.ServerError422>(result, response, 422)) {
-    return [
-      {
+    return {
+      result: {
         statusCode: 422,
         errorMsg:
           '입력한 이메일이 잘못되었어요. 수정해서 다시 시도해 보거나, 문의해 주세요.',
         info: result.detail,
       },
-      false,
-    ];
+      isSuccess: false,
+    };
   }
   // 나머지 에러
-  return [
-    {
+  return {
+    result: {
       statusCode: response.status,
       errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
       info: response,
     },
-    false,
-  ];
+    isSuccess: false,
+  };
 }

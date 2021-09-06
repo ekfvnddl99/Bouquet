@@ -1,66 +1,27 @@
-import { useEffect } from 'react';
-import { useRecoilState, SetterOrUpdater } from 'recoil';
+import { useRecoilState } from 'recoil';
 import * as SecureStore from 'expo-secure-store';
 
-import { Character } from '../../utils/types/types';
-import { characterState, characterListState } from '../atoms';
-import { getCharacterAsync, getCharacterListAsync,
-  responseToCharacter, CharacterResponseType } from '../server/Character';
-import useUser from './useUser';
+// logics
+import { characterState } from '../atoms';
 
+// utils
+import { Character } from '../../utils/types/UserTypes';
 
-export async function setCharacterListAsync(setter: SetterOrUpdater<Character[]>) {
-  let list = [];
-  const result = await getCharacterListAsync();
-  if (typeof(result) !== "string") {
-    list = result.map((obj: CharacterResponseType) => {
-      return responseToCharacter(obj, obj.id);
-    });
-  }
-  setter(list);
-}
-
-export default function useCharacter() {
+/**
+ * 선택된 캐릭터 정보를 불러오고, 캐릭터 선택을 할 수 있는 custom hook
+ * @returns [character, setCharacter]
+ */
+export default function useCharacter(): [
+  Character | undefined,
+  (ch: Character) => Promise<void>,
+] {
   const [character, setCharacter] = useRecoilState(characterState);
-  const [characterList, setCharacterList] = useRecoilState(characterListState);
-  const [user, setUser] = useUser();
 
-  useEffect(() => {
-    const init = async () => {
-      if (characterList.length === 0) {
-        await setCharacterListAsync(setCharacterList);
-      }
-
-      if (character.id === -1) {
-        const lastCharacterId = await SecureStore.getItemAsync('lastCharacterId');
-        if (lastCharacterId) {
-          const lastCharacter = await getCharacterAsync(Number(lastCharacterId));
-          if (typeof(lastCharacter) !== "string") {
-            setCharacter(responseToCharacter(lastCharacter, Number(lastCharacterId)));
-          }
-          else if (characterList.length > 0) {
-            setCharacter(characterList[0]);
-          }
-        }
-        else if (characterList.length > 0) {
-          setCharacter(characterList[0]);
-        }
-      }
-    }
-
-    if (user.isLogined) init();
-  }, [user]);
-
-  const setCharacterFunc = async (ch: Character) => {
-    if (ch.id !== -1 && user.isLogined) await SecureStore.setItemAsync('lastCharacterId', String(ch.id));
+  async function selectCharacter(ch: Character): Promise<void> {
     setCharacter(ch);
+    // 마지막으로 선택한 캐릭터 이름을 로컬에 저장
+    await SecureStore.setItemAsync('lastCharacterName', ch.name);
   }
 
-  type OutputType = [
-    Character,
-    Function
-  ];
-
-  const returns: OutputType = [character, setCharacterFunc];
-  return returns;
+  return [character, selectCharacter];
 }

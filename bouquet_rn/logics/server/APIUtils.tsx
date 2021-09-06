@@ -24,7 +24,7 @@ export type ServerErrorOutput = {
 };
 
 /**
- * 서버의 에러 객체 Type (서버 요청을 그대로 담는 용도)
+ * 서버의 에러 객체 Type (서버 응답을 그대로 담는 용도)
  * @description 422(Validation Error) 제외
  * @property msg : 에러 내용을 담은 문자열
  */
@@ -33,7 +33,7 @@ export type ServerError = {
 };
 
 /**
- * 서버의 에러 객체 Type (422: Validation Error) (서버 요청을 그대로 담는 용도)
+ * 서버의 에러 객체 Type (422: Validation Error) (서버 응답을 그대로 담는 용도)
  * @property detail : 에러 내용을 담은 객체
  */
 export type ServerError422 = {
@@ -94,16 +94,26 @@ export function isError<T>(
 /**
  * 기본 서버 요청 함수를 이용한 여러 API 요청 함수들의 output type
  * @description T는 요청이 성공했을 때의 응답 type
- * @description 2번째 boolean은 요청 성공 여부 (true면 성공)
- * @description const [result, isSuccess] = 함수 형태로 사용
+ * @description isSuccess는 요청 성공 여부 (true면 성공)
  */
-export type ServerResult<T> = Promise<[T | ServerErrorOutput, boolean]>;
+export type ServerResult<T> = Promise<
+  | {
+      isSuccess: true;
+      result: T;
+    }
+  | {
+      isSuccess: false;
+      result: ServerErrorOutput;
+    }
+>;
 
 /**
  * ------------------------------------------------------------
  * * 서버 요청 함수들
  * ------------------------------------------------------------
  */
+
+// TODO: auth가 필수는 아니지만 auth를 넣으면 결과가 달라지는 경우 처리 필요
 
 /**
  * GET

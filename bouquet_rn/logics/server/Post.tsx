@@ -13,7 +13,7 @@ import {
  * 서버에 게시글 업로드를 요청하는 함수
  * @param post 업로드하려는 게시글 정보
  *
- * @returns [게시글 id, true] 또는 [에러 객체, false] : 2번째 boolean은 정보 불러오기 성공 여부
+ * @returns -{result: 게시글 id, isSuccess: true} 또는 {result: 에러 객체, isSuccess: false}
  */
 export async function uploadPostAsync(
   post: PostRequest<AllTemplates>,
@@ -32,44 +32,44 @@ export async function uploadPostAsync(
 
   // 사전 처리된 에러는 바로 반환
   if (APIs.isServerErrorOutput(tmpResult)) {
-    return [tmpResult, false];
+    return { result: tmpResult, isSuccess: false };
   }
 
   const [result, response] = tmpResult;
 
   // 요청 성공 : 게시글 id 반환
   if (APIs.isSuccess<UploadPostAsyncOutput>(result, response)) {
-    return [result.id, true];
+    return { result: result.id, isSuccess: true };
   }
 
   // 422 : Validation Error
   if (APIs.isError<APIs.ServerError422>(result, response, 422)) {
-    return [
-      {
+    return {
+      result: {
         statusCode: 422,
         errorMsg:
           '입력한 정보가 잘못되었어요. 수정해서 다시 시도해 보거나, 문의해 주세요.',
         info: result.detail,
       },
-      false,
-    ];
+      isSuccess: false,
+    };
   }
   // 나머지 에러
-  return [
-    {
+  return {
+    result: {
       statusCode: response.status,
       errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
       info: response,
     },
-    false,
-  ];
+    isSuccess: false,
+  };
 }
 
 /**
  * 서버에 댓글 업로드를 요청하는 함수
  * @param comment 업로드하려는 댓글 정보
  *
- * @returns [댓글 id, true] 또는 [에러 객체, false] : 2번째 boolean은 정보 불러오기 성공 여부
+ * @returns -{result: 댓글 id, isSuccess: true} 또는 {result: 에러 객체, isSuccess: false}
  */
 export async function uploadCommentAsync(
   comment: PostCommentRequest,
@@ -88,37 +88,37 @@ export async function uploadCommentAsync(
 
   // 사전 처리된 에러는 바로 반환
   if (APIs.isServerErrorOutput(tmpResult)) {
-    return [tmpResult, false];
+    return { result: tmpResult, isSuccess: false };
   }
 
   const [result, response] = tmpResult;
 
   // 요청 성공 : 댓글 id 반환
   if (APIs.isSuccess<UploadCommentAsyncOutput>(result, response)) {
-    return [result.id, true];
+    return { result: result.id, isSuccess: true };
   }
 
   // 422 : Validation Error
   if (APIs.isError<APIs.ServerError422>(result, response, 422)) {
-    return [
-      {
+    return {
+      result: {
         statusCode: 422,
         errorMsg:
           '입력한 정보가 잘못되었어요. 수정해서 다시 시도해 보거나, 문의해 주세요.',
         info: result.detail,
       },
-      false,
-    ];
+      isSuccess: false,
+    };
   }
   // 나머지 에러
-  return [
-    {
+  return {
+    result: {
       statusCode: response.status,
       errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
       info: response,
     },
-    false,
-  ];
+    isSuccess: false,
+  };
 }
 
 /**
@@ -126,7 +126,7 @@ export async function uploadCommentAsync(
  * @param postId 불러오려는 게시글 id
  * @param characterId 게시글을 열람하는 캐릭터 id
  *
- * @returns [Post 객체, true] 또는 [에러 객체, false] : 2번째 boolean은 정보 불러오기 성공 여부
+ * @returns -{result: Post, isSuccess: true} 또는 {result: 에러 객체, isSuccess: false}
  */
 export async function getPostAsync(
   postId: number,
@@ -143,34 +143,34 @@ export async function getPostAsync(
 
   // 사전 처리된 에러는 바로 반환
   if (APIs.isServerErrorOutput(tmpResult)) {
-    return [tmpResult, false];
+    return { result: tmpResult, isSuccess: false };
   }
 
   const [result, response] = tmpResult;
 
   // 요청 성공 : Post 객체 반환
   if (APIs.isSuccess<GetPostAsyncOutput>(result, response)) {
-    return [result, true];
+    return { result, isSuccess: true };
   }
 
   // 422 : Validation Error
   if (APIs.isError<APIs.ServerError422>(result, response, 422)) {
-    return [
-      {
+    return {
+      result: {
         statusCode: 422,
         errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
         info: result.detail,
       },
-      false,
-    ];
+      isSuccess: false,
+    };
   }
   // 나머지 에러
-  return [
-    {
+  return {
+    result: {
       statusCode: response.status,
       errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
       info: response,
     },
-    false,
-  ];
+    isSuccess: false,
+  };
 }
