@@ -2,8 +2,9 @@ import { useRecoilState } from 'recoil';
 import * as SecureStore from 'expo-secure-store';
 
 // logics
-import { userState, characterListState, characterState } from '../atoms';
+import { userState, characterState, characterListState } from '../atoms';
 import { getUserAsync } from '../server/User';
+import useLoadCharacter from './useLoadCharacter';
 
 /**
  * 계정 로그인, 로그아웃 함수를 제공하는 custom hook
@@ -12,14 +13,15 @@ import { getUserAsync } from '../server/User';
  */
 export default function useLogin(): [() => Promise<void>, () => Promise<void>] {
   const [, setUser] = useRecoilState(userState);
-  const [, setCharacterList] = useRecoilState(characterListState);
   const [, setCharacter] = useRecoilState(characterState);
+  const [, setCharacterList] = useRecoilState(characterListState);
+  const [loadCharacter] = useLoadCharacter();
 
   async function login(): Promise<void> {
     const result = await getUserAsync();
     if (result.isSuccess) {
       setUser(result.result);
-      // TODO: 캐릭터 리스트와 캐릭터 설정도 필요
+      await loadCharacter();
     }
   }
 

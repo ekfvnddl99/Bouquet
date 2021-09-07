@@ -2,7 +2,12 @@ import { atom } from 'recoil';
 
 // utils
 import { Post, AllTemplates } from '../utils/types/PostTypes';
-import { User, Character } from '../utils/types/UserTypes';
+import {
+  User,
+  UserDetail,
+  Character,
+  MyCharacter,
+} from '../utils/types/UserTypes';
 
 /**
  * 현재 로그인된 계정 정보를 담는 atom
@@ -17,7 +22,7 @@ export const userState = atom({
  */
 export const characterState = atom({
   key: 'characterState',
-  default: <Character | undefined>undefined,
+  default: <MyCharacter | undefined>undefined,
 });
 
 /**
@@ -25,7 +30,7 @@ export const characterState = atom({
  */
 export const characterListState = atom({
   key: 'characterListState',
-  default: <Array<Character>>[],
+  default: <Array<MyCharacter>>[],
 });
 
 /**
@@ -33,7 +38,7 @@ export const characterListState = atom({
  */
 export const viewUserState = atom({
   key: 'viewUserState',
-  default: <User | undefined>undefined,
+  default: <UserDetail | undefined>undefined,
 });
 
 /**

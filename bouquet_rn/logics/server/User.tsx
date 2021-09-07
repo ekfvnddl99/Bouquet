@@ -2,7 +2,7 @@
 import * as APIs from './APIUtils';
 
 // utils
-import { User } from '../../utils/types/UserTypes';
+import { User, MyCharacter } from '../../utils/types/UserTypes';
 
 /**
  * 로그인 auth로 서버에서 유저 정보를 불러오는 함수
@@ -140,6 +140,57 @@ export async function deleteUserAsync(): APIs.ServerResult<null> {
   }
 
   // 에러
+  return {
+    result: {
+      statusCode: response.status,
+      errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
+      info: response,
+    },
+    isSuccess: false,
+  };
+}
+
+/**
+ * 로그인된 계정의 캐릭터 목록을 불러오는 함수
+ * @returns -{result: MyCharacter 리스트, isSuccess: true} 또는 {result: 에러 객체, isSuccess: false}
+ */
+export async function getMyCharacterListAsync(): APIs.ServerResult<
+  Array<MyCharacter>
+> {
+  // 서버 응답 타입 정의
+  type GetMyCharacterListAsyncOutput = {
+    characters: Array<MyCharacter>;
+  };
+
+  const tmpResult = await APIs.getAsync<GetMyCharacterListAsyncOutput>(
+    '/user/character',
+    true,
+  );
+
+  // 사전 처리된 에러는 바로 반환
+  if (APIs.isServerErrorOutput(tmpResult)) {
+    return { result: tmpResult, isSuccess: false };
+  }
+
+  const [result, response] = tmpResult;
+
+  // 요청 성공 : CharacterCarouselMini 리스트 반환
+  if (APIs.isSuccess<GetMyCharacterListAsyncOutput>(result, response)) {
+    return { result: result.characters, isSuccess: true };
+  }
+
+  // 404 : No such user
+  if (APIs.isError<APIs.ServerError>(result, response, 404)) {
+    return {
+      result: {
+        statusCode: 404,
+        errorMsg: '유저를 찾을 수 없어요. 다시 시도해 보거나, 문의해 주세요.',
+        info: result.msg,
+      },
+      isSuccess: false,
+    };
+  }
+  // 나머지 에러
   return {
     result: {
       statusCode: response.status,

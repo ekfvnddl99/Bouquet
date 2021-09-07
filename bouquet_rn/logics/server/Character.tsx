@@ -4,7 +4,7 @@ import * as APIs from './APIUtils';
 // utils
 import {
   Character,
-  CharacterMini,
+  UserDetail,
   OptionalCharacter,
 } from '../../utils/types/UserTypes';
 
@@ -148,26 +148,17 @@ export async function editCharacterAsync(
 }
 
 /**
- * getCharacterListAsync()의 Output Type
- */
-type GetCharacterListAsyncOutput = {
-  user_info: {
-    name: string;
-    profile_img: string;
-    num_followers: number;
-    num_characters: number;
-  };
-  characters: Array<CharacterMini>;
-};
-/**
  * 한 유저의 캐릭터 목록을 서버에서 불러오는 함수
  * @param userName 유저의 이름. 이 유저의 캐릭터 목록을 불러옴
  *
- * @returns -{result: {user_info, characters}, isSuccess: true} 또는 {result: 에러 객체, isSuccess: false}
+ * @returns -{result: UserDetail, isSuccess: true} 또는 {result: 에러 객체, isSuccess: false}
  */
 export async function getCharacterListAsync(
   userName: string,
-): APIs.ServerResult<GetCharacterListAsyncOutput> {
+): APIs.ServerResult<UserDetail> {
+  // 서버 응답 타입 정의
+  type GetCharacterListAsyncOutput = UserDetail;
+
   const tmpResult = await APIs.getAsync<GetCharacterListAsyncOutput>(
     `/character/user/${userName}`,
     false,
@@ -180,7 +171,7 @@ export async function getCharacterListAsync(
 
   const [result, response] = tmpResult;
 
-  // 요청 성공 : GetCharacterListAsyncOutput 객체 반환
+  // 요청 성공 : UserDetail 객체 반환
   if (APIs.isSuccess<GetCharacterListAsyncOutput>(result, response)) {
     return { result, isSuccess: true };
   }
