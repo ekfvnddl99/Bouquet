@@ -68,6 +68,7 @@ export default function useLoadCharacter(): [
       // setState가 바로 적용되지 않는 경우를 방지하기 위해 최신값 반환
       return result.result;
     }
+    // 빈 배열인 경우와 요청이 실패한 경우 구별
     return undefined;
   }
 

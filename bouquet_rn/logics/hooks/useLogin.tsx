@@ -6,6 +6,9 @@ import { userState, characterState, characterListState } from '../atoms';
 import { getUserAsync } from '../server/User';
 import useLoadCharacter from './useLoadCharacter';
 
+// utils
+import { noUser, noMyCharacter } from '../../utils/types/UserTypes';
+
 /**
  * 계정 로그인, 로그아웃 함수를 제공하는 custom hook
  * * useLogin의 로그인은 'user state에 정보를 저장하는 것'을 말하며, SecureStore에 저장된 auth 키로 진행됨
@@ -31,9 +34,9 @@ export default function useLogin(): [() => Promise<void>, () => Promise<void>] {
       await SecureStore.deleteItemAsync('auth');
     }
     // TODO: Toast로 로그아웃 알림 메시지 띄우기
-    setUser(undefined);
+    setUser(noUser);
     setCharacterList([]);
-    setCharacter(undefined);
+    setCharacter(noMyCharacter);
   }
 
   return [login, logout];

@@ -13,17 +13,14 @@ import { Post, AllTemplates } from '../../utils/types/PostTypes';
  * @returns [viewPost, setViewPost]
  */
 export default function useViewPost(): [
-  Post<AllTemplates> | undefined,
+  Post<AllTemplates>,
   (postId: number) => Promise<void>,
 ] {
   const [viewPost, setViewPost] = useRecoilState(viewPostState);
   const [character] = useCharacter();
 
   async function setViewPostById(postId: number): Promise<void> {
-    const result = await getPostAsync(
-      postId,
-      character ? character.id : undefined,
-    );
+    const result = await getPostAsync(postId, character.id);
     if (result.isSuccess) {
       setViewPost(result.result);
     }

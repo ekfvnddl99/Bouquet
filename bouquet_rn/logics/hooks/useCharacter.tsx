@@ -13,7 +13,7 @@ import { MyCharacter } from '../../utils/types/UserTypes';
  * * setCharacter가 async function임에 주의
  */
 export default function useCharacter(): [
-  MyCharacter | undefined,
+  MyCharacter,
   (ch: MyCharacter) => Promise<void>,
 ] {
   const [character, setCharacter] = useRecoilState(characterState);

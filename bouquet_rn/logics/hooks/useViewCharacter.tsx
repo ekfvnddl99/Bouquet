@@ -12,7 +12,7 @@ import { Character } from '../../utils/types/UserTypes';
  * @returns [viewCharacter, setViewCharacter]
  */
 export default function useViewCharacter(): [
-  Character | undefined,
+  Character,
   (characterName: string) => Promise<void>,
 ] {
   const [viewCharacter, setViewCharacter] = useRecoilState(viewCharacterState);

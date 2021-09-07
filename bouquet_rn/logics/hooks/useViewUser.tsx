@@ -12,7 +12,7 @@ import { UserDetail } from '../../utils/types/UserTypes';
  * @returns [viewUser, setViewUser]
  */
 export default function useViewUser(): [
-  UserDetail | undefined,
+  UserDetail,
   (userName: string) => Promise<void>,
 ] {
   const [viewUser, setViewUser] = useRecoilState(viewUserState);

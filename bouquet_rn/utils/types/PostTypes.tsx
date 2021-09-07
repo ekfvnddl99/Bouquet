@@ -20,6 +20,26 @@ export type Post<T extends AllTemplates> = {
 };
 
 /**
+ * Post의 초기값
+ */
+export const noPost: Post<PlainTemplate> = {
+  id: -1,
+  created_at: '',
+  updated_at: '',
+  template: {
+    type: 'None',
+  },
+  text: '',
+  num_sunshines: 0,
+  character_info: {
+    character_name: '',
+    character_img: '',
+  },
+  liked: false,
+  comments: [],
+};
+
+/**
  * (POST 요청용) 게시글 Type
  * @description T는 템플릿 Type을 나타냄
  */

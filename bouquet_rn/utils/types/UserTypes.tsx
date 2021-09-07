@@ -12,6 +12,17 @@ export type User = {
 };
 
 /**
+ * User의 초기값
+ */
+export const noUser: User = {
+  id: -1,
+  email: '',
+  name: '',
+  profile_img: '',
+  sns_type: '',
+};
+
+/**
  * 유저의 Profile Detail을 위한 Type
  */
 export type UserDetail = {
@@ -22,6 +33,19 @@ export type UserDetail = {
     num_characters: number;
   };
   characters: Array<CharacterMini>;
+};
+
+/**
+ * UserDetail의 초기값
+ */
+export const noUserDetail: UserDetail = {
+  user_info: {
+    name: '',
+    profile_img: '',
+    num_followers: 0,
+    num_characters: 0,
+  },
+  characters: [],
 };
 
 /**
@@ -48,6 +72,27 @@ export type Character = {
 };
 
 /**
+ * Character의 초기값
+ */
+export const noCharacter: Character = {
+  name: '',
+  profile_img: '',
+  birth: 0,
+  job: '',
+  nationality: '',
+  intro: '',
+  tmi: '',
+  likes: [],
+  hates: [],
+  num_follows: 0,
+  num_followers: 0,
+  user_info: {
+    name: '',
+    profile_img: '',
+  },
+};
+
+/**
  * 캐릭터 미리보기용 Type
  */
 export type CharacterMini = {
@@ -70,6 +115,21 @@ export type MyCharacter = {
   tmi: string;
   likes: Array<string>;
   hates: Array<string>;
+};
+
+/**
+ * MyCharacter의 초기값
+ */
+export const noMyCharacter = {
+  name: '',
+  profile_img: '',
+  birth: 0,
+  job: '',
+  nationality: '',
+  intro: '',
+  tmi: '',
+  likes: [],
+  hates: [],
 };
 
 /**

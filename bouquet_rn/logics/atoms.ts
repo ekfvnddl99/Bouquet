@@ -1,12 +1,16 @@
 import { atom } from 'recoil';
 
 // utils
-import { Post, AllTemplates } from '../utils/types/PostTypes';
+import { Post, noPost, AllTemplates } from '../utils/types/PostTypes';
 import {
   User,
+  noUser,
   UserDetail,
+  noUserDetail,
   Character,
+  noCharacter,
   MyCharacter,
+  noMyCharacter,
 } from '../utils/types/UserTypes';
 
 /**
@@ -14,7 +18,7 @@ import {
  */
 export const userState = atom({
   key: 'userState',
-  default: <User | undefined>undefined,
+  default: <User>noUser,
 });
 
 /**
@@ -22,7 +26,7 @@ export const userState = atom({
  */
 export const characterState = atom({
   key: 'characterState',
-  default: <MyCharacter | undefined>undefined,
+  default: <MyCharacter>noMyCharacter,
 });
 
 /**
@@ -38,7 +42,7 @@ export const characterListState = atom({
  */
 export const viewUserState = atom({
   key: 'viewUserState',
-  default: <UserDetail | undefined>undefined,
+  default: <UserDetail>noUserDetail,
 });
 
 /**
@@ -46,7 +50,7 @@ export const viewUserState = atom({
  */
 export const viewCharacterState = atom({
   key: 'viewCharacterState',
-  default: <Character | undefined>undefined,
+  default: <Character>noCharacter,
 });
 
 /**
@@ -54,7 +58,7 @@ export const viewCharacterState = atom({
  */
 export const viewPostState = atom({
   key: 'viewPostState',
-  default: <Post<AllTemplates> | undefined>undefined,
+  default: <Post<AllTemplates>>noPost,
 });
 
 /**
