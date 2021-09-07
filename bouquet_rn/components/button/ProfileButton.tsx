@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableWithoutFeedback } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 // styles
@@ -15,22 +15,25 @@ import useUserView from '../../logics/hooks/useUserView';
 type ProfileButtonProps = {
   diameter: number;
   isAccount: boolean;
+  isJustImg: boolean;
   name: string;
-  img: string;
+  profileImg: string;
 };
 /**
  * (원형 모양의 프로필 사진, 해당 이름) 버튼
  *
  * @param diameter 원의 지름
  * @param isAccount 계정 화면에 쓰이는지 아닌지
+ * @param isJustImg 프로필 이미지만 있는지 아닌지
  * @param name 프로필 이름
  * @param img 프로필 사진
  */
 export default function ProfileButton({
   diameter,
   isAccount,
+  isJustImg,
   name,
-  img,
+  profileImg,
 }: ProfileButtonProps): React.ReactElement {
   const navigation = useNavigation();
   const [characterView, setCharacterView] = useCharacterView();
@@ -48,16 +51,19 @@ export default function ProfileButton({
    * @description 계정 프로필을 눌렀을 때
    */
   function goAccount() {
-    setUserView({ name, profileImg: img });
+    setUserView({ name, profileImg });
     navigation.navigate('AccountStack');
   }
 
   return (
     <TouchableWithoutFeedback onPress={isAccount ? goAccount : goProfileDetail}>
       <area.RowArea>
-        <elses.CircleImg diameter={diameter} source={{ uri: img }} />
-        <View style={{ marginLeft: 8 }} />
-        <text.Body2B textColor={colors.black}>{name}</text.Body2B>
+        <elses.CircleImg diameter={diameter} source={{ uri: profileImg }} />
+        {isJustImg ? null : (
+          <text.Body2B textColor={colors.black} style={{ marginLeft: 8 }}>
+            {name}
+          </text.Body2B>
+        )}
       </area.RowArea>
     </TouchableWithoutFeedback>
   );

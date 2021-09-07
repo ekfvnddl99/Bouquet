@@ -360,7 +360,7 @@ import PostWritingScreen from './screens/common/PostWritingScreen';
 import SelectTemplateScreen from './screens/common/SelectTemplateScreen';
 import PostDetailScreen from './screens/common/PostDetailScreen';
 
-import ChaGenerationScreen from './screens/character/ChaGenerationScreen';
+import ChaGenerationScreen from './screens/character/CharacterGenerationScreen';
 import ChaDeletionScreen from './screens/character/ChaDeletionScreen';
 
 //// tab

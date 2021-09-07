@@ -10,7 +10,18 @@ function Svg<T extends keyof iconType>({
   size: number;
 }): React.ReactElement {
   const xmlString = iconList[icon];
-  const SvgTag = () => <SvgXml xml={xmlString} width={size} height={size} />;
+  let widthSize: number;
+  let heightSize: number;
+  if (icon === 'title') {
+    widthSize = 170;
+    heightSize = 54;
+  } else {
+    widthSize = size;
+    heightSize = size;
+  }
+  const SvgTag = () => (
+    <SvgXml xml={xmlString} width={widthSize} height={heightSize} />
+  );
   return <SvgTag />;
 }
 

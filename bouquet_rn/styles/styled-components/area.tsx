@@ -1,25 +1,30 @@
 import styled from 'styled-components/native';
 import colors from '../colors';
 
-// props & logic
+// logics
 import { StatusBarHeight } from '../../logics/non-server/StatusbarHeight';
 
+/**
+ * 가로로 쓸 때
+ */
 export const RowArea = styled.View`
   align-items: center;
   flex-direction: row;
 `;
 
+/**
+ * 가로로 쓸 때인데 이제 flex를 곁들인...
+ */
 export const RowFlexArea = styled.View`
   flex: 1;
   align-items: center;
   flex-direction: row;
 `;
 
-export const TextBtnArea = styled.View`
-  justify-content: center;
-  flex-direction: row;
-`;
-
+/**
+ * text 버튼인데 뒤에 배경을 곁들인...
+ * @description 사용처: 웰컴(미리보기), 로그인(미리보기)
+ */
 export const TextBackgroundBtnArea = styled.View`
   width: 100%;
   flex-direction: row;
@@ -30,6 +35,10 @@ export const TextBackgroundBtnArea = styled.View`
   margin-top: 30;
 `;
 
+/**
+ * 맨 밑에 버튼이 위치한 경우
+ * @description 사용처: 로그인, 레지스터, 캐릭터 생성
+ */
 export const BottomArea = styled.View`
   flex: 1;
   justify-content: flex-end;

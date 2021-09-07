@@ -1,80 +1,127 @@
-import React, {Component, useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-    View,
-    TextInput,
-    TouchableWithoutFeedback,
-    Keyboard,
-    BackHandler
+  View,
+  TouchableWithoutFeedback,
+  Keyboard,
+  BackHandler,
 } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
+
+// styles
 import * as area from '../../../styles/styled-components/area';
 
-// components
-import ProgressArea from '../../../components/item/ProgressItem';
+// logics
+import { registerEmailAsync } from '../../../logics/server/EmailLogin';
 
-// props && logic
-import { EmailRegisterAsync, EmailDupAsync } from '../../../logics/server/EmailLogin';
+// components
+import ProgressItem from '../../../components/item/ProgressItem';
 
 // screens
-import RegisterScreenOne from './RegisterScreen1';
-import RegisterScreenTwo from './RegisterScreenTwo';
-import RegisterScreenThree from './RegisterScreen3';
-import RegisterScreenFour from './RegisterScreen4';
+import RegisterScreen1 from './RegisterScreen1';
+import RegisterScreen2 from './RegisterScreen2';
+import RegisterScreen3 from './RegisterScreen3';
+import RegisterScreen4 from './RegisterScreen4';
 
-function setTitle(step:number){
-  if(step===1) return i18n.t("메일로 회원가입");
-  else if(step===2) return i18n.t("비밀번호 설정");
-  else if(step===3) return i18n.t("계정 정보 입력");
-  else return i18n.t("회원가입 완료");
-}
-
-export default function RegisterScreen(){
-  const[step, setStep]=useState(1);
+export default function RegisterScreen(): React.ReactElement {
+  // 현재 몇 단계인지 나타내는 state. 1부터 시작
+  const [step, setStep] = useState(1);
   const navigation = useNavigation();
+  // 회원가입에서 입력될 값들 저장하는 state
   const [email, setEmail] = useState('');
-  const [pw, setPW] = useState('');
+  const [password, setPassword] = useState('');
   const [name, setName] = useState('');
-  const [authNum, setAuthNum] = useState('');
-  const [profilePic, setProfilePic] = useState('');
+  const [authNumber, setAuthNumber] = useState(1);
+  const [profileImg, setProfileImg] = useState('');
 
-  const register = async () => {
-    const result = await EmailRegisterAsync(email, pw, name, profilePic);
-    if (!result) setStep(step+1);
-    else alert(result);
+  async function registerUser() {
+    const serverResult = await registerEmailAsync(
+      email,
+      password,
+      name,
+      profileImg,
+    );
+    if (serverResult.isSuccess) setStep(step + 1);
+    else alert(serverResult.result.errorMsg);
   }
 
-  const backAction=()=>{
-    if(step!==1) setStep(step-1);
+  function backAction() {
+    if (step !== 1) setStep(step - 1);
     else navigation.goBack();
     return true;
   }
   useEffect(() => {
-    BackHandler.addEventListener("hardwareBackPress", backAction);
+    BackHandler.addEventListener('hardwareBackPress', backAction);
     return () =>
-      BackHandler.removeEventListener("hardwareBackPress", backAction);
+      BackHandler.removeEventListener('hardwareBackPress', backAction);
   });
-  
-  return(
+
+  /**
+   * 단계에 따른 제목
+   * @param stepNumber 현재 단계
+   * @returns
+   */
+  function setTitle(stepNumber: number) {
+    if (stepNumber === 1) return i18n.t('메일로 회원가입');
+    if (stepNumber === 2) return i18n.t('비밀번호 설정');
+    if (stepNumber === 3) return i18n.t('계정 정보 입력');
+    return i18n.t('회원가입 완료');
+  }
+  /**
+   * 단계에 따른 View.
+   * @param stepNumber 현재 단계
+   * @returns
+   */
+  function setRegisterScreen(stepNumber: number) {
+    if (stepNumber === 1)
+      return (
+        <RegisterScreen1
+          onPress={() => setStep(step + 1)}
+          setEmail={setEmail}
+          email={email}
+          setAuthNumber={setAuthNumber}
+          authNumber={authNumber}
+        />
+      );
+    if (stepNumber === 2)
+      return (
+        <RegisterScreen2
+          onPress={() => setStep(step + 1)}
+          password={password}
+          setPassword={setPassword}
+        />
+      );
+    if (stepNumber === 3)
+      return (
+        <RegisterScreen3
+          onPress={() => registerUser}
+          name={name}
+          setName={setName}
+          profileImg={profileImg}
+          setProfileImg={setProfileImg}
+        />
+      );
+    return (
+      <RegisterScreen4
+        name={name}
+        profileImg={profileImg}
+        navigation={navigation}
+      />
+    );
+  }
+
+  return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <area.Container> 
-        <View style={{paddingHorizontal:20, paddingTop:20}}>
-          <ProgressArea back={()=>setStep(step-1)} step={step} title={setTitle(step)} intro={null} navigation={navigation}/>
+      <area.Container>
+        <View style={{ paddingHorizontal: 20, paddingTop: 20 }}>
+          <ProgressItem
+            stepBack={() => setStep(step - 1)}
+            step={step}
+            title={setTitle(step)}
+            navigation={navigation}
+          />
         </View>
-        {step===1 ? <RegisterScreenOne onChange={()=>setStep(step+1)} 
-          setEmail={setEmail} 
-          email={email} 
-          setAuthNum={setAuthNum} 
-          authNum={authNum}/> :
-        step===2 ? <RegisterScreenTwo onChange={()=>setStep(step+1)} 
-          pw={pw} 
-          setPW={setPW} /> :
-        step===3 ? <RegisterScreenThree onChange={register} 
-          name={name} 
-          setName={setName} 
-          profilePic={profilePic}
-          setProfilePic={setProfilePic}/> : 
-        <RegisterScreenFour name={name} profile={profilePic} navigation={navigation}/>}
+        {setRegisterScreen(step)}
       </area.Container>
     </TouchableWithoutFeedback>
   );

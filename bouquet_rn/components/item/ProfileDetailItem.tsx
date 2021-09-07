@@ -34,7 +34,7 @@ type ProfileDetailItemProps = {
  * Profile의 swipe view 캐릭터 컴포넌트 && '상세 프로필'의 캐릭터 정보
  *
  * @param isMini swipe view에 사용되는지 아닌지
- * @param characterInfo 캐릭터
+ * @param characterInfo 해당 캐릭터 객체
  */
 export default function ProfileDetailItem({
   isMini,
@@ -162,12 +162,13 @@ export default function ProfileDetailItem({
             <ProfileButton
               diameter={20}
               isAccount
+              isJustImg={false}
               name={
                 realCharacter.user_info.name ? realCharacter.user_info.name : ''
               }
-              img={
+              profileImg={
                 realCharacter.user_info.profile_img
-                  ? realCharacter.user_info.profile_img
+                  ? realCharacter.user_info.profile_imgch
                   : ''
               }
             />
@@ -207,12 +208,12 @@ export default function ProfileDetailItem({
       <View style={{ marginTop: 16, flexWrap: 'wrap' }} />
       <ProfileInfoTagItem
         title={i18n.t('좋아하는 것')}
-        tags={realCharacter.likes}
+        tagArray={realCharacter.likes}
       />
       <View style={{ marginTop: 16, flexWrap: 'wrap' }} />
       <ProfileInfoTagItem
         title={i18n.t('싫어하는 것')}
-        tags={realCharacter.hates}
+        tagArray={realCharacter.hates}
       />
       <View style={{ marginTop: 16 }} />
       <BoldNRegularText

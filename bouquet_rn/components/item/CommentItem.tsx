@@ -21,6 +21,13 @@ import { PostComment } from '../../utils/types/PostTypes';
 // components
 import ProfileButton from '../button/ProfileButton';
 
+type CommentItemProps = {
+  commentInfo: PostComment;
+  selectId: number;
+  setTargetComment: (param: PostComment) => void;
+  OpeningCommentArray?: number[];
+  setOpeningCommentArray?: (param: number[]) => void;
+};
 /**
  * 댓글 컴포넌트
  * TODO 댓글 삭제 함수
@@ -33,13 +40,6 @@ import ProfileButton from '../button/ProfileButton';
  * @param OpeningCommentArray 대댓글이 보이는 댓글들의 아이디가 담긴 배열
  * @param setOpeningCommentArray 대댓글이 보이는 댓글들의 아이디가 담긴 배열의 set 함수
  */
-interface CommentItemProps {
-  commentInfo: PostComment;
-  selectId: number;
-  setTargetComment: (param: PostComment) => void;
-  OpeningCommentArray?: number[];
-  setOpeningCommentArray?: (param: number[]) => void;
-}
 export default function CommentItem({
   commentInfo,
   selectId,
@@ -49,7 +49,7 @@ export default function CommentItem({
 }: CommentItemProps): React.ReactElement {
   // 얘가 부모 댓글일 때, 대댓글이 있는지
   const [isOpeningCommentComment, setIsOpeningCommentComment] = useState(false);
-  const [user, isLogined] = useUser();
+  const user = useUser();
   const [character, setCharacter] = useCharacter();
 
   /**
@@ -76,7 +76,7 @@ export default function CommentItem({
       paddingV={12}
       style={{
         backgroundColor:
-          selectId === commentInfo.id && isLogined
+          selectId === commentInfo.id && user !== undefined
             ? colors.alpha10_primary
             : colors.white,
       }}
@@ -104,12 +104,14 @@ export default function CommentItem({
         <ProfileButton
           diameter={20}
           isAccount={false}
+          isJustImg={false}
           name={commentInfo.character_info.name}
-          img={commentInfo.character_info.profile_img}
+          profileImg={commentInfo.character_info.profile_img}
         />
         <View style={{ flex: 1 }} />
         <area.RowArea>
           {selectId === commentInfo.id &&
+          character !== undefined &&
           character.name === commentInfo.character_info.name ? (
             <TouchableOpacity>
               <Icon icon="bin" size={18} />
@@ -140,13 +142,14 @@ export default function CommentItem({
             </View>
           ) : null}
 
-          <View style={{ marginLeft: 8 }} />
-          <TouchableOpacity onPress={() => setTargetComment(commentInfo)}>
+          <TouchableOpacity
+            onPress={() => setTargetComment(commentInfo)}
+            style={{ marginLeft: 8 }}
+          >
             <Icon icon="comment" size={18} />
           </TouchableOpacity>
 
-          <View style={{ marginLeft: 8 }} />
-          <area.RowArea>
+          <area.RowArea style={{ marginLeft: 8 }}>
             <TouchableOpacity>
               {commentInfo.liked ? (
                 <Icon icon="sunFocusPrimary" size={18} />

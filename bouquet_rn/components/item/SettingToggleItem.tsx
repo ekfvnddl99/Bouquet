@@ -6,18 +6,24 @@ import styled from 'styled-components/native';
 import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 
-// logics
-import useCharacter from '../../logics/hooks/useCharacter';
-
 // components
 import ProfileButton from '../button/ProfileButton';
 
+// utils
+import { Character } from '../../utils/types/UserTypes';
+
+type SettingToggleItemProps = {
+  characterInfo: Character;
+};
 /**
  * 알람 설정을 위한 toggle 컴포넌트
+ *
+ * @param characterInfo 해당 캐릭터 객체
  */
-export default function SettingToggleItem(): React.ReactElement {
+export default function SettingToggleItem({
+  characterInfo,
+}: SettingToggleItemProps): React.ReactElement {
   const [isOn, setIsOn] = useState(false);
-  const [character, setCharacter] = useCharacter();
 
   /**
    * toggle의 animation 관련
@@ -73,8 +79,9 @@ export default function SettingToggleItem(): React.ReactElement {
         <ProfileButton
           diameter={20}
           isAccount={false}
-          name={character.name}
-          img={character.profile_img}
+          isJustImg={false}
+          name={characterInfo.name}
+          profileImg={characterInfo.profile_img}
         />
         <View style={{ flex: 1 }} />
         <Toggle />

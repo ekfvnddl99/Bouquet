@@ -11,14 +11,17 @@ import * as text from '../../styles/styled-components/text';
 import Svg from '../../assets/Icon';
 
 // logics
-import useCharacter from '../../logics/hooks/useCharacter';
 import { PostComment } from '../../utils/types/PostTypes';
+
+// utils
+import { Character } from '../../utils/types/UserTypes';
 
 type CommInputProps = {
   textValue: string;
   onChanageText: (param: string) => void;
   onPress: (param: string) => void;
   isChild: boolean;
+  characterInfo: Character;
   targetComment?: PostComment;
   setTargetComment?: () => void;
 };
@@ -29,6 +32,7 @@ type CommInputProps = {
  * @param onChanageText textinput의 onChangeText 함수 역할을 할 것
  * @param onPress '전송' 버튼 누르면 실행되는 함수
  * @param isChild 대댓글인지 아닌지
+ * @param characterInfo 현재 내 캐릭터 객체
  * ---------------
  * @param targetComment 대댓글의 대상이 되는 댓글 Comment 객체
  * @param setTargetComment 대댓글의 대상이 되는 댓글 set 함수 (대상이 되는 부모댓글을 x버튼으로 누를 때 삭제하기 위해 사용됨)
@@ -40,9 +44,8 @@ export default function CommentTextInput({
   isChild,
   targetComment,
   setTargetComment,
+  characterInfo,
 }: CommInputProps): React.ReactElement {
-  const [character, setCharacter] = useCharacter();
-
   return (
     <View>
       {isChild ? (
@@ -60,12 +63,11 @@ export default function CommentTextInput({
           </TouchableOpacity>
         </TargetCommentArea>
       ) : null}
-
       <CommentInputArea>
         <View style={{ marginBottom: 3 }}>
           <elses.CircleImg
             diameter={30}
-            source={{ uri: character.profile_img }}
+            source={{ uri: characterInfo.profile_img }}
           />
         </View>
         <CommentInput
@@ -86,6 +88,7 @@ export default function CommentTextInput({
   );
 }
 
+// 내가 대댓글 달려는 대상의 댓글이 나타나는 영역
 const TargetCommentArea = styled.View`
   background-color: ${colors.gray1};
   height: 32;

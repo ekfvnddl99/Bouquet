@@ -17,7 +17,7 @@ interface ConditionTextInputProps {
   placeholder: string;
   onChangeText: (param: string) => void;
   keyboardType: KeyboardTypeOptions;
-  isActive: boolean;
+  isWarning: boolean;
   textValue: string;
   warnText: string;
   conditionTag?: JSX.Element;
@@ -31,7 +31,7 @@ interface ConditionTextInputProps {
  * @param placeholder textinput의 placeholder
  * @param onChangeText textinput의 onChangeText 함수 역할을 할 것
  * @param keyboardType textinput의 keyboard type
- * @param isActive textinput이 눌러진 적이 있는가
+ * @param isWarning 조건을 모두 만족했는가
  * @param textValue textinput의 value가 될 것
  * @param warnText 조건에 맞지 않을 경우 띄우는 경고 문구
  * ---------------
@@ -44,7 +44,7 @@ export default function ConditionTextInput({
   placeholder,
   onChangeText,
   keyboardType,
-  isActive,
+  isWarning,
   textValue,
   warnText,
   conditionTag,
@@ -64,14 +64,14 @@ export default function ConditionTextInput({
         onFocus={() => setFocus(true)}
         maxLength={maxLength}
         style={
-          isActive && IsFocus
+          isWarning && IsFocus
             ? { borderWidth: 1, borderColor: colors.warning_red }
             : null
         }
       />
       <View style={{ alignItems: 'flex-start', flexDirection: 'row' }}>
         <View style={{ flex: 1 }}>
-          {isActive && IsFocus ? (
+          {isWarning && IsFocus ? (
             <WarningText content={warnText} marginTop={8} />
           ) : null}
           {conditionTag || null}

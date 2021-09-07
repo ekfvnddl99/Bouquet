@@ -12,7 +12,7 @@ type ProgressItemProps = {
   stepBack: () => void;
   step: number;
   title: string;
-  subtitle: string;
+  subtitle?: string;
   navigation: any;
 };
 /**
@@ -56,7 +56,7 @@ export default function ProgressItem({
       toValue: progressValue,
       useNativeDriver: false,
     }).start();
-  }, [step, progress, progressValue]);
+  }, [step]);
   /**
    * step 1일 때 뒤로가기를 처리하는 함수
    * 탭을 다시 나타나게 하고, 화면 자체를 뒤로 이동한다.
@@ -79,9 +79,11 @@ export default function ProgressItem({
         <ProgressArea barWidth={TranslateX} />
       </View>
       <text.Subtitle1 textColor={colors.black}>{title}</text.Subtitle1>
-      <View style={{ marginTop: 8 }}>
-        <text.Caption textColor={colors.gray6}>{subtitle}</text.Caption>
-      </View>
+      {subtitle ? (
+        <View style={{ marginTop: 8 }}>
+          <text.Caption textColor={colors.gray6}>{subtitle}</text.Caption>
+        </View>
+      ) : null}
     </View>
   );
 }

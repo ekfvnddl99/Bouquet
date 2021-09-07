@@ -15,26 +15,26 @@ import useCharacterView from '../../logics/hooks/useCharacterView';
 import { Character } from '../../utils/types/UserTypes';
 
 type CharacterItemProps = {
-  character: Character;
+  characterInfo: Character;
 };
 /**
  * 캐릭터 리스트의 컴포넌트
  * @description 캐릭터 고를 때 보이는 컴포넌트
  *
- * @param character 캐릭터 unit
+ * @param characterInfo 해당 캐릭터 객체
  */
 export default function CharacterItem({
-  character,
+  characterInfo,
 }: CharacterItemProps): React.ReactElement {
   const navigation = useNavigation();
-  const [viewCharacter, setViewCharacter] = useCharacterView();
+  const [characterView, setCharacterView] = useCharacterView();
   /**
    * '상세 프로필' 화면으로 이동하는 함수
    * @description 보여지는 캐릭터를 설정하고 나서 넘어간다.
    */
   function goProfileDetail() {
-    setViewCharacter(character.name);
-    navigation.navigate('ProfileItem');
+    setCharacterView(characterInfo.name);
+    navigation.navigate('ProfileStack');
   }
 
   return (
@@ -48,12 +48,15 @@ export default function CharacterItem({
       activeOpacity={1}
       onPress={() => goProfileDetail}
     >
-      <elses.CircleImg diameter={100} source={{ uri: character.profile_img }} />
+      <elses.CircleImg
+        diameter={100}
+        source={{ uri: characterInfo.profile_img }}
+      />
       <View style={{ marginVertical: 8 }}>
-        <text.Body2B textColor={colors.black}>{character.name}</text.Body2B>
+        <text.Body2B textColor={colors.black}>{characterInfo.name}</text.Body2B>
       </View>
       <text.Caption textColor={colors.black} numberOfLines={2}>
-        {character.intro}
+        {characterInfo.intro}
       </text.Caption>
     </button.MiniListButton>
   );

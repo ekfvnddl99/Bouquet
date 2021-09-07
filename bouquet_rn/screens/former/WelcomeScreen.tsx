@@ -1,91 +1,111 @@
-import * as React from 'react';
-import { useSafeAreaInsets, SafeAreaProvider } from 'react-native-safe-area-context';
-import { 
-  View, Platform
-} from 'react-native';
+import React from 'react';
+import { View, Platform } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
-import {colors} from '../styles/colors';
-import * as area from '../styles/styled-components/area';
-import * as text from '../styles/styled-components/text';
 
-// icons
-import LogoSvg from '../assets/Logo';
-import MailSvg from '../assets/Mail';
-import AppleSvg from '../assets/Apple';
-import GoogleSvg from '../assets/Google';
-import TitleSvg from '../assets/Title';
+// styles
+import colors from '../../styles/colors';
+import * as area from '../../styles/styled-components/area';
+import * as text from '../../styles/styled-components/text';
 
-// props & logic
-import type {WelcomeProps} from '../utils/types';
-import GoogleSignInAsync  from './logics/GoogleLogin';
-import useUser from './logics/useUser';
+// assets
+import Svg from '../../assets/Icon';
+
+// logics
+import GoogleSignInAsync from '../../logics/server/GoogleLogin';
 
 // components
-import LoginButton from './components/LoginButton';
-import PrimaryTextButton from './components/PrimaryTextButton';
+import LoginButton from '../../components/button/LoginButton';
+import PrimaryTextButton from '../../components/button/PrimaryTextButton';
 
-import {atom, useRecoilState} from 'recoil';
-import { useEffect } from 'react';
-export const viewTop=atom({
-  key: 'top',
-  default: 0
-});
-export const viewBottom=atom({
-  key: 'bottom',
-  default: 0
-});
-
-export default function WelcomeScreen() {
+/**
+ * 웰컴 스크린
+ * TODO 애플 로그인
+ * @description 소셜로그인, 미리보기 등 가능
+ */
+export default function WelcomeScreen(): React.ReactElement {
+  // safearea 밖의 공간
   const insets = useSafeAreaInsets();
-  const[top, setTop]=useRecoilState(viewTop);
-  const[bottom, setBottom]=useRecoilState(viewBottom);
   const navigation = useNavigation();
-  useEffect(()=>{
-    setTop(insets.top);
-    setBottom(insets.bottom);
-  },[])
 
-  const goTabs =()=>{
-    navigation.navigate("Tab");
-  };
-
-  // 이렇게 함수를 만들어줘야 welcome 나오고 버튼 눌렀을 때 login이 나온다.
-  const goLogin = ()=>{
-    navigation.navigate("Login");
+  /**
+   * tab이 있는 main으로 이동
+   * @description 미리보기 버튼 눌렀을 때
+   */
+  function goTabs() {
+    navigation.navigate('Tab');
   }
 
-  const goRegister = ()=>{
-    navigation.navigate("Register");
+  /**
+   * '로그인' 화면으로 이동
+   */
+  function goLogin() {
+    navigation.navigate('Login');
   }
 
-  return(
-    <View style={{flex:1, backgroundColor:colors.gray0, paddingTop:top}}>
+  /**
+   * '회원가입' 화면으로 이동
+   */
+  function goRegister() {
+    navigation.navigate('Register');
+  }
+
+  return (
+    <View
+      style={{ flex: 1, backgroundColor: colors.gray0, paddingTop: insets.top }}
+    >
       <area.ContainerBlank20>
-        <View style={{alignItems:'center', marginTop: 70}}>
-            <LogoSvg w='100' h='100'/>
+        <View style={{ alignItems: 'center', marginTop: 70 }}>
+          <Svg icon="logo" size={100} />
         </View>
-        <View style={{alignItems:'center', marginTop: 15}}>
-            <TitleSvg w='170' h='54'/>
+        <View style={{ alignItems: 'center', marginTop: 15 }}>
+          <Svg icon="title" size={0} />
         </View>
 
         <area.BottomArea>
-            <LoginButton sentence={i18n.t('메일로 가입하기')} tag={<MailSvg w='15' h='15'/>} press={goRegister}/>
-            <LoginButton sentence={i18n.t("Google로 계속하기")} tag={<GoogleSvg w='15' h='15'/>} press={GoogleSignInAsync}/>
-            {Platform.OS==='ios' ? <LoginButton sentence={i18n.t("Apple로 계속하기")} tag={<AppleSvg w='15' h='15'/>} press={GoogleSignInAsync}/> : null}
+          <LoginButton
+            content={i18n.t('메일로 가입하기')}
+            icon="mail"
+            onPress={() => goRegister}
+          />
+          <LoginButton
+            content={i18n.t('Google로 계속하기')}
+            icon="google"
+            onPress={GoogleSignInAsync}
+          />
+          {Platform.OS === 'ios' ? (
+            <LoginButton
+              content={i18n.t('Apple로 계속하기')}
+              icon="apple"
+              onPress={GoogleSignInAsync}
+            />
+          ) : null}
         </area.BottomArea>
 
-        <area.TextBtnArea style={{marginTop:15}}>
-            <text.Button2R color={colors.black}>{i18n.t('또는')} </text.Button2R>
-            <PrimaryTextButton press={goLogin} content={i18n.t("로그인")} level={1}/>
-        </area.TextBtnArea>
+        <area.RowArea style={{ marginTop: 15 }}>
+          <text.Button2R textColor={colors.black}>
+            {i18n.t('또는')}{' '}
+          </text.Button2R>
+          <PrimaryTextButton
+            onPress={() => goLogin}
+            content={i18n.t('로그인')}
+            isBold
+          />
+        </area.RowArea>
       </area.ContainerBlank20>
 
-        <area.TextBackgroundBtnArea>
-            <text.Button2B color={colors.black}>{i18n.t('우선 알아보고 싶다면')}</text.Button2B>
-            <PrimaryTextButton press={goTabs} content={i18n.t("미리보기")} level={1}/>
-        </area.TextBackgroundBtnArea>
-        <View style={{height:bottom, backgroundColor:colors.white}}/>
+      <area.TextBackgroundBtnArea>
+        <text.Button2B textColor={colors.black}>
+          {i18n.t('우선 알아보고 싶다면')}
+        </text.Button2B>
+        <PrimaryTextButton
+          onPress={() => goTabs}
+          content={i18n.t('미리보기')}
+          isBold
+        />
+      </area.TextBackgroundBtnArea>
+      <View style={{ backgroundColor: colors.white, height: insets.bottom }} />
     </View>
   );
 }

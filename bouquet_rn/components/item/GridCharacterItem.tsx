@@ -27,7 +27,7 @@ interface GridCharacterItemProps {
 /**
  * Profile, Account의 grid view의 캐릭터 컴포넌트
  *
- * @param characterInfo 캐릭터 객체
+ * @param characterInfo 해당 캐릭터 객체
  * @param isAccount '계정' 화면의 grid view인지 아닌지
  * @param onPress 캐릭터 컴포넌트 눌렀을 때 실행되는 함수
  */
@@ -71,10 +71,12 @@ export default function GridCharacterItem({
       {isAccount ? null : (
         <View style={{ marginTop: 21 }}>
           <ConditionButton
-            isActive={!(character.id === characterInfo.id)}
+            isActive={
+              !(character !== undefined && character.id === characterInfo.id)
+            }
             onPress={() => onPress(characterInfo.id ? characterInfo.id : -1)}
             content={
-              character.id === characterInfo.id
+              character !== undefined && character.id === characterInfo.id
                 ? i18n.t('선택된 캐릭터')
                 : i18n.t('캐릭터 선택')
             }

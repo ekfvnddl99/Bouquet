@@ -6,39 +6,45 @@ import styled from 'styled-components/native';
 import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 
-// logics
-import useCharacter from '../../logics/hooks/useCharacter';
-
 // components
 import ProfileButton from '../button/ProfileButton';
 import LineButton from '../button/LineButton';
 import QuestionItem from '../item/QuestionItem';
 import QnAItem from '../item/QnAItem';
 
+// utils
+import { Character } from '../../utils/types/UserTypes';
+
 type QnATextInputProps = {
-  question: string;
-  onChangeQuestion: () => void;
+  characterInfo: Character;
 };
 /**
  * Home의 피드 상단에 있는 질답
  * TODO 질문에 답하면 업로드 하는 함수를 연결해야 함
  *
- * @param question 질문
- * @param onChangeQuestion '질문 바꾸기' 버튼 눌렀을 때 실행되는 함수
+ * @param characterInfo 현재 내 캐릭터 객체
  */
 export default function QnATextInput({
-  question,
-  onChangeQuestion,
+  characterInfo,
 }: QnATextInputProps): React.ReactElement {
   // '올리기' 버튼 눌렀는지 여부를 저장하는 state
   const [isUpload, setIsUpload] = useState(false);
+  const [question, setQusetion] = useState('');
   const [answer, setAnswer] = useState('');
-  const [character, setCharacter] = useCharacter();
+
+  async function getQuestion() {
+    // 질문 가져오는 함수()
+    // setQuestion(가져온 질문)
+  }
 
   if (isUpload) {
     return (
       // 여기로 질문이랑 답변 넘겨줘야 함!
-      <QnAItem question={question} answer={answer} />
+      <QnAItem
+        question={question}
+        answer={answer}
+        characterInfo={characterInfo}
+      />
     );
   }
   return (
@@ -48,12 +54,13 @@ export default function QnATextInput({
           <ProfileButton
             diameter={30}
             isAccount={false}
-            name={character.name}
-            img={character.profileImg}
+            isJustImg={false}
+            name={characterInfo.name}
+            profileImg={characterInfo.profile_img}
           />
         </View>
         <LineButton
-          onPress={onChangeQuestion}
+          onPress={() => getQuestion}
           content="질문 바꾸기"
           borderColor={colors.black}
         />
@@ -62,6 +69,7 @@ export default function QnATextInput({
       <QuestionItem question={question} />
 
       <MiddleLine />
+
       <AnswerTextInput
         placeholder="답변을 입력해 보세요."
         multiline
@@ -78,6 +86,7 @@ export default function QnATextInput({
   );
 }
 
+// 구분선
 const MiddleLine = styled.View`
   border-width: 1;
   border-color: ${colors.gray5};

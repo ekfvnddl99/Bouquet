@@ -12,15 +12,18 @@ import * as text from '../../styles/styled-components/text';
 // logics
 import * as cal from '../../logics/non-server/Calculation';
 
+// utils
+import { Character } from '../../utils/types/UserTypes';
+
 // components
 import ProfileButton from '../button/ProfileButton';
 import QuestionItem from './QuestionItem';
 import SunButton from '../button/SunButton';
-import useCharacter from '../../logics/hooks/useCharacter';
 
 type QnAItemProps = {
   question: string;
   answer: string;
+  characterInfo: Character;
 };
 /**
  * 질답 게시물 컴포넌트
@@ -31,13 +34,14 @@ type QnAItemProps = {
  *
  * @param question 질문
  * @param answer 대답
+ * @param characterInfo 해당 캐릭터 객체
  */
 export default function QnAItem({
   question,
   answer,
+  characterInfo,
 }: QnAItemProps): React.ReactElement {
   const navigation = useNavigation();
-  const [character, setCharacter] = useCharacter();
 
   /**
    * '상세 게시물' 화면으로 가는 함수
@@ -54,8 +58,9 @@ export default function QnAItem({
             <ProfileButton
               diameter={30}
               isAccount={false}
-              name={character.name}
-              img={character.profile_img}
+              isJustImg={false}
+              name={characterInfo.name}
+              profileImg={characterInfo.profile_img}
             />
           </View>
           <text.Caption textColor={colors.gray5}>
