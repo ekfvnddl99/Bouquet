@@ -51,3 +51,11 @@ export const viewPostState = atom({
   key: 'viewPostState',
   default: <Post<AllTemplates> | undefined>undefined,
 });
+
+/**
+ * Post Detail에 띄울 게시글 정보를 담는 atom
+ */
+export const selectTemplate = atom({
+  key: 'selectTemplate',
+  default: -1,
+});

@@ -18,7 +18,7 @@ import { Character } from '../../utils/types/UserTypes';
 
 type CommInputProps = {
   textValue: string;
-  onChanageText: (param: string) => void;
+  onChangeText: (param: string) => void;
   onPress: (param: string) => void;
   isChild: boolean;
   characterInfo: Character;
@@ -29,7 +29,7 @@ type CommInputProps = {
  * 댓글 입력하는 textinput
  *
  * @param textValue textinput의 value로 지정할 것
- * @param onChanageText textinput의 onChangeText 함수 역할을 할 것
+ * @param onChangeText textinput의 onChangeText 함수 역할을 할 것
  * @param onPress '전송' 버튼 누르면 실행되는 함수
  * @param isChild 대댓글인지 아닌지
  * @param characterInfo 현재 내 캐릭터 객체
@@ -39,7 +39,7 @@ type CommInputProps = {
  */
 export default function CommentTextInput({
   textValue,
-  onChanageText,
+  onChangeText,
   onPress,
   isChild,
   targetComment,
@@ -74,7 +74,7 @@ export default function CommentTextInput({
           placeholder="어떤 반응을 남기고 싶나요?"
           placeholderTextColor={colors.gray5}
           value={textValue}
-          onChangeText={(input: string) => onChanageText(input)}
+          onChangeText={(input: string) => onChangeText(input)}
           multiline
         />
         <TouchableOpacity

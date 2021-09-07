@@ -22,7 +22,7 @@ import { Character } from '../../utils/types/UserTypes';
 interface GridCharacterItemProps {
   characterInfo: Character;
   isAccount: boolean;
-  onPress: (param: number) => void;
+  onPress?: (param: number) => void;
 }
 /**
  * Profile, Account의 grid view의 캐릭터 컴포넌트
@@ -68,7 +68,7 @@ export default function GridCharacterItem({
       <text.Caption textColor={colors.black} numberOfLines={1}>
         {characterInfo.intro}
       </text.Caption>
-      {isAccount ? null : (
+      {!isAccount && onPress ? (
         <View style={{ marginTop: 21 }}>
           <ConditionButton
             isActive={
@@ -85,7 +85,7 @@ export default function GridCharacterItem({
             height={22}
           />
         </View>
-      )}
+      ) : null}
     </button.MiniListButton>
   );
 }
