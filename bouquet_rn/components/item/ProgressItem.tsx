@@ -10,7 +10,7 @@ import Icon from '../../assets/Icon';
 
 type ProgressItemProps = {
   stepBack: () => void;
-  step: number;
+  step: 0 | 1 | 2 | 3 | 4;
   title: string;
   subtitle?: string;
   navigation: any;
@@ -39,21 +39,24 @@ export default function ProgressItem({
    * progress animation 변수
    * TranslateX x축으로 움직이는 animation
    */
-  const [progressValue, setProgressValue] = useState(step * 25);
+  // const [progressValue, setProgressValue] = useState(step * 25);
   const progress = useRef(new Animated.Value(0)).current;
   const TranslateX = progress.interpolate({
     inputRange: [0, 100],
     outputRange: ['0%', '100%'],
     extrapolate: 'clamp',
   });
+
   /**
    * step 값이 바뀔 때마다 progress bar가 자동으로 움직여야 한다.
    */
   useEffect(() => {
-    setProgressValue(25 * step);
+    const newValue = 25 * step;
+    // setProgressValue(newValue);
+
     Animated.timing(progress, {
       duration: 1000,
-      toValue: progressValue,
+      toValue: newValue,
       useNativeDriver: false,
     }).start();
   }, [step]);
@@ -76,7 +79,7 @@ export default function ProgressItem({
       )}
       <View style={{ marginTop: 20, marginBottom: 24 }}>
         <elses.Bar width="100%" backgroundColor={colors.alpha20_primary} />
-        <ProgressArea barWidth={TranslateX} />
+        <ProgressArea barWidth={TranslateX} style={{ width: TranslateX }} />
       </View>
       <text.Subtitle1 textColor={colors.black}>{title}</text.Subtitle1>
       {subtitle ? (
@@ -92,9 +95,9 @@ interface ProgressAreaProps {
   barWidth: any;
 }
 const ProgressArea = styled(Animated.View)`
-  width: ${(props: ProgressAreaProps) => props.barWidth};,
-  height: 8,
-  border-radius: 10,
-  position: 'absolute',
-  background-color: ${colors.primary},
+  width: ${(props: ProgressAreaProps) => props.barWidth};
+  height: 8;
+  border-radius: 10;
+  position: 'absolute';
+  background-color: ${colors.primary};
 `;
