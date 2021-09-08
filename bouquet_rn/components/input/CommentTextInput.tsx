@@ -91,7 +91,6 @@ const TargetCommentArea = styled.View`
   background-color: ${colors.gray1};
   height: 32;
   justify-content: center;
-  align-item
   padding-horizontal: 15;
   padding-vertical: 7;
   align-items: center;

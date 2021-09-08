@@ -105,7 +105,7 @@ export type CharacterMini = {
  * 자신의 캐릭터 정보를 담는 Type
  */
 export type MyCharacter = {
-  id?: number;
+  id: number;
   name: string;
   profile_img: string;
   birth: number;
@@ -120,7 +120,8 @@ export type MyCharacter = {
 /**
  * MyCharacter의 초기값
  */
-export const noMyCharacter = {
+export const noMyCharacter: MyCharacter = {
+  id: -1,
   name: '',
   profile_img: '',
   birth: 0,

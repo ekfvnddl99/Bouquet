@@ -8,20 +8,19 @@ import {
 import i18n from 'i18n-js';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { useRecoilState } from 'recoil';
 
 // styles
 import * as area from '../../styles/styled-components/area';
 
 // logics
 import type { ChaGenerationProps } from '../../utils/types/NavigationTypes';
-import { characterListState } from '../../logics/atoms';
 import {
   createCharacterAsync,
   editCharacterAsync,
 } from '../../logics/server/Character';
 import useCharacter from '../../logics/hooks/useCharacter';
 import UploadImageAsync from '../../logics/server/UploadImage';
+import useLoadCharacter from '../../logics/hooks/useLoadCharacter';
 
 // components
 import ProgressItem from '../../components/item/ProgressItem';
@@ -33,11 +32,7 @@ import CharacterGenerationScreen3 from './CharacterGenerationScreen3';
 import CharacterGenerationScreen4 from './CharacterGenerationScreen4';
 
 // utils
-import {
-  MyCharacter,
-  noMyCharacter,
-  Character,
-} from '../../utils/types/UserTypes';
+import { MyCharacter, noMyCharacter } from '../../utils/types/UserTypes';
 
 type ParamList = {
   ProfileDetail: {
@@ -47,6 +42,7 @@ type ParamList = {
 };
 export default function CharacterGenerationScreen(): React.ReactElement {
   const [step, setStep] = useState(1);
+  const [, loadCharacterList] = useLoadCharacter();
   const navigation = useNavigation<StackNavigationProp<ChaGenerationProps>>();
   const route = useRoute<RouteProp<ParamList, 'ProfileDetail'>>();
   const isModifying = route.params?.isModifying;
@@ -55,8 +51,7 @@ export default function CharacterGenerationScreen(): React.ReactElement {
   const [newCharacter, setNewCharacter] = useState(
     isModifying ? characterInfo : noMyCharacter,
   );
-  const [character, setCharacter] = useCharacter();
-  const [characterList, setCharacterList] = useRecoilState(characterListState);
+  const [, setCharacter] = useCharacter();
 
   const backAction = () => {
     if (step !== 1) setStep(step - 1);
@@ -84,15 +79,20 @@ export default function CharacterGenerationScreen(): React.ReactElement {
         'https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg';
     }
 
-    const s = await editCharacterAsync(newCharacter);
-    const serverResult = await createCharacterAsync(newCharacter);
-    if (serverResult.isSuccess) {
-      setCharacter({
+    let serverResult;
+    if (newCharacter.id) {
+      serverResult = await editCharacterAsync({
         ...newCharacter,
-        id: serverResult.result!,
+        id: newCharacter.id ? newCharacter.id : -1,
       });
-      setCharacterList({ ...characterList, character });
-      // await setCharacterListAsync(setCharacterList);
+    } else serverResult = await createCharacterAsync(newCharacter);
+    if (serverResult.isSuccess) {
+      if (serverResult.result !== null)
+        setCharacter({
+          ...newCharacter,
+          id: serverResult.result,
+        });
+      await loadCharacterList();
       setStep(step + 1);
     } else {
       alert(serverResult.result.errorMsg);

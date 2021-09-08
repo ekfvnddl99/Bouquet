@@ -22,7 +22,8 @@ import ChaDeletionScreenTwo from './CharacterDeletionScreen2';
 export default function CharacterDeletionScreen(): React.ReactElement {
   const [step, setStep] = useState(1);
   const navigation = useNavigation();
-  const [myCharacter, setMyCharacter] = useCharacter();
+  const [myCharacter] = useCharacter();
+  const myCharacterCopy = myCharacter;
 
   async function deleteCharacter() {
     const serverResult = await deleteCharacterAsync(myCharacter.name);
@@ -56,8 +57,8 @@ export default function CharacterDeletionScreen(): React.ReactElement {
             />
           ) : (
             <ChaDeletionScreenTwo
-              profileImg={myCharacter.profile_img}
-              name={myCharacter.name}
+              profileImg={myCharacterCopy.profile_img}
+              name={myCharacterCopy.name}
               navigation={navigation}
             />
           )}
