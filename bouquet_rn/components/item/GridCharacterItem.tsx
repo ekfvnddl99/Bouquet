@@ -11,7 +11,7 @@ import * as elses from '../../styles/styled-components/elses';
 
 // logics
 import useCharacter from '../../logics/hooks/useCharacter';
-import useCharacterView from '../../logics/hooks/useCharacterView';
+import useViewCharacter from '../../logics/hooks/useViewCharacter';
 
 // components
 import ConditionButton from '../button/ConditionButton';
@@ -37,8 +37,8 @@ export default function GridCharacterItem({
   isAccount,
 }: GridCharacterItemProps): React.ReactElement {
   const navigation = useNavigation();
-  const [character, setCharacter] = useCharacter();
-  const [viewCharacter, setViewCharacter] = useCharacterView();
+  const [myCharacter, setMyCharacter] = useCharacter();
+  const [viewCharacter, setViewCharacter] = useViewCharacter();
   /**
    * '상세 프로필' 화면으로 이동하는 함수
    */
@@ -71,12 +71,10 @@ export default function GridCharacterItem({
       {!isAccount && onPress ? (
         <View style={{ marginTop: 21 }}>
           <ConditionButton
-            isActive={
-              !(character !== undefined && character.id === characterInfo.id)
-            }
+            isActive={!(myCharacter.id === characterInfo.id)}
             onPress={() => onPress(characterInfo.id ? characterInfo.id : -1)}
             content={
-              character !== undefined && character.id === characterInfo.id
+              myCharacter.id === characterInfo.id
                 ? i18n.t('선택된 캐릭터')
                 : i18n.t('캐릭터 선택')
             }

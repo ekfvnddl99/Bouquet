@@ -9,7 +9,7 @@ import * as text from '../../styles/styled-components/text';
 import * as elses from '../../styles/styled-components/elses';
 
 // logics
-import useCharacterView from '../../logics/hooks/useCharacterView';
+import useViewCharacter from '../../logics/hooks/useViewCharacter';
 
 // utils
 import { Character } from '../../utils/types/UserTypes';
@@ -27,13 +27,13 @@ export default function CharacterItem({
   characterInfo,
 }: CharacterItemProps): React.ReactElement {
   const navigation = useNavigation();
-  const [characterView, setCharacterView] = useCharacterView();
+  const [viewCharacter, setViewCharacter] = useViewCharacter();
   /**
    * '상세 프로필' 화면으로 이동하는 함수
    * @description 보여지는 캐릭터를 설정하고 나서 넘어간다.
    */
   function goProfileDetail() {
-    setCharacterView(characterInfo.name);
+    setViewCharacter(characterInfo.name);
     navigation.navigate('ProfileStack');
   }
 

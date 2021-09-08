@@ -179,13 +179,17 @@ export default function RegisterScreen3({
             ) : null}
             <area.RowArea style={{ marginBottom: 16 }}>
               <PrimaryTextButton
-                onPress={() => {}}
+                onPress={() => () => {
+                  /**/
+                }}
                 content={i18n.t('서비스 이용 약관')}
                 isBold={false}
               />
               <text.Caption textColor={colors.gray6}>, </text.Caption>
               <PrimaryTextButton
-                onPress={() => {}}
+                onPress={() => () => {
+                  /**/
+                }}
                 content={i18n.t('개인정보 취급 방침')}
                 isBold={false}
               />
@@ -200,7 +204,13 @@ export default function RegisterScreen3({
 
             <ConditionButton
               isActive={IsOK}
-              onPress={IsOK ? onPress : undefined}
+              onPress={
+                IsOK
+                  ? onPress
+                  : () => {
+                      /**/
+                    }
+              }
               content={i18n.t('필수 약관 동의 & 가입 완료')}
               paddingH={0}
               paddingV={14}

@@ -197,7 +197,13 @@ export default function RegisterScreen1({
         <View style={{ marginVertical: 16 }}>
           <ConditionButton
             isActive={IsOK}
-            onPress={IsOK ? onPress : undefined}
+            onPress={
+              IsOK
+                ? onPress
+                : () => {
+                    /**/
+                  }
+            }
             content={i18n.t('메일로 계속하기')}
             paddingH={0}
             paddingV={14}

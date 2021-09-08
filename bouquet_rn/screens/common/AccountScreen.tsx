@@ -25,11 +25,11 @@ import * as elses from '../../styles/styled-components/elses';
 import { StatusBarHeight } from '../../logics/non-server/StatusbarHeight';
 import * as cal from '../../logics/non-server/Calculation';
 import useUser from '../../logics/hooks/useUser';
-import useUserView from '../../logics/hooks/useUserView';
+import useViewUser from '../../logics/hooks/useViewUser';
 import { characterListState } from '../../logics/atoms';
 
 // utils
-import { Character } from '../../utils/types/UserTypes';
+import { MyCharacter, Character } from '../../utils/types/UserTypes';
 
 // components
 import GridCharacterItem from '../../components/item/GridCharacterItem';
@@ -49,7 +49,7 @@ export default function AccountScreen({
   const [characterList, setCharacterList] = useRecoilState(characterListState);
   const [chaList, setChaList] = useState<Character[]>(characterList);
   const [numberOfCharacter, setNumberOfCharacter] = useState(0);
-  const [viewUser, setViewUser, isMe] = useUserView();
+  const [viewUser, setViewUser] = useViewUser();
   const user = useUser();
 
   useEffect(() => {
@@ -66,7 +66,7 @@ export default function AccountScreen({
 
   const getTotalFollowers = useCallback(() => {
     let cnt = 0;
-    if (isMe) {
+    if (viewUser.user_info.name === user.name) {
       characterList.map((obj) => {
         cnt += obj.num_followers ? obj.num_followers : 0;
         return true;
@@ -78,7 +78,7 @@ export default function AccountScreen({
       });
     }
     return cnt;
-  }, [isMe, characterList, viewUser]);
+  }, [viewUser.user_info.name === user.name, characterList, viewUser]);
   const totalFollowers = useMemo(
     () => getTotalFollowers(),
     [getTotalFollowers],
@@ -119,16 +119,18 @@ export default function AccountScreen({
             diameter={120}
             source={{
               uri:
-                isMe && user !== undefined
+                viewUser.user_info.name === user.name && user !== undefined
                   ? user.profile_img
-                  : viewUser.profileImg,
+                  : viewUser.user_info.profile_img,
             }}
           />
           <text.Subtitle2B
             textColor={colors.black}
             style={{ marginVertical: 8 }}
           >
-            {isMe && user !== undefined ? user.name : viewUser.name}
+            {viewUser.user_info.name === user.name && user !== undefined
+              ? user.name
+              : viewUser.user_info.name}
           </text.Subtitle2B>
           <area.RowArea style={{ justifyContent: 'center' }}>
             <BoldNRegularText
@@ -140,7 +142,7 @@ export default function AccountScreen({
             <View style={{ marginRight: 32 }} />
             <BoldNRegularText
               boldContent={
-                isMe
+                viewUser.user_info.name === user.name
                   ? characterList.length.toString()
                   : viewUser.characters.length.toString()
               }
@@ -160,14 +162,20 @@ export default function AccountScreen({
         <area.RowArea style={{ marginBottom: 12 }}>
           <text.Body2R textColor={colors.black}>{i18n.t('총')} </text.Body2R>
           <text.Body2B textColor={colors.black}>
-            {isMe ? numberOfCharacter : viewUser.characters.length.toString()}
+            {viewUser.user_info.name === user.name
+              ? numberOfCharacter
+              : viewUser.characters.length.toString()}
           </text.Body2B>
           <text.Body2R textColor={colors.black}>{i18n.t('명')}</text.Body2R>
         </area.RowArea>
         <FlatList
           columnWrapperStyle={{ justifyContent: 'space-between' }}
           contentContainerStyle={{ justifyContent: 'center' }}
-          data={isMe ? characterList : viewUser.characters}
+          data={
+            viewUser.user_info.name === user.name
+              ? characterList
+              : viewUser.characters
+          }
           keyExtractor={(item) => item.name.toString()}
           numColumns={2}
           showsHorizontalScrollIndicator={false}

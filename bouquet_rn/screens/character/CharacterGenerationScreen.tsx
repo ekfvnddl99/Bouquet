@@ -33,11 +33,16 @@ import CharacterGenerationScreen3 from './CharacterGenerationScreen3';
 import CharacterGenerationScreen4 from './CharacterGenerationScreen4';
 
 // utils
-import { Character } from '../../utils/types/UserTypes';
+import {
+  MyCharacter,
+  noMyCharacter,
+  Character,
+} from '../../utils/types/UserTypes';
 
 type ParamList = {
   ProfileDetail: {
     isModifying: boolean;
+    characterInfo: MyCharacter;
   };
 };
 export default function CharacterGenerationScreen(): React.ReactElement {
@@ -45,8 +50,11 @@ export default function CharacterGenerationScreen(): React.ReactElement {
   const navigation = useNavigation<StackNavigationProp<ChaGenerationProps>>();
   const route = useRoute<RouteProp<ParamList, 'ProfileDetail'>>();
   const isModifying = route.params?.isModifying;
+  const characterInfo = route.params?.characterInfo;
 
-  const [characterToCreate, setCharacterToCreate] = useState<Character>();
+  const [newCharacter, setNewCharacter] = useState(
+    isModifying ? characterInfo : noMyCharacter,
+  );
   const [character, setCharacter] = useCharacter();
   const [characterList, setCharacterList] = useRecoilState(characterListState);
 
@@ -61,12 +69,9 @@ export default function CharacterGenerationScreen(): React.ReactElement {
       BackHandler.removeEventListener('hardwareBackPress', backAction);
   });
 
-  async function createCharacter() {
-    const newCharacter = { ...characterToCreate };
-    if (characterToCreate !== undefined && characterToCreate.profile_img) {
-      const serverResult = await UploadImageAsync(
-        characterToCreate.profile_img,
-      );
+  async function createNewCharacter() {
+    if (newCharacter.profile_img) {
+      const serverResult = await UploadImageAsync(newCharacter.profile_img);
       if (serverResult.isSuccess) {
         newCharacter.profile_img = serverResult.result;
       } else {
@@ -79,18 +84,15 @@ export default function CharacterGenerationScreen(): React.ReactElement {
         'https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg';
     }
 
-    let func;
-    if (isModifying) {
-      func = editCharacterAsync;
-    } else func = createCharacterAsync;
-
-    const serverResult = await func(newCharacter);
+    const s = await editCharacterAsync(newCharacter);
+    const serverResult = await createCharacterAsync(newCharacter);
     if (serverResult.isSuccess) {
       setCharacter({
         ...newCharacter,
-        id: serverResult.result,
+        id: serverResult.result!,
       });
-      await setCharacterListAsync(setCharacterList);
+      setCharacterList({ ...characterList, character });
+      // await setCharacterListAsync(setCharacterList);
       setStep(step + 1);
     } else {
       alert(serverResult.result.errorMsg);
@@ -116,34 +118,34 @@ export default function CharacterGenerationScreen(): React.ReactElement {
     if (stepNumber === 1)
       return (
         <CharacterGenerationScreen1
-          isisModifyinging={isModifying}
-          onChange={() => setStep(step + 1)}
-          characterToCreate={characterToCreate}
-          setCharacterToCreate={() => setCharacterToCreate}
+          isModifying={isModifying}
+          onPress={() => setStep(step + 1)}
+          newCharacter={newCharacter}
+          setNewCharacter={() => setNewCharacter}
         />
       );
     if (stepNumber === 2)
       return (
         <CharacterGenerationScreen2
-          isisModifyinging={isModifying}
+          isModifying={isModifying}
           onPress={() => setStep(step + 1)}
-          characterToCreate={characterToCreate}
-          setCharacterToCreate={setCharacterToCreate}
+          newCharacter={newCharacter}
+          setNewCharacter={() => setNewCharacter}
         />
       );
     if (stepNumber === 3)
       return (
         <CharacterGenerationScreen3
-          isisModifyinging={isModifying}
-          onPress={() => createCharacter}
-          characterToCreate={characterToCreate}
-          setCharacterToCreate={setCharacterToCreate}
+          isModifying={isModifying}
+          onPress={() => createNewCharacter}
+          newCharacter={newCharacter}
+          setNewCharacter={() => setNewCharacter}
         />
       );
     return (
       <CharacterGenerationScreen4
-        profileImg={characterToCreate.profile_img}
-        name={characterToCreate.name}
+        profileImg={newCharacter.profile_img}
+        name={newCharacter.name}
         isModifying={isModifying}
         navigation={navigation}
       />

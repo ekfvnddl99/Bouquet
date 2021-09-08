@@ -12,21 +12,15 @@ import LineButton from '../button/LineButton';
 import QuestionItem from '../item/QuestionItem';
 import QnAItem from '../item/QnAItem';
 
-// utils
-import { Character } from '../../utils/types/UserTypes';
+// logics
+import useCharacter from '../../logics/hooks/useCharacter';
 
-type QnATextInputProps = {
-  characterInfo: Character;
-};
 /**
  * Home의 피드 상단에 있는 질답
  * TODO 질문에 답하면 업로드 하는 함수를 연결해야 함
- *
- * @param characterInfo 현재 내 캐릭터 객체
  */
-export default function QnATextInput({
-  characterInfo,
-}: QnATextInputProps): React.ReactElement {
+export default function QnATextInput(): React.ReactElement {
+  const [myCharacter, setMyCharacter] = useCharacter();
   // '올리기' 버튼 눌렀는지 여부를 저장하는 state
   const [isUpload, setIsUpload] = useState(false);
   const [question, setQusetion] = useState('');
@@ -43,7 +37,7 @@ export default function QnATextInput({
       <QnAItem
         question={question}
         answer={answer}
-        characterInfo={characterInfo}
+        characterInfo={myCharacter}
       />
     );
   }
@@ -55,8 +49,8 @@ export default function QnATextInput({
             diameter={30}
             isAccount={false}
             isJustImg={false}
-            name={characterInfo.name}
-            profileImg={characterInfo.profile_img}
+            name={myCharacter.name}
+            profileImg={myCharacter.profile_img}
           />
         </View>
         <LineButton

@@ -24,10 +24,10 @@ export default function CharacterGenerationScreen4({
   isModifying,
   navigation,
 }: CharacterGenerationScreen4Props): React.ReactElement {
-  const goNext = () => {
+  function goNext() {
     navigation.popToTop();
-    navigation.navigate('Profile');
-  };
+    navigation.navigate('ProfileDetailStack');
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -59,7 +59,7 @@ export default function CharacterGenerationScreen4({
           <ConditionButton
             height={44}
             isActive
-            onPress={goNext}
+            onPress={() => goNext}
             content={i18n.t('시작')}
             paddingH={0}
             paddingV={14}

@@ -10,18 +10,17 @@ import * as text from '../../styles/styled-components/text';
 // assets
 import Svg from '../../assets/Icon';
 
-// logics
+// utils
 import { PostComment } from '../../utils/types/PostTypes';
 
-// utils
-import { Character } from '../../utils/types/UserTypes';
+// logics
+import useCharacter from '../../logics/hooks/useCharacter';
 
 type CommInputProps = {
   textValue: string;
   onChangeText: (param: string) => void;
   onPress: (param: string) => void;
   isChild: boolean;
-  characterInfo: Character;
   targetComment?: PostComment;
   setTargetComment?: () => void;
 };
@@ -32,7 +31,6 @@ type CommInputProps = {
  * @param onChangeText textinput의 onChangeText 함수 역할을 할 것
  * @param onPress '전송' 버튼 누르면 실행되는 함수
  * @param isChild 대댓글인지 아닌지
- * @param characterInfo 현재 내 캐릭터 객체
  * ---------------
  * @param targetComment 대댓글의 대상이 되는 댓글 Comment 객체
  * @param setTargetComment 대댓글의 대상이 되는 댓글 set 함수 (대상이 되는 부모댓글을 x버튼으로 누를 때 삭제하기 위해 사용됨)
@@ -44,8 +42,8 @@ export default function CommentTextInput({
   isChild,
   targetComment,
   setTargetComment,
-  characterInfo,
 }: CommInputProps): React.ReactElement {
+  const [myCharcater, setMyCharacter] = useCharacter();
   return (
     <View>
       {isChild ? (
@@ -67,7 +65,7 @@ export default function CommentTextInput({
         <View style={{ marginBottom: 3 }}>
           <elses.CircleImg
             diameter={30}
-            source={{ uri: characterInfo.profile_img }}
+            source={{ uri: myCharcater.profile_img }}
           />
         </View>
         <CommentInput

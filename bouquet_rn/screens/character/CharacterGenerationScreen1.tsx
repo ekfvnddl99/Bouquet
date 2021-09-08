@@ -11,20 +11,20 @@ import * as elses from '../../styles/styled-components/elses';
 import Svg from '../../assets/Icon';
 
 // logics
-import type { Character } from '../../utils/types/UserTypes';
+import type { MyCharacter } from '../../utils/types/UserTypes';
 
 // components
 import ConditionButton from '../../components/button/ConditionButton';
 
 type CharacterGenerationScreen1Props = {
   isModifying: boolean;
-  onChange: any;
-  newCharacter: Character;
-  setNewCharacter: ()=>void;
+  onPress: () => void;
+  newCharacter: MyCharacter;
+  setNewCharacter: (param: MyCharacter) => void;
 };
 export default function CharacterGenerationScreen1({
   isModifying,
-  onChange,
+  onPress,
   newCharacter,
   setNewCharacter,
 }: CharacterGenerationScreen1Props): React.ReactElement {
@@ -43,20 +43,18 @@ export default function CharacterGenerationScreen1({
     if (newCharacter.profile_img) setIsOK(true);
   });
 
-  const onPress = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+  const setImage = async () => {
+    const imgResult = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
     });
 
-    console.log(result);
-
-    if (!result.cancelled) {
+    if (!imgResult.cancelled) {
       setNewCharacter({
         ...newCharacter,
-        profileImg: result.uri,
+        profile_img: imgResult.uri,
       });
     }
   };
@@ -64,7 +62,7 @@ export default function CharacterGenerationScreen1({
   return (
     <area.ContainerBlank20>
       <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-        <TouchableOpacity onPress={() => onPress()}>
+        <TouchableOpacity onPress={() => setImage}>
           {newCharacter.profile_img ? (
             <elses.CircleImg
               diameter={180}
@@ -81,7 +79,7 @@ export default function CharacterGenerationScreen1({
         <ConditionButton
           height={44}
           isActive={IsOK}
-          onPress={IsOK ? onChange : }
+          onPress={() => (IsOK ? onPress : undefined)}
           content={
             isModifying ? i18n.t('기본 정보 수정') : i18n.t('기본 정보 입력')
           }

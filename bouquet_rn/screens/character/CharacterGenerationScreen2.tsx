@@ -6,7 +6,7 @@ import i18n from 'i18n-js';
 import * as area from '../../styles/styled-components/area';
 
 // logics
-import type { Character } from '../../utils/types/UserTypes';
+import type { MyCharacter } from '../../utils/types/UserTypes';
 import { getByte } from '../../logics/non-server/Calculation';
 import { checkCharacterAsync } from '../../logics/server/Auth';
 
@@ -18,8 +18,8 @@ import ConditionTextInput from '../../components/input/ConditionTextInput';
 type CharacterGenerationScreen2Props = {
   isModifying: boolean;
   onPress: () => void;
-  newCharacter: Character;
-  setNewCharacter: (param: Character) => void;
+  newCharacter: MyCharacter;
+  setNewCharacter: (param: MyCharacter) => void;
 };
 export default function CharacterGenerationScreen2({
   isModifying,
@@ -38,31 +38,45 @@ export default function CharacterGenerationScreen2({
   ]);
   const errText = ['필수 입력 항목이에요.', '이름 규칙을 지켜야 해요.'];
 
-  const [dupResult, setDupResult] = useState(false);
-  useEffect(() => {
-    async function IsDupName() {
-      const result = await checkCharacterAsync(newCharacter.name);
-      setDupResult(!result);
-    }
-
+  async function checkName(textInput: string) {
+    setNewCharacter({ ...newCharacter, name: textInput });
     const tmpArray = [...conArray];
     if (newCharacter.name.length > 0) tmpArray[0] = true;
     else tmpArray[0] = false;
     if (getByte(newCharacter.name) <= 18 && getByte(newCharacter.name) > 0)
       tmpArray[1] = true;
     else tmpArray[1] = false;
-    // 중복 확인
-    IsDupName();
-    if (newCharacter.name.length > 0 && dupResult) tmpArray[2] = true;
+    const serverResult = await checkCharacterAsync(newCharacter.name);
+    if (newCharacter.name.length > 0 && serverResult.isSuccess)
+      tmpArray[2] = true;
     else tmpArray[2] = false;
+    setConArray(tmpArray);
+  }
+
+  function checkBirth(textInput: string) {
+    setNewCharacter({ ...newCharacter, birth: Number(textInput) });
+    const tmpArray = [...conArray];
     if (newCharacter.birth.toString.length > 0) tmpArray[3] = true;
     else tmpArray[3] = false;
+    setConArray(tmpArray);
+  }
+
+  function checkJob(textInput: string) {
+    setNewCharacter({ ...newCharacter, job: textInput });
+    const tmpArray = [...conArray];
     if (newCharacter.job.length > 0) tmpArray[4] = true;
     else tmpArray[4] = false;
+    setConArray(tmpArray);
+  }
+
+  function checkNationality(textInput: string) {
+    setNewCharacter({ ...newCharacter, nationality: textInput });
+    const tmpArray = [...conArray];
     if (newCharacter.nationality.length > 0) tmpArray[5] = true;
     else tmpArray[5] = false;
     setConArray(tmpArray);
-  }, [newCharacter]);
+  }
+
   useEffect(() => {
     if (conArray.includes(false)) setIsOK(false);
     else setIsOK(true);
@@ -80,7 +94,7 @@ export default function CharacterGenerationScreen2({
             height={44}
             placeholder={i18n.t('캐릭터 이름')}
             onChangeText={(textInput: string) => {
-              setNewCharacter({ ...newCharacter, name: textInput });
+              checkName(textInput);
             }}
             keyboardType="default"
             isWarning={!(conArray[0] && conArray[1] && conArray[2])}
@@ -104,10 +118,7 @@ export default function CharacterGenerationScreen2({
             height={44}
             placeholder={i18n.t('생년월일 (YYYYMMDD)')}
             onChangeText={(textInput: string) => {
-              setNewCharacter({
-                ...newCharacter,
-                birth: Number(textInput),
-              });
+              checkBirth(textInput);
             }}
             keyboardType="numeric"
             isWarning={!conArray[3]}
@@ -119,7 +130,7 @@ export default function CharacterGenerationScreen2({
             height={44}
             placeholder={i18n.t('직업')}
             onChangeText={(textInput: string) => {
-              setNewCharacter({ ...newCharacter, job: textInput });
+              checkJob(textInput);
             }}
             keyboardType="default"
             isWarning={!conArray[4]}
@@ -130,10 +141,7 @@ export default function CharacterGenerationScreen2({
             height={44}
             placeholder={i18n.t('국적')}
             onChangeText={(textInput: string) => {
-              setNewCharacter({
-                ...newCharacter,
-                nationality: textInput,
-              });
+              checkNationality(textInput);
             }}
             keyboardType="default"
             isWarning={!conArray[5]}

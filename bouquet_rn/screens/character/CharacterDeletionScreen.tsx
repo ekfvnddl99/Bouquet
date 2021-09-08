@@ -10,6 +10,7 @@ import * as text from '../../styles/styled-components/text';
 
 // logics
 import { deleteCharacterAsync } from '../../logics/server/Character';
+import useCharacter from '../../logics/hooks/useCharacter';
 
 // components
 import HeaderItem from '../../components/item/HeaderItem';
@@ -18,20 +19,13 @@ import HeaderItem from '../../components/item/HeaderItem';
 import ChaDeletionScreenOne from './CharacterDeletionScreen1';
 import ChaDeletionScreenTwo from './CharacterDeletionScreen2';
 
-// utils
-import { Character } from '../../utils/types/UserTypes';
-
-type CharacterDeletionScreenProps = {
-  characterInfo: Character;
-};
-export default function CharacterDeletionScreen({
-  characterInfo,
-}: CharacterDeletionScreenProps): React.ReactElement {
+export default function CharacterDeletionScreen(): React.ReactElement {
   const [step, setStep] = useState(1);
   const navigation = useNavigation();
+  const [myCharacter, setMyCharacter] = useCharacter();
 
   async function deleteCharacter() {
-    const serverResult = await deleteCharacterAsync(characterInfo.name);
+    const serverResult = await deleteCharacterAsync(myCharacter.name);
     if (serverResult.isSuccess) setStep(step + 1);
     else alert(serverResult.result.errorMsg);
   }
@@ -47,8 +41,8 @@ export default function CharacterDeletionScreen({
         <HeaderItem
           isAccount
           isBackButton={step === 1}
-          name={characterInfo.name}
-          img={characterInfo.profile_img}
+          name={myCharacter.name}
+          profileImg={myCharacter.profile_img}
         />
         <area.ContainerBlank20>
           <text.Subtitle1 textColor={colors.black} style={{ marginBottom: 32 }}>
@@ -56,14 +50,14 @@ export default function CharacterDeletionScreen({
           </text.Subtitle1>
           {step === 1 ? (
             <ChaDeletionScreenOne
-              profileImg={characterInfo.profile_img}
-              name={characterInfo.name}
+              profileImg={myCharacter.profile_img}
+              name={myCharacter.name}
               onPress={() => deleteCharacter}
             />
           ) : (
             <ChaDeletionScreenTwo
-              profileImg={characterInfo.profile_img}
-              name={characterInfo.name}
+              profileImg={myCharacter.profile_img}
+              name={myCharacter.name}
               navigation={navigation}
             />
           )}

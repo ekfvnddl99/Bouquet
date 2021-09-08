@@ -50,7 +50,7 @@ export default function CommentItem({
   // 얘가 부모 댓글일 때, 대댓글이 있는지
   const [isOpeningCommentComment, setIsOpeningCommentComment] = useState(false);
   const user = useUser();
-  const [character, setCharacter] = useCharacter();
+  const [myCharacter, setMyCharacter] = useCharacter();
 
   /**
    * 대댓글이 보여지는 댓글들을 배열로 관리하는 함수
@@ -111,8 +111,7 @@ export default function CommentItem({
         <View style={{ flex: 1 }} />
         <area.RowArea>
           {selectId === commentInfo.id &&
-          character !== undefined &&
-          character.name === commentInfo.character_info.name ? (
+          myCharacter.name === commentInfo.character_info.name ? (
             <TouchableOpacity>
               <Icon icon="bin" size={18} />
             </TouchableOpacity>

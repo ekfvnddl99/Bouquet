@@ -131,7 +131,13 @@ export default function RegisterScreen2({
       <area.BottomArea style={{ marginBottom: 16 }}>
         <ConditionButton
           isActive={IsOK}
-          onPress={IsOK ? onPress : undefined}
+          onPress={
+            IsOK
+              ? onPress
+              : () => {
+                  /**/
+                }
+          }
           content={i18n.t('계정 정보 입력')}
           paddingH={0}
           paddingV={14}

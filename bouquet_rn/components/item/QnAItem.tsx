@@ -13,7 +13,7 @@ import * as text from '../../styles/styled-components/text';
 import * as cal from '../../logics/non-server/Calculation';
 
 // utils
-import { Character } from '../../utils/types/UserTypes';
+import { Character, MyCharacter } from '../../utils/types/UserTypes';
 
 // components
 import ProfileButton from '../button/ProfileButton';
@@ -23,7 +23,7 @@ import SunButton from '../button/SunButton';
 type QnAItemProps = {
   question: string;
   answer: string;
-  characterInfo: Character;
+  characterInfo: Character | MyCharacter;
 };
 /**
  * 질답 게시물 컴포넌트

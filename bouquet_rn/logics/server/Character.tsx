@@ -4,6 +4,7 @@ import * as APIs from './APIUtils';
 // utils
 import {
   Character,
+  MyCharacter,
   UserDetail,
   OptionalCharacter,
 } from '../../utils/types/UserTypes';
@@ -17,7 +18,7 @@ import {
  * @returns -{result: 캐릭터 id, isSuccess: true} 또는 {result: 에러 객체, isSuccess: false}
  */
 export async function createCharacterAsync(
-  character: Character,
+  character: MyCharacter,
 ): APIs.ServerResult<number> {
   // 서버 응답 타입 정의
   type CreateCharacterAsyncOutput = { id: number };

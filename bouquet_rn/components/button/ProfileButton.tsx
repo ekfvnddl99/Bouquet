@@ -9,8 +9,8 @@ import * as elses from '../../styles/styled-components/elses';
 import * as text from '../../styles/styled-components/text';
 
 // logics
-import useCharacterView from '../../logics/hooks/useCharacterView';
-import useUserView from '../../logics/hooks/useUserView';
+import useViewCharacter from '../../logics/hooks/useViewCharacter';
+import useViewUser from '../../logics/hooks/useViewUser';
 
 type ProfileButtonProps = {
   diameter: number;
@@ -36,14 +36,14 @@ export default function ProfileButton({
   profileImg,
 }: ProfileButtonProps): React.ReactElement {
   const navigation = useNavigation();
-  const [characterView, setCharacterView] = useCharacterView();
-  const [userView, setUserView, isMe] = useUserView();
+  const [viewCharacter, setViewCharacter] = useViewCharacter();
+  const [viewUser, setViewUser] = useViewUser();
   /**
    * '상세 프로필' 화면으로 이동하는 함수
    * @description 캐릭터 프로필을 눌렀을 때
    */
   function goProfileDetail() {
-    setCharacterView(name);
+    setViewCharacter(name);
     navigation.navigate('ProfileDetailStack');
   }
   /**
@@ -51,7 +51,7 @@ export default function ProfileButton({
    * @description 계정 프로필을 눌렀을 때
    */
   function goAccount() {
-    setUserView({ name, profileImg });
+    setViewUser(name);
     navigation.navigate('AccountStack');
   }
 
