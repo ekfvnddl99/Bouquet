@@ -9,7 +9,7 @@ import Icon from '../../assets/Icon';
 
 type SettingItemProps = {
   content: string;
-  onPress: () => void;
+  onPress?: () => void;
 };
 /**
  * '설정' 화면에서 설정 항목 컴포넌트

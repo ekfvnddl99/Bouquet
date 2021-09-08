@@ -7,7 +7,7 @@ import * as button from '../../styles/styled-components/button';
 
 type ConditionButtonProps = {
   isActive: boolean;
-  onPress: () => void;
+  onPress?: () => void;
   content: string;
   paddingH: number;
   paddingV: number;

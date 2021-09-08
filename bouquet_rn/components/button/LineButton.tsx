@@ -5,7 +5,7 @@ import * as text from '../../styles/styled-components/text';
 import * as button from '../../styles/styled-components/button';
 
 type LineButtonProps = {
-  onPress: () => void;
+  onPress?: () => void;
   content: string;
   borderColor: string;
 };
