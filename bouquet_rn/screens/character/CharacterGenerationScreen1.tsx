@@ -22,14 +22,24 @@ type CharacterGenerationScreen1Props = {
   newCharacter: MyCharacter;
   setNewCharacter: (param: MyCharacter) => void;
 };
+/**
+ * 캐릭터 이미지 설정하는 화면
+ * @param isModifying 수정하는 거니?
+ * @param onPress 다음으로 넘어가는 버튼 누를 때 실행되는 함수
+ * @param newCharacter 생성/수정할 캐릭터 객체
+ * @param setNewCharacter 생성/수정할 캐릭터 객체 set 함수
+ * @returns
+ */
 export default function CharacterGenerationScreen1({
   isModifying,
   onPress,
   newCharacter,
   setNewCharacter,
 }: CharacterGenerationScreen1Props): React.ReactElement {
+  // 다음 단계 넘어가도 되는지 확인하는 state
   const [IsOK, setIsOK] = useState(false);
 
+  // 이미지 업로드 할 때 권한이 없다면 일단 권한부터 받는다.
   useEffect(() => {
     (async () => {
       const { status } =
@@ -39,6 +49,7 @@ export default function CharacterGenerationScreen1({
       }
     })();
   }, []);
+  // 만약 이미지 사진이 있다면 통과???
   useEffect(() => {
     if (newCharacter.profile_img) setIsOK(true);
   });

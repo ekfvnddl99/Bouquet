@@ -1,5 +1,15 @@
+import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+import * as Types from '../utils/types/NavigationTypes';
+
+// screens
+import WelcomeScreen from '../screens/former/WelcomeScreen';
+import LoginScreen from '../screens/former/LoginScreen';
+import RegisterScreen from '../screens/former/register/RegisterScreen';
+import TabNavigator from './TabNavigator';
+
 const WelcomeStack = createStackNavigator<Types.WelcomeStackParam>();
-function WelcomeStackNavigator() {
+export default function WelcomeStackNavigator(): React.ReactElement {
   return (
     <WelcomeStack.Navigator initialRouteName="Welcome">
       <WelcomeStack.Screen

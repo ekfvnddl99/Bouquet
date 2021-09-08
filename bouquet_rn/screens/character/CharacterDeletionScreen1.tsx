@@ -17,6 +17,15 @@ type CharacterDeletionScreen1Props = {
   name: string;
   onPress: () => void;
 };
+/**
+ * 진짜 캐릭터 삭제할 건지 확인하는 화면
+ * * 삭제 버튼 누르면 여기서 삭제되고 나서 다음 화면으로 넘어간다.
+ *
+ * @param profileImg 삭제될 캐릭터의 프로필 이미지
+ * @param name 삭제될 캐릭터의 이름
+ * @param onPress 삭제 버튼 눌렀을 때 실행되는 함수
+ * @returns
+ */
 export default function CharacterDeletionScreen1({
   profileImg,
   name,

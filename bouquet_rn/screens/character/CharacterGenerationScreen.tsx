@@ -41,18 +41,26 @@ type ParamList = {
   };
 };
 export default function CharacterGenerationScreen(): React.ReactElement {
-  const [step, setStep] = useState(1);
-  const [, loadCharacterList] = useLoadCharacter();
   const navigation = useNavigation<StackNavigationProp<ChaGenerationProps>>();
   const route = useRoute<RouteProp<ParamList, 'ProfileDetail'>>();
+  // navigation으로 받아온 param
+  // 수정하는 거니?
   const isModifying = route.params?.isModifying;
+  // 수정할 캐릭터 객체
   const characterInfo = route.params?.characterInfo;
 
+  // hooks
+  const [, setCharacter] = useCharacter();
+  const [, loadCharacterList] = useLoadCharacter();
+
+  // 화면 몇 단계인지 나타내는 state
+  const [step, setStep] = useState(1);
+  // 생성/수정할 캐릭터 객체
   const [newCharacter, setNewCharacter] = useState(
     isModifying ? characterInfo : noMyCharacter,
   );
-  const [, setCharacter] = useCharacter();
 
+  // 백핸들러 처리
   const backAction = () => {
     if (step !== 1) setStep(step - 1);
     else navigation.goBack();
@@ -64,23 +72,31 @@ export default function CharacterGenerationScreen(): React.ReactElement {
       BackHandler.removeEventListener('hardwareBackPress', backAction);
   });
 
+  /**
+   * 캐릭터 생성 or 수정 함수
+   * * 단계3일 때 이용됨.
+   */
   async function createNewCharacter() {
+    // 입력한 이미지가 있는 경우
     if (newCharacter.profile_img) {
       const serverResult = await UploadImageAsync(newCharacter.profile_img);
       if (serverResult.isSuccess) {
         newCharacter.profile_img = serverResult.result;
       } else {
         alert(serverResult.result.errorMsg);
+        // 못 가져왔으면 기본 이미지 대체
         newCharacter.profile_img =
           'https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg';
       }
     } else {
+      // 입력한 이미지 없으면 기본 이미지 대체
       newCharacter.profile_img =
         'https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg';
     }
 
     let serverResult;
-    if (newCharacter.id) {
+    // 만약 캐릭터 아이디가 -1이 아니면 이미 생성된 캐릭터니까 '수정'하는 경우임
+    if (newCharacter.id !== -1) {
       serverResult = await editCharacterAsync({
         ...newCharacter,
         id: newCharacter.id ? newCharacter.id : -1,
@@ -99,13 +115,22 @@ export default function CharacterGenerationScreen(): React.ReactElement {
     }
   }
 
+  /**
+   * 단계에 따른 화면 제목
+   * @param stepNumber 현재 몇 번째 단계 화면
+   * @returns
+   */
   function setTitle(stepNumber: number) {
     if (stepNumber === 1) return i18n.t('어떤 모습인가요');
     if (stepNumber === 2) return i18n.t('이 캐릭터는 누구인가요');
     if (stepNumber === 3) return i18n.t('어떤 캐릭터인가요');
     return `${i18n.t('캐릭터 생성 완료')}!`;
   }
-
+  /**
+   * 단계에 따른 화면 제목
+   * @param stepNumber 현재 몇 번째 단계 화면
+   * @returns
+   */
   function setSubtitle(stepNumber: number) {
     if (stepNumber === 1) return i18n.t('이 캐릭터의 겉모습을 생각해 보아요');
     if (stepNumber === 2)
@@ -114,6 +139,11 @@ export default function CharacterGenerationScreen(): React.ReactElement {
     return undefined;
   }
 
+  /**
+   * 단계에 따른 화면
+   * @param stepNumber 현재 몇 번째 단계 화면
+   * @returns
+   */
   function setCharacterGenerationScreen(stepNumber: number) {
     if (stepNumber === 1)
       return (

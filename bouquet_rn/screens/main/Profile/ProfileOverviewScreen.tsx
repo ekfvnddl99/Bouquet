@@ -37,10 +37,10 @@ export default function ProfileOverviewScreen(): React.ReactElement {
     scroll.setValue(0);
   });
   const goChaGeneration = () => {
-    navigation.navigate('ChaGeneration');
+    navigation.navigate('CharacterGeneration');
   };
   const goSetting = () => {
-    navigation.navigate('Setting');
+    navigation.navigate('SettingStack');
   };
 
   const scroll = useRef(new Animated.Value(0)).current;

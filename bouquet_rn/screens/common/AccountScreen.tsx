@@ -1,19 +1,7 @@
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
-  useMemo,
-} from 'react';
-import {
-  FlatList,
-  View,
-  TouchableWithoutFeedback,
-  Animated,
-} from 'react-native';
+import React, { useRef, useEffect, useState } from 'react';
+import { FlatList, View, Animated } from 'react-native';
 import i18n from 'i18n-js';
 import styled from 'styled-components/native';
-import { useRecoilState } from 'recoil';
 
 // styles
 import colors from '../../styles/colors';
@@ -24,65 +12,49 @@ import * as elses from '../../styles/styled-components/elses';
 // logics
 import { StatusBarHeight } from '../../logics/non-server/StatusbarHeight';
 import * as cal from '../../logics/non-server/Calculation';
-import useUser from '../../logics/hooks/useUser';
 import useViewUser from '../../logics/hooks/useViewUser';
-import { characterListState } from '../../logics/atoms';
 
 // utils
-import { MyCharacter, Character } from '../../utils/types/UserTypes';
+import { noMyCharacter, MyCharacter } from '../../utils/types/UserTypes';
 
 // components
 import GridCharacterItem from '../../components/item/GridCharacterItem';
 import BoldNRegularText from '../../components/text/BoldNRegularText';
 import HeaderItem from '../../components/item/HeaderItem';
+import useCharacter from '../../logics/hooks/useCharacter';
 
 const HEADER_MAX_HEIGHT = 80;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
-type AccountScreenProps = {
-  characterInfo: Character;
-};
-export default function AccountScreen({
-  characterInfo,
-}: AccountScreenProps): React.ReactElement {
-  const [characterList, setCharacterList] = useRecoilState(characterListState);
-  const [chaList, setChaList] = useState<Character[]>(characterList);
-  const [numberOfCharacter, setNumberOfCharacter] = useState(0);
-  const [viewUser, setViewUser] = useViewUser();
-  const user = useUser();
+/**
+ * '계정' 화면
+ * @returns
+ */
+export default function AccountScreen(): React.ReactElement {
+  const [myCharacter] = useCharacter();
+  const [viewUser] = useViewUser();
+  // 해당 계정의 캐릭터들을 담는 배열
+  const [characterArray, setCharacterArray] = useState<MyCharacter[]>();
 
+  // 캐릭터가 홀수 개일 때 grid가 이상하게 나오지 않도록 하나를 더 끼워준다.
   useEffect(() => {
-    setNumberOfCharacter(characterList.length);
-    if (chaList.length % 2 === 1) setChaList([...chaList]);
+    if (characterArray) {
+      if (characterArray.length % 2 === 1)
+        setCharacterArray([...characterArray, noMyCharacter]);
+    }
   }, []);
 
+  /**
+   * scroll - animation 변수
+   * OpacityHeader - 헤더 투명도
+   */
   const scroll = useRef(new Animated.Value(0)).current;
   const OpacityHeader = scroll.interpolate({
     inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
     outputRange: [0, 0.5, 1],
     extrapolate: 'clamp',
   });
-
-  const getTotalFollowers = useCallback(() => {
-    let cnt = 0;
-    if (viewUser.user_info.name === user.name) {
-      characterList.map((obj) => {
-        cnt += obj.num_followers ? obj.num_followers : 0;
-        return true;
-      });
-    } else {
-      viewUser.characters.map((obj) => {
-        cnt += obj.num_followers ? obj.num_followers : 0;
-        return true;
-      });
-    }
-    return cnt;
-  }, [viewUser.user_info.name === user.name, characterList, viewUser]);
-  const totalFollowers = useMemo(
-    () => getTotalFollowers(),
-    [getTotalFollowers],
-  );
 
   return (
     <area.Container>
@@ -94,8 +66,8 @@ export default function AccountScreen({
       <HeaderItem
         isAccount
         isBackButton
-        name={characterInfo.name}
-        profileImg={characterInfo.profile_img}
+        name={myCharacter.name}
+        profileImg={myCharacter.profile_img}
       />
 
       <Animated.ScrollView
@@ -118,34 +90,27 @@ export default function AccountScreen({
           <elses.CircleImg
             diameter={120}
             source={{
-              uri:
-                viewUser.user_info.name === user.name && user !== undefined
-                  ? user.profile_img
-                  : viewUser.user_info.profile_img,
+              uri: viewUser.user_info.profile_img,
             }}
           />
           <text.Subtitle2B
             textColor={colors.black}
             style={{ marginVertical: 8 }}
           >
-            {viewUser.user_info.name === user.name && user !== undefined
-              ? user.name
-              : viewUser.user_info.name}
+            {viewUser.user_info.name}
           </text.Subtitle2B>
           <area.RowArea style={{ justifyContent: 'center' }}>
             <BoldNRegularText
-              boldContent={cal.numName(totalFollowers).toString()}
+              boldContent={cal
+                .numName(viewUser.user_info.num_followers)
+                .toString()}
               regularContent={i18n.t('팔로워')}
               textColor={colors.primary}
               isCenter
             />
             <View style={{ marginRight: 32 }} />
             <BoldNRegularText
-              boldContent={
-                viewUser.user_info.name === user.name
-                  ? characterList.length.toString()
-                  : viewUser.characters.length.toString()
-              }
+              boldContent={viewUser.user_info.num_characters.toString()}
               regularContent={
                 i18n.t('캐릭터') + (i18n.locale === 'en' ? 's' : '')
               }
@@ -162,20 +127,14 @@ export default function AccountScreen({
         <area.RowArea style={{ marginBottom: 12 }}>
           <text.Body2R textColor={colors.black}>{i18n.t('총')} </text.Body2R>
           <text.Body2B textColor={colors.black}>
-            {viewUser.user_info.name === user.name
-              ? numberOfCharacter
-              : viewUser.characters.length.toString()}
+            {viewUser.user_info.num_characters.toString()}
           </text.Body2B>
           <text.Body2R textColor={colors.black}>{i18n.t('명')}</text.Body2R>
         </area.RowArea>
         <FlatList
           columnWrapperStyle={{ justifyContent: 'space-between' }}
           contentContainerStyle={{ justifyContent: 'center' }}
-          data={
-            viewUser.user_info.name === user.name
-              ? characterList
-              : viewUser.characters
-          }
+          data={characterArray}
           keyExtractor={(item) => item.name.toString()}
           numColumns={2}
           showsHorizontalScrollIndicator={false}
@@ -184,9 +143,7 @@ export default function AccountScreen({
               {obj.item.name === '' ? (
                 <View />
               ) : (
-                <TouchableWithoutFeedback>
-                  <GridCharacterItem characterInfo={characterInfo} isAccount />
-                </TouchableWithoutFeedback>
+                <GridCharacterItem characterInfo={obj.item} isAccount />
               )}
             </View>
           )}

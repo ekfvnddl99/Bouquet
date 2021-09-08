@@ -17,14 +17,23 @@ type CharacterDeletionScreen2Props = {
   name: string;
   navigation: any;
 };
+/**
+ * 캐릭터 삭제 됐다고 말하는 화면
+ *
+ * @param profileImg 삭제될 캐릭터의 프로필 이미지
+ * @param name 삭제될 캐릭터의 이름
+ * @param navigation 돌아가기 버튼 누를 때 필요한 네비게이션 변수
+ * @returns
+ */
 export default function CharacterDeletionScreen2({
   profileImg,
   name,
   navigation,
 }: CharacterDeletionScreen2Props): React.ReactElement {
-  const goOverview = () => {
+  // 돌아가기 버튼 누르면 실행되는 함수. 캐릭터 오버뷰로 이동한다.
+  function goOverview() {
     navigation.navigate('ProfileOverview');
-  };
+  }
 
   return (
     <area.Container>
@@ -53,7 +62,7 @@ export default function CharacterDeletionScreen2({
         <ConditionButton
           height={44}
           isActive
-          onPress={goOverview}
+          onPress={() => goOverview}
           content={i18n.t('캐릭터 목록으로 돌아가기')}
           paddingH={0}
           paddingV={14}

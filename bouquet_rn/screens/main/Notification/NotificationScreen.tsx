@@ -31,6 +31,7 @@ const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 export default function NotificationScreen(): React.ReactElement {
+  // 더미데이터
   const Data = [
     { a: '오란지', b: '님이 당신을 팔로우해요.' },
     { a: '폭스처돌이1호님', b: '이 당신의 게시글을 좋아해요.' },
@@ -44,16 +45,28 @@ export default function NotificationScreen(): React.ReactElement {
     { a: '비걸핑크해', b: '님이 당신의 게시글에 댓글을 남겼어요.' },
     { a: '비걸핑크해', b: '님이 당신의 게시글을 좋아해요.' },
   ];
+
+  const navigation = useNavigation();
   const user = useUser();
   const [myCharacter] = useCharacter();
+  // 로그인한 상태인지 아닌지
   const [isLogined, setIsLogined] = useState(false);
-  const navigation = useNavigation();
 
+  // 로그인한 상태인지 아닌지 확인
   useEffect(() => {
-    if (user !== undefined || myCharacter.id === -1) setIsLogined(false);
+    if (user === undefined || myCharacter.id === -1) setIsLogined(false);
     else setIsLogined(true);
   }, []);
 
+  /**
+   * animation 관련
+   * scroll - animation 변수
+   * ScaleImg - 프로필 이미지 크기 조절
+   * TranslateImgX - 프로필 이미지 X축 이동
+   * TranslateImgY - 프로필 이미지 Y축 이동
+   * OpacityTitle - 제목 투명도 정도. 위로 올리면 제목 없어짐.
+   * OpacityHeader - 헤더 투명도 정도
+   */
   const scroll = useRef(new Animated.Value(0)).current;
   const ScaleImg = scroll.interpolate({
     inputRange: [0, HEADER_SCROLL_DISTANCE],
@@ -82,6 +95,10 @@ export default function NotificationScreen(): React.ReactElement {
     extrapolate: 'clamp',
   });
 
+  /**
+   * 알람 개수가 0이냐 아니냐에 따라 달라지는 구성
+   * @param notificationNumber 알람이 몇개 와있는가에 따라서 다르다.
+   */
   function setNotification(notificationNumber: number) {
     if (notificationNumber) {
       <FlatList

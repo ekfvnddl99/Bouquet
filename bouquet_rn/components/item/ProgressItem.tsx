@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { View, Animated, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
 import colors from '../../styles/colors';
@@ -10,7 +10,7 @@ import Icon from '../../assets/Icon';
 
 type ProgressItemProps = {
   stepBack: () => void;
-  step: 0 | 1 | 2 | 3 | 4;
+  step: number;
   title: string;
   subtitle?: string;
   navigation: any;
@@ -79,7 +79,7 @@ export default function ProgressItem({
       )}
       <View style={{ marginTop: 20, marginBottom: 24 }}>
         <elses.Bar width="100%" backgroundColor={colors.alpha20_primary} />
-        <ProgressArea barWidth={TranslateX} style={{ width: TranslateX }} />
+        <ProgressArea style={{ width: TranslateX }} />
       </View>
       <text.Subtitle1 textColor={colors.black}>{title}</text.Subtitle1>
       {subtitle ? (
@@ -91,11 +91,7 @@ export default function ProgressItem({
   );
 }
 
-interface ProgressAreaProps {
-  barWidth: any;
-}
 const ProgressArea = styled(Animated.View)`
-  width: ${(props: ProgressAreaProps) => props.barWidth};
   height: 8;
   border-radius: 10;
   position: 'absolute';

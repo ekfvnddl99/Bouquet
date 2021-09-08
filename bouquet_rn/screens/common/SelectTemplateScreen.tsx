@@ -8,13 +8,11 @@ import * as area from '../../styles/styled-components/area';
 // logics
 import { StatusBarHeight } from '../../logics/non-server/StatusbarHeight';
 import { selectTemplate } from '../../logics/atoms';
+import useCharacter from '../../logics/hooks/useCharacter';
 
 // components
 import SelectTemplateItem from '../../components/item/SelectTemplateItem';
 import HeaderItem from '../../components/item/HeaderItem';
-
-// utils
-import { Character } from '../../utils/types/UserTypes';
 
 // templates
 import TextTemplate from '../template/TextTemplate';
@@ -23,25 +21,30 @@ import AlbumTemplate from '../template/AlbumTemplate';
 import DiaryTemplate from '../template/DiaryTemplate';
 import ListTemplate from '../template/ListTemplate';
 
+// 헤더의 최대.최소 길이
 const HEADER_MAX_HEIGHT = 90;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
-type SelectTemplateScreenProps = {
-  characterInfo: Character;
-};
-export default function SelectTemplateScreen({
-  characterInfo,
-}: SelectTemplateScreenProps): React.ReactElement {
+export default function SelectTemplateScreen(): React.ReactElement {
+  const [myCharacter] = useCharacter();
+
+  // 내가 고른 템플릿 아이디와, 그 아이디의 set 함수
   const select = useRecoilValue(selectTemplate);
   const setSelect = useSetRecoilState(selectTemplate);
 
+  /**
+   * scroll - animation 변수
+   * OpacityHeader - 헤더 투명도.
+   */
   const scroll = useRef(new Animated.Value(0)).current;
   const OpacityHeader = scroll.interpolate({
     inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
     outputRange: [0, 0.5, 1],
     extrapolate: 'clamp',
   });
+
+  // 템플릿 예시 설명
   const templates = [
     {
       name: '선택 안 함.',
@@ -85,8 +88,8 @@ export default function SelectTemplateScreen({
       <HeaderItem
         isAccount={false}
         isBackButton
-        name={characterInfo.name}
-        profileImg={characterInfo.profile_img}
+        name={myCharacter.name}
+        profileImg={myCharacter.profile_img}
       />
 
       <Animated.ScrollView

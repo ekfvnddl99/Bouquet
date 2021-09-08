@@ -32,13 +32,17 @@ const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 export default function HomeScreen(): React.ReactElement {
   const user = useUser();
   const [myCharacter] = useCharacter();
+  // 로그인한 상태인지 아닌지
   const [isLogined, setIsLogined] = useState(false);
+  // 인기 게시글 담을 state
   const [postArray, setPostArray] = useState<Post<AllTemplates>[]>();
 
+  // 로그인한 상태인지 아닌지 확인
   useEffect(() => {
-    if (user !== undefined || myCharacter.id === -1) setIsLogined(false);
+    if (user === undefined || myCharacter.id === -1) setIsLogined(false);
     else setIsLogined(true);
   }, []);
+  // 가장 처음에 인기 게시물 가져옴
   useEffect(() => {
     async function getPosts() {
       async function getPost() {
@@ -54,6 +58,15 @@ export default function HomeScreen(): React.ReactElement {
     getPosts();
   }, []);
 
+  /**
+   * animation 관련
+   * scroll - animation 변수
+   * ScaleImg - 프로필 이미지 크기 조절
+   * TranslateImgX - 프로필 이미지 X축 이동
+   * TranslateImgY - 프로필 이미지 Y축 이동
+   * OpacityTitle - 제목 투명도 정도. 위로 올리면 제목 없어짐.
+   * OpacityHeader - 헤더 투명도 정도
+   */
   const scroll = useRef(new Animated.Value(0)).current;
   const ScaleImg = scroll.interpolate({
     inputRange: [0, HEADER_SCROLL_DISTANCE],

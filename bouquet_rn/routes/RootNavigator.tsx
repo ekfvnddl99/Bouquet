@@ -1,28 +1,67 @@
-export default function AppStack() {
-  const [splash, setSplash] = useState(true);
-  const [user, setUser] = useUser();
-  const [character, setCharacter] = useCharacter();
+import React, { useState, useEffect } from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { NavigationContainer } from '@react-navigation/native';
+
+// logics
+import useUser from '../logics/hooks/useUser';
+
+// screens
+import SplashScreen from '../screens/former/SplashScreen';
+import TabNavigator from './TabNavigator';
+import WelcomeStackNavigator from './WelcomeStackNavigator';
+
+import CharacterGenerationScreen from '../screens/character/CharacterGenerationScreen';
+
+export default function AppStack(): React.ReactElement {
+  const [isSplash, setIsSplash] = useState(true);
+  const user = useUser();
 
   useEffect(() => {
     setTimeout(() => {
-      setSplash(false);
+      setIsSplash(false);
     }, 2000);
   });
 
+  // 1
+  function initScreen() {
+    if (isSplash) {
+      return <SplashScreen />;
+    }
+    if (user !== undefined)
+      return (
+        <>
+          <CharacterGenerationScreen />
+          <TabNavigator />
+        </>
+      );
+    return <WelcomeStackNavigator />;
+  }
+
+  // 2
+  let Screen;
+
+  if (isSplash) {
+    Screen = <SplashScreen />;
+  } else if (user !== undefined) {
+    Screen = <CharacterGenerationScreen />;
+  } else {
+    Screen = <WelcomeStackNavigator />;
+  }
+
+  // 3
+  const normalScreen = user ? (
+    <CharacterGenerationScreen />
+  ) : (
+    <WelcomeStackNavigator />
+  );
+
   return (
     <SafeAreaProvider>
+      {/* <NavigationContainer>{Screen}</NavigationContainer> */}
       <NavigationContainer>
-        {splash === true ? (
-          <SplashScreen />
-        ) : user.isLogined ? (
-          <TabNavigator />
-        ) : (
-          <WelcomeStackNavigator />
-        )}
-        <ModalStack.Navigator>
-          <ModalStack.screen name="QRCode" component={QRCodeScreen} />
-        </ModalStack.Navigator>
+        {isSplash ? <SplashScreen /> : normalScreen}
       </NavigationContainer>
+      <CharacterGenerationScreen />
     </SafeAreaProvider>
   );
 }

@@ -18,12 +18,25 @@ type CharacterGenerationScreen4Props = {
   isModifying: boolean;
   navigation: any;
 };
+/**
+ * 캐릭터 생성/수정 완료됐다는 확인 화면
+ *
+ * @param profileImg 삭제될 캐릭터의 프로필 이미지
+ * @param name 삭제될 캐릭터의 이름
+ * @param isModifying 수정하냐?
+ * @param navigation 돌아가기 버튼 누를 때 필요한 네비게이션 변수
+ * @returns
+ */
 export default function CharacterGenerationScreen4({
   profileImg,
   name,
   isModifying,
   navigation,
 }: CharacterGenerationScreen4Props): React.ReactElement {
+  /**
+   * 해당 캐릭터의 상세 화면으로 이동하는 함수.
+   * * '시작하기' 버튼을 누르면 실행됨.
+   */
   function goNext() {
     navigation.popToTop();
     navigation.navigate('ProfileDetailStack');
