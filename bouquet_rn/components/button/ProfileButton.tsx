@@ -36,22 +36,22 @@ export default function ProfileButton({
   profileImg,
 }: ProfileButtonProps): React.ReactElement {
   const navigation = useNavigation();
-  const [viewCharacter, setViewCharacter] = useViewCharacter();
-  const [viewUser, setViewUser] = useViewUser();
+  const [, setViewCharacter] = useViewCharacter();
+  const [, setViewUser] = useViewUser();
   /**
    * '상세 프로필' 화면으로 이동하는 함수
    * @description 캐릭터 프로필을 눌렀을 때
    */
-  function goProfileDetail() {
-    setViewCharacter(name);
+  async function goProfileDetail() {
+    await setViewCharacter(name);
     navigation.navigate('ProfileDetailStack');
   }
   /**
    * '계정' 화면으로 이동하는 함수
    * @description 계정 프로필을 눌렀을 때
    */
-  function goAccount() {
-    setViewUser(name);
+  async function goAccount() {
+    await setViewUser(name);
     navigation.navigate('AccountStack');
   }
 

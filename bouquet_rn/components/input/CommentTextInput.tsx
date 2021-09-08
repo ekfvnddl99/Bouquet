@@ -43,7 +43,7 @@ export default function CommentTextInput({
   targetComment,
   setTargetComment,
 }: CommInputProps): React.ReactElement {
-  const [myCharcater, setMyCharacter] = useCharacter();
+  const [myCharcater] = useCharacter();
   return (
     <View>
       {isChild ? (

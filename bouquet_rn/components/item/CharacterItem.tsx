@@ -27,13 +27,13 @@ export default function CharacterItem({
   characterInfo,
 }: CharacterItemProps): React.ReactElement {
   const navigation = useNavigation();
-  const [viewCharacter, setViewCharacter] = useViewCharacter();
+  const [, setViewCharacter] = useViewCharacter();
   /**
    * '상세 프로필' 화면으로 이동하는 함수
    * @description 보여지는 캐릭터를 설정하고 나서 넘어간다.
    */
-  function goProfileDetail() {
-    setViewCharacter(characterInfo.name);
+  async function goProfileDetail() {
+    await setViewCharacter(characterInfo.name);
     navigation.navigate('ProfileStack');
   }
 

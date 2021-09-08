@@ -50,7 +50,7 @@ export default function CommentItem({
   // 얘가 부모 댓글일 때, 대댓글이 있는지
   const [isOpeningCommentComment, setIsOpeningCommentComment] = useState(false);
   const user = useUser();
-  const [myCharacter, setMyCharacter] = useCharacter();
+  const [myCharacter] = useCharacter();
 
   /**
    * 대댓글이 보여지는 댓글들을 배열로 관리하는 함수
