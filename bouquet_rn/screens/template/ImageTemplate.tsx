@@ -1,20 +1,36 @@
 import React, { useEffect, useState } from 'react';
-import { View, TextInput, TouchableOpacity, Image, Dimensions, StyleSheet } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  Image,
+  Dimensions,
+  StyleSheet,
+} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
-import { colors } from '../../styles/colors';
+import colors from '../../styles/colors';
 import * as elses from '../../styles/styled-components/elses';
-import GallerySvg from '../../assets/Gallery';
 
-import * as Post from '../../logics/Post';
-  
+import Icon from '../../assets/Icon';
+
+import { ImageTemplate } from '../../utils/types/PostTypes';
+
 const windowWidth = Dimensions.get('window').width;
-function Img({ img, isMini, isEditMode }: {img?:string, isMini: boolean, isEditMode?: boolean}) {
-  const[image, setImage]=useState(img);
-  const[edit, setEdit]=useState(isEditMode);
+function Img({
+  img,
+  isMini,
+  isEditMode,
+}: {
+  img?: string;
+  isMini: boolean;
+  isEditMode?: boolean;
+}) {
+  const [image, setImage] = useState(img);
+
   useEffect(() => {
     (async () => {
-      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      const { status } =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== 'granted') {
         alert('이미지를 업로드하려면 권한이 필요해요.');
       }
@@ -22,10 +38,10 @@ function Img({ img, isMini, isEditMode }: {img?:string, isMini: boolean, isEditM
   }, []);
 
   const onPress = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+    const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect:[1,1],
+      aspect: [1, 1],
       quality: 1,
     });
 
@@ -34,57 +50,67 @@ function Img({ img, isMini, isEditMode }: {img?:string, isMini: boolean, isEditM
     }
   };
 
-
-  return(
-    <View style={{marginBottom: isMini ? 0 : 12, alignItems:'center'}}>
-      {edit ? 
-      <TouchableOpacity onPress={onPress} style={styles.selectImg}>
-        <GallerySvg w="24" h="24"/>
-      </TouchableOpacity>
-      : image==='' ? <elses.RectangleImg width={windowWidth/2} height={windowWidth/2} source={require('../../assets/img.jpg')}/>:
-       <Image source={{uri:img}} resizeMode={'cover'} style={styles.setImg}/>}
+  return (
+    <View style={{ marginBottom: isMini ? 0 : 12, alignItems: 'center' }}>
+      {
+        /* eslint-disable-next-line no-nested-ternary */
+        isEditMode ? (
+          <TouchableOpacity onPress={onPress} style={styles.selectImg}>
+            <Icon icon="gallery" size={24} />
+          </TouchableOpacity>
+        ) : image === '' ? (
+          <elses.RectangleImg
+            width={windowWidth / 2}
+            height={windowWidth / 2}
+            source={{}}
+          />
+        ) : (
+          <Image
+            source={{ uri: img }}
+            resizeMode="cover"
+            style={styles.setImg}
+          />
+        )
+      }
     </View>
-  )
+  );
 }
 
 type TemplateProps = {
   mode: string;
-  post?: Post.PostInterface<any>;
-}
+  post?: ImageTemplate;
+};
 
-export default function ImageTemplate({ mode, post }: TemplateProps) {
+export default function ImageTemplate({
+  mode,
+  post,
+}: TemplateProps): React.ReactElement {
   switch (mode) {
     case 'edit':
-      return (
-        <Img isMini={false} isEditMode={true}/>
-      );
+      return <Img isMini={false} isEditMode />;
     case 'detail':
       return (
-        <Img img={post ? post.template.img : ''} isMini={false} isEditMode={false}/>
+        <Img img={post ? post.img : ''} isMini={false} isEditMode={false} />
       );
     case 'ex':
-      return (
-        <Img img={''} isMini={true} isEditMode={false}/>
-      );
+      return <Img img="" isMini isEditMode={false} />;
     default:
-      return (
-        <Img img={post ? post.template.img : ''} isMini={true} isEditMode={false}/>
-      );
+      return <Img img={post ? post.img : ''} isMini isEditMode={false} />;
   }
 }
 
 const styles = StyleSheet.create({
-  selectImg:{
-    justifyContent:'center', 
-    alignItems:'center', 
-    width:'100%', 
-    height:200,
-    backgroundColor:colors.white,
-    borderRadius:10,
+  selectImg: {
+    alignItems: 'center',
+    backgroundColor: colors.white,
+    borderRadius: 10,
+    height: 200,
+    justifyContent: 'center',
+    width: '100%',
   },
-  setImg:{
-    width:'100%',
-    borderRadius:10,
-    aspectRatio: 1/1
-  }
-})
+  setImg: {
+    aspectRatio: 1 / 1,
+    borderRadius: 10,
+    width: '100%',
+  },
+});

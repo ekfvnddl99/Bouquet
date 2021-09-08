@@ -1,40 +1,178 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { View, TextInput, LayoutChangeEvent, TouchableOpacity, Platform } from 'react-native';
+import React, { useState } from 'react';
+import {
+  TextInput,
+  LayoutChangeEvent,
+  TouchableOpacity,
+  Platform,
+} from 'react-native';
 import styled from 'styled-components/native';
-import * as ImagePicker from 'expo-image-picker';
 
-import { colors } from '../../styles/colors';
+import colors from '../../styles/colors';
 import * as text from '../../styles/styled-components/text';
 import * as area from '../../styles/styled-components/area';
-import * as elses from '../../styles/styled-components/elses';
 
-import LineButton from '../../components/button/LineButton';
+import Icon from '../../assets/Icon';
 
-import PlaySvg from '../../assets/Play';
-import PlayFocusSvg from '../../assets/PlayFocus';
-import WriteSvg from '../../assets/Write';
-import XSvg from '../../assets/X';
-import GallerySvg from '../../assets/Gallery';
+import { DiaryTemplate } from '../../utils/types/PostTypes';
 
-import * as Post from '../../logics/Post';
+/* eslint-disable global-require */
 
-const LINE_HEIGHT = Platform.OS === "ios" ? 20 : 22;
-
-type DiaryInfo = {
-  title: string;
-  year: number;
-  month: number;
-  day: number;
-  weather: string;
-  imageUrl: string;
-  content: string;
-}
+const LINE_HEIGHT = Platform.OS === 'ios' ? 20 : 22;
 
 type DiaryProps = {
   isMini: boolean;
   isEditMode?: boolean;
-  diary: DiaryInfo;
-  setPost?: React.Dispatch< React.SetStateAction<Post.AllPostRequestType> >;
+  diary: DiaryTemplate;
+  setPost?: React.Dispatch<React.SetStateAction<DiaryTemplate>>;
+};
+
+function Diary({ isMini, isEditMode, diary, setPost }: DiaryProps) {
+  const [contentHeight, setContentHeight] = useState(20);
+  const [dateInfo, setDateInfo] = useState({
+    year: Math.floor(diary.date / 10000),
+    month: Math.floor((diary.date % 10000) / 100),
+    day: diary.date % 100,
+  });
+
+  const onLayout = (event: LayoutChangeEvent) => {
+    const { height } = event.nativeEvent.layout;
+    setContentHeight(height);
+  };
+
+  return (
+    <area.NoHeightArea marBottom={0} paddingH={15} paddingV={15}>
+      <TopWrap>
+        <DateWrap>
+          {isEditMode ? (
+            <SmallInput
+              placeholder="연도"
+              placeholderTextColor={colors.gray5}
+            />
+          ) : (
+            <text.DiaryBody2R textColor={colors.diary}>
+              {dateInfo.year}
+            </text.DiaryBody2R>
+          )}
+          <text.DiaryBody2R
+            textColor={colors.diary}
+            style={{ marginHorizontal: 4 }}
+          >
+            년
+          </text.DiaryBody2R>
+          {isEditMode ? (
+            <SmallInput placeholder="월" placeholderTextColor={colors.gray5} />
+          ) : (
+            <text.DiaryBody2R textColor={colors.diary}>
+              {dateInfo.month}
+            </text.DiaryBody2R>
+          )}
+          <text.DiaryBody2R
+            textColor={colors.diary}
+            style={{ marginHorizontal: 4 }}
+          >
+            월
+          </text.DiaryBody2R>
+          {isEditMode ? (
+            <SmallInput placeholder="일" placeholderTextColor={colors.gray5} />
+          ) : (
+            <text.DiaryBody2R textColor={colors.diary}>
+              {dateInfo.day}
+            </text.DiaryBody2R>
+          )}
+          <text.DiaryBody2R
+            textColor={colors.diary}
+            style={{ marginHorizontal: 4 }}
+          >
+            일
+          </text.DiaryBody2R>
+        </DateWrap>
+        {isEditMode ? (
+          <SmallInput placeholder="날씨" placeholderTextColor={colors.gray5} />
+        ) : (
+          <text.DiaryBody2R textColor={colors.diary}>
+            {diary.weather}
+          </text.DiaryBody2R>
+        )}
+      </TopWrap>
+      <ContentWrap>
+        {isEditMode ? (
+          <TextInput
+            placeholder="일기 제목"
+            style={{
+              flex: 1,
+              fontWeight: '600',
+              fontSize: 16,
+              textAlignVertical: 'top',
+              paddingTop: 0,
+              paddingBottom: 0,
+              color: colors.diary,
+            }}
+            multiline
+          />
+        ) : (
+          <text.DiarySubtitle3 textColor={colors.diary}>
+            {diary.title}
+          </text.DiarySubtitle3>
+        )}
+        {
+          /* eslint-disable-next-line no-nested-ternary */
+          isEditMode ? (
+            diary.img ? (
+              <TouchableOpacity>
+                <MainImage isMini={isMini} source={{ uri: diary.img }} />
+              </TouchableOpacity>
+            ) : (
+              <MainBlankPic>
+                <Icon icon="gallery" size={24} />
+              </MainBlankPic>
+            )
+          ) : diary.img ? (
+            <MainImage isMini={isMini} source={{ uri: diary.img }} />
+          ) : (
+            <MainImage
+              isMini={isMini}
+              source={require('../../assets/img.jpg')}
+            />
+          )
+        }
+        <ContentTextWrap>
+          {isEditMode ? (
+            <TextInput
+              placeholder="일기를 입력해 보세요."
+              style={{
+                flex: 1,
+                fontWeight: 'normal',
+                fontSize: 14,
+                textAlignVertical: 'top',
+                paddingTop: 0,
+                paddingBottom: 0,
+                lineHeight: 20,
+                zIndex: 1,
+              }}
+              multiline
+              onLayout={onLayout}
+            />
+          ) : (
+            <text.DiaryBody2R
+              textColor={colors.black}
+              style={{ lineHeight: 20, zIndex: 1 }}
+              onLayout={onLayout}
+              numberOfLines={isMini ? 3 : undefined}
+            >
+              {diary.content}
+            </text.DiaryBody2R>
+          )}
+          <LineBackground>
+            {[...Array(Math.round(contentHeight / LINE_HEIGHT))].map(
+              (n, idx) => (
+                <Line key={idx} />
+              ),
+            )}
+          </LineBackground>
+        </ContentTextWrap>
+      </ContentWrap>
+    </area.NoHeightArea>
+  );
 }
 
 const TopWrap = styled.View`
@@ -69,7 +207,7 @@ const ContentWrap = styled.View`
 const MainImage = styled.Image<{ isMini: boolean }>`
   margin-top: 16;
   border-radius: 5;
-  height: ${props => props.isMini ? 150 : 180};
+  height: ${(props) => (props.isMini ? 150 : 180)};
   width: 100%;
 `;
 
@@ -99,296 +237,74 @@ const Line = styled.View`
   border-bottom-color: ${colors.diary};
 `;
 
-function Diary({ isMini, isEditMode, diary, setPost }: DiaryProps) {
-  const [contentHeight, setContentHeight] = useState(20);
-  const [tmpDate, setTmpDate] = useState({
-    year: '',
-    month: '',
-    day: ''
-  });
-  const [tmpPost, setTmpPost] = useState<Post.DiaryPostRequestInterface>({
-    characterId: -1,
-    template: "Diary",
-    text: undefined,
-    title: "",
-    weather: "",
-    img: "",
-    date: 10000000,
-    content: "",
-  });
-
-  const onLayout = (event: LayoutChangeEvent) => {
-    const { height } = event.nativeEvent.layout;
-    setContentHeight(height);
-  };
-
-  const changePost = (toChange: Post.DiaryPostRequestInterface) => {
-    if (isEditMode && setPost) {
-      setTmpPost(toChange);
-      setPost(toChange);
-    }
-  }
-
-  const changeImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    });
-
-    console.log(result);
-
-    if (!result.cancelled) {
-      changePost({
-        ...tmpPost,
-        img: result.uri
-      });
-    }
-  }
-
-  useEffect(() => {
-    if (tmpDate.year || tmpDate.month || tmpDate.day) {
-      changePost({
-        ...tmpPost,
-        date: Number(tmpDate.year + tmpDate.month + tmpDate.day)
-      });
-    }
-  }, [tmpDate]);
-
-  return (
-    <area.NoHeightArea
-      marBottom={0}
-      paddingH={15}
-      paddingV={15}
-    >
-      <TopWrap>
-        <DateWrap>
-          {isEditMode ?
-          <SmallInput
-            placeholder="연도"
-            placeholderTextColor={colors.gray5}
-            value={tmpDate.year}
-            onChangeText={(text: string) => {
-              setTmpDate({
-                ...tmpDate,
-                year: text
-              });
-            }}
-          />
-          :
-          <text.DiaryBody2R color={colors.diary}>{diary.year}</text.DiaryBody2R>
-          }
-          <text.DiaryBody2R color={colors.diary} style={{ marginHorizontal: 4 }}>년</text.DiaryBody2R>
-          {isEditMode ?
-          <SmallInput
-            placeholder="월"
-            placeholderTextColor={colors.gray5}
-            value={tmpDate.month}
-            onChangeText={(text: string) => setTmpDate({
-              ...tmpDate,
-              month: text
-            })}
-          />
-          :
-          <text.DiaryBody2R color={colors.diary}>{diary.month}</text.DiaryBody2R>
-          }
-          <text.DiaryBody2R color={colors.diary} style={{ marginHorizontal: 4 }}>월</text.DiaryBody2R>
-          {isEditMode ?
-          <SmallInput
-            placeholder="일"
-            placeholderTextColor={colors.gray5}
-            value={tmpDate.day}
-            onChangeText={(text: string) => setTmpDate({
-              ...tmpDate,
-              day: text
-            })}
-          />
-          :
-          <text.DiaryBody2R color={colors.diary}>{diary.day}</text.DiaryBody2R>
-          }
-          <text.DiaryBody2R color={colors.diary} style={{ marginHorizontal: 4 }}>일</text.DiaryBody2R>
-        </DateWrap>
-        {isEditMode ?
-        <SmallInput
-          placeholder="날씨"
-          placeholderTextColor={colors.gray5}
-          value={tmpPost.weather}
-          onChangeText={(text: string) => changePost({
-            ...tmpPost,
-            weather: text
-          })}
-        />
-        :
-        <text.DiaryBody2R color={colors.diary}>{diary.weather}</text.DiaryBody2R>
-        }
-      </TopWrap>
-      <ContentWrap>
-        {isEditMode ?
-        <TextInput
-          placeholder="일기 제목"
-          style={{
-            flex: 1,
-            fontWeight: '600',
-            fontSize: 16,
-            textAlignVertical: 'top',
-            paddingTop: 0,
-            paddingBottom: 0,
-            color: colors.diary,
-          }}
-          multiline={true}
-          value={tmpPost.title}
-          onChangeText={(text: string) => changePost({
-            ...tmpPost,
-            title: text
-          })}
-        />
-        :
-        <text.DiarySubtitle3 color={colors.diary}>{diary.title}</text.DiarySubtitle3>
-        }
-        {isEditMode ?
-
-        tmpPost.img ?
-        <TouchableOpacity onPress={changeImage}>
-          <MainImage
-            isMini={isMini}
-            source={{ uri: tmpPost.img }}
-          />
-        </TouchableOpacity>
-        :
-        <MainBlankPic onPress={changeImage}>
-          <GallerySvg
-            w="24"
-            h="24"
-          />
-        </MainBlankPic>
-
-        :
-        diary.imageUrl ?
-        <MainImage
-          isMini={isMini}
-          source={diary.imageUrl==='' ? require('../../assets/img.jpg') : { uri: diary.imageUrl }}
-        />
-        :
-        <MainImage
-          isMini={isMini}
-          source={require('../../assets/img.jpg')}
-        />
-        }
-        <ContentTextWrap>
-          {isEditMode ?
-          <TextInput
-            placeholder="일기를 입력해 보세요."
-            style={{
-              flex: 1,
-              fontWeight: 'normal',
-              fontSize: 14,
-              textAlignVertical: 'top',
-              paddingTop: 0,
-              paddingBottom: 0,
-              lineHeight: 20,
-              zIndex: 1,
-            }}
-            multiline={true}
-            onLayout={onLayout}
-            value={tmpPost.content}
-            onChangeText={(text: string) => changePost({
-              ...tmpPost,
-              content: text
-            })}
-          />
-          :
-          <text.DiaryBody2R
-            color={colors.black}
-            style={{ lineHeight: 20, zIndex: 1 }}
-            onLayout={onLayout}
-            numberOfLines={isMini ? 3 : undefined}
-          >
-            {diary.content}
-          </text.DiaryBody2R>
-          }
-          <LineBackground>
-            {[...Array(Math.round(contentHeight / LINE_HEIGHT))].map((n, idx) => (
-              <Line key={idx} />
-            ))}
-          </LineBackground>
-        </ContentTextWrap>
-      </ContentWrap>
-    </area.NoHeightArea>
-  )
-}
-
 type TemplateProps = {
   mode: string;
-  setPost?: React.Dispatch< React.SetStateAction<Post.AllPostRequestType> >;
-  post?: Post.PostInterface<any>;
-}
+  setPost?: React.Dispatch<React.SetStateAction<DiaryTemplate>>;
+  post?: DiaryTemplate;
+};
 
-export default function DiaryTemplate({ mode, setPost, post }: TemplateProps) {
-  const diaryData = {
-    title: post ? post.template.title : '',
-    year: post ? Number(String(post.template.date).slice(0, 4)) : 1000,
-    month: post ? Number(String(post.template.date).slice(4, 6)) : 10,
-    day: post ? Number(String(post.template.date).slice(6, 8)) : 10,
-    weather: post ? post.template.weather : '',
-    imageUrl: post ? post.template.img : '',
-    content: post ? post.template.content : '',
-  };
-  const diaryDataEx = {
+export default function DiaryTemplate({
+  mode,
+  setPost,
+  post,
+}: TemplateProps): React.ReactElement {
+  const diaryDataEx: DiaryTemplate = {
+    type: 'Diary',
     title: '떡볶이를 실컷 먹은 날',
-    year: 2021,
-    month: 8,
-    day: 1,
+    date: 20210801,
     weather: '맑음☀️',
-    imageUrl: '',
-    content: '오늘은 떡볶이를 실컷 먹었다. 너무 맛있었다. 다음에 또 먹어야지. 맛있는 떡볶이 집을 찾아야겠다. 하지만 이 주변엔 그런 게 없는걸... 너무 슬프다.',
+    img: '',
+    content:
+      '오늘은 떡볶이를 실컷 먹었다. 너무 맛있었다. 다음에 또 먹어야지. 맛있는 떡볶이 집을 찾아야겠다. 하지만 이 주변엔 그런 게 없는걸... 너무 슬프다.',
   };
 
   switch (mode) {
     case 'ex':
       return (
-        <Diary isMini={false} isEditMode={false}
+        <Diary
+          isMini={false}
+          isEditMode={false}
           diary={diaryDataEx}
           setPost={setPost}
         />
       );
     case 'mini':
       return (
-        <Diary isMini={true} isEditMode={false}
-          diary={diaryData}
+        <Diary
+          isMini
+          isEditMode={false}
+          diary={post || diaryDataEx}
           setPost={setPost}
         />
       );
     case 'detail':
       return (
-        <area.NoHeightArea
-          marBottom={12}
-          paddingH={10}
-          paddingV={10}
-        >
-          <Diary isMini={false} isEditMode={false}
-            diary={diaryData}
+        <area.NoHeightArea marBottom={12} paddingH={10} paddingV={10}>
+          <Diary
+            isMini={false}
+            isEditMode={false}
+            diary={post || diaryDataEx}
             setPost={setPost}
           />
         </area.NoHeightArea>
       );
     case 'edit':
       return (
-        <area.NoHeightArea
-          marBottom={12}
-          paddingH={10}
-          paddingV={10}
-        >
-          <Diary isMini={false} isEditMode={true}
-            diary={diaryData}
+        <area.NoHeightArea marBottom={12} paddingH={10} paddingV={10}>
+          <Diary
+            isMini={false}
+            isEditMode
+            diary={post || diaryDataEx}
             setPost={setPost}
           />
         </area.NoHeightArea>
       );
     default:
       return (
-        <Diary isMini={true} isEditMode={false}
-          diary={diaryData}
+        <Diary
+          isMini
+          isEditMode={false}
+          diary={post || diaryDataEx}
           setPost={setPost}
         />
       );
