@@ -12,10 +12,10 @@ import * as elses from '../../styles/styled-components/elses';
 import useViewCharacter from '../../logics/hooks/useViewCharacter';
 
 // utils
-import { Character } from '../../utils/types/UserTypes';
+import { CharacterMini } from '../../utils/types/UserTypes';
 
 type CharacterItemProps = {
-  characterInfo: Character;
+  characterInfo: CharacterMini;
 };
 /**
  * 캐릭터 리스트의 컴포넌트

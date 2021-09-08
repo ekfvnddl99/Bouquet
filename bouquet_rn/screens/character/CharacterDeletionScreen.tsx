@@ -11,6 +11,7 @@ import * as text from '../../styles/styled-components/text';
 // logics
 import { deleteCharacterAsync } from '../../logics/server/Character';
 import useCharacter from '../../logics/hooks/useCharacter';
+import useLoadCharacter from '../../logics/hooks/useLoadCharacter';
 
 // components
 import HeaderItem from '../../components/item/HeaderItem';
@@ -23,12 +24,15 @@ export default function CharacterDeletionScreen(): React.ReactElement {
   const [step, setStep] = useState(1);
   const navigation = useNavigation();
   const [myCharacter] = useCharacter();
+  const [, loadCharacterList] = useLoadCharacter();
   const myCharacterCopy = myCharacter;
 
   async function deleteCharacter() {
     const serverResult = await deleteCharacterAsync(myCharacter.name);
-    if (serverResult.isSuccess) setStep(step + 1);
-    else alert(serverResult.result.errorMsg);
+    if (serverResult.isSuccess) {
+      setStep(step + 1);
+      loadCharacterList();
+    } else alert(serverResult.result.errorMsg);
   }
 
   function setTitle(stepNumber: number) {
