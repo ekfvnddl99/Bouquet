@@ -87,6 +87,14 @@ export type PostCommentRequest = {
  * ------------------------------------------------------------
  */
 
+export const enum templates {
+  None,
+  Image,
+  Diary,
+  Album,
+  List,
+}
+
 /**
  * 모든 템플릿 type을 엮은 Union Type (템플릿이 없는 경우(빈 객체)도 포함)
  */

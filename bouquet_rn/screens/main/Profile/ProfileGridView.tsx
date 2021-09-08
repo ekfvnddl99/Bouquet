@@ -1,33 +1,33 @@
-import React, { Component, useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  Animated,
-} from 'react-native';
+import React from 'react';
+import { View, FlatList, Animated } from 'react-native';
 
 // props && logic
-import { Character } from '../../../utils/types/types';
+import { MyCharacter } from '../../../utils/types/UserTypes';
 import useCharacter from '../../../logics/hooks/useCharacter';
 
 // components
-import ProfileChaItem from '../../../components/item/ProfileCharacterItem';
+import GridCharacterItem from '../../../components/item/GridCharacterItem';
 
 export default function ProfileGridScreen({
   scroll,
   characterList,
 }: {
   scroll: any;
-  characterList: Character[];
-}) {
-  const [character, setCharacter] = useCharacter();
-  const [selectId, setSelectId] = useState(character.id);
+  characterList: MyCharacter[];
+}): React.ReactElement {
+  const [, setCharacter] = useCharacter();
 
-  const press = (idx: number, id: number) => {
-    setCharacter(characterList[idx]);
-    setSelectId(id);
+  const press = async (id: number) => {
+    if (characterList.length > 0) {
+      let tmpCharacter = characterList[0];
+      for (let i = 0; i < characterList.length; i += 1) {
+        if (id === characterList[i].id) {
+          tmpCharacter = characterList[i];
+          break;
+        }
+      }
+      setCharacter(tmpCharacter);
+    }
   };
 
   return (
@@ -48,25 +48,19 @@ export default function ProfileGridScreen({
         keyExtractor={(item) => item.id.toString()}
         numColumns={2}
         showsHorizontalScrollIndicator={false}
-        renderItem={(obj) => {
-          return (
-            <View style={{ flex: 0.5, marginBottom: 13, marginHorizontal: 8 }}>
-              {obj.item.name === '' ? (
-                <View />
-              ) : (
-                <ProfileChaItem
-                  name={obj.item.name}
-                  profile={obj.item.profileImg}
-                  introduction={obj.item.intro}
-                  id={obj.item.id}
-                  select={selectId}
-                  press={press}
-                  idx={obj.index}
-                />
-              )}
-            </View>
-          );
-        }}
+        renderItem={(obj) => (
+          <View style={{ flex: 0.5, marginBottom: 13, marginHorizontal: 8 }}>
+            {obj.item.name === '' ? (
+              <View />
+            ) : (
+              <GridCharacterItem
+                characterInfo={obj.item}
+                onPress={press}
+                isAccount={false}
+              />
+            )}
+          </View>
+        )}
       />
     </Animated.ScrollView>
   );

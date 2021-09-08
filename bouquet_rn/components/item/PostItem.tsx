@@ -2,7 +2,6 @@ import React, { useCallback, useMemo } from 'react';
 import { View } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
-import { useRecoilState } from 'recoil';
 
 // styles
 import colors from '../../styles/colors';
@@ -12,7 +11,7 @@ import * as button from '../../styles/styled-components/button';
 
 // logics
 import * as cal from '../../logics/non-server/Calculation';
-import { viewPostState } from '../../logics/atoms';
+import useViewPost from '../../logics/hooks/useViewPost';
 
 // utils
 import { AllTemplates, Post } from '../../utils/types/PostTypes';
@@ -41,12 +40,12 @@ export default function PostItem({
   postInfo,
 }: PostItemProps): React.ReactElement {
   const navigation = useNavigation();
-  const [viewPost, setViewPost] = useRecoilState(viewPostState);
+  const [, setViewPost] = useViewPost();
   /**
    * '상세 게시글' 화면으로 이동하는 함수
    */
-  function goPostStack() {
-    setViewPost(postInfo);
+  async function goPostStack() {
+    await setViewPost(postInfo.id);
     navigation.navigate('PostStack');
   }
 

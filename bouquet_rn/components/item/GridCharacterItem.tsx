@@ -17,10 +17,10 @@ import useViewCharacter from '../../logics/hooks/useViewCharacter';
 import ConditionButton from '../button/ConditionButton';
 
 // utils
-import { Character } from '../../utils/types/UserTypes';
+import { MyCharacter } from '../../utils/types/UserTypes';
 
 interface GridCharacterItemProps {
-  characterInfo: Character;
+  characterInfo: MyCharacter;
   isAccount: boolean;
   onPress?: (param: number) => void;
 }
@@ -37,13 +37,13 @@ export default function GridCharacterItem({
   isAccount,
 }: GridCharacterItemProps): React.ReactElement {
   const navigation = useNavigation();
-  const [myCharacter, setMyCharacter] = useCharacter();
-  const [viewCharacter, setViewCharacter] = useViewCharacter();
+  const [myCharacter] = useCharacter();
+  const [, setViewCharacter] = useViewCharacter();
   /**
    * '상세 프로필' 화면으로 이동하는 함수
    */
-  function goProfileDetail() {
-    setViewCharacter(characterInfo.name);
+  async function goProfileDetail() {
+    await setViewCharacter(characterInfo.name);
     navigation.navigate('ProfileDetailStack');
   }
 

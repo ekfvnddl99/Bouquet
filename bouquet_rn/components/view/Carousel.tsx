@@ -5,10 +5,10 @@ import { View, FlatList, TouchableWithoutFeedback } from 'react-native';
 import ProfileDetailItem from '../item/ProfileDetailItem';
 
 // utils
-import { Character } from '../../utils/types/UserTypes';
+import { MyCharacter } from '../../utils/types/UserTypes';
 
 type carouselProps = {
-  pages: Array<Character>;
+  pages: Array<MyCharacter>;
   offset: number;
   gap: number;
   pageWidth: number;
@@ -50,7 +50,13 @@ export default function Carousel({
         renderItem={(obj) => (
           <TouchableWithoutFeedback>
             <View style={{ width: pageWidth, marginHorizontal: gap / 2 }}>
-              <ProfileDetailItem isMini characterInfo={obj.item} />
+              <ProfileDetailItem
+                isMini
+                characterInfo={{
+                  ...obj.item,
+                  id: obj.item.id ? obj.item.id : -1,
+                }}
+              />
             </View>
           </TouchableWithoutFeedback>
         )}

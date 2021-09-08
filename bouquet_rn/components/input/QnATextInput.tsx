@@ -20,10 +20,10 @@ import useCharacter from '../../logics/hooks/useCharacter';
  * TODO 질문에 답하면 업로드 하는 함수를 연결해야 함
  */
 export default function QnATextInput(): React.ReactElement {
-  const [myCharacter, setMyCharacter] = useCharacter();
+  const [myCharacter] = useCharacter();
   // '올리기' 버튼 눌렀는지 여부를 저장하는 state
   const [isUpload, setIsUpload] = useState(false);
-  const [question, setQusetion] = useState('');
+  const [question] = useState('');
   const [answer, setAnswer] = useState('');
 
   async function getQuestion() {

@@ -10,10 +10,10 @@ import * as area from '../../styles/styled-components/area';
 import ProfileButton from '../button/ProfileButton';
 
 // utils
-import { Character } from '../../utils/types/UserTypes';
+import { MyCharacter } from '../../utils/types/UserTypes';
 
 type SettingToggleItemProps = {
-  characterInfo: Character;
+  characterInfo: MyCharacter;
 };
 /**
  * 알람 설정을 위한 toggle 컴포넌트
