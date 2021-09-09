@@ -153,7 +153,7 @@ export default function CharacterGenerationScreen(): React.ReactElement {
           isModifying={isModifying}
           onPress={() => setStep(step + 1)}
           newCharacter={newCharacter}
-          setNewCharacter={() => setNewCharacter}
+          setNewCharacter={setNewCharacter}
         />
       );
     if (stepNumber === 2)
@@ -162,16 +162,16 @@ export default function CharacterGenerationScreen(): React.ReactElement {
           isModifying={isModifying}
           onPress={() => setStep(step + 1)}
           newCharacter={newCharacter}
-          setNewCharacter={() => setNewCharacter}
+          setNewCharacter={setNewCharacter}
         />
       );
     if (stepNumber === 3)
       return (
         <CharacterGenerationScreen3
           isModifying={isModifying}
-          onPress={() => createNewCharacter}
+          onPress={() => createNewCharacter()}
           newCharacter={newCharacter}
-          setNewCharacter={() => setNewCharacter}
+          setNewCharacter={setNewCharacter}
         />
       );
     return (

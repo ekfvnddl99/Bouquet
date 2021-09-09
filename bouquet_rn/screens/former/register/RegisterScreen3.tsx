@@ -55,33 +55,48 @@ export default function RegisterScreen3({
 }: RegisterPropsThree): React.ReactElement {
   // 모든 조건이 만족됐는지 확인하기 위한 state
   const [IsOK, setIsOK] = useState(false);
+  // 이미지 선택하려고 눌렀냐
+  // 여러번 누르면 여러번 갤러리가 떠서 방지하기 위해
+  const [isSelectImg, setIsSelectImg] = useState(false);
   // 이름 입력 조건을 체크하는 배열
   const [nameConditionArray, setNameConditionArray] = useState([
     false,
     false,
     false,
   ]);
+  // 이름 에러 메세지
+  const [nameErr, setNameErr] = useState('');
   // 조건을 만족하지 못했을 때 뜨는 에러메세지
-  const errText = ['별명을 입력해 주세요.', '별명 규칙을 지켜야 해요.'];
+  const errTextArray = [
+    '별명을 입력해 주세요.',
+    '별명 규칙을 지켜야 해요.',
+    '중복된 별명입니다.',
+  ];
 
   /**
    * 이름 조건을 확인하는 함수
    * @description 이름 값이 바뀔 때마다 실행된다.
-   * @param textInput 입력되는 이름 값
    */
-  async function checkName(textInput: string) {
-    setName(textInput);
+  useEffect(() => {
+    async function checkUserName(arr: boolean[]) {
+      const serverResult = await checkUserAsync(name);
+      if (serverResult.isSuccess)
+        setNameConditionArray([
+          arr[0],
+          arr[1],
+          !serverResult.result && name.length > 0,
+        ]);
+    }
     const tmpArray = [...nameConditionArray];
-    if (name.length > 0) tmpArray[0] = true;
-    else tmpArray[0] = false;
-    if (getByte(name) <= 20 && getByte(name) > 0) tmpArray[1] = true;
-    else tmpArray[1] = false;
-    // 중복 조건
-    const serverResult = await checkUserAsync(name);
-    if (name.length > 0 && serverResult.isSuccess) tmpArray[2] = true;
-    else tmpArray[2] = false;
+    tmpArray[0] = name.length > 0;
+    tmpArray[1] = getByte(name) <= 20 && getByte(name) > 0;
+    checkUserName(tmpArray);
+    if (!tmpArray[0]) setNameErr(errTextArray[0]);
+    else if (!tmpArray[1]) setNameErr(errTextArray[1]);
+    else if (!tmpArray[2]) setNameErr(errTextArray[2]);
+    else setNameErr('');
     setNameConditionArray(tmpArray);
-  }
+  }, [name]);
 
   /**
    * 매번 모든 조건이 다 충족됐는지 확인
@@ -107,7 +122,8 @@ export default function RegisterScreen3({
   /**
    * 이미지 가져오는 함수
    */
-  async function setImg() {
+  async function setImage() {
+    setIsSelectImg(true);
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
@@ -117,6 +133,7 @@ export default function RegisterScreen3({
 
     if (!result.cancelled) {
       setProfileImg(result.uri);
+      setIsSelectImg(false);
     }
   }
 
@@ -129,11 +146,11 @@ export default function RegisterScreen3({
           keyboardShouldPersistTaps="always"
         >
           <View style={{ alignItems: 'center', marginBottom: 32 }}>
-            <TouchableOpacity onPress={() => setImg}>
+            <TouchableOpacity onPress={() => (isSelectImg ? {} : setImage())}>
               {profileImg ? (
                 <elses.CircleImg diameter={180} source={{ uri: profileImg }} />
               ) : (
-                <elses.Circle diameter={180}>
+                <elses.Circle diameter={180} backgroundColor={colors.white}>
                   <Svg icon="gallery" size={24} />
                 </elses.Circle>
               )}
@@ -143,17 +160,11 @@ export default function RegisterScreen3({
           <ConditionTextInput
             height={44}
             placeholder={i18n.t('별명')}
-            onChangeText={(textInput: string) => checkName(textInput)}
+            onChangeText={(textInput: string) => setName(textInput)}
             keyboardType="default"
-            isWarning={
-              !(
-                nameConditionArray[0] &&
-                nameConditionArray[1] &&
-                nameConditionArray[2]
-              )
-            }
+            isWarning={nameConditionArray.includes(false)}
             textValue={name}
-            warnText={!nameConditionArray[0] ? errText[0] : errText[1]}
+            warnText={nameErr}
             conditionTag={
               <View>
                 <ConditionText
@@ -177,7 +188,9 @@ export default function RegisterScreen3({
                 </text.Caption>
               </View>
             ) : null}
-            <area.RowArea style={{ marginBottom: 16 }}>
+            <area.RowArea
+              style={{ marginBottom: 16, justifyContent: 'center' }}
+            >
               <PrimaryTextButton
                 onPress={() => {
                   /**/
@@ -204,7 +217,7 @@ export default function RegisterScreen3({
 
             <ConditionButton
               isActive={IsOK}
-              onPress={() => (IsOK ? onPress : {})}
+              onPress={() => (IsOK ? onPress() : {})}
               content={i18n.t('필수 약관 동의 & 가입 완료')}
               paddingH={0}
               paddingV={14}

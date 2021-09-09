@@ -45,30 +45,32 @@ export default function RegisterScreen2({
     false,
     false,
   ]);
+  // 비밀번호 에러 메세지
+  const [passwordErr, setPasswordErr] = useState('');
   // 조건을 만족하지 못했을 때 뜨는 에러메세지
-  const errText = ['비밀번호를 입력해 주세요.', '비밀번호 규칙을 지켜야 해요.'];
+  const errTextArray = [
+    '비밀번호를 입력해 주세요.',
+    '비밀번호 규칙을 지켜야 해요.',
+  ];
   // 비밀번호 정규표현식
   const passwordRegex = /^(?=.*\d)|((?=.*[\w])|(?=.*[!@#$%^*+=-])).{8,32}$/;
 
   /**
    * 비밀번호 조건을 확인하는 함수
    * @description 비밀번호 값이 바뀔 때마다 실행된다.
-   * @param textInput 입력되는 email 값
    */
-  function checkPassword(textInput: string) {
-    setPassword(textInput);
+  useEffect(() => {
     const tmpArray = [...passwordConditionArray];
-    if (password.length > 0) tmpArray[0] = true;
-    else tmpArray[1] = false;
-    if (
+    tmpArray[0] = password.length > 0;
+    tmpArray[1] =
       password.length >= 8 &&
       password.length <= 32 &&
-      passwordRegex.test(password)
-    )
-      tmpArray[1] = true;
-    else tmpArray[1] = false;
+      passwordRegex.test(password);
+    if (!tmpArray[0]) setPasswordErr(errTextArray[0]);
+    else if (!tmpArray[1]) setPasswordErr(errTextArray[1]);
+    else setPasswordErr('');
     setPasswordConditionArray(tmpArray);
-  }
+  }, [password]);
 
   /**
    * 매번 모든 조건이 다 충족됐는지 확인
@@ -103,8 +105,8 @@ export default function RegisterScreen2({
         <TextInput
           style={{ flex: 1 }}
           placeholder={i18n.t('비밀번호')}
-          secureTextEntry={isShowing}
-          onChangeText={(textInput: string) => checkPassword(textInput)}
+          secureTextEntry={!isShowing}
+          onChangeText={(textInput: string) => setPassword(textInput)}
           onFocus={() => setFocus(true)}
           value={password}
         />
@@ -116,11 +118,8 @@ export default function RegisterScreen2({
           {setEyeIcon(isShowing)}
         </TouchableOpacity>
       </area.FormArea>
-      {IsFocus && !(passwordConditionArray[0] && passwordConditionArray[1]) ? (
-        <WarningText
-          content={!passwordConditionArray[0] ? errText[0] : errText[1]}
-          marginTop={8}
-        />
+      {IsFocus && passwordConditionArray.includes(false) ? (
+        <WarningText content={passwordErr} marginTop={8} />
       ) : null}
 
       <ConditionText
@@ -131,7 +130,7 @@ export default function RegisterScreen2({
       <area.BottomArea style={{ marginBottom: 16 }}>
         <ConditionButton
           isActive={IsOK}
-          onPress={() => (IsOK ? onPress : {})}
+          onPress={() => (IsOK ? onPress() : {})}
           content={i18n.t('계정 정보 입력')}
           paddingH={0}
           paddingV={14}

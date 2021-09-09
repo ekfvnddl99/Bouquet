@@ -1,6 +1,12 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 
+export type RootParam = {
+  RootTab: undefined;
+  RootWelcome: undefined;
+};
+export type RootProps = StackScreenProps<RootParam, 'RootTab'>;
+
 export type TabParam = {
   Home: undefined;
   Search: undefined;
@@ -106,6 +112,7 @@ export type WelcomeStackParam = {
   Login: undefined;
   Register: undefined;
   Tab: undefined;
+  CharacterGeneration: undefined;
 };
 export type WelcomeProps = StackScreenProps<WelcomeStackParam, 'Welcome'>;
 

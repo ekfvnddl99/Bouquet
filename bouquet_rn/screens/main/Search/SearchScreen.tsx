@@ -66,9 +66,10 @@ export default function SearchScreen(): React.ReactElement {
   // 가장 처음에 인기 게시물 가져옴
   useEffect(() => {
     async function getPost() {
-      let serverResult;
-      if (myCharacter.id === -1) serverResult = await getTopPostListAsync(1);
-      else serverResult = await getTopPostListAsync(1, myCharacter.id);
+      const serverResult = await getTopPostListAsync(
+        1,
+        myCharacter.id ? myCharacter.id : undefined,
+      );
       if (serverResult.isSuccess) {
         setPostArray(serverResult.result);
       } else alert(serverResult.result.errorMsg);
@@ -208,7 +209,7 @@ export default function SearchScreen(): React.ReactElement {
           </area.ContainerBlank30>
         </ScrollView>
       </TouchableWithoutFeedback>
-      <FloatingButton />
+      {myCharacter.id === -1 ? null : <FloatingButton />}
     </area.Container>
   );
 }

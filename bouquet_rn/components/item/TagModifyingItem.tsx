@@ -56,7 +56,7 @@ export default function TagModifyingItem({
       >
         {content}
       </text.Caption>
-      <TouchableOpacity onPress={() => deleteTag} style={{ flexGrow: 1 }}>
+      <TouchableOpacity onPress={() => deleteTag()} style={{ flexGrow: 1 }}>
         {isSearching ? (
           <Icon icon="x" size={25} />
         ) : (

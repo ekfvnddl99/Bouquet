@@ -18,11 +18,12 @@ interface ConditionTextInputProps {
   onChangeText: (param: string) => void;
   keyboardType: KeyboardTypeOptions;
   isWarning: boolean;
-  textValue: string;
+  textValue: string | undefined;
   warnText: string;
   conditionTag?: JSX.Element;
   byteNum?: number;
   maxLength?: number;
+  multiline?: boolean;
 }
 /**
  * 조건을 맞춰야 하는 입력을 받는 textinput (레지스터, 캐릭터 생성)
@@ -38,6 +39,7 @@ interface ConditionTextInputProps {
  * @param conditionTag 조건들이 적힌 JSX 태그
  * @param byteNum 바이트 조건이 있다면 제한 바이트 수
  * @param maxLength 글자 수 제한이 있다면 최대 글자 길이
+ * @param multiline 여러 줄 쓸 수 있는지
  */
 export default function ConditionTextInput({
   height,
@@ -50,6 +52,7 @@ export default function ConditionTextInput({
   conditionTag,
   byteNum,
   maxLength,
+  multiline,
 }: ConditionTextInputProps): React.ReactElement {
   // 지금 내가 누르고 있는 textinput인지
   const [IsFocus, setFocus] = useState(false);
@@ -63,6 +66,7 @@ export default function ConditionTextInput({
         value={textValue}
         onFocus={() => setFocus(true)}
         maxLength={maxLength}
+        multiline={multiline}
         style={
           isWarning && IsFocus
             ? { borderWidth: 1, borderColor: colors.warning_red }
@@ -77,7 +81,7 @@ export default function ConditionTextInput({
           {conditionTag || null}
         </View>
 
-        {byteNum ? (
+        {byteNum && textValue ? (
           <text.Caption textColor={colors.gray6} style={{ marginTop: 8 }}>
             {getByte(textValue)} / {byteNum} byte
           </text.Caption>

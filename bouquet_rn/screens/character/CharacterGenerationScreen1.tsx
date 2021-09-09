@@ -15,6 +15,7 @@ import type { MyCharacter } from '../../utils/types/UserTypes';
 
 // components
 import ConditionButton from '../../components/button/ConditionButton';
+import colors from '../../styles/colors';
 
 type CharacterGenerationScreen1Props = {
   isModifying: boolean;
@@ -38,6 +39,9 @@ export default function CharacterGenerationScreen1({
 }: CharacterGenerationScreen1Props): React.ReactElement {
   // 다음 단계 넘어가도 되는지 확인하는 state
   const [IsOK, setIsOK] = useState(false);
+  // 이미지 선택하려고 눌렀냐
+  // 여러번 누르면 여러번 갤러리가 떠서 방지하기 위해
+  const [isSelectImg, setIsSelectImg] = useState(false);
 
   // 이미지 업로드 할 때 권한이 없다면 일단 권한부터 받는다.
   useEffect(() => {
@@ -52,9 +56,13 @@ export default function CharacterGenerationScreen1({
   // 만약 이미지 사진이 있다면 통과???
   useEffect(() => {
     if (newCharacter.profile_img) setIsOK(true);
-  });
+  }, [newCharacter]);
 
-  const setImage = async () => {
+  /**
+   * 이미지 가져오는 함수
+   */
+  async function setImage() {
+    setIsSelectImg(true);
     const imgResult = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
@@ -67,20 +75,21 @@ export default function CharacterGenerationScreen1({
         ...newCharacter,
         profile_img: imgResult.uri,
       });
+      setIsSelectImg(false);
     }
-  };
+  }
 
   return (
     <area.ContainerBlank20>
       <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-        <TouchableOpacity onPress={() => setImage}>
+        <TouchableOpacity onPress={() => (isSelectImg ? {} : setImage())}>
           {newCharacter.profile_img ? (
             <elses.CircleImg
               diameter={180}
               source={{ uri: newCharacter.profile_img }}
             />
           ) : (
-            <elses.Circle diameter={180}>
+            <elses.Circle diameter={180} backgroundColor={colors.white}>
               <Svg icon="gallery" size={24} />
             </elses.Circle>
           )}
@@ -90,7 +99,7 @@ export default function CharacterGenerationScreen1({
         <ConditionButton
           height={44}
           isActive={IsOK}
-          onPress={() => (IsOK ? onPress : undefined)}
+          onPress={() => (IsOK ? onPress() : undefined)}
           content={
             isModifying ? i18n.t('기본 정보 수정') : i18n.t('기본 정보 입력')
           }

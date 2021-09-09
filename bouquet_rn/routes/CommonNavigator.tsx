@@ -156,3 +156,18 @@ export function AccountStackNavigator(): React.ReactElement {
     </AccountStack.Navigator>
   );
 }
+
+// CharacterGeneration
+const CharacterGenerationStack =
+  createStackNavigator<Types.CharacterGenerationStackParam>();
+export function CharacterGenerationStackNavigator(): React.ReactElement {
+  return (
+    <CharacterGenerationStack.Navigator initialRouteName="CharacterGeneration">
+      <CharacterGenerationStack.Screen
+        name="CharacterGeneration"
+        component={CharacterGenerationScreen}
+        options={{ headerShown: false }}
+      />
+    </CharacterGenerationStack.Navigator>
+  );
+}

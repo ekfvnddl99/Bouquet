@@ -52,7 +52,7 @@ export default function ProfileButton({
    */
   async function goAccount() {
     await setViewUser(name);
-    navigation.navigate('Account');
+    navigation.navigate('AccountStack');
   }
 
   return (

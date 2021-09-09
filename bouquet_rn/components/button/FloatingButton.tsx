@@ -24,7 +24,7 @@ export default function FloatingButton(): React.ReactElement {
   return (
     <TouchableOpacity
       style={{ bottom: 20, position: 'absolute', right: 20 }}
-      onPress={() => goWritingStack}
+      onPress={() => goWritingStack()}
     >
       <elses.Circle diameter={50} backgroundColor={colors.primary}>
         <Svg icon="writeWhite" size={24} />

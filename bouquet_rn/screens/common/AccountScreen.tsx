@@ -15,7 +15,7 @@ import * as cal from '../../logics/non-server/Calculation';
 import useViewUser from '../../logics/hooks/useViewUser';
 
 // utils
-import { noMyCharacter, MyCharacter } from '../../utils/types/UserTypes';
+import { noMyCharacter, CharacterMini } from '../../utils/types/UserTypes';
 
 // components
 import GridCharacterItem from '../../components/item/GridCharacterItem';
@@ -35,10 +35,11 @@ export default function AccountScreen(): React.ReactElement {
   const [myCharacter] = useCharacter();
   const [viewUser] = useViewUser();
   // 해당 계정의 캐릭터들을 담는 배열
-  const [characterArray, setCharacterArray] = useState<MyCharacter[]>();
+  const [characterArray, setCharacterArray] = useState<CharacterMini[]>();
 
   // 캐릭터가 홀수 개일 때 grid가 이상하게 나오지 않도록 하나를 더 끼워준다.
   useEffect(() => {
+    setCharacterArray(viewUser.characters);
     if (characterArray) {
       if (characterArray.length % 2 === 1)
         setCharacterArray([...characterArray, noMyCharacter]);
@@ -160,6 +161,6 @@ const AnimationHeader = styled(Animated.View)`
   top: 0;
   background-color: ${colors.white};
   overflow: hidden;
-  height: ${HEADER_MIN_HEIGHT}+${StatusBarHeight};
+  height: ${HEADER_MIN_HEIGHT + StatusBarHeight};
   border-radius: 15;
 `;

@@ -31,7 +31,7 @@ export default function ConditionText({
         <Svg icon="check" size={15} />
       )}
       <text.Caption textColor={isActive ? colors.primary : colors.gray6}>
-        {content}
+        {` ${content}`}
       </text.Caption>
     </area.RowArea>
   );

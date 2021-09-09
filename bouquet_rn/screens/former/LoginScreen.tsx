@@ -119,7 +119,7 @@ export default function LoginScreen(): React.ReactElement {
               <TextInput
                 style={{ flex: 1 }}
                 placeholder={i18n.t('비밀번호')}
-                secureTextEntry={isShowing}
+                secureTextEntry={!isShowing}
                 onChangeText={(textInput: string) => setPassword(textInput)}
               />
               <TouchableOpacity

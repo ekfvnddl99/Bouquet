@@ -1,14 +1,17 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { View, Animated, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Animated, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import styled from 'styled-components/native';
+
+// styles
 import colors from '../../../styles/colors';
 import * as area from '../../../styles/styled-components/area';
 import * as elses from '../../../styles/styled-components/elses';
 
-// icons
+// assets
 import Icon from '../../../assets/Icon';
 
-// props & logic
+// logics
 import { StatusBarHeight } from '../../../logics/non-server/StatusbarHeight';
 import useCharacter from '../../../logics/hooks/useCharacter';
 import { MyCharacter, noMyCharacter } from '../../../utils/types/UserTypes';
@@ -25,7 +28,7 @@ const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 export default function ProfileOverviewScreen(): React.ReactElement {
   const [swipe, setSwipe] = useState(1);
-  const [character] = useCharacter();
+  const [myCharacter] = useCharacter();
   const characterList = useCharacterList();
   const [chaList, setChaList] = useState<MyCharacter[]>(characterList);
   useEffect(() => {
@@ -52,16 +55,16 @@ export default function ProfileOverviewScreen(): React.ReactElement {
 
   return (
     <area.Container>
-      <Animated.View
+      <AnimationHeader
         pointerEvents="none"
-        style={[styles.header, { opacity: OpacityHeader }]}
+        style={[{}, { opacity: OpacityHeader }]}
       />
 
       <area.RowArea style={{ paddingHorizontal: 30, paddingVertical: 16 }}>
         <View style={{ flex: 1 }}>
           <elses.CircleImg
             diameter={24}
-            source={{ uri: character.profile_img }}
+            source={{ uri: myCharacter.profile_img }}
           />
         </View>
         <TouchableOpacity style={{ marginRight: 16 }} onPress={goChaGeneration}>
@@ -86,20 +89,18 @@ export default function ProfileOverviewScreen(): React.ReactElement {
       ) : (
         <ProfileGridView scroll={scroll} characterList={characterList} />
       )}
-      <FloatingButton />
+      {myCharacter.id === -1 ? null : <FloatingButton />}
     </area.Container>
   );
 }
 
-const styles = StyleSheet.create({
-  header: {
-    backgroundColor: colors.white,
-    borderRadius: 15,
-    height: HEADER_MIN_HEIGHT + StatusBarHeight,
-    left: 0,
-    overflow: 'hidden',
-    position: 'absolute',
-    right: 0,
-    top: 0,
-  },
-});
+const AnimationHeader = styled(Animated.View)`
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  background-color: ${colors.white};
+  overflow: hidden;
+  height: ${HEADER_MIN_HEIGHT + StatusBarHeight};
+  border-radius: 15;
+`;

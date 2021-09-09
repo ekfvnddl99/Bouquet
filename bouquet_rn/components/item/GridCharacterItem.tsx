@@ -17,12 +17,12 @@ import useViewCharacter from '../../logics/hooks/useViewCharacter';
 import ConditionButton from '../button/ConditionButton';
 
 // utils
-import { MyCharacter } from '../../utils/types/UserTypes';
+import { CharacterMini } from '../../utils/types/UserTypes';
 
 interface GridCharacterItemProps {
-  characterInfo: MyCharacter;
+  characterInfo: CharacterMini;
   isAccount: boolean;
-  onPress?: (param: number) => void;
+  onPress?: (param: string) => void;
 }
 /**
  * Profile, Account의 grid view의 캐릭터 컴포넌트
@@ -56,7 +56,7 @@ export default function GridCharacterItem({
       paddingV={18}
       style={{ alignItems: 'center', paddingBottom: 16, paddingTop: 18 }}
       activeOpacity={1}
-      onPress={() => goProfileDetail}
+      onPress={() => goProfileDetail()}
     >
       <elses.CircleImg
         diameter={100}
@@ -71,10 +71,12 @@ export default function GridCharacterItem({
       {!isAccount && onPress ? (
         <View style={{ marginTop: 21 }}>
           <ConditionButton
-            isActive={!(myCharacter.id === characterInfo.id)}
-            onPress={() => onPress(characterInfo.id ? characterInfo.id : -1)}
+            isActive={!(myCharacter.name === characterInfo.name)}
+            onPress={() =>
+              onPress(characterInfo.name ? characterInfo.name : '')
+            }
             content={
-              myCharacter.id === characterInfo.id
+              myCharacter.name === characterInfo.name
                 ? i18n.t('선택된 캐릭터')
                 : i18n.t('캐릭터 선택')
             }

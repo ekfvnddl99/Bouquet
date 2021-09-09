@@ -47,14 +47,13 @@ export default function NotificationScreen(): React.ReactElement {
   ];
 
   const navigation = useNavigation();
-  const user = useUser();
   const [myCharacter] = useCharacter();
   // 로그인한 상태인지 아닌지
   const [isLogined, setIsLogined] = useState(false);
 
   // 로그인한 상태인지 아닌지 확인
   useEffect(() => {
-    if (user === undefined || myCharacter.id === -1) setIsLogined(false);
+    if (myCharacter.id === -1) setIsLogined(false);
     else setIsLogined(true);
   }, []);
 
@@ -133,12 +132,12 @@ export default function NotificationScreen(): React.ReactElement {
           ]}
         >
           <NameNText
-            name={isLogined ? myCharacter.name : '당신'}
-            sub={i18n.t('의')}
+            name={isLogined ? myCharacter.name : ''}
+            sub={isLogined ? i18n.t('의') : '당신의'}
           />
-          <text.Subtitle2R textColor={colors.black}>
+          <text.Subtitle2B textColor={colors.black}>
             {i18n.t('알림')}
-          </text.Subtitle2R>
+          </text.Subtitle2B>
         </AnimationText>
         {isLogined ? (
           <AnimationImg
@@ -174,11 +173,9 @@ export default function NotificationScreen(): React.ReactElement {
           { useNativeDriver: true },
         )}
       >
+        <View style={{ paddingTop: 30 + 14 }} />
         {isLogined ? (
-          <>
-            <View style={{ paddingTop: 30 + 14 }} />
-            {setNotification(Data.length)}
-          </>
+          <>{setNotification(Data.length)}</>
         ) : (
           <NotificationItem
             name="Bouquet"

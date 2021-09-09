@@ -120,9 +120,9 @@ export default function HomeScreen(): React.ReactElement {
               {i18n.t('눈길이 가는')}
             </text.Subtitle2R>
           )}
-          <text.Subtitle2R textColor={colors.black}>
+          <text.Subtitle2B textColor={colors.black}>
             {i18n.t('피드')}
-          </text.Subtitle2R>
+          </text.Subtitle2B>
         </AnimationText>
         {isLogined ? (
           <AnimationImg

@@ -16,9 +16,9 @@ export function timeName(time: string): string {
   const diff = (now.getTime() - curr.getTime()) / 1000;
 
   if (diff < 60) return `${time}${i18n.t('초')}`;
-  if (diff / 60 < 60) return `${diff / 60}${i18n.t('분')}`;
-  if (diff / 360 < 24) return `${diff / 360}${i18n.t('시간')}`;
-  return `${diff / 8640}${i18n.t('일')}`;
+  if (diff / 60 < 60) return `${Math.round(diff / 60)}${i18n.t('분')}`;
+  if (diff / 360 < 24) return `${Math.round(diff / 360)}${i18n.t('시간')}`;
+  return `${Math.round(diff / 86400)}${i18n.t('일')}`;
 }
 
 export function getByte(str: string): number {

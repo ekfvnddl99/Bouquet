@@ -7,6 +7,7 @@ import WelcomeScreen from '../screens/former/WelcomeScreen';
 import LoginScreen from '../screens/former/LoginScreen';
 import RegisterScreen from '../screens/former/register/RegisterScreen';
 import TabNavigator from './TabNavigator';
+import CharacterGenerationScreen from '../screens/character/CharacterGenerationScreen';
 
 const WelcomeStack = createStackNavigator<Types.WelcomeStackParam>();
 export default function WelcomeStackNavigator(): React.ReactElement {
@@ -30,6 +31,11 @@ export default function WelcomeStackNavigator(): React.ReactElement {
       <WelcomeStack.Screen
         name="Tab"
         component={TabNavigator}
+        options={{ headerShown: false }}
+      />
+      <WelcomeStack.Screen
+        name="CharacterGeneration"
+        component={CharacterGenerationScreen}
         options={{ headerShown: false }}
       />
     </WelcomeStack.Navigator>

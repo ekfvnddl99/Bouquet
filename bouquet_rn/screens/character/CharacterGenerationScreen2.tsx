@@ -37,83 +37,76 @@ export default function CharacterGenerationScreen2({
 }: CharacterGenerationScreen2Props): React.ReactElement {
   // 다음 단계 넘어가도 되는지 확인하는 state
   const [IsOK, setIsOK] = useState(false);
-  // 조건을 체크하는 배열
-  const [conditionArray, setConditionArray] = useState([
-    false,
-    false,
-    false,
+  // 이름 조건을 체크하는 배열과 state
+  const [nameConditionArray, setNameConditionArray] = useState([
     false,
     false,
     false,
   ]);
+  // 생일 조건 체크하는 state
+  const [birthCondition, setBirthCondition] = useState(false);
+  // 직업 조건 체크하는 state
+  const [jobCondition, setJobCondition] = useState(false);
+  // 국적 조건 체크하는 state
+  const [nationalityCondition, setNationalityCondition] = useState(false);
+  // 이름 에러 메세지
+  const [nameErr, setNameErr] = useState('');
   // 에러 메세지
-  const errText = ['필수 입력 항목이에요.', '이름 규칙을 지켜야 해요.'];
+  const errTextArray = ['필수 입력 항목이에요.', '이름 규칙을 지켜야 해요.'];
 
   /**
    * 이름 조건 체크 함수
-   * @param textInput 이름 입력받은 값
    */
-  async function checkName(textInput: string) {
-    // 입력받은 거 일단 저장
-    setNewCharacter({ ...newCharacter, name: textInput });
-
-    const tmpArray = [...conditionArray];
-    // 입려됐냐
-    if (newCharacter.name.length > 0) tmpArray[0] = true;
-    else tmpArray[0] = false;
-    // 바이트 수 지켰냐
-    if (getByte(newCharacter.name) <= 18 && getByte(newCharacter.name) > 0)
-      tmpArray[1] = true;
-    else tmpArray[1] = false;
-    // 중복된 이름이냐
-    const serverResult = await checkCharacterAsync(newCharacter.name);
-    if (newCharacter.name.length > 0 && serverResult.isSuccess)
-      tmpArray[2] = true;
-    else tmpArray[2] = false;
-    setConditionArray(tmpArray);
-  }
+  useEffect(() => {
+    async function checkCharacterName(arr: boolean[]) {
+      const serverResult = await checkCharacterAsync(newCharacter.name);
+      if (serverResult.isSuccess)
+        setNameConditionArray([
+          arr[0],
+          arr[1],
+          !serverResult.result && newCharacter.name.length > 0,
+        ]);
+    }
+    const tmpArray = [...nameConditionArray];
+    // 이름 입력됐냐
+    tmpArray[0] = newCharacter.name.length > 0;
+    tmpArray[1] =
+      getByte(newCharacter.name) <= 18 && getByte(newCharacter.name) > 0;
+    checkCharacterName(tmpArray);
+    if (!tmpArray[0]) setNameErr(errTextArray[0]);
+    else if (!(tmpArray[1] && tmpArray[2])) setNameErr(errTextArray[1]);
+    setNameConditionArray(tmpArray);
+  }, [newCharacter.name]);
 
   /**
    * 생일 조건 체크 함수
-   * @param textInput 생일 입력받은 값
    */
-  function checkBirth(textInput: string) {
-    setNewCharacter({ ...newCharacter, birth: Number(textInput) });
-    const tmpArray = [...conditionArray];
-    // 생일 입력했냐
-    if (newCharacter.birth.toString.length > 0) tmpArray[3] = true;
-    else tmpArray[3] = false;
-    setConditionArray(tmpArray);
-  }
+  useEffect(() => {
+    setBirthCondition(newCharacter.birth.toString.length > 0);
+  }, [newCharacter.birth]);
 
   /**
    * 직업 조건 체크 함수
-   * @param textInput 직업 입력받은 값
    */
-  function checkJob(textInput: string) {
-    setNewCharacter({ ...newCharacter, job: textInput });
-    const tmpArray = [...conditionArray];
-    // 직업 입력했냐
-    if (newCharacter.job.length > 0) tmpArray[4] = true;
-    else tmpArray[4] = false;
-    setConditionArray(tmpArray);
-  }
+  useEffect(() => {
+    setJobCondition(newCharacter.job.length > 0);
+  }, [newCharacter.job]);
   /**
    * 국가 조건 체크 함수
-   * @param textInput 국가 입력받은 값
    */
-  function checkNationality(textInput: string) {
-    setNewCharacter({ ...newCharacter, nationality: textInput });
-    const tmpArray = [...conditionArray];
-    // 국가 입력했냐
-    if (newCharacter.nationality.length > 0) tmpArray[5] = true;
-    else tmpArray[5] = false;
-    setConditionArray(tmpArray);
-  }
+  useEffect(() => {
+    setNationalityCondition(newCharacter.nationality.length > 0);
+  }, [newCharacter.nationality]);
 
   // 매번 모든 조건을 만족하는지 확인
   useEffect(() => {
-    if (conditionArray.includes(false)) setIsOK(false);
+    if (
+      nameConditionArray.includes(false) ||
+      !birthCondition ||
+      !jobCondition ||
+      !nationalityCondition
+    )
+      setIsOK(false);
     else setIsOK(true);
   });
 
@@ -129,23 +122,21 @@ export default function CharacterGenerationScreen2({
             height={44}
             placeholder={i18n.t('캐릭터 이름')}
             onChangeText={(textInput: string) => {
-              checkName(textInput);
+              setNewCharacter({ ...newCharacter, name: textInput });
             }}
             keyboardType="default"
-            isWarning={
-              !(conditionArray[0] && conditionArray[1] && conditionArray[2])
-            }
+            isWarning={nameConditionArray.includes(false)}
             textValue={newCharacter.name}
-            warnText={!conditionArray[0] ? errText[0] : errText[1]}
+            warnText={nameErr}
             conditionTag={
               <View>
                 <ConditionText
                   content={i18n.t('18 byte 이하')}
-                  isActive={conditionArray[1]}
+                  isActive={nameConditionArray[1]}
                 />
                 <ConditionText
                   content={i18n.t('중복되지 않는 이름')}
-                  isActive={conditionArray[2]}
+                  isActive={nameConditionArray[2]}
                 />
               </View>
             }
@@ -155,35 +146,39 @@ export default function CharacterGenerationScreen2({
             height={44}
             placeholder={i18n.t('생년월일 (YYYYMMDD)')}
             onChangeText={(textInput: string) => {
-              checkBirth(textInput);
+              setNewCharacter({ ...newCharacter, birth: Number(textInput) });
             }}
             keyboardType="numeric"
-            isWarning={!conditionArray[3]}
-            textValue={newCharacter.birth.toString()}
-            warnText={errText[0]}
+            isWarning={!birthCondition}
+            textValue={
+              newCharacter.birth === 0
+                ? undefined
+                : newCharacter.birth.toString()
+            }
+            warnText={errTextArray[0]}
             maxLength={8}
           />
           <ConditionTextInput
             height={44}
             placeholder={i18n.t('직업')}
             onChangeText={(textInput: string) => {
-              checkJob(textInput);
+              setNewCharacter({ ...newCharacter, job: textInput });
             }}
             keyboardType="default"
-            isWarning={!conditionArray[4]}
+            isWarning={!jobCondition}
             textValue={newCharacter.job}
-            warnText={errText[0]}
+            warnText={errTextArray[0]}
           />
           <ConditionTextInput
             height={44}
             placeholder={i18n.t('국적')}
             onChangeText={(textInput: string) => {
-              checkNationality(textInput);
+              setNewCharacter({ ...newCharacter, nationality: textInput });
             }}
             keyboardType="default"
-            isWarning={!conditionArray[5]}
+            isWarning={!nationalityCondition}
             textValue={newCharacter.nationality}
-            warnText={errText[0]}
+            warnText={errTextArray[0]}
           />
           <View style={{ flexGrow: 1 }} />
           <View style={{ marginBottom: 16 }}>

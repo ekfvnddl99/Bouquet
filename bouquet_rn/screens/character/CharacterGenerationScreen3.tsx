@@ -36,20 +36,23 @@ export default function CharacterGenerationScreen3({
 }: CharacterGenerationScreen3Props): React.ReactElement {
   // 다음 단계 넘어가도 되는지 확인하는 state
   const [IsOK, setIsOK] = useState(false);
-  // 조건을 체크하는 배열
-  const [conditionArray, setConditionArray] = useState([
-    false,
-    false,
-    false,
-    false,
-  ]);
+  // 좋아하는 것 조건 체크하는 state
+  const [likeCondition, setLikeCondition] = useState(false);
+  // 싫어하는 것 조건 체크하는 state
+  const [dislikeCondition, setDislikeCondition] = useState(false);
+  // 한 줄 소개 조건 체크하는 state
+  const [introCondition, setIntroCondition] = useState(false);
+  // 특이사항 조건 체크하는 state
+  const [tmiCondition, setTmiCondition] = useState(false);
   // 에러 메세지
-  const errText = ['필수 입력 항목이에요.', '한 개 이상 입력해주세요.'];
+  const errTextArray = ['필수 입력 항목이에요.', '한 개 이상 입력해주세요.'];
 
   // '좋아하는 것' 입력창 누른 상태냐
   const [isFocusingLikeInput, setIsFocusingLikeInput] = useState(false);
   // '싫어하는 것' 입력창 누른 상태냐
   const [isFocusingDislikeInput, setIsFocusingDislikeInput] = useState(false);
+  // 'tmi' 입력창 누른 상태냐
+  const [isFocusTmiInput, setIsFocusTmiInput] = useState(false);
 
   // '좋아하는 것' 배열
   const [likeArray, setLikeArray] = useState<string[]>(newCharacter.likes);
@@ -57,6 +60,7 @@ export default function CharacterGenerationScreen3({
   const [dislikeArray, setDisLikeArray] = useState<string[]>(
     newCharacter.hates,
   );
+
   // '좋아하는 것' 입력값
   const [likeInput, setLikeInput] = useState('');
   // '싫어하는 것' 입력값
@@ -64,6 +68,7 @@ export default function CharacterGenerationScreen3({
 
   /**
    * '좋아하는 것' 태그 만들어주는 함수
+   * * dependency가 likeArray인 useEffect에 영향을 준다.
    * @param isBlur '좋아하는 것' 입력창이 안 눌러진 상태냐
    */
   function createLikeTag(isBlur: boolean) {
@@ -77,16 +82,11 @@ export default function CharacterGenerationScreen3({
       setLikeInput('');
       // 배열에 추가
       setLikeArray([...likeArray, tmpLikes]);
-      // 해당 배열을 캐릭터 객체에 저장
-      setNewCharacter({
-        ...newCharacter,
-        likes: [...likeArray, tmpLikes],
-      });
     }
-    checkLikeArray();
   }
   /**
    * '싫어하는 것' 태그 만들어주는 함수
+   * * dependency가 dislikeArray인 useEffect에 영향을 준다.
    * @param isBlur '싫어하는 것' 입력창이 안 눌러진 상태냐
    */
   function createDislikeTag(isBlur: boolean) {
@@ -100,13 +100,7 @@ export default function CharacterGenerationScreen3({
       setDisLikeInput('');
       // 배열에 추가
       setDisLikeArray([...dislikeArray, tmpDisLikes]);
-      // 해당 배열을 캐릭터 객체에 저장
-      setNewCharacter({
-        ...newCharacter,
-        hates: [...dislikeArray, tmpDisLikes],
-      });
     }
-    checkDislikeArray();
   }
 
   // isBlur가 true가 되면 계속 태그가 만들어지므로 진짜 blur 상황 빼고는 늘 false를 유지하도록 한다.
@@ -117,54 +111,41 @@ export default function CharacterGenerationScreen3({
 
   /**
    * '한 줄 소개' 조건 체크 함수
-   * @param textInput '한 줄 소개' 입력받은 값
    */
-  function checkIntro(textInput: string) {
-    setNewCharacter({ ...newCharacter, intro: textInput });
-    const tmpArray = [...conditionArray];
-    // '한 줄 소개' 입력했냐
-    if (newCharacter.intro.length > 0) tmpArray[0] = true;
-    else tmpArray[0] = false;
-    setConditionArray(tmpArray);
-  }
+  useEffect(() => {
+    setIntroCondition(newCharacter.intro.length > 0);
+  }, [newCharacter.intro]);
   /**
    * '좋아하는 것' 조건 체크 함수
    */
-  function checkLikeArray() {
-    const tmpArray = [...conditionArray];
-    // 1개 이상 좋아하냐
-    if (likeArray.length > 0) tmpArray[1] = true;
-    else tmpArray[1] = false;
-    setConditionArray(tmpArray);
-    setNewCharacter({ ...newCharacter, likes: likeArray });
-  }
+  useEffect(() => {
+    setLikeCondition(likeArray.length > 0);
+    setNewCharacter({
+      ...newCharacter,
+      likes: likeArray,
+    });
+  }, [likeArray]);
   /**
    * '싫어하는 것' 조건 체크 함수
    */
-  function checkDislikeArray() {
-    const tmpArray = [...conditionArray];
-    // 1개 이상 싫어하냐
-    if (dislikeArray.length > 0) tmpArray[2] = true;
-    else tmpArray[2] = false;
-    setConditionArray(tmpArray);
-    setNewCharacter({ ...newCharacter, hates: dislikeArray });
-  }
+  useEffect(() => {
+    setDislikeCondition(dislikeArray.length > 0);
+    setNewCharacter({
+      ...newCharacter,
+      hates: dislikeArray,
+    });
+  }, [dislikeArray]);
   /**
    * 특이사항 조건 체크 함수
-   * @param textInput 특이사항 입력받은 값
    */
-  function checkTmi(textInput: string) {
-    setNewCharacter({ ...newCharacter, tmi: textInput });
-    const tmpArray = [...conditionArray];
-    // 특이사항 입력했냐
-    if (newCharacter.tmi.length > 0) tmpArray[3] = true;
-    else tmpArray[3] = false;
-    setConditionArray(tmpArray);
-  }
+  useEffect(() => {
+    setTmiCondition(newCharacter.tmi.length > 0);
+  }, [newCharacter.tmi]);
 
   // 매번 모든 조건을 만족하는지 확인
   useEffect(() => {
-    if (conditionArray.includes(false)) setIsOK(false);
+    if (!(introCondition && tmiCondition && likeCondition && dislikeCondition))
+      setIsOK(false);
     else setIsOK(true);
   });
 
@@ -179,11 +160,13 @@ export default function CharacterGenerationScreen3({
           <ConditionTextInput
             height={44}
             placeholder={i18n.t('한 줄 소개')}
-            onChangeText={(textInput: string) => checkIntro(textInput)}
+            onChangeText={(textInput: string) =>
+              setNewCharacter({ ...newCharacter, intro: textInput })
+            }
             keyboardType="default"
-            isWarning={!conditionArray[0]}
+            isWarning={!introCondition}
             textValue={newCharacter.intro}
-            warnText={errText[0]}
+            warnText={errTextArray[0]}
           />
 
           <area.NoHeightArea
@@ -191,20 +174,22 @@ export default function CharacterGenerationScreen3({
             paddingH={16}
             paddingV={8}
             style={
-              isFocusingLikeInput && likeArray.length === 0
+              isFocusingLikeInput && !likeCondition
                 ? { borderWidth: 1, borderColor: colors.warning_red }
                 : null
             }
           >
             <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
               {likeArray.map((data: string, index: number) => (
-                <TagModifyingItem
-                  content={data}
-                  tagIndex={index}
-                  isSearching={false}
-                  tagArray={likeArray}
-                  setTagArray={setLikeArray}
-                />
+                <View>
+                  <TagModifyingItem
+                    content={data}
+                    tagIndex={index}
+                    isSearching={false}
+                    tagArray={likeArray}
+                    setTagArray={setLikeArray}
+                  />
+                </View>
               ))}
               <TextInput
                 placeholder={!likeArray.length ? i18n.t('좋아하는 것') : ''}
@@ -218,8 +203,8 @@ export default function CharacterGenerationScreen3({
             </View>
           </area.NoHeightArea>
           <View style={{ marginBottom: 16 }}>
-            {isFocusingLikeInput && likeArray.length === 0 ? (
-              <WarningText content={errText[1]} marginTop={8} />
+            {isFocusingLikeInput && !likeCondition ? (
+              <WarningText content={errTextArray[1]} marginTop={8} />
             ) : null}
           </View>
 
@@ -228,20 +213,22 @@ export default function CharacterGenerationScreen3({
             paddingH={16}
             paddingV={8}
             style={
-              isFocusingDislikeInput && dislikeArray.length === 0
+              isFocusingDislikeInput && !dislikeCondition
                 ? { borderWidth: 1, borderColor: colors.warning_red }
                 : null
             }
           >
             <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
               {dislikeArray.map((data: string, index: number) => (
-                <TagModifyingItem
-                  content={data}
-                  tagIndex={index}
-                  isSearching={false}
-                  tagArray={dislikeArray}
-                  setTagArray={setDisLikeArray}
-                />
+                <View>
+                  <TagModifyingItem
+                    content={data}
+                    tagIndex={index}
+                    isSearching={false}
+                    tagArray={dislikeArray}
+                    setTagArray={setDisLikeArray}
+                  />
+                </View>
               ))}
               <TextInput
                 placeholder={!dislikeArray.length ? i18n.t('싫어하는 것') : ''}
@@ -255,8 +242,8 @@ export default function CharacterGenerationScreen3({
             </View>
           </area.NoHeightArea>
           <View style={{ marginBottom: 16 }}>
-            {isFocusingDislikeInput && dislikeArray.length === 0 ? (
-              <WarningText content={errText[1]} marginTop={8} />
+            {isFocusingDislikeInput && !dislikeCondition ? (
+              <WarningText content={errTextArray[1]} marginTop={8} />
             ) : null}
           </View>
 
@@ -266,11 +253,30 @@ export default function CharacterGenerationScreen3({
               i18n.t('이외에도 캐릭터에 대해서 자유롭게 알려 주세요 (선택)') +
               i18n.t('예시: 난 고민따위 하지 않는다')
             }
-            onChangeText={(textInput: string) => checkTmi(textInput)}
+            onChangeText={(textInput: string) =>
+              setNewCharacter({ ...newCharacter, tmi: textInput })
+            }
+            keyboardType="default"
+            onFocus={() => setIsFocusTmiInput(true)}
             multiline
-            style={{ textAlignVertical: 'top', paddingTop: 16 }}
+            style={
+              isFocusTmiInput && !tmiCondition
+                ? {
+                    borderWidth: 1,
+                    borderColor: colors.warning_red,
+                    textAlignVertical: 'top',
+                    paddingTop: 16,
+                  }
+                : { textAlignVertical: 'top', paddingTop: 16 }
+            }
             value={newCharacter.tmi}
           />
+          <View style={{ flex: 1 }}>
+            {isFocusTmiInput && !tmiCondition ? (
+              <WarningText content={errTextArray[0]} marginTop={8} />
+            ) : null}
+          </View>
+
           <View style={{ flex: 1 }} />
           <View style={{ marginVertical: 16 }}>
             <ConditionButton
