@@ -64,7 +64,7 @@ export default function ProfileDetailItem({
   /**
    * '캐릭터 삭제' 화면으로 이동하는 함수
    */
-  function goChaDeletion() {
+  function goCharacterDeletion() {
     navigation.navigate('ProfileDeletion');
   }
 
@@ -82,7 +82,7 @@ export default function ProfileDetailItem({
   return (
     <button.ProfileDetailButton
       activeOpacity={1}
-      onPress={() => (isMini ? goProfileDetail : {})}
+      onPress={() => (isMini ? goProfileDetail() : {})}
     >
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
         <elses.CircleImg
@@ -109,20 +109,20 @@ export default function ProfileDetailItem({
           }) ? (
             <area.RowArea>
               <LineButton
-                onPress={() => goChaModification}
+                onPress={() => goChaModification()}
                 content={i18n.t('정보 수정')}
                 borderColor={colors.primary}
               />
               <View style={{ marginLeft: 8 }} />
               <LineButton
-                onPress={() => goChaDeletion}
+                onPress={() => goCharacterDeletion()}
                 content={i18n.t('삭제')}
                 borderColor={colors.warning_red}
               />
             </area.RowArea>
           ) : (
             <LineButton
-              onPress={() => follow}
+              onPress={() => follow()}
               content={i18n.t('팔로우')}
               borderColor={colors.primary}
             />

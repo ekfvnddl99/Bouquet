@@ -37,7 +37,7 @@ export default function NotLoginPrimaryButton(): React.ReactElement {
       onPressIn={() => setColor(colors.pressed_primary)}
       onPressOut={() => setColor(colors.primary)}
       activeOpacity={1}
-      onPress={() => (user !== undefined ? goCharacterGeneration : goLogin)}
+      onPress={() => (user !== undefined ? goCharacterGeneration() : goLogin())}
     >
       <WholeArea backgroundColor={color}>
         <text.Button2R textColor={colors.white}>

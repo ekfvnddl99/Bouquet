@@ -73,7 +73,7 @@ export default function ProgressItem({
       {step === 4 ? (
         <View style={{ marginBottom: 24 }} />
       ) : (
-        <TouchableOpacity onPress={() => (step === 1 ? goBack : stepBack)}>
+        <TouchableOpacity onPress={() => (step === 1 ? goBack() : stepBack())}>
           <Icon icon="arrowLeft" size={24} />
         </TouchableOpacity>
       )}
@@ -94,6 +94,6 @@ export default function ProgressItem({
 const ProgressArea = styled(Animated.View)`
   height: 8;
   border-radius: 10;
-  position: 'absolute';
+  position: absolute;
   background-color: ${colors.primary};
 `;

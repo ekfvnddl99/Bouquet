@@ -67,7 +67,7 @@ export default function WelcomeScreen(): React.ReactElement {
           <LoginButton
             content={i18n.t('메일로 가입하기')}
             icon="mail"
-            onPress={() => goRegister}
+            onPress={() => goRegister()}
           />
           <LoginButton
             content={i18n.t('Google로 계속하기')}
@@ -83,12 +83,12 @@ export default function WelcomeScreen(): React.ReactElement {
           ) : null}
         </area.BottomArea>
 
-        <area.RowArea style={{ marginTop: 15 }}>
+        <area.RowArea style={{ marginTop: 15, justifyContent: 'center' }}>
           <text.Button2R textColor={colors.black}>
             {i18n.t('또는')}{' '}
           </text.Button2R>
           <PrimaryTextButton
-            onPress={() => goLogin}
+            onPress={() => goLogin()}
             content={i18n.t('로그인')}
             isBold
           />
@@ -100,7 +100,7 @@ export default function WelcomeScreen(): React.ReactElement {
           {i18n.t('우선 알아보고 싶다면')}
         </text.Button2B>
         <PrimaryTextButton
-          onPress={() => goTabs}
+          onPress={() => goTabs()}
           content={i18n.t('미리보기')}
           isBold
         />

@@ -67,8 +67,8 @@ export default function SearchScreen(): React.ReactElement {
   useEffect(() => {
     async function getPost() {
       let serverResult;
-      if (myCharacter.id === -1) serverResult = await getTopPostListAsync(0);
-      else serverResult = await getTopPostListAsync(0, myCharacter.id);
+      if (myCharacter.id === -1) serverResult = await getTopPostListAsync(1);
+      else serverResult = await getTopPostListAsync(1, myCharacter.id);
       if (serverResult.isSuccess) {
         setPostArray(serverResult.result);
       } else alert(serverResult.result.errorMsg);
@@ -213,18 +213,18 @@ export default function SearchScreen(): React.ReactElement {
   );
 }
 
+// 0을 해주니까 상태바 길이만큼 위치가 내려간다!
 const SearchArea = styled(Animated.View)`
-height: 40,
-    paddingVertical: 10,
-    backgroundColor: colors.white,
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 10,
-    position: 'absolute',
-    // 0을 해주니까 상태바 길이만큼 위치가 내려간다!
-    top: 0,
-    left: 0,
-    right: 0,
+  height: 40;
+  padding-vertical: 10;
+  background-color: ${colors.white};
+  flex-direction: row;
+  align-items: center;
+  border-radius: 10;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
 `;
 
 const AnimationHeader = styled(Animated.View)`
@@ -234,6 +234,6 @@ const AnimationHeader = styled(Animated.View)`
   top: 0;
   background-color: ${colors.white};
   overflow: hidden;
-  height: ${HEADER_MIN_HEIGHT}+${StatusBarHeight};
+  height: ${HEADER_MIN_HEIGHT + StatusBarHeight};
   border-radius: 15;
 `;

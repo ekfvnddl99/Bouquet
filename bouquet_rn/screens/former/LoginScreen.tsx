@@ -136,7 +136,7 @@ export default function LoginScreen(): React.ReactElement {
               <View style={{ marginTop: 16 }}>
                 <ConditionButton
                   isActive
-                  onPress={() => emailLogin}
+                  onPress={() => emailLogin()}
                   content={i18n.t('로그인')}
                   paddingH={40}
                   paddingV={14}
@@ -145,7 +145,7 @@ export default function LoginScreen(): React.ReactElement {
               </View>
             </View>
 
-            <area.RowArea style={{ marginTop: 16 }}>
+            <area.RowArea style={{ marginTop: 16, justifyContent: 'center' }}>
               <text.Caption textColor={colors.black}>
                 {i18n.t('비밀번호를 잊었나요')}{' '}
               </text.Caption>
@@ -171,12 +171,18 @@ export default function LoginScreen(): React.ReactElement {
               />
             ) : null}
 
-            <area.RowArea style={{ marginTop: 15, overflow: 'hidden' }}>
+            <area.RowArea
+              style={{
+                marginTop: 15,
+                overflow: 'hidden',
+                justifyContent: 'center',
+              }}
+            >
               <text.Body2R textColor={colors.black}>
                 {i18n.t('계정이 없다면')}{' '}
               </text.Body2R>
               <PrimaryTextButton
-                onPress={() => goRegister}
+                onPress={() => goRegister()}
                 content={i18n.t('회원가입')}
                 isBold
               />
@@ -189,7 +195,7 @@ export default function LoginScreen(): React.ReactElement {
             {i18n.t('우선 알아보고 싶다면')}{' '}
           </text.Body2R>
           <PrimaryTextButton
-            onPress={() => goTabs}
+            onPress={() => goTabs()}
             content={i18n.t('미리보기')}
             isBold
           />

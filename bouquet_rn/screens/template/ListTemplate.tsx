@@ -241,7 +241,7 @@ type TemplateProps = {
   post?: ListTemplate;
 };
 
-export default function ListTemplate({
+export default function ListTemplateComp({
   mode,
   post,
 }: TemplateProps): React.ReactElement {

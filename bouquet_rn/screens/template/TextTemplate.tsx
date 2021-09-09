@@ -30,7 +30,7 @@ type TemplateProps = {
   post?: string;
 };
 
-export default function TextTemplate({
+export default function TextTemplateComp({
   mode,
   post,
 }: TemplateProps): React.ReactElement {

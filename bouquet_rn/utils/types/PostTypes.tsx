@@ -12,8 +12,8 @@ export type Post<T extends AllTemplates> = {
   text: string;
   num_sunshines: number;
   character_info: {
-    character_name: string;
-    character_img: string;
+    name: string;
+    profile_img: string;
   };
   liked: boolean;
   comments: Array<PostComment>;
@@ -32,8 +32,8 @@ export const noPost: Post<PlainTemplate> = {
   text: '',
   num_sunshines: 0,
   character_info: {
-    character_name: '',
-    character_img: '',
+    name: '',
+    profile_img: '',
   },
   liked: false,
   comments: [],
@@ -87,7 +87,7 @@ export type PostCommentRequest = {
  * ------------------------------------------------------------
  */
 
-export const enum templates {
+export enum templates {
   None,
   Image,
   Diary,

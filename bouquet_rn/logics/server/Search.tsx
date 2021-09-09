@@ -18,7 +18,7 @@ export async function getTopCharacterListAsync(): APIs.ServerResult<
   };
 
   const tmpResult = await APIs.getAsync<GetTopCharacterListAsyncOutput>(
-    '/search/top_characters',
+    '/search/top-characters',
     false,
   );
 
@@ -63,9 +63,9 @@ export async function getTopPostListAsync(
   };
 
   const tmpResult = await APIs.getAsync<GetTopPostListAsyncOutput>(
-    '/search/top_posts',
+    '/search/top-posts',
     false,
-    { 'page-num': pageNum, 'character-id': characterId },
+    { 'page-num': pageNum, 'character-id': characterId || -1 },
   );
 
   // 사전 처리된 에러는 바로 반환

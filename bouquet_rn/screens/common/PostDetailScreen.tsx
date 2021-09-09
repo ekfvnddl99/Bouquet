@@ -78,7 +78,7 @@ export default function PostDetailScreen(): React.ReactElement {
 
   // 이 게시글이 나의 게시글인지
   const postOwner = useMemo(
-    () => myCharacter.name === viewPost?.character_info.character_name,
+    () => myCharacter.name === viewPost?.character_info.name,
     [myCharacter, viewPost],
   );
 
@@ -151,8 +151,8 @@ export default function PostDetailScreen(): React.ReactElement {
                 diameter={30}
                 isAccount={false}
                 isJustImg={false}
-                name={viewPost?.character_info.character_name}
-                profileImg={viewPost?.character_info.character_img}
+                name={viewPost?.character_info.name}
+                profileImg={viewPost?.character_info.profile_img}
               />
             </View>
             {postOwner ? (
@@ -245,7 +245,7 @@ export default function PostDetailScreen(): React.ReactElement {
             )}
           />
         </Animated.ScrollView>
-        {user !== undefined ? (
+        {user.name !== '' ? (
           <View style={{ justifyContent: 'flex-end' }}>
             <CommentTextInput
               textValue={Comment}
@@ -267,6 +267,6 @@ const AnimationHeader = styled(Animated.View)`
   top: 0;
   background-color: ${colors.white};
   overflow: hidden;
-  height: ${HEADER_MIN_HEIGHT}+${StatusBarHeight};
+  height: ${HEADER_MIN_HEIGHT + StatusBarHeight};
   border-radius: 15;
 `;

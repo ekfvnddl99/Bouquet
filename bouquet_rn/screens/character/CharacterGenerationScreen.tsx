@@ -13,7 +13,6 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import * as area from '../../styles/styled-components/area';
 
 // logics
-import type { ChaGenerationProps } from '../../utils/types/NavigationTypes';
 import {
   createCharacterAsync,
   editCharacterAsync,
@@ -33,6 +32,7 @@ import CharacterGenerationScreen4 from './CharacterGenerationScreen4';
 
 // utils
 import { MyCharacter, noMyCharacter } from '../../utils/types/UserTypes';
+import { CharacterGenerationProps } from '../../utils/types/NavigationTypes';
 
 type ParamList = {
   ProfileDetail: {
@@ -41,7 +41,9 @@ type ParamList = {
   };
 };
 export default function CharacterGenerationScreen(): React.ReactElement {
-  const navigation = useNavigation<StackNavigationProp<ChaGenerationProps>>();
+  const navigation =
+    useNavigation<StackNavigationProp<CharacterGenerationProps>>();
+  // const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'ProfileDetail'>>();
   // navigation으로 받아온 param
   // 수정하는 거니?

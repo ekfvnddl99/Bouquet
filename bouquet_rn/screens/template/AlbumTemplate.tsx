@@ -212,7 +212,7 @@ type TemplateProps = {
   post?: AlbumTemplate;
 };
 
-export default function AlbumTemplate({
+export default function AlbumTemplateComp({
   mode,
   post,
 }: TemplateProps): React.ReactElement {

@@ -243,7 +243,7 @@ type TemplateProps = {
   post?: DiaryTemplate;
 };
 
-export default function DiaryTemplate({
+export default function DiaryTemplateComp({
   mode,
   setPost,
   post,

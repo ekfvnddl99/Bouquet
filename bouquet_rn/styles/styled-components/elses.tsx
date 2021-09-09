@@ -7,8 +7,8 @@ interface BarProps {
 export const Bar = styled.View`
   width: ${(props: BarProps) => props.width};
   height: 8;
-  borderradius: 10;
-  backgroundcolor: ${(props: BarProps) => props.backgroundColor};
+  border-radius: 10;
+  background-color: ${(props: BarProps) => props.backgroundColor};
   position: absolute;
 `;
 

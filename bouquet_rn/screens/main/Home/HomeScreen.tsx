@@ -47,11 +47,13 @@ export default function HomeScreen(): React.ReactElement {
     async function getPosts() {
       async function getPost() {
         let serverResult;
-        if (myCharacter.id === -1) serverResult = await getTopPostListAsync(0);
-        else serverResult = await getTopPostListAsync(0, myCharacter.id);
+        if (myCharacter.id === -1) serverResult = await getTopPostListAsync(1);
+        else serverResult = await getTopPostListAsync(1, myCharacter.id);
         if (serverResult.isSuccess) {
           setPostArray(serverResult.result);
-        } else alert(serverResult.result.errorMsg);
+        } else {
+          alert(serverResult.result.errorMsg);
+        }
       }
       getPost();
     }
@@ -204,6 +206,6 @@ const AnimationHeader = styled(Animated.View)`
   top: 0;
   background-color: ${colors.white};
   overflow: hidden;
-  height: ${HEADER_MIN_HEIGHT}+${StatusBarHeight};
+  height: ${HEADER_MIN_HEIGHT + StatusBarHeight};
   border-radius: 15;
 `;

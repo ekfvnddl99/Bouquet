@@ -52,11 +52,13 @@ export default function ProfileButton({
    */
   async function goAccount() {
     await setViewUser(name);
-    navigation.navigate('AccountStack');
+    navigation.navigate('Account');
   }
 
   return (
-    <TouchableWithoutFeedback onPress={isAccount ? goAccount : goProfileDetail}>
+    <TouchableWithoutFeedback
+      onPress={() => (isAccount ? goAccount() : goProfileDetail())}
+    >
       <area.RowArea>
         <elses.CircleImg diameter={diameter} source={{ uri: profileImg }} />
         {isJustImg ? null : (

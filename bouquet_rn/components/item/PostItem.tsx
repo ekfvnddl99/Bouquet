@@ -78,17 +78,17 @@ export default function PostItem({
       backgroundColor={colors.white}
       paddingH={10}
       paddingV={10}
-      onPress={() => goPostStack}
+      onPress={() => goPostStack()}
       activeOpacity={1}
     >
       <area.RowArea>
-        <View style={{ alignItems: 'center', flex: 2, flexDirection: 'row' }}>
+        <View style={{ alignItems: 'center', flex: 1, flexDirection: 'row' }}>
           <ProfileButton
             diameter={30}
             isAccount={false}
             isJustImg={false}
-            name={postInfo ? postInfo.character_info.character_name : ''}
-            profileImg={postInfo ? postInfo.character_info.character_img : ''}
+            name={postInfo ? postInfo.character_info.name : ''}
+            profileImg={postInfo ? postInfo.character_info.profile_img : ''}
           />
         </View>
         <View style={{ alignItems: 'flex-end', flex: 1 }}>

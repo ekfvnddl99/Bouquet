@@ -81,7 +81,7 @@ type TemplateProps = {
   post?: ImageTemplate;
 };
 
-export default function ImageTemplate({
+export default function ImageTemplateComp({
   mode,
   post,
 }: TemplateProps): React.ReactElement {

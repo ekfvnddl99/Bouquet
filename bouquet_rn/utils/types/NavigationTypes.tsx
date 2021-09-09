@@ -2,12 +2,12 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 
 export type TabParam = {
-  HomeStack: undefined;
-  SearchStack: undefined;
-  NotificationStack: undefined;
-  ProfileStack: undefined;
+  Home: undefined;
+  Search: undefined;
+  Notification: undefined;
+  Profile: undefined;
 };
-export type TabProps = BottomTabScreenProps<TabParam, 'HomeStack'>;
+export type TabProps = BottomTabScreenProps<TabParam, 'Home'>;
 
 // writing - fab
 export type WritingStackParam = {
@@ -46,12 +46,12 @@ export type SettingStackParam = {
 };
 export type SettingProps = StackScreenProps<SettingStackParam, 'Setting'>;
 // character generation
-export type ChaGenerationStackParam = {
-  ChaGeneration: undefined;
+export type CharacterGenerationStackParam = {
+  CharacterGeneration: undefined;
 };
-export type ChaGenerationProps = StackScreenProps<
-  ChaGenerationStackParam,
-  'ChaGeneration'
+export type CharacterGenerationProps = StackScreenProps<
+  CharacterGenerationStackParam,
+  'CharacterGeneration'
 >;
 // account
 export type AccountStackParam = {

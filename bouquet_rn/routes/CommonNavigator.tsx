@@ -10,6 +10,7 @@ import PostDetailScreen from '../screens/common/PostDetailScreen';
 
 import ProfileDetailScreen from '../screens/main/Profile/ProfileDetailScreen';
 import CharacterDeletionScreen from '../screens/character/CharacterDeletionScreen';
+import CharacterGenerationScreen from '../screens/character/CharacterGenerationScreen';
 import AccountScreen from '../screens/common/AccountScreen';
 
 import SettingScreen from '../screens/setting/SettingScreen';
@@ -19,7 +20,7 @@ import SettingAlarmCustomScreen from '../screens/setting/SettingAlarmCustomScree
 import AccountDeletionScreen1 from '../screens/setting/AccountDeletionScreen1';
 import AccountDeletionScreen2 from '../screens/setting/AccountDeletionScreen2';
 
-// writing - fab -postStack
+// writing - fab
 const WritingStack = createStackNavigator<Types.WritingStackParam>();
 export function WritingStackNavigator(): React.ReactElement {
   return (
@@ -34,10 +35,15 @@ export function WritingStackNavigator(): React.ReactElement {
         component={SelectTemplateScreen}
         options={{ headerShown: false }}
       />
+      <WritingStack.Screen
+        name="PostStack"
+        component={PostStackNavigator}
+        options={{ headerShown: false }}
+      />
     </WritingStack.Navigator>
   );
 }
-// post item - profileDetail
+// post item
 const PostStack = createStackNavigator<Types.PostStackParam>();
 export function PostStackNavigator(): React.ReactElement {
   return (
@@ -47,10 +53,15 @@ export function PostStackNavigator(): React.ReactElement {
         component={PostDetailScreen}
         options={{ headerShown: false }}
       />
+      <PostStack.Screen
+        name="ProfileDetailStack"
+        component={ProfileDetailStackNavigator}
+        options={{ headerShown: false }}
+      />
     </PostStack.Navigator>
   );
 }
-// profile item - profileoverview, character item - profileModify, postStack, accountStack
+// profile item - profileoverview, character item
 const ProfileDetailStack =
   createStackNavigator<Types.ProfileDetailStackParam>();
 export function ProfileDetailStackNavigator(): React.ReactElement {
@@ -62,14 +73,29 @@ export function ProfileDetailStackNavigator(): React.ReactElement {
         options={{ headerShown: false }}
       />
       <ProfileDetailStack.Screen
+        name="ProfileModification"
+        component={CharacterGenerationScreen}
+        options={{ headerShown: false }}
+      />
+      <ProfileDetailStack.Screen
         name="ProfileDeletion"
         component={CharacterDeletionScreen}
+        options={{ headerShown: false }}
+      />
+      <ProfileDetailStack.Screen
+        name="PostStack"
+        component={PostStackNavigator}
+        options={{ headerShown: false }}
+      />
+      <ProfileDetailStack.Screen
+        name="AccountStack"
+        component={AccountStackNavigator}
         options={{ headerShown: false }}
       />
     </ProfileDetailStack.Navigator>
   );
 }
-// setting - accountStack
+// setting
 const SettingStack = createStackNavigator<Types.SettingStackParam>();
 export function SettingStackNavigator(): React.ReactElement {
   return (
@@ -95,6 +121,11 @@ export function SettingStackNavigator(): React.ReactElement {
         options={{ headerShown: false }}
       />
       <SettingStack.Screen
+        name="AccountStack"
+        component={AccountStackNavigator}
+        options={{ headerShown: false }}
+      />
+      <SettingStack.Screen
         name="SettingAccountDeletion1"
         component={AccountDeletionScreen1}
         options={{ headerShown: false }}
@@ -107,7 +138,7 @@ export function SettingStackNavigator(): React.ReactElement {
     </SettingStack.Navigator>
   );
 }
-// account - profileDetail
+// account
 const AccountStack = createStackNavigator<Types.AccountStackParam>();
 export function AccountStackNavigator(): React.ReactElement {
   return (
@@ -115,6 +146,11 @@ export function AccountStackNavigator(): React.ReactElement {
       <AccountStack.Screen
         name="Account"
         component={AccountScreen}
+        options={{ headerShown: false }}
+      />
+      <AccountStack.Screen
+        name="ProfileDetailStack"
+        component={ProfileDetailStackNavigator}
         options={{ headerShown: false }}
       />
     </AccountStack.Navigator>

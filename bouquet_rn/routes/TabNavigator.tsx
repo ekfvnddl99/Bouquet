@@ -21,7 +21,7 @@ const Tab = createBottomTabNavigator<Types.TabParam>();
 export default function TabNavigator(): React.ReactElement {
   return (
     <Tab.Navigator
-      initialRouteName="HomeStack"
+      initialRouteName="Home"
       backBehavior="none"
       tabBar={({ state, navigation }) => customTabBar({ state, navigation })}
       lazy={false}
@@ -30,13 +30,10 @@ export default function TabNavigator(): React.ReactElement {
         keyboardHidesTabBar: true,
       }}
     >
-      <Tab.Screen name="HomeStack" component={HomeStackNavigator} />
-      <Tab.Screen name="SearchStack" component={SearchStackNavigator} />
-      <Tab.Screen
-        name="NotificationStack"
-        component={NotificationStackNavigator}
-      />
-      <Tab.Screen name="ProfileStack" component={ProfileStackNavigator} />
+      <Tab.Screen name="Home" component={HomeStackNavigator} />
+      <Tab.Screen name="Search" component={SearchStackNavigator} />
+      <Tab.Screen name="Notification" component={NotificationStackNavigator} />
+      <Tab.Screen name="Profile" component={ProfileStackNavigator} />
     </Tab.Navigator>
   );
 }
@@ -55,7 +52,7 @@ function customTabBar({ state, navigation }: { state: any; navigation: any }) {
             else icon = <Svg icon="home" size={len} />;
           } else if (route.name === 'Search') {
             if (isFocused) icon = <Svg icon="searchFocus" size={len} />;
-            else icon = <Svg icon="searchFocus" size={len} />;
+            else icon = <Svg icon="search" size={len} />;
           } else if (route.name === 'Notification') {
             if (isFocused) icon = <Svg icon="notificationFocus" size={len} />;
             else icon = <Svg icon="notification" size={len} />;
@@ -63,7 +60,6 @@ function customTabBar({ state, navigation }: { state: any; navigation: any }) {
             if (isFocused) icon = <Svg icon="profileFocus" size={len} />;
             else icon = <Svg icon="profile" size={len} />;
           }
-
           // You can return any component that you like here!
           return <View>{icon}</View>;
         };

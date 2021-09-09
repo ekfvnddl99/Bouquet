@@ -34,7 +34,7 @@ export default function CharacterItem({
    */
   async function goProfileDetail() {
     await setViewCharacter(characterInfo.name);
-    navigation.navigate('ProfileStack');
+    navigation.navigate('ProfileDetailStack');
   }
 
   return (
@@ -46,7 +46,7 @@ export default function CharacterItem({
       paddingV={18}
       style={{ alignItems: 'center', marginRight: 10 }}
       activeOpacity={1}
-      onPress={() => goProfileDetail}
+      onPress={() => goProfileDetail()}
     >
       <elses.CircleImg
         diameter={100}

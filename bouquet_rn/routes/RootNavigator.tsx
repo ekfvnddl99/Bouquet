@@ -22,46 +22,33 @@ export default function AppStack(): React.ReactElement {
     }, 2000);
   });
 
-  // 1
-  function initScreen() {
-    if (isSplash) {
-      return <SplashScreen />;
-    }
-    if (user !== undefined)
-      return (
-        <>
-          <CharacterGenerationScreen />
-          <TabNavigator />
-        </>
-      );
-    return <WelcomeStackNavigator />;
-  }
+  // // 2
+  // let Screen;
 
-  // 2
-  let Screen;
-
-  if (isSplash) {
-    Screen = <SplashScreen />;
-  } else if (user !== undefined) {
-    Screen = <CharacterGenerationScreen />;
-  } else {
-    Screen = <WelcomeStackNavigator />;
-  }
+  // if (isSplash) {
+  //   Screen = <SplashScreen />;
+  // } else if (user !== undefined) {
+  //   Screen = <CharacterGenerationScreen />;
+  // } else {
+  //   Screen = <WelcomeStackNavigator />;
+  // }
 
   // 3
-  const normalScreen = user ? (
-    <CharacterGenerationScreen />
-  ) : (
-    <WelcomeStackNavigator />
-  );
+  const normalScreen =
+    user.name !== '' ? (
+      <>
+        <TabNavigator />
+        <CharacterGenerationScreen />
+      </>
+    ) : (
+      <WelcomeStackNavigator />
+    );
 
   return (
     <SafeAreaProvider>
-      {/* <NavigationContainer>{Screen}</NavigationContainer> */}
       <NavigationContainer>
         {isSplash ? <SplashScreen /> : normalScreen}
       </NavigationContainer>
-      <CharacterGenerationScreen />
     </SafeAreaProvider>
   );
 }
