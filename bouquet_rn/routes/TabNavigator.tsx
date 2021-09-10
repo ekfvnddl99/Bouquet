@@ -61,7 +61,7 @@ function customTabBar({ state, navigation }: { state: any; navigation: any }) {
             else icon = <Svg icon="profile" size={len} />;
           }
           // You can return any component that you like here!
-          return <View>{icon}</View>;
+          return <View key={index.toString()}>{icon}</View>;
         };
         return (
           <TouchableOpacity

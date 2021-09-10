@@ -10,7 +10,6 @@ import PostDetailScreen from '../screens/common/PostDetailScreen';
 
 import ProfileDetailScreen from '../screens/main/Profile/ProfileDetailScreen';
 import CharacterDeletionScreen from '../screens/character/CharacterDeletionScreen';
-import CharacterGenerationScreen from '../screens/character/CharacterGenerationScreen';
 import AccountScreen from '../screens/common/AccountScreen';
 
 import SettingScreen from '../screens/setting/SettingScreen';
@@ -70,11 +69,6 @@ export function ProfileDetailStackNavigator(): React.ReactElement {
       <ProfileDetailStack.Screen
         name="ProfileDetail"
         component={ProfileDetailScreen}
-        options={{ headerShown: false }}
-      />
-      <ProfileDetailStack.Screen
-        name="ProfileModification"
-        component={CharacterGenerationScreen}
         options={{ headerShown: false }}
       />
       <ProfileDetailStack.Screen
@@ -154,20 +148,5 @@ export function AccountStackNavigator(): React.ReactElement {
         options={{ headerShown: false }}
       />
     </AccountStack.Navigator>
-  );
-}
-
-// CharacterGeneration
-const CharacterGenerationStack =
-  createStackNavigator<Types.CharacterGenerationStackParam>();
-export function CharacterGenerationStackNavigator(): React.ReactElement {
-  return (
-    <CharacterGenerationStack.Navigator initialRouteName="CharacterGeneration">
-      <CharacterGenerationStack.Screen
-        name="CharacterGeneration"
-        component={CharacterGenerationScreen}
-        options={{ headerShown: false }}
-      />
-    </CharacterGenerationStack.Navigator>
   );
 }

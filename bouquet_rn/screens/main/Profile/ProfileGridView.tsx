@@ -55,7 +55,7 @@ export default function ProfileGridScreen({
             ) : (
               <GridCharacterItem
                 characterInfo={obj.item}
-                onPress={press}
+                onPress={() => press}
                 isAccount={false}
               />
             )}

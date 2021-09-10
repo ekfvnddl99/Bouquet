@@ -11,6 +11,7 @@ import {
   ProfileDetailStackNavigator,
   SettingStackNavigator,
   WritingStackNavigator,
+  AccountStackNavigator,
 } from './CommonNavigator';
 
 // profile
@@ -36,6 +37,11 @@ export default function ProfileStackNavigator(): React.ReactElement {
       <ProfileStack.Screen
         name="WritingStack"
         component={WritingStackNavigator}
+        options={{ headerShown: false }}
+      />
+      <ProfileStack.Screen
+        name="AccountStack"
+        component={AccountStackNavigator}
         options={{ headerShown: false }}
       />
     </ProfileStack.Navigator>

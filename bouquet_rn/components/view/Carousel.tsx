@@ -30,21 +30,23 @@ export default function Carousel({
   pageWidth,
   setPage,
 }: carouselProps): React.ReactElement {
-  function onScroll(e: any) {
+  const onScroll = (e: any) => {
     const newPage = Math.round(
       e.nativeEvent.contentOffset.x / (pageWidth + gap),
     );
     setPage(newPage);
-  }
+  };
+
   return (
     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
       <FlatList
         contentContainerStyle={{ paddingHorizontal: offset + gap / 2 }}
         data={pages}
-        onScroll={() => onScroll}
+        onScroll={onScroll}
         decelerationRate="fast"
         horizontal
         pagingEnabled
+        keyExtractor={(item, idx) => idx.toString()}
         snapToInterval={pageWidth + gap}
         showsHorizontalScrollIndicator={false}
         renderItem={(obj) => (

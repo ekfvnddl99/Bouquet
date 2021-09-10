@@ -26,7 +26,7 @@ type ProfileButtonProps = {
  * @param isAccount 계정 화면에 쓰이는지 아닌지
  * @param isJustImg 프로필 이미지만 있는지 아닌지
  * @param name 프로필 이름
- * @param img 프로필 사진
+ * @param profileImg 프로필 사진
  */
 export default function ProfileButton({
   diameter,
@@ -36,8 +36,8 @@ export default function ProfileButton({
   profileImg,
 }: ProfileButtonProps): React.ReactElement {
   const navigation = useNavigation();
-  const [, setViewCharacter] = useViewCharacter();
   const [, setViewUser] = useViewUser();
+  const [, setViewCharacter] = useViewCharacter();
   /**
    * '상세 프로필' 화면으로 이동하는 함수
    * @description 캐릭터 프로필을 눌렀을 때

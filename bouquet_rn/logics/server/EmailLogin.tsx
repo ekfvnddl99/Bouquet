@@ -17,7 +17,7 @@ export async function loginEmailAsync(
   };
 
   const tmpResult = await APIs.postAsync<LoginEmailAsyncOutput>(
-    '/auth/login/Email',
+    '/auth/login/email',
     { 'Content-Type': 'application/json' },
     JSON.stringify({
       email,

@@ -17,9 +17,10 @@ import * as elses from '../../../styles/styled-components/elses';
 // icons
 import Svg from '../../../assets/Icon';
 
-// props & logic
+// logics
 import { getByte } from '../../../logics/non-server/Calculation';
 import { checkUserAsync } from '../../../logics/server/Auth';
+import uploadImageAsync from '../../../logics/server/UploadImage';
 
 // components
 import ConditionText from '../../../components/text/ConditionText';
@@ -132,9 +133,11 @@ export default function RegisterScreen3({
     });
 
     if (!result.cancelled) {
-      setProfileImg(result.uri);
-      setIsSelectImg(false);
+      const serverResult = await uploadImageAsync(result.uri);
+      if (serverResult.isSuccess) setProfileImg(serverResult.result);
+      else alert(serverResult.result.errorMsg);
     }
+    setIsSelectImg(false);
   }
 
   return (

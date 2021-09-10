@@ -41,7 +41,7 @@ export default function CharacterGenerationScreen2({
   const [nameConditionArray, setNameConditionArray] = useState([
     false,
     false,
-    false,
+    isModifying,
   ]);
   // 생일 조건 체크하는 state
   const [birthCondition, setBirthCondition] = useState(false);
@@ -60,12 +60,13 @@ export default function CharacterGenerationScreen2({
   useEffect(() => {
     async function checkCharacterName(arr: boolean[]) {
       const serverResult = await checkCharacterAsync(newCharacter.name);
-      if (serverResult.isSuccess)
-        setNameConditionArray([
-          arr[0],
-          arr[1],
-          !serverResult.result && newCharacter.name.length > 0,
-        ]);
+      if (serverResult.isSuccess) {
+        const value =
+          isModifying && serverResult.result
+            ? true
+            : !serverResult.result && newCharacter.name.length > 0;
+        setNameConditionArray([arr[0], arr[1], value]);
+      }
     }
     const tmpArray = [...nameConditionArray];
     // 이름 입력됐냐

@@ -15,19 +15,22 @@ import Icon from '../../../assets/Icon';
 import { StatusBarHeight } from '../../../logics/non-server/StatusbarHeight';
 import useCharacter from '../../../logics/hooks/useCharacter';
 import { MyCharacter, noMyCharacter } from '../../../utils/types/UserTypes';
+import useUser from '../../../logics/hooks/useUser';
 
 // components
 import ProfileSwipeView from './ProfileSwipeView';
 import ProfileGridView from './ProfileGridView';
 import FloatingButton from '../../../components/button/FloatingButton';
 import useCharacterList from '../../../logics/hooks/useCharacterList';
+import ProfileButton from '../../../components/button/ProfileButton';
 
 const HEADER_MAX_HEIGHT = 90;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 export default function ProfileOverviewScreen(): React.ReactElement {
-  const [swipe, setSwipe] = useState(1);
+  const [isSwipe, setIsSwipe] = useState(true);
+  const user = useUser();
   const [myCharacter] = useCharacter();
   const characterList = useCharacterList();
   const [chaList, setChaList] = useState<MyCharacter[]>(characterList);
@@ -38,7 +41,7 @@ export default function ProfileOverviewScreen(): React.ReactElement {
   const navigation = useNavigation();
   useEffect(() => {
     scroll.setValue(0);
-  });
+  }, [isSwipe]);
   const goChaGeneration = () => {
     navigation.navigate('CharacterGeneration');
   };
@@ -62,20 +65,23 @@ export default function ProfileOverviewScreen(): React.ReactElement {
 
       <area.RowArea style={{ paddingHorizontal: 30, paddingVertical: 16 }}>
         <View style={{ flex: 1 }}>
-          <elses.CircleImg
+          <ProfileButton
             diameter={24}
-            source={{ uri: myCharacter.profile_img }}
+            isAccount
+            isJustImg
+            name={user.name}
+            profileImg={user.profile_img}
           />
         </View>
         <TouchableOpacity style={{ marginRight: 16 }} onPress={goChaGeneration}>
           <Icon icon="plus" size={24} />
         </TouchableOpacity>
-        {swipe === 1 ? (
-          <TouchableOpacity onPress={() => setSwipe(0)}>
+        {isSwipe ? (
+          <TouchableOpacity onPress={() => setIsSwipe(!isSwipe)}>
             <Icon icon="grid" size={24} />
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity onPress={() => setSwipe(1)}>
+          <TouchableOpacity onPress={() => setIsSwipe(!isSwipe)}>
             <Icon icon="swipe" size={24} />
           </TouchableOpacity>
         )}
@@ -84,7 +90,7 @@ export default function ProfileOverviewScreen(): React.ReactElement {
         </TouchableOpacity>
       </area.RowArea>
 
-      {swipe === 1 ? (
+      {isSwipe ? (
         <ProfileSwipeView characterList={characterList} />
       ) : (
         <ProfileGridView scroll={scroll} characterList={characterList} />

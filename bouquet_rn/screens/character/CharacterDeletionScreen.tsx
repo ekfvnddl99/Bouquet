@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TouchableWithoutFeedback, Keyboard } from 'react-native';
 import i18n from 'i18n-js';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 
 // styles
 import colors from '../../styles/colors';
@@ -10,8 +10,10 @@ import * as text from '../../styles/styled-components/text';
 
 // logics
 import { deleteCharacterAsync } from '../../logics/server/Character';
-import useCharacter from '../../logics/hooks/useCharacter';
 import useLoadCharacter from '../../logics/hooks/useLoadCharacter';
+
+// utils
+import { MyCharacter } from '../../utils/types/UserTypes';
 
 // components
 import HeaderItem from '../../components/item/HeaderItem';
@@ -20,19 +22,25 @@ import HeaderItem from '../../components/item/HeaderItem';
 import ChaDeletionScreenOne from './CharacterDeletionScreen1';
 import ChaDeletionScreenTwo from './CharacterDeletionScreen2';
 
+type ParamList = {
+  ProfileDetail: {
+    characterInfo: MyCharacter;
+  };
+};
 export default function CharacterDeletionScreen(): React.ReactElement {
   const navigation = useNavigation();
-  const [myCharacter] = useCharacter();
+  const route = useRoute<RouteProp<ParamList, 'ProfileDetail'>>();
+  const targetCharacter = route.params?.characterInfo;
+
   const [, loadCharacterList] = useLoadCharacter();
   // 첫 번째 화면에서 삭제하고, 두 번째 화면에서 삭제한 캐릭터의 이미지와 이름을 보여줘야 하는데 음 제대로 될지 모르겠네
-  const myCharacterCopy = myCharacter;
 
   // 화면 몇 단계인지 나타내는 state
   const [step, setStep] = useState(1);
 
   // 캐릭터 삭제 함수
   async function deleteCharacter() {
-    const serverResult = await deleteCharacterAsync(myCharacter.name);
+    const serverResult = await deleteCharacterAsync(targetCharacter.name);
     if (serverResult.isSuccess) {
       setStep(step + 1);
       loadCharacterList();
@@ -55,8 +63,8 @@ export default function CharacterDeletionScreen(): React.ReactElement {
         <HeaderItem
           isAccount
           isBackButton={step === 1}
-          name={myCharacter.name}
-          profileImg={myCharacter.profile_img}
+          name={targetCharacter.name}
+          profileImg={targetCharacter.profile_img}
         />
         <area.ContainerBlank20>
           <text.Subtitle1 textColor={colors.black} style={{ marginBottom: 32 }}>
@@ -64,14 +72,14 @@ export default function CharacterDeletionScreen(): React.ReactElement {
           </text.Subtitle1>
           {step === 1 ? (
             <ChaDeletionScreenOne
-              profileImg={myCharacter.profile_img}
-              name={myCharacter.name}
-              onPress={() => deleteCharacter}
+              profileImg={targetCharacter.profile_img}
+              name={targetCharacter.name}
+              onPress={() => deleteCharacter()}
             />
           ) : (
             <ChaDeletionScreenTwo
-              profileImg={myCharacterCopy.profile_img}
-              name={myCharacterCopy.name}
+              profileImg={targetCharacter.profile_img}
+              name={targetCharacter.name}
               navigation={navigation}
             />
           )}

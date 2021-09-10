@@ -8,6 +8,9 @@ import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
 import * as elses from '../../styles/styled-components/elses';
 
+// logics
+import useLoadCharacter from '../../logics/hooks/useLoadCharacter';
+
 // components
 import ConditionButton from '../../components/button/ConditionButton';
 import NameNText from '../../components/text/NameNText';
@@ -33,13 +36,15 @@ export default function CharacterGenerationScreen4({
   isModifying,
   navigation,
 }: CharacterGenerationScreen4Props): React.ReactElement {
+  const [loadCharacter] = useLoadCharacter();
   /**
    * 해당 캐릭터의 상세 화면으로 이동하는 함수.
    * * '시작하기' 버튼을 누르면 실행됨.
    */
   function goNext() {
-    navigation.popToTop();
-    navigation.navigate('ProfileDetailStack');
+    loadCharacter();
+    navigation.pop();
+    navigation.navigate('Profile');
   }
 
   return (
@@ -72,7 +77,7 @@ export default function CharacterGenerationScreen4({
           <ConditionButton
             height={44}
             isActive
-            onPress={() => goNext}
+            onPress={() => goNext()}
             content={i18n.t('시작')}
             paddingH={0}
             paddingV={14}

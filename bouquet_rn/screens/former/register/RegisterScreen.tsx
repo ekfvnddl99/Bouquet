@@ -5,6 +5,7 @@ import {
   Keyboard,
   BackHandler,
 } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
 
@@ -13,6 +14,7 @@ import * as area from '../../../styles/styled-components/area';
 
 // logics
 import { registerEmailAsync } from '../../../logics/server/EmailLogin';
+import useLogin from '../../../logics/hooks/useLogin';
 
 // components
 import ProgressItem from '../../../components/item/ProgressItem';
@@ -27,6 +29,7 @@ export default function RegisterScreen(): React.ReactElement {
   // 현재 몇 단계인지 나타내는 state. 1부터 시작
   const [step, setStep] = useState(1);
   const navigation = useNavigation();
+  const [login] = useLogin();
   // 회원가입에서 입력될 값들 저장하는 state
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -41,8 +44,11 @@ export default function RegisterScreen(): React.ReactElement {
       name,
       profileImg,
     );
-    if (serverResult.isSuccess) setStep(step + 1);
-    else alert(serverResult.result.errorMsg);
+    if (serverResult.isSuccess) {
+      await SecureStore.setItemAsync('auth', serverResult.result);
+      await login();
+      setStep(step + 1);
+    } else alert(serverResult.result.errorMsg);
   }
 
   function backAction() {

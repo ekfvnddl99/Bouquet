@@ -10,7 +10,6 @@ import * as text from '../../../styles/styled-components/text';
 
 // logics
 import { StatusBarHeight } from '../../../logics/non-server/StatusbarHeight';
-import useUser from '../../../logics/hooks/useUser';
 import useCharacter from '../../../logics/hooks/useCharacter';
 import { getTopPostListAsync } from '../../../logics/server/Search';
 
@@ -30,7 +29,6 @@ const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 export default function HomeScreen(): React.ReactElement {
-  const user = useUser();
   const [myCharacter] = useCharacter();
   // 로그인한 상태인지 아닌지
   const [isLogined, setIsLogined] = useState(false);
@@ -39,9 +37,9 @@ export default function HomeScreen(): React.ReactElement {
 
   // 로그인한 상태인지 아닌지 확인
   useEffect(() => {
-    if (user === undefined || myCharacter.id === -1) setIsLogined(false);
+    if (myCharacter.id === -1) setIsLogined(false);
     else setIsLogined(true);
-  }, []);
+  }, [myCharacter.id]);
   // 가장 처음에 인기 게시물 가져옴
   useEffect(() => {
     async function getPosts() {
@@ -109,6 +107,7 @@ export default function HomeScreen(): React.ReactElement {
       <area.RowArea style={{ marginHorizontal: 30, marginTop: 30 }}>
         <AnimationText
           style={[
+            {},
             { opacity: OpacityTitle },
             { transform: [{ translateY: TranslateImgY }] },
           ]}
@@ -162,7 +161,7 @@ export default function HomeScreen(): React.ReactElement {
         <FlatList
           data={postArray}
           showsVerticalScrollIndicator={false}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item, idx) => idx.toString()}
           renderItem={(obj) => <PostItem postInfo={obj.item} />}
         />
       </Animated.ScrollView>
@@ -196,7 +195,7 @@ const AnimationImg = styled(Animated.View)`
   align-items: center;
   justify-content: flex-start;
   top: 0;
-  left: 0;
+  right: 0;
 `;
 
 const AnimationHeader = styled(Animated.View)`

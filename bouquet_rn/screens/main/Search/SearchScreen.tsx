@@ -125,7 +125,11 @@ export default function SearchScreen(): React.ReactElement {
 
       <View style={{ marginTop: 30, marginHorizontal: 30 }}>
         <SearchArea
-          style={[searchColor, { transform: [{ translateY: TranslateInput }] }]}
+          style={[
+            {},
+            searchColor,
+            { transform: [{ translateY: TranslateInput }] },
+          ]}
         >
           <View style={{ marginLeft: 18, marginRight: 10 }}>
             {isFocus || searchInput.length > 0 ? (
@@ -164,7 +168,7 @@ export default function SearchScreen(): React.ReactElement {
               <FlatList
                 style={{ marginTop: 12 }}
                 data={recentList}
-                keyExtractor={(item) => item}
+                keyExtractor={(item, idx) => idx.toString()}
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 renderItem={(obj) => (
@@ -187,7 +191,7 @@ export default function SearchScreen(): React.ReactElement {
               <FlatList
                 style={{ marginTop: 12 }}
                 data={characterArray}
-                keyExtractor={(index) => index.toString()}
+                keyExtractor={(item, idx) => idx.toString()}
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 renderItem={(obj) => <CharacterItem characterInfo={obj.item} />}

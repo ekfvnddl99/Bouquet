@@ -97,12 +97,8 @@ export default function CharacterGenerationScreen(): React.ReactElement {
     }
 
     let serverResult;
-    // 만약 캐릭터 아이디가 -1이 아니면 이미 생성된 캐릭터니까 '수정'하는 경우임
-    if (newCharacter.id !== -1) {
-      serverResult = await editCharacterAsync({
-        ...newCharacter,
-        id: newCharacter.id ? newCharacter.id : -1,
-      });
+    if (isModifying) {
+      serverResult = await editCharacterAsync(newCharacter);
     } else serverResult = await createCharacterAsync(newCharacter);
     if (serverResult.isSuccess) {
       if (serverResult.result !== null)

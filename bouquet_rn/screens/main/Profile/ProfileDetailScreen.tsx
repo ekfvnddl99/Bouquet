@@ -67,10 +67,6 @@ export default function ProfileDetailScreen(): React.ReactElement {
               </text.Subtitle3>
             </TouchableOpacity>
             <View style={{ marginRight: 16 }} />
-            {/* <TouchableOpacity onPress={()=>setPress(1)}>
-                <text.Subtitle3 color={press===1 ? colors.black : colors.gray5}>에피소드</text.Subtitle3>
-              </TouchableOpacity>
-              <View style={{marginRight:16}}/> */}
             <TouchableOpacity onPress={() => setPress(2)}>
               <text.Subtitle3
                 textColor={press === 2 ? colors.black : colors.gray5}

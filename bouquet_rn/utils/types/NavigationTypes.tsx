@@ -4,8 +4,19 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 export type RootParam = {
   RootTab: undefined;
   RootWelcome: undefined;
+  CharacterGeneration: undefined;
 };
 export type RootProps = StackScreenProps<RootParam, 'RootTab'>;
+
+// welcome
+export type WelcomeStackParam = {
+  Welcome: undefined;
+  Login: undefined;
+  Register: undefined;
+  Tab: undefined;
+  CharacterGeneration: undefined;
+};
+export type WelcomeProps = StackScreenProps<WelcomeStackParam, 'Welcome'>;
 
 export type TabParam = {
   Home: undefined;
@@ -31,7 +42,6 @@ export type PostStackProps = StackScreenProps<PostStackParam, 'PostDetail'>;
 // profile item - profileoverview, character item
 export type ProfileDetailStackParam = {
   ProfileDetail: undefined;
-  ProfileModification: undefined;
   ProfileDeletion: undefined;
   PostStack: undefined;
   AccountStack: undefined;
@@ -72,7 +82,6 @@ export type HomeStackParam = {
   ProfileDetailStack: undefined;
   PostStack: undefined;
   WritingStack: undefined;
-  CharacterGeneration: undefined;
 };
 export type HomeProps = StackScreenProps<HomeStackParam, 'Home'>;
 // search
@@ -88,7 +97,6 @@ export type NotificationStackParam = {
   Notification: undefined;
   ProfileDetailStack: undefined;
   PostStack: undefined;
-  CharacterGeneration: undefined;
 };
 export type NotificationProps = StackScreenProps<
   NotificationStackParam,
@@ -100,21 +108,12 @@ export type ProfileStackParam = {
   ProfileDetailStack: undefined;
   SettingStack: undefined;
   WritingStack: undefined;
-  CharacterGeneration: undefined;
+  AccountStack: undefined;
 };
 export type ProfileProps = StackScreenProps<
   ProfileStackParam,
   'ProfileOverview'
 >;
-// welcome
-export type WelcomeStackParam = {
-  Welcome: undefined;
-  Login: undefined;
-  Register: undefined;
-  Tab: undefined;
-  CharacterGeneration: undefined;
-};
-export type WelcomeProps = StackScreenProps<WelcomeStackParam, 'Welcome'>;
 
 // crew
 export type CrewStackParam = {

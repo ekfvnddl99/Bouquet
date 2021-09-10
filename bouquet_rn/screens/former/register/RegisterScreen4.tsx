@@ -61,7 +61,7 @@ export default function RegisterScreen4({
         <area.BottomArea style={{ marginBottom: 16 }}>
           <ConditionButton
             isActive
-            onPress={() => goNext}
+            onPress={() => goNext()}
             content={i18n.t('시작')}
             paddingH={0}
             paddingV={14}

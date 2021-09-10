@@ -84,7 +84,8 @@ export default function RegisterScreen1({
    */
   useEffect(() => {
     const tmpArray = [...emailConditionArray];
-    // 조건 다 통과했는데, 다시 이메일을 입력하는 경우
+    // 조건 다 통과했는데, 다시 이메일을 입력하는 경우.
+    // step 2에서 다시 돌아온 경우.
     if (isOK) {
       setIsNext(false);
       setAuthNumber('');

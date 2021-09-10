@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
@@ -55,8 +55,8 @@ export default function ProfileDetailItem({
    * '캐릭터 프로필 수정' 화면으로 이동하는 함수
    * @description modify는 수정한다는 의미의 param
    */
-  function goChaModification() {
-    navigation.navigate('ProfileModification', {
+  function goCharacterModification() {
+    navigation.navigate('CharacterGeneration', {
       isModifying: true,
       characterInfo: realCharacter,
     });
@@ -65,7 +65,9 @@ export default function ProfileDetailItem({
    * '캐릭터 삭제' 화면으로 이동하는 함수
    */
   function goCharacterDeletion() {
-    navigation.navigate('ProfileDeletion');
+    navigation.navigate('ProfileDeletion', {
+      characterInfo: realCharacter,
+    });
   }
 
   /**
@@ -76,6 +78,14 @@ export default function ProfileDetailItem({
     const realCharacterId = realCharacter.id ? realCharacter.id : -1;
     const myCharacterId = myCharacter.id;
     const result = await followCharacterAsync(realCharacterId, myCharacterId);
+    return result;
+  }
+
+  function checkMyCharacter() {
+    let result = false;
+    characterList.forEach((obj) => {
+      if (obj.name === realCharacter.name) result = true;
+    });
     return result;
   }
 
@@ -103,13 +113,10 @@ export default function ProfileDetailItem({
         <View style={{ marginTop: 34 }} />
       ) : (
         <View style={{ marginTop: 8, alignItems: 'center' }}>
-          {characterList.includes({
-            ...realCharacter,
-            id: realCharacter.id ? realCharacter.id : -1,
-          }) ? (
+          {checkMyCharacter() ? (
             <area.RowArea>
               <LineButton
-                onPress={() => goChaModification()}
+                onPress={() => goCharacterModification()}
                 content={i18n.t('정보 수정')}
                 borderColor={colors.primary}
               />

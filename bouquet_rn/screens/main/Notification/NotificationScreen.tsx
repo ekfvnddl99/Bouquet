@@ -18,13 +18,13 @@ import * as text from '../../../styles/styled-components/text';
 // logics
 import { StatusBarHeight } from '../../../logics/non-server/StatusbarHeight';
 import useCharacter from '../../../logics/hooks/useCharacter';
-import useUser from '../../../logics/hooks/useUser';
 
 // components
 import NotificationItem from '../../../components/item/NotificationItem';
 import NameNText from '../../../components/text/NameNText';
 import NotLoginPrimaryButton from '../../../components/button/NotLoginPrimaryButton';
 import ProfileButton from '../../../components/button/ProfileButton';
+import FloatingButton from '../../../components/button/FloatingButton';
 
 const HEADER_MAX_HEIGHT = 94;
 const HEADER_MIN_HEIGHT = 60;
@@ -55,7 +55,7 @@ export default function NotificationScreen(): React.ReactElement {
   useEffect(() => {
     if (myCharacter.id === -1) setIsLogined(false);
     else setIsLogined(true);
-  }, []);
+  }, [myCharacter.id]);
 
   /**
    * animation 관련
@@ -102,7 +102,7 @@ export default function NotificationScreen(): React.ReactElement {
     if (notificationNumber) {
       <FlatList
         data={Data}
-        keyExtractor={(item) => item.a}
+        keyExtractor={(item, idx) => idx.toString()}
         renderItem={(obj) => (
           <TouchableWithoutFeedback>
             <NotificationItem name={obj.item.a} content={obj.item.b} />
@@ -135,9 +135,9 @@ export default function NotificationScreen(): React.ReactElement {
             name={isLogined ? myCharacter.name : ''}
             sub={isLogined ? i18n.t('의') : '당신의'}
           />
-          <text.Subtitle2B textColor={colors.black}>
+          <text.Subtitle2R textColor={colors.black}>
             {i18n.t('알림')}
-          </text.Subtitle2B>
+          </text.Subtitle2R>
         </AnimationText>
         {isLogined ? (
           <AnimationImg
@@ -183,7 +183,9 @@ export default function NotificationScreen(): React.ReactElement {
           />
         )}
       </Animated.ScrollView>
-      {isLogined ? null : (
+      {isLogined ? (
+        <FloatingButton />
+      ) : (
         <TouchableOpacity
           style={{ flex: 1, justifyContent: 'flex-end' }}
           onPress={() => navigation.navigate('CharacterGeneration')}
@@ -214,7 +216,7 @@ const AnimationImg = styled(Animated.View)`
   align-items: center;
   justify-content: flex-start;
   top: 0;
-  left: 0;
+  right: 0;
 `;
 
 const AnimationHeader = styled(Animated.View)`

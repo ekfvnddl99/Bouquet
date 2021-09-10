@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
+import * as SecureStore from 'expo-secure-store';
 
 import { createStackNavigator } from '@react-navigation/stack';
 import * as Types from '../utils/types/NavigationTypes';
 
 // logics
 import useUser from '../logics/hooks/useUser';
+import useLogin from '../logics/hooks/useLogin';
 
 // screens, navigators
 import SplashScreen from '../screens/former/SplashScreen';
 import TabNavigator from './TabNavigator';
 import WelcomeStackNavigator from './WelcomeStackNavigator';
-import { CharacterGenerationStackNavigator } from './CommonNavigator';
 import CharacterGenerationScreen from '../screens/character/CharacterGenerationScreen';
 
 export default function AppStack(): React.ReactElement {
   const [isSplash, setIsSplash] = useState(true);
+  const [login] = useLogin();
   const user = useUser();
 
   useEffect(() => {
@@ -41,11 +43,18 @@ export default function AppStack(): React.ReactElement {
   const normalScreen = (
     <RootStack.Navigator>
       {user.name !== '' ? (
-        <RootStack.Screen
-          name="RootTab"
-          component={TabNavigator}
-          options={{ headerShown: false }}
-        />
+        <>
+          <RootStack.Screen
+            name="RootTab"
+            component={TabNavigator}
+            options={{ headerShown: false }}
+          />
+          <RootStack.Screen
+            name="CharacterGeneration"
+            component={CharacterGenerationScreen}
+            options={{ headerShown: false }}
+          />
+        </>
       ) : (
         <>
           <RootStack.Screen
