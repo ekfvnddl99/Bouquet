@@ -9,19 +9,22 @@ import {
 } from 'react-native';
 import i18n from 'i18n-js';
 import * as ImagePicker from 'expo-image-picker';
+
+// styles
 import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
 import * as elses from '../../styles/styled-components/elses';
 
-// icons
+// assets
 import Icon from '../../assets/Icon';
 
-// props & logic
+// logics
 import { getByte } from '../../logics/non-server/Calculation';
 import { checkUserAsync } from '../../logics/server/Auth';
 import { editUserAsync } from '../../logics/server/User';
 import useUser from '../../logics/hooks/useUser';
+import uploadImageAsync from '../../logics/server/UploadImage';
 
 // components
 import ConditionText from '../../components/text/ConditionText';
@@ -34,34 +37,59 @@ export default function SettingProfileScreen({
   navigation,
 }: SettingProps): React.ReactElement {
   const user = useUser();
-  const [name, setName] = useState('');
-  const [profile, setProfile] = useState('');
+  const [name, setName] = useState(user.name);
+  const [profileImg, setProfileImg] = useState(user.profile_img);
 
+  // 모든 조건이 만족됐는지 확인하기 위한 state
   const [IsOK, setIsOK] = useState(false);
-  const [conArray, setConArray] = useState([false, false, false]);
-  const errText = ['별명을 입력해 주세요.', '별명 규칙을 지켜야 해요.'];
+  // 이미지 선택하려고 눌렀냐
+  // 여러번 누르면 여러번 갤러리가 떠서 방지하기 위해
+  const [isSelectImg, setIsSelectImg] = useState(false);
+  // 이름 입력 조건을 체크하는 배열
+  const [nameConditionArray, setNameConditionArray] = useState([
+    false,
+    false,
+    false,
+  ]);
+  // 이름 에러 메세지
+  const [nameErr, setNameErr] = useState('');
+  // 조건을 만족하지 못했을 때 뜨는 에러메세지
+  const errTextArray = [
+    '별명을 입력해 주세요.',
+    '별명 규칙을 지켜야 해요.',
+    '중복된 별명입니다.',
+  ];
 
-  const [dupResult, setDupResult] = useState(false);
-
+  /**
+   * 이름 조건을 확인하는 함수
+   * @description 이름 값이 바뀔 때마다 실행된다.
+   */
   useEffect(() => {
-    const IsDupName = async () => {
-      const result = await checkUserAsync(name);
-      if (result.isSuccess) setDupResult(!result);
-      else alert(result.result.errorMsg);
-    };
-    const tmpArray = [...conArray];
-    if (name.length > 0) tmpArray[0] = true;
-    else tmpArray[0] = false;
-    if (getByte(name) <= 20 && getByte(name) > 0) tmpArray[1] = true;
-    else tmpArray[1] = false;
-    // 중복 조건
-    IsDupName();
-    if (name.length > 0 && dupResult) tmpArray[2] = true;
-    else tmpArray[2] = false;
-    setConArray(tmpArray);
+    async function checkUserName(arr: boolean[]) {
+      const serverResult = await checkUserAsync(name);
+      if (serverResult.isSuccess) {
+        const value =
+          user.name === name && serverResult.result
+            ? true
+            : !serverResult.result && name.length > 0;
+        setNameConditionArray([arr[0], arr[1], value]);
+      }
+    }
+    const tmpArray = [...nameConditionArray];
+    tmpArray[0] = name.length > 0;
+    tmpArray[1] = getByte(name) <= 20 && getByte(name) > 0;
+    checkUserName(tmpArray);
+    if (!tmpArray[0]) setNameErr(errTextArray[0]);
+    else if (!tmpArray[1]) setNameErr(errTextArray[1]);
+    else if (!tmpArray[2]) setNameErr(errTextArray[2]);
+    else setNameErr('');
+    setNameConditionArray(tmpArray);
   }, [name]);
+  /**
+   * 매번 모든 조건이 다 충족됐는지 확인
+   */
   useEffect(() => {
-    if (conArray.includes(false)) setIsOK(false);
+    if (nameConditionArray.includes(false)) setIsOK(false);
     else setIsOK(true);
   });
 
@@ -74,7 +102,9 @@ export default function SettingProfileScreen({
       }
     })();
   }, []);
-  const onPress = async () => {
+
+  async function setImage() {
+    setIsSelectImg(true);
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
@@ -83,12 +113,15 @@ export default function SettingProfileScreen({
     });
 
     if (!result.cancelled) {
-      setProfile(result.uri);
+      const serverResult = await uploadImageAsync(result.uri);
+      if (serverResult.isSuccess) setProfileImg(serverResult.result);
+      else alert(serverResult.result.errorMsg);
     }
-  };
+    setIsSelectImg(false);
+  }
 
   const changeNgoProfile = async () => {
-    const result = await editUserAsync(name, profile);
+    const result = await editUserAsync(name, profileImg);
     if (result.isSuccess) navigation.popToTop();
     else alert(result.result.errorMsg);
   };
@@ -122,11 +155,16 @@ export default function SettingProfileScreen({
               </text.Subtitle1>
 
               <View style={{ alignItems: 'center', marginBottom: 32 }}>
-                <TouchableOpacity onPress={onPress}>
-                  {profile ? (
-                    <elses.CircleImg diameter={180} source={{ uri: profile }} />
+                <TouchableOpacity
+                  onPress={() => (isSelectImg ? {} : setImage())}
+                >
+                  {profileImg ? (
+                    <elses.CircleImg
+                      diameter={180}
+                      source={{ uri: profileImg }}
+                    />
                   ) : (
-                    <elses.Circle diameter={180}>
+                    <elses.Circle diameter={180} backgroundColor={colors.white}>
                       <Icon icon="gallery" size={24} />
                     </elses.Circle>
                   )}
@@ -136,20 +174,20 @@ export default function SettingProfileScreen({
               <ConditionTextInput
                 height={44}
                 placeholder={i18n.t('별명')}
-                onChangeText={(t: string) => setName(t)}
+                onChangeText={(textInput: string) => setName(textInput)}
                 keyboardType="default"
-                isWarning={!(conArray[0] && conArray[1] && conArray[2])}
+                isWarning={nameConditionArray.includes(false)}
                 textValue={name}
-                warnText={!conArray[0] ? errText[0] : errText[1]}
+                warnText={nameErr}
                 conditionTag={
                   <View>
                     <ConditionText
                       content={i18n.t('20 byte 이하')}
-                      isActive={conArray[1]}
+                      isActive={nameConditionArray[1]}
                     />
                     <ConditionText
                       content={i18n.t('중복되지 않는 이름')}
-                      isActive={conArray[2]}
+                      isActive={nameConditionArray[2]}
                     />
                   </View>
                 }
@@ -159,7 +197,7 @@ export default function SettingProfileScreen({
               <area.BottomArea style={{ marginBottom: 16 }}>
                 <TouchableOpacity
                   style={{ alignItems: 'center' }}
-                  onPress={goDeletion}
+                  onPress={() => goDeletion()}
                 >
                   <text.Button3
                     textColor={colors.warning_red}
@@ -170,7 +208,7 @@ export default function SettingProfileScreen({
                 </TouchableOpacity>
                 <ConditionButton
                   isActive={IsOK}
-                  onPress={IsOK ? changeNgoProfile : undefined}
+                  onPress={() => (IsOK ? changeNgoProfile() : undefined)}
                   content={i18n.t('계정 프로필 수정 완료')}
                   paddingH={0}
                   paddingV={14}

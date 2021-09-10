@@ -53,6 +53,11 @@ export default function CharacterGenerationScreen2({
   const [nameErr, setNameErr] = useState('');
   // 에러 메세지
   const errTextArray = ['필수 입력 항목이에요.', '이름 규칙을 지켜야 해요.'];
+  // 수정 시, 기존 이름과 같은 경우 중복 안 되는 경우이므로 기존 이름을 기억하기 위한 변수
+  const [originalName, setOriginalName] = useState(newCharacter.name);
+  useEffect(() => {
+    setOriginalName(newCharacter.name);
+  }, []);
 
   /**
    * 이름 조건 체크 함수
@@ -62,7 +67,7 @@ export default function CharacterGenerationScreen2({
       const serverResult = await checkCharacterAsync(newCharacter.name);
       if (serverResult.isSuccess) {
         const value =
-          isModifying && serverResult.result
+          originalName === newCharacter.name && serverResult.result
             ? true
             : !serverResult.result && newCharacter.name.length > 0;
         setNameConditionArray([arr[0], arr[1], value]);

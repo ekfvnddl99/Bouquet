@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
@@ -30,7 +30,8 @@ type ProfileDetailItemProps = {
 };
 /**
  * Profile의 swipe view 캐릭터 컴포넌트 && '상세 프로필'의 캐릭터 정보
- *
+ * TODO 언팔로우
+ * TODO 팔로우 여부
  * @param isMini swipe view에 사용되는지 아닌지
  */
 export default function ProfileDetailItem({
@@ -77,8 +78,12 @@ export default function ProfileDetailItem({
   async function follow() {
     const realCharacterId = realCharacter.id ? realCharacter.id : -1;
     const myCharacterId = myCharacter.id;
-    const result = await followCharacterAsync(realCharacterId, myCharacterId);
-    return result;
+    const serverResult = await followCharacterAsync(
+      realCharacterId,
+      myCharacterId,
+    );
+    if (serverResult.isSuccess) await setViewCharacter(realCharacter.name);
+    else alert(serverResult.result.errorMsg);
   }
 
   function checkMyCharacter() {

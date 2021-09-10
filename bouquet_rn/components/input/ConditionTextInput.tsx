@@ -55,7 +55,7 @@ export default function ConditionTextInput({
   multiline,
 }: ConditionTextInputProps): React.ReactElement {
   // 지금 내가 누르고 있는 textinput인지
-  const [IsFocus, setFocus] = useState(false);
+  const [isFocus, setFocus] = useState(false);
   return (
     <View style={{ marginBottom: 16 }}>
       <input.FormInput
@@ -68,14 +68,14 @@ export default function ConditionTextInput({
         maxLength={maxLength}
         multiline={multiline}
         style={
-          isWarning && IsFocus
+          isWarning && isFocus
             ? { borderWidth: 1, borderColor: colors.warning_red }
             : null
         }
       />
       <View style={{ alignItems: 'flex-start', flexDirection: 'row' }}>
         <View style={{ flex: 1 }}>
-          {isWarning && IsFocus ? (
+          {isWarning && isFocus ? (
             <WarningText content={warnText} marginTop={8} />
           ) : null}
           {conditionTag || null}

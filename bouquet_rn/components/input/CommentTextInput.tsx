@@ -10,9 +10,6 @@ import * as text from '../../styles/styled-components/text';
 // assets
 import Svg from '../../assets/Icon';
 
-// utils
-import { PostComment } from '../../utils/types/PostTypes';
-
 // logics
 import useCharacter from '../../logics/hooks/useCharacter';
 
@@ -21,8 +18,8 @@ type CommInputProps = {
   onChangeText: (param: string) => void;
   onPress: () => void;
   isChild: boolean;
-  targetComment: PostComment | undefined;
-  setTargetComment: (param: PostComment | undefined) => void;
+  targetComment: string | undefined;
+  setTargetComment: (param: string | undefined) => void;
 };
 /**
  * 댓글 입력하는 textinput
@@ -51,7 +48,7 @@ export default function CommentTextInput({
           <Svg icon="commentInput" size={18} />
           <View style={{ flex: 1, marginHorizontal: 8 }}>
             <text.Body3 textColor={colors.gray6} numberOfLines={1}>
-              {targetComment ? targetComment.comment : ''}
+              {targetComment}
             </text.Body3>
           </View>
           <TouchableOpacity

@@ -10,6 +10,7 @@ import colors from '../../../styles/colors';
 import * as area from '../../../styles/styled-components/area';
 import * as text from '../../../styles/styled-components/text';
 
+// logics
 import { checkEmailAsync } from '../../../logics/server/EmailLogin';
 
 // components
@@ -57,6 +58,7 @@ export default function RegisterScreen1({
     false,
     false,
     false,
+    false,
   ]);
   // 인증번호 입력 조건을 체크하는 배열
   const [authNumberConditionArray, setAuthNumberConditionArray] = useState([
@@ -71,6 +73,7 @@ export default function RegisterScreen1({
   const errTextArray = [
     '메일을 입력해 주세요.',
     '메일 형식대로 입력해야 해요.',
+    '중복된 메일이에요.',
     '메일을 인증해 주세요.',
     '인증 번호를 입력해 주세요.',
     '인증 번호가 틀렸나 봐요.',
@@ -83,6 +86,13 @@ export default function RegisterScreen1({
    * @description email 값이 바뀔 때마다 실행된다.
    */
   useEffect(() => {
+    async function checkEmail(arr: boolean[]) {
+      const serverResult = await checkEmailAsync(email);
+      if (serverResult.isSuccess) {
+        const value = !serverResult.result && email.length > 0;
+        setEmailConditionArray([arr[0], arr[1], value, arr[3]]);
+      }
+    }
     const tmpArray = [...emailConditionArray];
     // 조건 다 통과했는데, 다시 이메일을 입력하는 경우.
     // step 2에서 다시 돌아온 경우.
@@ -92,10 +102,12 @@ export default function RegisterScreen1({
     }
     tmpArray[0] = email.length > 0;
     tmpArray[1] = emailRegex.test(email);
-    tmpArray[2] = isNext;
+    checkEmail(tmpArray);
+    tmpArray[3] = isNext;
     if (!tmpArray[0]) setEmailErr(errTextArray[0]);
     else if (!tmpArray[1]) setEmailErr(errTextArray[1]);
     else if (!tmpArray[2]) setEmailErr(errTextArray[2]);
+    else if (!tmpArray[3]) setEmailErr(errTextArray[3]);
     else setEmailErr('');
     setEmailConditionArray(tmpArray);
   }, [email, isNext]);

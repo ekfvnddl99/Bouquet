@@ -1,10 +1,4 @@
-import React, {
-  useRef,
-  useState,
-  useMemo,
-  useCallback,
-  useEffect,
-} from 'react';
+import React, { useRef, useState, useMemo, useCallback } from 'react';
 import {
   KeyboardAvoidingView,
   FlatList,
@@ -50,6 +44,11 @@ const HEADER_MAX_HEIGHT = 90;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
+/**
+ * TODO 댓글 삭제
+ * TODO 햇님 누르기
+ * @returns
+ */
 export default function PostDetailScreen(): React.ReactElement {
   const user = useRecoilValue(userState);
   const [myCharacter] = useCharacter();
@@ -61,12 +60,14 @@ export default function PostDetailScreen(): React.ReactElement {
   const [openingCommentArray, setOpeningCommentArray] = useState<number[]>([]);
   // 내가 쓴 댓글 값 state
   const [comment, setComment] = useState('');
+  // 아래 2개를 그냥 1개의 PostComment 변수로 설정하면 되지 않냐고 생각할 수 있습니다.
+  // 따로 설정한 이유는, 대댓글A에 새 대댓글을 달 때 새 대댓글의 parent를 대댓글A를 담는 댓글의 아이디로 설정해야 합니다.
+  // PostComment에는 parent id만 있으니, id로만 set을 해줘야 하는데 대댓글을 달 때 input 창 위에 대댓글A 내용이 뜹니다.
+  // id도 필요하고, 대댓글A의 내용도 필요하니 불가피하게 따로 두게 되었습니다.
   // 내가 쓴 댓글이 어떤 것의 대댓글일 때, 어떤 것을 맡고 있습니다.
-  const [parentComment, setParentComment] = useState<PostComment>();
-
-  useEffect(() => {
-    console.log(openingCommentArray);
-  });
+  const [parentComment, setParentComment] = useState<string>();
+  // 댓글 혹은 대댓글에 댓글을 달 때, 서버에 입력할 parent id 값을 저장하는 변수
+  const [parentCommentId, setParentCommentById] = useState(-1);
 
   /**
    * 내가 쓴 댓글 업로드하는 함수
@@ -77,15 +78,16 @@ export default function PostDetailScreen(): React.ReactElement {
       post_id: viewPost?.id,
       character_id: myCharacter.id,
       comment,
-      parent: parentComment !== undefined ? parentComment.id : 0,
+      parent: parentCommentId,
     };
     const serverResult = await uploadCommentAsync(newComment);
     if (serverResult.isSuccess) {
       setComment('');
       setSelectId(-1);
       setParentComment(undefined);
+      setParentCommentById(-1);
+      // 새로고침을 위하여
       setViewPost(viewPost.id);
-      // 새로고침
     } else alert(serverResult.result.errorMsg);
   }
 
@@ -127,10 +129,8 @@ export default function PostDetailScreen(): React.ReactElement {
   function clickComment(commentInfo: PostComment) {
     if (selectId === commentInfo.id) {
       setSelectId(-1);
-      setParentComment(undefined);
     } else {
       setSelectId(commentInfo.id);
-      setParentComment(commentInfo);
     }
   }
 
@@ -231,6 +231,7 @@ export default function PostDetailScreen(): React.ReactElement {
                     commentInfo={obj.item}
                     selectId={selectId}
                     setTargetComment={setParentComment}
+                    setTargetCommentId={setParentCommentById}
                     openingCommentArray={openingCommentArray}
                     setOpeningCommentArray={setOpeningCommentArray}
                   />
@@ -250,6 +251,7 @@ export default function PostDetailScreen(): React.ReactElement {
                           commentInfo={childObj.item}
                           selectId={selectId}
                           setTargetComment={setParentComment}
+                          setTargetCommentId={setParentCommentById}
                         />
                       </TouchableOpacity>
                     )}

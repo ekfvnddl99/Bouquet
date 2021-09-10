@@ -59,7 +59,7 @@ export default function SettingToggleItem({
           <ToggleArea>
             <ToggleBall
               style={[
-                {},
+                { backgroundColor: isOn ? colors.primary : colors.gray5 },
                 {
                   transform: [
                     { translateX: isOn ? TranslateXRight : TranslateXLeft },
@@ -97,8 +97,7 @@ const ToggleArea = styled.View`
   height: 20;
 `;
 const ToggleBall = styled(Animated.View)`
-  background-color: ${colors.gray0};
-  border-radius: 10;
-  width: 40;
+  width: 20;
   height: 20;
+  border-radius: ${20 / 2};
 `;

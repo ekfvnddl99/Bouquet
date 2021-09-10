@@ -11,7 +11,6 @@ import * as text from '../../styles/styled-components/text';
 import Icon from '../../assets/Icon';
 
 // logics
-import useUser from '../../logics/hooks/useUser';
 import useCharacter from '../../logics/hooks/useCharacter';
 import * as cal from '../../logics/non-server/Calculation';
 
@@ -24,7 +23,8 @@ import ProfileButton from '../button/ProfileButton';
 type CommentItemProps = {
   commentInfo: PostComment;
   selectId: number;
-  setTargetComment: (param: PostComment) => void;
+  setTargetComment: (param: string) => void;
+  setTargetCommentId: (param: number) => void;
   openingCommentArray?: number[];
   setOpeningCommentArray?: (param: number[]) => void;
 };
@@ -36,6 +36,8 @@ type CommentItemProps = {
  * @param commentInfo 댓글 객체. 서버에서 불러온다.
  * @param selectId 사용자가 클릭한 댓글.
  * @param setTargetComment 대댓글 대상이 되는 댓글의 set 함수
+ * @param setTargetCommentId 대댓글 대상이 되는 댓글의 아이디 set 함수
+ * * 대댓글에 대댓글을 달 경우, 대상이 되는 대댓글을 담은 댓글의 아이디가 들어간다.
  * ---------------
  * @param openingCommentArray 대댓글이 보이는 댓글들의 아이디가 담긴 배열
  * @param setOpeningCommentArray 대댓글이 보이는 댓글들의 아이디가 담긴 배열의 set 함수
@@ -44,10 +46,10 @@ export default function CommentItem({
   commentInfo,
   selectId,
   setTargetComment,
+  setTargetCommentId,
   openingCommentArray,
   setOpeningCommentArray,
 }: CommentItemProps): React.ReactElement {
-  const user = useUser();
   const [myCharacter] = useCharacter();
 
   return (
@@ -57,7 +59,8 @@ export default function CommentItem({
       paddingV={12}
       style={{
         backgroundColor:
-          selectId === commentInfo.id && user.name !== ''
+          selectId === commentInfo.id &&
+          myCharacter.name === commentInfo.character_info.name
             ? colors.alpha10_primary
             : colors.white,
       }}
@@ -103,18 +106,7 @@ export default function CommentItem({
           openingCommentArray &&
           setOpeningCommentArray ? (
             <View style={{ marginLeft: 8 }}>
-              {openingCommentArray?.includes(commentInfo.id) ? (
-                <TouchableOpacity
-                  onPress={() =>
-                    setOpeningCommentArray([
-                      ...openingCommentArray,
-                      commentInfo.id,
-                    ])
-                  }
-                >
-                  <Icon icon="commentDownArrow" size={18} />
-                </TouchableOpacity>
-              ) : (
+              {openingCommentArray.includes(commentInfo.id) ? (
                 <TouchableOpacity
                   onPress={() =>
                     setOpeningCommentArray(
@@ -124,6 +116,17 @@ export default function CommentItem({
                     )
                   }
                 >
+                  <Icon icon="commentDownArrow" size={18} />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  onPress={() =>
+                    setOpeningCommentArray([
+                      ...openingCommentArray,
+                      commentInfo.id,
+                    ])
+                  }
+                >
                   <Icon icon="commentUpArrow" size={18} />
                 </TouchableOpacity>
               )}
@@ -131,7 +134,12 @@ export default function CommentItem({
           ) : null}
 
           <TouchableOpacity
-            onPress={() => setTargetComment(commentInfo)}
+            onPress={() => [
+              setTargetCommentId(
+                commentInfo.parent === 0 ? commentInfo.id : commentInfo.parent,
+              ),
+              setTargetComment(commentInfo.comment),
+            ]}
             style={{ marginLeft: 8 }}
           >
             <Icon icon="comment" size={18} />
