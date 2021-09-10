@@ -67,7 +67,7 @@ export type PostComment = {
     profile_img: string;
   };
   liked: boolean;
-  children?: Array<PostComment>;
+  children: Array<PostComment>;
 };
 
 /**

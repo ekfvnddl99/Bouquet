@@ -19,10 +19,10 @@ import useCharacter from '../../logics/hooks/useCharacter';
 type CommInputProps = {
   textValue: string;
   onChangeText: (param: string) => void;
-  onPress: (param: string) => void;
+  onPress: () => void;
   isChild: boolean;
-  targetComment?: PostComment;
-  setTargetComment?: () => void;
+  targetComment: PostComment | undefined;
+  setTargetComment: (param: PostComment | undefined) => void;
 };
 /**
  * 댓글 입력하는 textinput
@@ -55,7 +55,9 @@ export default function CommentTextInput({
             </text.Body3>
           </View>
           <TouchableOpacity
-            onPress={setTargetComment ? () => setTargetComment : undefined}
+            onPress={
+              setTargetComment ? () => setTargetComment(undefined) : undefined
+            }
           >
             <Svg icon="roundX" size={18} />
           </TouchableOpacity>
@@ -77,7 +79,7 @@ export default function CommentTextInput({
         />
         <TouchableOpacity
           style={{ marginBottom: 3 }}
-          onPress={() => onPress(textValue)}
+          onPress={() => (textValue ? onPress() : {})}
         >
           <Svg icon="send" size={30} />
         </TouchableOpacity>

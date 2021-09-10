@@ -1,4 +1,10 @@
-import React, { useRef, useState, useMemo, useCallback } from 'react';
+import React, {
+  useRef,
+  useState,
+  useMemo,
+  useCallback,
+  useEffect,
+} from 'react';
 import {
   KeyboardAvoidingView,
   FlatList,
@@ -54,15 +60,19 @@ export default function PostDetailScreen(): React.ReactElement {
   // 대댓글이 보이는 댓글의 아이디가 들어가는 배열
   const [openingCommentArray, setOpeningCommentArray] = useState<number[]>([]);
   // 내가 쓴 댓글 값 state
-  const [Comment, setComment] = useState('');
+  const [comment, setComment] = useState('');
   // 내가 쓴 댓글이 어떤 것의 대댓글일 때, 어떤 것을 맡고 있습니다.
   const [parentComment, setParentComment] = useState<PostComment>();
+
+  useEffect(() => {
+    console.log(openingCommentArray);
+  });
 
   /**
    * 내가 쓴 댓글 업로드하는 함수
    * @param comment 내가 쓴 댓글
    */
-  async function onUpload(comment: string) {
+  async function onUpload() {
     const newComment: PostCommentRequest = {
       post_id: viewPost?.id,
       character_id: myCharacter.id,
@@ -71,7 +81,10 @@ export default function PostDetailScreen(): React.ReactElement {
     };
     const serverResult = await uploadCommentAsync(newComment);
     if (serverResult.isSuccess) {
-      setViewPost(serverResult.result);
+      setComment('');
+      setSelectId(-1);
+      setParentComment(undefined);
+      setViewPost(viewPost.id);
       // 새로고침
     } else alert(serverResult.result.errorMsg);
   }
@@ -110,6 +123,16 @@ export default function PostDetailScreen(): React.ReactElement {
     return true;
   }, [viewPost]);
   const template = useMemo(() => getTemplate(), [getTemplate]);
+
+  function clickComment(commentInfo: PostComment) {
+    if (selectId === commentInfo.id) {
+      setSelectId(-1);
+      setParentComment(undefined);
+    } else {
+      setSelectId(commentInfo.id);
+      setParentComment(commentInfo);
+    }
+  }
 
   return (
     <area.Container>
@@ -197,40 +220,31 @@ export default function PostDetailScreen(): React.ReactElement {
           <FlatList
             data={viewPost?.comments}
             keyboardShouldPersistTaps="always"
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={(item, idx) => idx.toString()}
             renderItem={(obj) => (
               <View>
                 <TouchableOpacity
                   activeOpacity={1}
-                  onPress={() =>
-                    selectId === obj.item.id
-                      ? setSelectId(-1)
-                      : setSelectId(obj.item.id)
-                  }
+                  onPress={() => clickComment(obj.item)}
                 >
                   <CommentItem
                     commentInfo={obj.item}
                     selectId={selectId}
                     setTargetComment={setParentComment}
-                    OpeningCommentArray={openingCommentArray}
+                    openingCommentArray={openingCommentArray}
                     setOpeningCommentArray={setOpeningCommentArray}
                   />
                 </TouchableOpacity>
 
-                {openingCommentArray.includes(obj.item.id) &&
-                obj.item.children ? (
+                {openingCommentArray.includes(obj.item.id) ? (
                   <FlatList
                     style={{ marginLeft: 16 }}
                     data={obj.item.children}
-                    keyExtractor={(item) => item.id.toString()}
+                    keyExtractor={(item, idx) => idx.toString()}
                     renderItem={(childObj) => (
                       <TouchableOpacity
                         activeOpacity={1}
-                        onPress={() =>
-                          selectId === childObj.item.id
-                            ? setSelectId(-1)
-                            : setSelectId(childObj.item.id)
-                        }
+                        onPress={() => clickComment(childObj.item)}
                       >
                         <CommentItem
                           commentInfo={childObj.item}
@@ -248,10 +262,12 @@ export default function PostDetailScreen(): React.ReactElement {
         {user.name !== '' ? (
           <View style={{ justifyContent: 'flex-end' }}>
             <CommentTextInput
-              textValue={Comment}
-              onChangeText={() => setComment}
-              onPress={() => onUpload}
+              textValue={comment}
+              onChangeText={setComment}
+              onPress={() => onUpload()}
               isChild={parentComment !== undefined}
+              targetComment={parentComment}
+              setTargetComment={setParentComment}
             />
           </View>
         ) : null}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import i18n from 'i18n-js';
 
@@ -25,7 +25,7 @@ type CommentItemProps = {
   commentInfo: PostComment;
   selectId: number;
   setTargetComment: (param: PostComment) => void;
-  OpeningCommentArray?: number[];
+  openingCommentArray?: number[];
   setOpeningCommentArray?: (param: number[]) => void;
 };
 /**
@@ -37,37 +37,18 @@ type CommentItemProps = {
  * @param selectId 사용자가 클릭한 댓글.
  * @param setTargetComment 대댓글 대상이 되는 댓글의 set 함수
  * ---------------
- * @param OpeningCommentArray 대댓글이 보이는 댓글들의 아이디가 담긴 배열
+ * @param openingCommentArray 대댓글이 보이는 댓글들의 아이디가 담긴 배열
  * @param setOpeningCommentArray 대댓글이 보이는 댓글들의 아이디가 담긴 배열의 set 함수
  */
 export default function CommentItem({
   commentInfo,
   selectId,
   setTargetComment,
-  OpeningCommentArray,
+  openingCommentArray,
   setOpeningCommentArray,
 }: CommentItemProps): React.ReactElement {
-  // 얘가 부모 댓글일 때, 대댓글이 있는지
-  const [isOpeningCommentComment, setIsOpeningCommentComment] = useState(false);
   const user = useUser();
   const [myCharacter] = useCharacter();
-
-  /**
-   * 대댓글이 보여지는 댓글들을 배열로 관리하는 함수
-   * @description 대댓글이 보여지는 댓글들은 함수에 넣고, 아니면 뺀다.
-   */
-  function manageOpeningCommentArray() {
-    if (!(OpeningCommentArray && setOpeningCommentArray)) return;
-    const tmp: number[] = OpeningCommentArray;
-    // 대댓글이 열린 상태의 댓글이라면 배열에 '추가'
-    if (isOpeningCommentComment) {
-      if (!tmp.includes(commentInfo.id)) tmp.push(commentInfo.id);
-    } else {
-      const idx = tmp.indexOf(commentInfo.id);
-      tmp.splice(idx, 1);
-    }
-    setOpeningCommentArray(tmp);
-  }
 
   return (
     <area.NoHeightArea
@@ -76,7 +57,7 @@ export default function CommentItem({
       paddingV={12}
       style={{
         backgroundColor:
-          selectId === commentInfo.id && user !== undefined
+          selectId === commentInfo.id && user.name !== ''
             ? colors.alpha10_primary
             : colors.white,
       }}
@@ -117,23 +98,31 @@ export default function CommentItem({
             </TouchableOpacity>
           ) : null}
 
-          {commentInfo.parent === 0 ? (
+          {commentInfo.parent === 0 &&
+          commentInfo.children.length > 0 &&
+          openingCommentArray &&
+          setOpeningCommentArray ? (
             <View style={{ marginLeft: 8 }}>
-              {isOpeningCommentComment ? (
+              {openingCommentArray?.includes(commentInfo.id) ? (
                 <TouchableOpacity
-                  onPress={() => [
-                    setIsOpeningCommentComment(false),
-                    manageOpeningCommentArray,
-                  ]}
+                  onPress={() =>
+                    setOpeningCommentArray([
+                      ...openingCommentArray,
+                      commentInfo.id,
+                    ])
+                  }
                 >
                   <Icon icon="commentDownArrow" size={18} />
                 </TouchableOpacity>
               ) : (
                 <TouchableOpacity
-                  onPress={() => [
-                    setIsOpeningCommentComment(true),
-                    manageOpeningCommentArray,
-                  ]}
+                  onPress={() =>
+                    setOpeningCommentArray(
+                      openingCommentArray.filter(
+                        (item) => item !== commentInfo.id,
+                      ),
+                    )
+                  }
                 >
                   <Icon icon="commentUpArrow" size={18} />
                 </TouchableOpacity>

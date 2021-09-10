@@ -23,7 +23,9 @@ export default function ProfileInfoTag({
   tagArray,
 }: ProfileInfoTagProps): React.ReactElement {
   // tag 배열에 들어갈 각 tag들의 모양을 잡아서 다시 배열로 만든다.
-  const list = tagArray.map((tag) => <TagItem content={tag} isActive />);
+  const list = tagArray.map((tag, idx) => (
+    <TagItem content={tag} isActive key={idx.toString()} />
+  ));
   return (
     <View>
       <text.Body2B textColor={colors.black}>{title}</text.Body2B>
