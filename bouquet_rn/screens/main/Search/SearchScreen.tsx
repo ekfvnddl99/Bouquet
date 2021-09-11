@@ -151,7 +151,7 @@ export default function SearchScreen(): React.ReactElement {
       </View>
 
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ScrollView
+        <Animated.ScrollView
           style={{ marginTop: HEADER_MIN_HEIGHT - 30, flex: 1 }}
           showsVerticalScrollIndicator={false}
           onScroll={Animated.event(
@@ -211,7 +211,7 @@ export default function SearchScreen(): React.ReactElement {
               renderItem={(obj) => <PostItem postInfo={obj.item} />}
             />
           </area.ContainerBlank30>
-        </ScrollView>
+        </Animated.ScrollView>
       </TouchableWithoutFeedback>
       {myCharacter.id === -1 ? null : <FloatingButton />}
     </area.Container>

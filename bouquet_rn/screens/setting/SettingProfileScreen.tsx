@@ -130,21 +130,21 @@ export default function SettingProfileScreen({
   };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <area.Container>
-        <HeaderItem
-          isAccount
-          isBackButton
-          name={user.name}
-          profileImg={user.profile_img}
-        />
+    <area.Container>
+      <HeaderItem
+        isAccount
+        isBackButton
+        name={user.name}
+        profileImg={user.profile_img}
+      />
 
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <KeyboardAvoidingView style={{ flex: 1 }} behavior="height">
           <area.ContainerBlank20>
             <ScrollView
               contentContainerStyle={{ flexGrow: 1 }}
               showsVerticalScrollIndicator={false}
-              keyboardShouldPersistTaps="always"
+              keyboardShouldPersistTaps="handled"
             >
               <text.Subtitle1
                 textColor={colors.black}
@@ -217,7 +217,7 @@ export default function SettingProfileScreen({
             </ScrollView>
           </area.ContainerBlank20>
         </KeyboardAvoidingView>
-      </area.Container>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
+    </area.Container>
   );
 }

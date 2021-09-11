@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { View, FlatList, TouchableWithoutFeedback } from 'react-native';
+import {
+  View,
+  FlatList,
+  TouchableWithoutFeedback,
+  ScrollView,
+  Keyboard,
+} from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
-
-// props & logic
-import type { SettingProps } from '../../utils/types/NavigationTypes';
 
 // components
 import SettingToggleItem from '../../components/item/SettingToggleItem';
@@ -19,11 +22,7 @@ type ParamList = {
     title: string;
   };
 };
-export default function SettingAlarmCustomScreen({
-  props,
-}: {
-  props: SettingProps;
-}): React.ReactElement {
+export default function SettingAlarmCustomScreen(): React.ReactElement {
   const user = useUser();
   const characterList = useCharacterList();
 
@@ -45,20 +44,24 @@ export default function SettingAlarmCustomScreen({
           {title}
         </text.Subtitle2B>
         <area.NoHeightArea marBottom={0} paddingH={8} paddingV={8}>
-          <FlatList
-            data={characterList}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={(obj) => (
-              <TouchableWithoutFeedback
-                onPress={() => {
-                  if (selectId === obj.index) setSelectId(-1);
-                  else setSelectId(obj.index);
-                }}
-              >
-                <SettingToggleItem characterInfo={obj.item} />
-              </TouchableWithoutFeedback>
-            )}
-          />
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <FlatList
+                data={characterList}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={(obj) => (
+                  <TouchableWithoutFeedback
+                    onPress={() => {
+                      if (selectId === obj.index) setSelectId(-1);
+                      else setSelectId(obj.index);
+                    }}
+                  >
+                    <SettingToggleItem characterInfo={obj.item} />
+                  </TouchableWithoutFeedback>
+                )}
+              />
+            </ScrollView>
+          </TouchableWithoutFeedback>
         </area.NoHeightArea>
       </View>
     </area.Container>

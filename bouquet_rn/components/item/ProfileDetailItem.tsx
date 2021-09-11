@@ -220,12 +220,12 @@ export default function ProfileDetailItem({
           />
         </View>
       </area.RowArea>
-      <View style={{ marginTop: 16, flexWrap: 'wrap' }} />
+      <View style={{ marginTop: 16 }} />
       <ProfileInfoTagItem
         title={i18n.t('좋아하는 것')}
         tagArray={realCharacter.likes}
       />
-      <View style={{ marginTop: 16, flexWrap: 'wrap' }} />
+      <View style={{ marginTop: 16 }} />
       <ProfileInfoTagItem
         title={i18n.t('싫어하는 것')}
         tagArray={realCharacter.hates}

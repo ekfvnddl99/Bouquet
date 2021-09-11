@@ -127,6 +127,7 @@ export default function RegisterScreen(): React.ReactElement {
             navigation={navigation}
           />
         </View>
+
         {setRegisterScreen(step)}
       </area.Container>
     </TouchableWithoutFeedback>

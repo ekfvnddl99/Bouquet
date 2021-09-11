@@ -181,15 +181,13 @@ export default function CharacterGenerationScreen3({
           >
             <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
               {likeArray.map((data: string, index: number) => (
-                <View>
-                  <TagModifyingItem
-                    content={data}
-                    tagIndex={index}
-                    isSearching={false}
-                    tagArray={likeArray}
-                    setTagArray={setLikeArray}
-                  />
-                </View>
+                <TagModifyingItem
+                  content={data}
+                  tagIndex={index}
+                  isSearching={false}
+                  tagArray={likeArray}
+                  setTagArray={setLikeArray}
+                />
               ))}
               <TextInput
                 placeholder={!likeArray.length ? i18n.t('좋아하는 것') : ''}
@@ -220,15 +218,13 @@ export default function CharacterGenerationScreen3({
           >
             <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
               {dislikeArray.map((data: string, index: number) => (
-                <View>
-                  <TagModifyingItem
-                    content={data}
-                    tagIndex={index}
-                    isSearching={false}
-                    tagArray={dislikeArray}
-                    setTagArray={setDisLikeArray}
-                  />
-                </View>
+                <TagModifyingItem
+                  content={data}
+                  tagIndex={index}
+                  isSearching={false}
+                  tagArray={dislikeArray}
+                  setTagArray={setDisLikeArray}
+                />
               ))}
               <TextInput
                 placeholder={!dislikeArray.length ? i18n.t('싫어하는 것') : ''}

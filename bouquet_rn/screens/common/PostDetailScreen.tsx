@@ -5,6 +5,8 @@ import {
   View,
   Animated,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import i18n from 'i18n-js';
 import styled from 'styled-components/native';
@@ -148,121 +150,126 @@ export default function PostDetailScreen(): React.ReactElement {
         profileImg={myCharacter.profile_img}
       />
 
-      <KeyboardAvoidingView
-        style={{ flex: 1, flexDirection: 'column', justifyContent: 'center' }}
-        behavior="padding"
-        enabled
-      >
-        <Animated.ScrollView
-          contentContainerStyle={{
-            marginHorizontal: 30,
-            flexGrow: 1,
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <KeyboardAvoidingView
+          style={{
+            flex: 1,
             flexDirection: 'column',
+            justifyContent: 'center',
+            backgroundColor: colors.warning_red,
           }}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="always"
-          onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { y: scroll } } }],
-            { useNativeDriver: true },
-          )}
+          behavior="padding"
+          enabled
         >
-          <View style={{ paddingTop: 20 }} />
+          <Animated.ScrollView
+            contentContainerStyle={{
+              marginHorizontal: 30,
+              flexGrow: 1,
+              flexDirection: 'column',
+            }}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+            onScroll={Animated.event(
+              [{ nativeEvent: { contentOffset: { y: scroll } } }],
+              { useNativeDriver: true },
+            )}
+          >
+            <View style={{ paddingTop: 20 }} />
 
-          <area.RowArea>
-            <View style={{ flex: 1 }}>
-              <ProfileButton
-                diameter={30}
-                isAccount={false}
-                isJustImg={false}
-                name={viewPost?.character_info.name}
-                profileImg={viewPost?.character_info.profile_img}
+            <area.RowArea>
+              <View style={{ flex: 1 }}>
+                <ProfileButton
+                  diameter={30}
+                  isAccount={false}
+                  isJustImg={false}
+                  name={viewPost?.character_info.name}
+                  profileImg={viewPost?.character_info.profile_img}
+                />
+              </View>
+              {postOwner ? (
+                <area.RowArea style={{ paddingRight: 1 }}>
+                  <LineButton
+                    onPress={() => {
+                      /**/
+                    }}
+                    content={i18n.t('수정')}
+                    borderColor={colors.black}
+                  />
+                  <View style={{ marginRight: 4 }} />
+                  <LineButton
+                    onPress={() => {
+                      /**/
+                    }}
+                    content={i18n.t('삭제')}
+                    borderColor={colors.warning_red}
+                  />
+                </area.RowArea>
+              ) : null}
+            </area.RowArea>
+            <View style={{ marginBottom: 12 }} />
+            {template}
+            {viewPost?.template && viewPost.text ? (
+              <TextTemplate mode="detail" post={viewPost.text} />
+            ) : null}
+            <View style={{ alignItems: 'flex-start' }}>
+              <SunButton
+                sunNum={viewPost?.num_sunshines}
+                setSunNum={() => {
+                  /* */
+                }}
+                active={viewPost?.liked}
               />
             </View>
-            {postOwner ? (
-              <area.RowArea style={{ paddingRight: 1 }}>
-                <LineButton
-                  onPress={() => {
-                    /**/
-                  }}
-                  content={i18n.t('수정')}
-                  borderColor={colors.black}
-                />
-                <View style={{ marginRight: 4 }} />
-                <LineButton
-                  onPress={() => {
-                    /**/
-                  }}
-                  content={i18n.t('삭제')}
-                  borderColor={colors.warning_red}
-                />
-              </area.RowArea>
-            ) : null}
-          </area.RowArea>
-          <View style={{ marginBottom: 12 }} />
-          {template}
-          {viewPost?.template && viewPost.text ? (
-            <TextTemplate mode="detail" post={viewPost.text} />
-          ) : null}
-          <View style={{ alignItems: 'flex-start' }}>
-            <SunButton
-              sunNum={viewPost?.num_sunshines}
-              setSunNum={() => {
-                /* */
-              }}
-              active={viewPost?.liked}
+            <text.Subtitle3 textColor={colors.black} style={{ marginTop: 36 }}>
+              {i18n.t('반응')}
+            </text.Subtitle3>
+
+            <View style={{ paddingTop: 12 }} />
+            <FlatList
+              data={viewPost?.comments}
+              keyboardShouldPersistTaps="handled"
+              keyExtractor={(item, idx) => idx.toString()}
+              renderItem={(obj) => (
+                <View>
+                  <TouchableOpacity
+                    activeOpacity={1}
+                    onPress={() => clickComment(obj.item)}
+                  >
+                    <CommentItem
+                      commentInfo={obj.item}
+                      selectId={selectId}
+                      setTargetComment={setParentComment}
+                      setTargetCommentId={setParentCommentById}
+                      openingCommentArray={openingCommentArray}
+                      setOpeningCommentArray={setOpeningCommentArray}
+                    />
+                  </TouchableOpacity>
+
+                  {openingCommentArray.includes(obj.item.id) ? (
+                    <FlatList
+                      style={{ marginLeft: 16 }}
+                      data={obj.item.children}
+                      keyExtractor={(item, idx) => idx.toString()}
+                      renderItem={(childObj) => (
+                        <TouchableOpacity
+                          activeOpacity={1}
+                          onPress={() => clickComment(childObj.item)}
+                        >
+                          <CommentItem
+                            commentInfo={childObj.item}
+                            selectId={selectId}
+                            setTargetComment={setParentComment}
+                            setTargetCommentId={setParentCommentById}
+                          />
+                        </TouchableOpacity>
+                      )}
+                    />
+                  ) : null}
+                </View>
+              )}
             />
-          </View>
-          <text.Subtitle3 textColor={colors.black} style={{ marginTop: 36 }}>
-            {i18n.t('반응')}
-          </text.Subtitle3>
-
-          <View style={{ paddingTop: 12 }} />
-          <FlatList
-            data={viewPost?.comments}
-            keyboardShouldPersistTaps="always"
-            keyExtractor={(item, idx) => idx.toString()}
-            renderItem={(obj) => (
-              <View>
-                <TouchableOpacity
-                  activeOpacity={1}
-                  onPress={() => clickComment(obj.item)}
-                >
-                  <CommentItem
-                    commentInfo={obj.item}
-                    selectId={selectId}
-                    setTargetComment={setParentComment}
-                    setTargetCommentId={setParentCommentById}
-                    openingCommentArray={openingCommentArray}
-                    setOpeningCommentArray={setOpeningCommentArray}
-                  />
-                </TouchableOpacity>
-
-                {openingCommentArray.includes(obj.item.id) ? (
-                  <FlatList
-                    style={{ marginLeft: 16 }}
-                    data={obj.item.children}
-                    keyExtractor={(item, idx) => idx.toString()}
-                    renderItem={(childObj) => (
-                      <TouchableOpacity
-                        activeOpacity={1}
-                        onPress={() => clickComment(childObj.item)}
-                      >
-                        <CommentItem
-                          commentInfo={childObj.item}
-                          selectId={selectId}
-                          setTargetComment={setParentComment}
-                          setTargetCommentId={setParentCommentById}
-                        />
-                      </TouchableOpacity>
-                    )}
-                  />
-                ) : null}
-              </View>
-            )}
-          />
-        </Animated.ScrollView>
-        {user.name !== '' ? (
-          <View style={{ justifyContent: 'flex-end' }}>
+          </Animated.ScrollView>
+          {user.name !== '' ? (
             <CommentTextInput
               textValue={comment}
               onChangeText={setComment}
@@ -270,10 +277,11 @@ export default function PostDetailScreen(): React.ReactElement {
               isChild={parentComment !== undefined}
               targetComment={parentComment}
               setTargetComment={setParentComment}
+              setTargetCommentId={setParentCommentById}
             />
-          </View>
-        ) : null}
-      </KeyboardAvoidingView>
+          ) : null}
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
     </area.Container>
   );
 }

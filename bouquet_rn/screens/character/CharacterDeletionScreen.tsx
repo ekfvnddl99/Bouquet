@@ -58,33 +58,31 @@ export default function CharacterDeletionScreen(): React.ReactElement {
   }
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <area.Container>
-        <HeaderItem
-          isAccount
-          isBackButton={step === 1}
-          name={targetCharacter.name}
-          profileImg={targetCharacter.profile_img}
-        />
-        <area.ContainerBlank20>
-          <text.Subtitle1 textColor={colors.black} style={{ marginBottom: 32 }}>
-            {setTitle(step)}
-          </text.Subtitle1>
-          {step === 1 ? (
-            <ChaDeletionScreenOne
-              profileImg={targetCharacter.profile_img}
-              name={targetCharacter.name}
-              onPress={() => deleteCharacter()}
-            />
-          ) : (
-            <ChaDeletionScreenTwo
-              profileImg={targetCharacter.profile_img}
-              name={targetCharacter.name}
-              navigation={navigation}
-            />
-          )}
-        </area.ContainerBlank20>
-      </area.Container>
-    </TouchableWithoutFeedback>
+    <area.Container>
+      <HeaderItem
+        isAccount
+        isBackButton={step === 1}
+        name={targetCharacter.name}
+        profileImg={targetCharacter.profile_img}
+      />
+      <area.ContainerBlank20>
+        <text.Subtitle1 textColor={colors.black} style={{ marginBottom: 32 }}>
+          {setTitle(step)}
+        </text.Subtitle1>
+        {step === 1 ? (
+          <ChaDeletionScreenOne
+            profileImg={targetCharacter.profile_img}
+            name={targetCharacter.name}
+            onPress={() => deleteCharacter()}
+          />
+        ) : (
+          <ChaDeletionScreenTwo
+            profileImg={targetCharacter.profile_img}
+            name={targetCharacter.name}
+            navigation={navigation}
+          />
+        )}
+      </area.ContainerBlank20>
+    </area.Container>
   );
 }

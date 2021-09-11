@@ -16,8 +16,10 @@ export function timeName(time: string): string {
   const diff = (now.getTime() - curr.getTime()) / 1000;
 
   if (diff < 60) return `${Math.floor(diff)}${i18n.t('초')}`;
-  if (diff / 60 < 60) return `${Math.floor(diff / 60)}${i18n.t('분')}`;
-  if (diff / 360 < 24) return `${Math.floor(diff / 360)}${i18n.t('시간')}`;
+  if (diff / 60 < 60 && diff / 60 > 0)
+    return `${Math.floor(diff / 60)}${i18n.t('분')}`;
+  if (diff / 3600 < 24 && diff / 3600 > 0)
+    return `${Math.floor(diff / 3600)}${i18n.t('시간')}`;
   return `${Math.floor(diff / 86400)}${i18n.t('일')}`;
 }
 

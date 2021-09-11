@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 
 // styles
 import colors from '../../styles/colors';
@@ -45,24 +45,28 @@ export default function TagModifyingItem({
   }
 
   return (
-    <button.TagModifyButton
-      backgroundColor={isSearching ? colors.white : colors.alpha10_primary}
-      activeOpacity={1}
-      onPress={() => (isSearching && setSearch ? setSearch(content) : {})}
-    >
-      <text.Caption
-        textColor={isSearching ? colors.black : colors.primary}
-        style={{ flexShrink: 1 }}
+    <View style={{ flexShrink: 1 }}>
+      <button.TagModifyButton
+        backgroundColor={isSearching ? colors.white : colors.alpha10_primary}
+        activeOpacity={1}
+        onPress={() => (isSearching && setSearch ? setSearch(content) : {})}
       >
-        {content}
-      </text.Caption>
-      <TouchableOpacity onPress={() => deleteTag()} style={{ flexGrow: 1 }}>
-        {isSearching ? (
-          <Icon icon="x" size={25} />
-        ) : (
-          <Icon icon="xFocus" size={25} />
-        )}
-      </TouchableOpacity>
-    </button.TagModifyButton>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <text.Caption
+            textColor={isSearching ? colors.black : colors.primary}
+            style={{ flexShrink: 1 }}
+          >
+            {content}
+          </text.Caption>
+          <TouchableOpacity onPress={() => deleteTag()} style={{ flexGrow: 1 }}>
+            {isSearching ? (
+              <Icon icon="x" size={25} />
+            ) : (
+              <Icon icon="xFocus" size={25} />
+            )}
+          </TouchableOpacity>
+        </View>
+      </button.TagModifyButton>
+    </View>
   );
 }

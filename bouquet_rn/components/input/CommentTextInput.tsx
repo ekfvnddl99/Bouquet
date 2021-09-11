@@ -20,6 +20,7 @@ type CommInputProps = {
   isChild: boolean;
   targetComment: string | undefined;
   setTargetComment: (param: string | undefined) => void;
+  setTargetCommentId: (param: number) => void;
 };
 /**
  * 댓글 입력하는 textinput
@@ -31,6 +32,7 @@ type CommInputProps = {
  * ---------------
  * @param targetComment 대댓글의 대상이 되는 댓글 Comment 객체
  * @param setTargetComment 대댓글의 대상이 되는 댓글 set 함수 (대상이 되는 부모댓글을 x버튼으로 누를 때 삭제하기 위해 사용됨)
+ * @param setTargetCommentId 대댓글의 대상이 되는 댓글의 아이디 set 함수
  */
 export default function CommentTextInput({
   textValue,
@@ -39,6 +41,7 @@ export default function CommentTextInput({
   isChild,
   targetComment,
   setTargetComment,
+  setTargetCommentId,
 }: CommInputProps): React.ReactElement {
   const [myCharcater] = useCharacter();
   return (
@@ -52,8 +55,12 @@ export default function CommentTextInput({
             </text.Body3>
           </View>
           <TouchableOpacity
-            onPress={
-              setTargetComment ? () => setTargetComment(undefined) : undefined
+            onPress={() =>
+              setTargetComment &&
+              targetComment && [
+                setTargetCommentId(0),
+                setTargetComment(undefined),
+              ]
             }
           >
             <Svg icon="roundX" size={18} />

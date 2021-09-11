@@ -6,7 +6,6 @@ import styled from 'styled-components/native';
 // styles
 import colors from '../../../styles/colors';
 import * as area from '../../../styles/styled-components/area';
-import * as elses from '../../../styles/styled-components/elses';
 
 // assets
 import Icon from '../../../assets/Icon';

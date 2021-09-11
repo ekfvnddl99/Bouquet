@@ -91,8 +91,6 @@ export const TagModifyButton = styled.TouchableOpacity`
   border-radius: 10;
   margin-right: 4;
   margin-bottom: 2;
-  flex-direction: row;
-  align-items: center;
   padding-left: 8;
   padding-vertical: 5;
 `;

@@ -75,8 +75,8 @@ export default function CharacterGenerationScreen1({
         ...newCharacter,
         profile_img: imgResult.uri,
       });
-      setIsSelectImg(false);
     }
+    setIsSelectImg(false);
   }
 
   return (

@@ -144,7 +144,7 @@ export default function RegisterScreen3({
         <ScrollView
           contentContainerStyle={{ flexGrow: 1 }}
           showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="always"
+          keyboardShouldPersistTaps="handled"
         >
           <View style={{ alignItems: 'center', marginBottom: 32 }}>
             <TouchableOpacity onPress={() => (isSelectImg ? {} : setImage())}>
