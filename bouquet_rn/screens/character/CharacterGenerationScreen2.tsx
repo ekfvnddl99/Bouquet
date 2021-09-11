@@ -20,6 +20,7 @@ type CharacterGenerationScreen2Props = {
   onPress: () => void;
   newCharacter: MyCharacter;
   setNewCharacter: (param: MyCharacter) => void;
+  originCharacter?: MyCharacter;
 };
 /**
  * 캐릭터 이미지 설정하는 화면
@@ -27,6 +28,7 @@ type CharacterGenerationScreen2Props = {
  * @param onPress 다음으로 넘어가는 버튼 누를 때 실행되는 함수
  * @param newCharacter 생성/수정할 캐릭터 객체
  * @param setNewCharacter 생성/수정할 캐릭터 객체 set 함수
+ * @param originCharacter 기존 이름을 가져오기 위한 수정 대상 캐릭터 객체
  * @returns
  */
 export default function CharacterGenerationScreen2({
@@ -34,6 +36,7 @@ export default function CharacterGenerationScreen2({
   onPress,
   newCharacter,
   setNewCharacter,
+  originCharacter,
 }: CharacterGenerationScreen2Props): React.ReactElement {
   // 다음 단계 넘어가도 되는지 확인하는 state
   const [IsOK, setIsOK] = useState(false);
@@ -52,12 +55,11 @@ export default function CharacterGenerationScreen2({
   // 이름 에러 메세지
   const [nameErr, setNameErr] = useState('');
   // 에러 메세지
-  const errTextArray = ['필수 입력 항목이에요.', '이름 규칙을 지켜야 해요.'];
-  // 수정 시, 기존 이름과 같은 경우 중복 안 되는 경우이므로 기존 이름을 기억하기 위한 변수
-  const [originalName, setOriginalName] = useState(newCharacter.name);
-  useEffect(() => {
-    setOriginalName(newCharacter.name);
-  }, []);
+  const errTextArray = [
+    '필수 입력 항목이에요.',
+    '이름 규칙을 지켜야 해요.',
+    '중복된 이름이에요.',
+  ];
 
   /**
    * 이름 조건 체크 함수
@@ -67,9 +69,15 @@ export default function CharacterGenerationScreen2({
       const serverResult = await checkCharacterAsync(newCharacter.name);
       if (serverResult.isSuccess) {
         const value =
-          originalName === newCharacter.name && serverResult.result
+          isModifying &&
+          originCharacter?.name === newCharacter.name &&
+          serverResult.result
             ? true
             : !serverResult.result && newCharacter.name.length > 0;
+        if (!tmpArray[0]) setNameErr(errTextArray[0]);
+        else if (!tmpArray[1]) setNameErr(errTextArray[1]);
+        else if (!value) setNameErr(errTextArray[2]);
+        else setNameErr('');
         setNameConditionArray([arr[0], arr[1], value]);
       }
     }
@@ -79,8 +87,6 @@ export default function CharacterGenerationScreen2({
     tmpArray[1] =
       getByte(newCharacter.name) <= 18 && getByte(newCharacter.name) > 0;
     checkCharacterName(tmpArray);
-    if (!tmpArray[0]) setNameErr(errTextArray[0]);
-    else if (!(tmpArray[1] && tmpArray[2])) setNameErr(errTextArray[1]);
     setNameConditionArray(tmpArray);
   }, [newCharacter.name]);
 

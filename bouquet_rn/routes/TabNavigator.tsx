@@ -67,6 +67,7 @@ function customTabBar({ state, navigation }: { state: any; navigation: any }) {
           <TouchableOpacity
             onPress={() => navigation.navigate(route.name)}
             style={{ paddingHorizontal: 20 }}
+            key={index.toString()}
           >
             {setIcon()}
           </TouchableOpacity>

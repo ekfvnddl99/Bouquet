@@ -42,20 +42,16 @@ export default function HomeScreen(): React.ReactElement {
   }, [myCharacter.id]);
   // 가장 처음에 인기 게시물 가져옴
   useEffect(() => {
-    async function getPosts() {
-      async function getPost() {
-        let serverResult;
-        if (myCharacter.id === -1) serverResult = await getTopPostListAsync(1);
-        else serverResult = await getTopPostListAsync(1, myCharacter.id);
-        if (serverResult.isSuccess) {
-          setPostArray(serverResult.result);
-        } else {
-          alert(serverResult.result.errorMsg);
-        }
+    async function getPost() {
+      const id = myCharacter.id ? myCharacter.id : undefined;
+      const serverResult = await getTopPostListAsync(1, id);
+      if (serverResult.isSuccess) {
+        setPostArray(serverResult.result);
+      } else {
+        alert(serverResult.result.errorMsg);
       }
-      getPost();
     }
-    getPosts();
+    getPost();
   }, []);
 
   /**
@@ -113,15 +109,22 @@ export default function HomeScreen(): React.ReactElement {
           ]}
         >
           {isLogined ? (
-            <NameNText name={myCharacter.name} sub={i18n.t('의')} />
+            <>
+              <NameNText name={myCharacter.name} sub={i18n.t('의')} />
+              <text.Subtitle2R textColor={colors.black}>
+                {i18n.t('피드')}
+              </text.Subtitle2R>
+            </>
           ) : (
-            <text.Subtitle2R textColor={colors.black}>
-              {i18n.t('눈길이 가는')}
-            </text.Subtitle2R>
+            <>
+              <text.Subtitle2R textColor={colors.black}>
+                {i18n.t('눈길이 가는')}
+              </text.Subtitle2R>
+              <text.Subtitle2B textColor={colors.black}>
+                {i18n.t('피드')}
+              </text.Subtitle2B>
+            </>
           )}
-          <text.Subtitle2B textColor={colors.black}>
-            {i18n.t('피드')}
-          </text.Subtitle2B>
         </AnimationText>
         {isLogined ? (
           <AnimationImg

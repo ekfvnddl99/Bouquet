@@ -57,7 +57,7 @@ export default function SettingProfileScreen({
   const errTextArray = [
     '별명을 입력해 주세요.',
     '별명 규칙을 지켜야 해요.',
-    '중복된 별명입니다.',
+    '중복된 별명이에요.',
   ];
 
   /**
@@ -69,9 +69,11 @@ export default function SettingProfileScreen({
       const serverResult = await checkUserAsync(name);
       if (serverResult.isSuccess) {
         const value =
-          user.name === name && serverResult.result
-            ? true
-            : !serverResult.result && name.length > 0;
+          user.name === name ? true : !serverResult.result && name.length > 0;
+        if (!tmpArray[0]) setNameErr(errTextArray[0]);
+        else if (!tmpArray[1]) setNameErr(errTextArray[1]);
+        else if (!value) setNameErr(errTextArray[2]);
+        else setNameErr('');
         setNameConditionArray([arr[0], arr[1], value]);
       }
     }
@@ -79,12 +81,9 @@ export default function SettingProfileScreen({
     tmpArray[0] = name.length > 0;
     tmpArray[1] = getByte(name) <= 20 && getByte(name) > 0;
     checkUserName(tmpArray);
-    if (!tmpArray[0]) setNameErr(errTextArray[0]);
-    else if (!tmpArray[1]) setNameErr(errTextArray[1]);
-    else if (!tmpArray[2]) setNameErr(errTextArray[2]);
-    else setNameErr('');
     setNameConditionArray(tmpArray);
   }, [name]);
+
   /**
    * 매번 모든 조건이 다 충족됐는지 확인
    */

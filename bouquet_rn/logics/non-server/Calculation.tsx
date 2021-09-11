@@ -15,10 +15,10 @@ export function timeName(time: string): string {
   const now = new Date();
   const diff = (now.getTime() - curr.getTime()) / 1000;
 
-  if (diff < 60) return `${Math.round(diff)}${i18n.t('초')}`;
-  if (diff / 60 < 60) return `${Math.round(diff / 60)}${i18n.t('분')}`;
-  if (diff / 360 < 24) return `${Math.round(diff / 360)}${i18n.t('시간')}`;
-  return `${Math.round(diff / 86400)}${i18n.t('일')}`;
+  if (diff < 60) return `${Math.floor(diff)}${i18n.t('초')}`;
+  if (diff / 60 < 60) return `${Math.floor(diff / 60)}${i18n.t('분')}`;
+  if (diff / 360 < 24) return `${Math.floor(diff / 360)}${i18n.t('시간')}`;
+  return `${Math.floor(diff / 86400)}${i18n.t('일')}`;
 }
 
 export function getByte(str: string): number {

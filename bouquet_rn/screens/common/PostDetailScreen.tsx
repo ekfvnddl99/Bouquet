@@ -67,7 +67,7 @@ export default function PostDetailScreen(): React.ReactElement {
   // 내가 쓴 댓글이 어떤 것의 대댓글일 때, 어떤 것을 맡고 있습니다.
   const [parentComment, setParentComment] = useState<string>();
   // 댓글 혹은 대댓글에 댓글을 달 때, 서버에 입력할 parent id 값을 저장하는 변수
-  const [parentCommentId, setParentCommentById] = useState(-1);
+  const [parentCommentId, setParentCommentById] = useState(0);
 
   /**
    * 내가 쓴 댓글 업로드하는 함수

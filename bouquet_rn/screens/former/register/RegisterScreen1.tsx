@@ -90,6 +90,11 @@ export default function RegisterScreen1({
       const serverResult = await checkEmailAsync(email);
       if (serverResult.isSuccess) {
         const value = !serverResult.result && email.length > 0;
+        if (!tmpArray[0]) setEmailErr(errTextArray[0]);
+        else if (!tmpArray[1]) setEmailErr(errTextArray[1]);
+        else if (!value) setEmailErr(errTextArray[2]);
+        else if (!tmpArray[3]) setEmailErr(errTextArray[3]);
+        else setEmailErr('');
         setEmailConditionArray([arr[0], arr[1], value, arr[3]]);
       }
     }
@@ -102,13 +107,8 @@ export default function RegisterScreen1({
     }
     tmpArray[0] = email.length > 0;
     tmpArray[1] = emailRegex.test(email);
-    checkEmail(tmpArray);
     tmpArray[3] = isNext;
-    if (!tmpArray[0]) setEmailErr(errTextArray[0]);
-    else if (!tmpArray[1]) setEmailErr(errTextArray[1]);
-    else if (!tmpArray[2]) setEmailErr(errTextArray[2]);
-    else if (!tmpArray[3]) setEmailErr(errTextArray[3]);
-    else setEmailErr('');
+    checkEmail(tmpArray);
     setEmailConditionArray(tmpArray);
   }, [email, isNext]);
 

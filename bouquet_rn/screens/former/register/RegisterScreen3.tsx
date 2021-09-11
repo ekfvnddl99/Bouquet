@@ -81,21 +81,19 @@ export default function RegisterScreen3({
   useEffect(() => {
     async function checkUserName(arr: boolean[]) {
       const serverResult = await checkUserAsync(name);
-      if (serverResult.isSuccess)
-        setNameConditionArray([
-          arr[0],
-          arr[1],
-          !serverResult.result && name.length > 0,
-        ]);
+      if (serverResult.isSuccess) {
+        const value = !serverResult.result && name.length > 0;
+        if (!tmpArray[0]) setNameErr(errTextArray[0]);
+        else if (!tmpArray[1]) setNameErr(errTextArray[1]);
+        else if (!value) setNameErr(errTextArray[2]);
+        else setNameErr('');
+        setNameConditionArray([arr[0], arr[1], value]);
+      }
     }
     const tmpArray = [...nameConditionArray];
     tmpArray[0] = name.length > 0;
     tmpArray[1] = getByte(name) <= 20 && getByte(name) > 0;
     checkUserName(tmpArray);
-    if (!tmpArray[0]) setNameErr(errTextArray[0]);
-    else if (!tmpArray[1]) setNameErr(errTextArray[1]);
-    else if (!tmpArray[2]) setNameErr(errTextArray[2]);
-    else setNameErr('');
     setNameConditionArray(tmpArray);
   }, [name]);
 

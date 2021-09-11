@@ -22,10 +22,14 @@ export default function AppStack(): React.ReactElement {
   const user = useUser();
 
   useEffect(() => {
+    async function goLogin() {
+      await login();
+    }
     setTimeout(() => {
       setIsSplash(false);
+      goLogin();
     }, 2000);
-  });
+  }, []);
 
   // // 2
   // let Screen;

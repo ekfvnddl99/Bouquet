@@ -75,7 +75,7 @@ export default function ProfileDetailItem({
    * 내가 다른 캐릭터를 follow하는 함수
    * @returns followCharacterAsync 함수 결과
    */
-  async function follow() {
+  async function followOrUnfollow() {
     const realCharacterId = realCharacter.id ? realCharacter.id : -1;
     const myCharacterId = myCharacter.id;
     const serverResult = await followCharacterAsync(
@@ -134,7 +134,7 @@ export default function ProfileDetailItem({
             </area.RowArea>
           ) : (
             <LineButton
-              onPress={() => follow()}
+              onPress={() => followOrUnfollow()}
               content={i18n.t('팔로우')}
               borderColor={colors.primary}
             />

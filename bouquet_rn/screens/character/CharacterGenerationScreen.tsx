@@ -159,6 +159,7 @@ export default function CharacterGenerationScreen(): React.ReactElement {
           onPress={() => setStep(step + 1)}
           newCharacter={newCharacter}
           setNewCharacter={setNewCharacter}
+          originCharacter={characterInfo}
         />
       );
     if (stepNumber === 3)
