@@ -30,9 +30,9 @@ export default function CharacterDeletionScreen2({
   name,
   navigation,
 }: CharacterDeletionScreen2Props): React.ReactElement {
-  // 돌아가기 버튼 누르면 실행되는 함수. 캐릭터 오버뷰로 이동한다.
-  function goOverview() {
-    navigation.navigate('ProfileOverview');
+  // 돌아가기 버튼 누르면 실행되는 함수. 프로필 탭으로 이동한다.
+  function goProfile() {
+    navigation.replace('Profile');
   }
 
   return (
@@ -62,7 +62,7 @@ export default function CharacterDeletionScreen2({
         <ConditionButton
           height={44}
           isActive
-          onPress={() => goOverview}
+          onPress={() => goProfile()}
           content={i18n.t('캐릭터 목록으로 돌아가기')}
           paddingH={0}
           paddingV={14}

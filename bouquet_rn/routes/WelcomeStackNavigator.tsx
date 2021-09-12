@@ -2,6 +2,8 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as Types from '../utils/types/NavigationTypes';
 
+import useUser from '../logics/hooks/useUser';
+
 // screens
 import WelcomeScreen from '../screens/former/WelcomeScreen';
 import LoginScreen from '../screens/former/LoginScreen';
@@ -11,8 +13,11 @@ import CharacterGenerationScreen from '../screens/character/CharacterGenerationS
 
 const WelcomeStack = createStackNavigator<Types.WelcomeStackParam>();
 export default function WelcomeStackNavigator(): React.ReactElement {
+  const user = useUser();
   return (
-    <WelcomeStack.Navigator initialRouteName="Welcome">
+    <WelcomeStack.Navigator
+      initialRouteName={user.name !== '' ? 'Tab' : 'Welcome'}
+    >
       <WelcomeStack.Screen
         name="Welcome"
         component={WelcomeScreen}

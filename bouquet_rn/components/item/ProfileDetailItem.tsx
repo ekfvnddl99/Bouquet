@@ -224,11 +224,13 @@ export default function ProfileDetailItem({
       <ProfileInfoTagItem
         title={i18n.t('좋아하는 것')}
         tagArray={realCharacter.likes}
+        isMini={isMini}
       />
       <View style={{ marginTop: 16 }} />
       <ProfileInfoTagItem
         title={i18n.t('싫어하는 것')}
         tagArray={realCharacter.hates}
+        isMini={isMini}
       />
       <View style={{ marginTop: 16 }} />
       <BoldNRegularText

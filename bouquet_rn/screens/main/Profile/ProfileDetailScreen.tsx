@@ -1,14 +1,17 @@
 import React, { useState, useRef } from 'react';
 import { View, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import i18n from 'i18n-js';
+
+// styles
 import colors from '../../../styles/colors';
 import * as area from '../../../styles/styled-components/area';
 import * as text from '../../../styles/styled-components/text';
 
+// view
 import ProfileFeedScreen from './ProfileFeedView';
 import ProfileQnAScreen from './ProfileQnAView';
 
-// props & logic
+// logics
 import { StatusBarHeight } from '../../../logics/non-server/StatusbarHeight';
 import useCharacter from '../../../logics/hooks/useCharacter';
 
@@ -21,7 +24,8 @@ const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 export default function ProfileDetailScreen(): React.ReactElement {
-  const [press, setPress] = useState(0);
+  // 상세 프로필마다 있는 하단의 탭 인덱스
+  const [tabIndex, setTabIndex] = useState(0);
   const [character] = useCharacter();
 
   const scroll = useRef(new Animated.Value(0)).current;
@@ -59,23 +63,23 @@ export default function ProfileDetailScreen(): React.ReactElement {
 
         <View style={{ marginTop: 30 }}>
           <area.RowArea>
-            <TouchableOpacity onPress={() => setPress(0)}>
+            <TouchableOpacity onPress={() => setTabIndex(0)}>
               <text.Subtitle3
-                textColor={press === 0 ? colors.black : colors.gray5}
+                textColor={tabIndex === 0 ? colors.black : colors.gray5}
               >
                 {i18n.t('게시글')}
               </text.Subtitle3>
             </TouchableOpacity>
             <View style={{ marginRight: 16 }} />
-            <TouchableOpacity onPress={() => setPress(2)}>
+            <TouchableOpacity onPress={() => setTabIndex(2)}>
               <text.Subtitle3
-                textColor={press === 2 ? colors.black : colors.gray5}
+                textColor={tabIndex === 2 ? colors.black : colors.gray5}
               >
                 {i18n.t('질문')}
               </text.Subtitle3>
             </TouchableOpacity>
           </area.RowArea>
-          {press === 0 ? <ProfileFeedScreen /> : <ProfileQnAScreen />}
+          {tabIndex === 0 ? <ProfileFeedScreen /> : <ProfileQnAScreen />}
         </View>
       </Animated.ScrollView>
     </area.Container>

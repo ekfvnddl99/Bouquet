@@ -4,7 +4,7 @@ import i18n from 'i18n-js';
 import { useFocusEffect } from '@react-navigation/native';
 import * as SecureStore from 'expo-secure-store';
 
-// props & logic
+// logics
 import Carousel from '../../../components/view/Carousel';
 import useCharacter from '../../../logics/hooks/useCharacter';
 
@@ -12,20 +12,25 @@ import useCharacter from '../../../logics/hooks/useCharacter';
 import BackgroundButton from '../../../components/button/BackgroundButton';
 import { MyCharacter } from '../../../utils/types/UserTypes';
 
+// 스크린 너비
 const screenWidth = Math.round(Dimensions.get('window').width);
 export default function ProfileSwipeScreen({
   characterList,
 }: {
   characterList: MyCharacter[];
 }): React.ReactElement {
+  // 스와이프 뷰를 이루는 페이지 인덱스
   const [page, setPage] = useState(0);
+  // 내가 선택한 캐릭터의 페이지 인덱스
   const [select, setSelect] = useState(-1);
   const [character, setCharacter] = useCharacter();
 
+  /**
+   * 하단의 캐릭터 선택 버튼을 눌렀을 시 시행되는 함수
+   */
   const onPress = async () => {
     if (characterList.length > 0) {
-      if (characterList[page].name === '폭스')
-        await SecureStore.setItemAsync('tmpPageNum', '1');
+      await SecureStore.setItemAsync('tmpPageNum', page.toString());
       setCharacter(characterList[page]);
       setSelect(page);
     }

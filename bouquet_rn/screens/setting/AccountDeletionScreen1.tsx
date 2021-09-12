@@ -2,12 +2,14 @@ import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
+
+// styles
 import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
 import * as elses from '../../styles/styled-components/elses';
 
-// props && logic
+// logics
 import { deleteUserAsync } from '../../logics/server/User';
 import useUser from '../../logics/hooks/useUser';
 

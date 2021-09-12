@@ -2,6 +2,8 @@ import React, { useRef } from 'react';
 import { FlatList, View, Animated } from 'react-native';
 import styled from 'styled-components/native';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
+
+// styles
 import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 
@@ -128,6 +130,6 @@ const AnimationHeader = styled(Animated.View)`
   top: 0;
   background-color: ${colors.white};
   overflow: hidden;
-  height: ${HEADER_MIN_HEIGHT}+${StatusBarHeight};
+  height: ${HEADER_MIN_HEIGHT + StatusBarHeight};
   border-radius: 15;
 `;

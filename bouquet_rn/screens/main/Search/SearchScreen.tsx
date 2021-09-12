@@ -2,7 +2,6 @@ import React, { useRef, useState, useEffect } from 'react';
 import {
   View,
   Animated,
-  ScrollView,
   TextInput,
   FlatList,
   TouchableWithoutFeedback,

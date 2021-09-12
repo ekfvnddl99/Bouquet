@@ -2,6 +2,8 @@ import React from 'react';
 import { View } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
+
+// styles
 import colors from '../../styles/colors';
 import * as text from '../../styles/styled-components/text';
 import * as area from '../../styles/styled-components/area';

@@ -1,11 +1,15 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import i18n from 'i18n-js';
-import { useNavigation } from '@react-navigation/native';
+
+// styles
 import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
 import * as elses from '../../styles/styled-components/elses';
+
+// logics
+import useLogin from '../../logics/hooks/useLogin';
 
 // components
 import ConditionButton from '../../components/button/ConditionButton';
@@ -13,13 +17,11 @@ import NameNText from '../../components/text/NameNText';
 import useUser from '../../logics/hooks/useUser';
 
 export default function AccountDeletionScreenTwo(): React.ReactElement {
-  const navigation = useNavigation();
+  const [, logout] = useLogin();
   const user = useUser();
-  const goOut = () => {
-    navigation.reset({
-      routes: [{ name: 'Welcome' }],
-    });
-  };
+  async function goOut() {
+    await logout();
+  }
 
   return (
     <area.Container>
@@ -53,7 +55,7 @@ export default function AccountDeletionScreenTwo(): React.ReactElement {
           <ConditionButton
             height={44}
             isActive
-            onPress={goOut}
+            onPress={() => goOut()}
             content={i18n.t('완료')}
             paddingH={0}
             paddingV={14}

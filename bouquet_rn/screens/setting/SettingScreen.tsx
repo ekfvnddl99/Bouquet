@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
 
+// styles
 import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
@@ -11,6 +12,7 @@ import * as text from '../../styles/styled-components/text';
 import SettingItem from '../../components/item/SettingItem';
 import HeaderItem from '../../components/item/HeaderItem';
 
+// logics
 import useUser from '../../logics/hooks/useUser';
 import useLogin from '../../logics/hooks/useLogin';
 
@@ -18,6 +20,15 @@ export default function SettingScreen(): React.ReactElement {
   const user = useUser();
   const [, logout] = useLogin();
   const navigation = useNavigation();
+  /**
+   * 로그아웃 하는 함수
+   */
+  async function goOut() {
+    await logout();
+    navigation.reset({ index: 0, routes: [{ name: 'Welcome' }] });
+    // navigation.popToTop();
+    // navigation.replace('Welcome');
+  }
 
   return (
     <area.Container>
@@ -41,7 +52,7 @@ export default function SettingScreen(): React.ReactElement {
             content={i18n.t('캐릭터별 알림 설정')}
             onPress={() => navigation.navigate('SettingAlarm')}
           />
-          <SettingItem content={i18n.t('로그아웃')} onPress={logout} />
+          <SettingItem content={i18n.t('로그아웃')} onPress={() => goOut()} />
         </area.NoHeightArea>
       </View>
 

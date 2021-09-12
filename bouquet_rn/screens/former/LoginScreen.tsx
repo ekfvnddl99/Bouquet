@@ -61,7 +61,7 @@ export default function LoginScreen(): React.ReactElement {
    * @description 미리보기
    */
   function goTabs() {
-    navigation.navigate('Tab');
+    navigation.reset({ index: 0, routes: [{ name: 'Tab' }] });
   }
 
   /**

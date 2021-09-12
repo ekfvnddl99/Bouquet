@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, FlatList } from 'react-native';
 import i18n from 'i18n-js';
+
+// styles
 import colors from '../../../styles/colors';
 import * as area from '../../../styles/styled-components/area';
 import * as text from '../../../styles/styled-components/text';

@@ -156,7 +156,6 @@ export default function PostDetailScreen(): React.ReactElement {
             flex: 1,
             flexDirection: 'column',
             justifyContent: 'center',
-            backgroundColor: colors.warning_red,
           }}
           behavior="padding"
           enabled

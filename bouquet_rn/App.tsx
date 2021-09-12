@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import * as Font from 'expo-font';
-import * as Localization from 'expo-localization';
 import { StatusBar } from 'expo-status-bar';
 import i18n from 'i18n-js';
 import { RecoilRoot } from 'recoil';

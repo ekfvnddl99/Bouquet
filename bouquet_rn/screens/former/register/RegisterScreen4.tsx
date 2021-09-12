@@ -1,6 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
 import i18n from 'i18n-js';
+
+// styles
 import colors from '../../../styles/colors';
 import * as area from '../../../styles/styled-components/area';
 import * as text from '../../../styles/styled-components/text';
@@ -32,9 +34,8 @@ export default function RegisterScreen4({
   /**
    * '메인 탭'으로 이동하는 함수
    */
-  function goNext() {
-    navigation.popToTop();
-    navigation.navigate('Tab');
+  function goTabs() {
+    navigation.reset({ index: 0, routes: [{ name: 'Tab' }] });
   }
 
   return (
@@ -61,7 +62,7 @@ export default function RegisterScreen4({
         <area.BottomArea style={{ marginBottom: 16 }}>
           <ConditionButton
             isActive
-            onPress={() => goNext()}
+            onPress={() => goTabs()}
             content={i18n.t('시작')}
             paddingH={0}
             paddingV={14}

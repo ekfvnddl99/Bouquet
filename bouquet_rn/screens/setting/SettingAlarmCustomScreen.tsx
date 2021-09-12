@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   View,
   FlatList,
@@ -7,6 +7,8 @@ import {
   Keyboard,
 } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
+
+// styles
 import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
@@ -26,7 +28,7 @@ export default function SettingAlarmCustomScreen(): React.ReactElement {
   const user = useUser();
   const characterList = useCharacterList();
 
-  const [selectId, setSelectId] = useState(-1);
+  // navigation param
   const route = useRoute<RouteProp<ParamList, 'SettingAlarm'>>();
   const title: string = route.params?.title;
 
@@ -50,14 +52,7 @@ export default function SettingAlarmCustomScreen(): React.ReactElement {
                 data={characterList}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={(obj) => (
-                  <TouchableWithoutFeedback
-                    onPress={() => {
-                      if (selectId === obj.index) setSelectId(-1);
-                      else setSelectId(obj.index);
-                    }}
-                  >
-                    <SettingToggleItem characterInfo={obj.item} />
-                  </TouchableWithoutFeedback>
+                  <SettingToggleItem characterInfo={obj.item} />
                 )}
               />
             </ScrollView>

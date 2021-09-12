@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { TouchableWithoutFeedback, Keyboard } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 

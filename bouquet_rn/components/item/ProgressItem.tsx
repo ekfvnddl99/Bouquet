@@ -1,6 +1,8 @@
 import React, { useRef, useEffect } from 'react';
 import { View, Animated, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
+
+// styles
 import colors from '../../styles/colors';
 import * as text from '../../styles/styled-components/text';
 import * as elses from '../../styles/styled-components/elses';

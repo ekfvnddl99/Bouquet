@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, FlatList, Animated } from 'react-native';
 
-// props && logic
+// logics
 import { MyCharacter } from '../../../utils/types/UserTypes';
 import useCharacter from '../../../logics/hooks/useCharacter';
 
@@ -17,18 +17,14 @@ export default function ProfileGridScreen({
 }): React.ReactElement {
   const [, setCharacter] = useCharacter();
 
-  const press = async (id: number) => {
+  function onPress(name: string) {
     if (characterList.length > 0) {
-      let tmpCharacter = characterList[0];
-      for (let i = 0; i < characterList.length; i += 1) {
-        if (id === characterList[i].id) {
-          tmpCharacter = characterList[i];
-          break;
-        }
-      }
-      setCharacter(tmpCharacter);
+      characterList.map((obj) => {
+        if (obj.name === name) return setCharacter(obj);
+        return undefined;
+      });
     }
-  };
+  }
 
   return (
     <Animated.ScrollView
@@ -55,7 +51,7 @@ export default function ProfileGridScreen({
             ) : (
               <GridCharacterItem
                 characterInfo={obj.item}
-                onPress={() => press}
+                onPress={() => onPress}
                 isAccount={false}
               />
             )}
