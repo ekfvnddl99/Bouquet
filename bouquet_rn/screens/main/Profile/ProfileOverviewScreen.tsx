@@ -28,27 +28,38 @@ const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 export default function ProfileOverviewScreen(): React.ReactElement {
+  // 스와이프뷰인지
   const [isSwipe, setIsSwipe] = useState(true);
   const user = useUser();
   const [myCharacter] = useCharacter();
   const characterList = useCharacterList();
-  const [chaList, setChaList] = useState<MyCharacter[]>(characterList);
+  // 의미없는 객체를 하나 넣어주기 위한 내 캐릭터 배열 복사본
+  const [characterListCopy, setCharacterListCopy] =
+    useState<MyCharacter[]>(characterList);
+  // 그리드뷰에서 좋은 미관을 위해 홀수 개일 경우 형태를 갖추기 위해 의미없는 객체를 하나 넣어준다.
   useEffect(() => {
-    if (chaList.length % 2 === 1) setChaList([...chaList, noMyCharacter]);
+    if (characterListCopy.length % 2 === 1)
+      setCharacterListCopy([...characterListCopy, noMyCharacter]);
   }, []);
 
   const navigation = useNavigation();
+  // 헤더는 그리드뷰에서만 적용된다. 만약 그리드뷰 갔다가 다시 스와이프뷰로 돌아오면, 헤더 투명도는 원상복구 해야한다.
+  // 헤더 투명도를 animation으로 표현하기 때문에 animation 변수인 scroll을 0으로 세팅한다.
   useEffect(() => {
     scroll.setValue(0);
   }, [isSwipe]);
-  const goChaGeneration = () => {
-    navigation.navigate('CharacterGeneration');
-  };
-  const goSetting = () => {
-    navigation.navigate('SettingStack');
-  };
 
+  function goCharacterGeneration() {
+    navigation.navigate('CharacterGeneration');
+  }
+  function goSetting() {
+    navigation.navigate('SettingStack');
+  }
+
+  // animation에 필요한 변수들
+  // animation 컨트롤 변수
   const scroll = useRef(new Animated.Value(0)).current;
+  // 헤더 투명도
   const OpacityHeader = scroll.interpolate({
     inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
     outputRange: [0, 0.5, 1],
@@ -72,7 +83,10 @@ export default function ProfileOverviewScreen(): React.ReactElement {
             profileImg={user.profile_img}
           />
         </View>
-        <TouchableOpacity style={{ marginRight: 16 }} onPress={goChaGeneration}>
+        <TouchableOpacity
+          style={{ marginRight: 16 }}
+          onPress={() => goCharacterGeneration()}
+        >
           <Icon icon="plus" size={24} />
         </TouchableOpacity>
         {isSwipe ? (
@@ -84,7 +98,10 @@ export default function ProfileOverviewScreen(): React.ReactElement {
             <Icon icon="swipe" size={24} />
           </TouchableOpacity>
         )}
-        <TouchableOpacity style={{ marginLeft: 16 }} onPress={goSetting}>
+        <TouchableOpacity
+          style={{ marginLeft: 16 }}
+          onPress={() => goSetting()}
+        >
           <Icon icon="setting" size={24} />
         </TouchableOpacity>
       </area.RowArea>

@@ -15,6 +15,7 @@ export type WelcomeStackParam = {
   Register: undefined;
   Tab: undefined;
   CharacterGeneration: undefined;
+  SettingAccountDeletion2: undefined;
 };
 export type WelcomeProps = StackScreenProps<WelcomeStackParam, 'Welcome'>;
 
@@ -58,7 +59,6 @@ export type SettingStackParam = {
   SettingProfile: undefined;
   AccountStack: undefined;
   SettingAccountDeletion1: undefined;
-  SettingAccountDeletion2: undefined;
 };
 export type SettingProps = StackScreenProps<SettingStackParam, 'Setting'>;
 // character generation

@@ -41,11 +41,10 @@ export default function CharacterGenerationScreen4({
    * 해당 캐릭터의 상세 화면으로 이동하는 함수.
    * * '시작하기' 버튼을 누르면 실행됨.
    */
-  function goNext() {
-    loadCharacter();
-    navigation.pop();
-    navigation.navigate('Profile');
-  }
+  const goNext = async () => {
+    await loadCharacter();
+    navigation.navigate('ProfileOverview');
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -77,7 +76,7 @@ export default function CharacterGenerationScreen4({
           <ConditionButton
             height={44}
             isActive
-            onPress={() => goNext()}
+            onPress={goNext}
             content={i18n.t('시작')}
             paddingH={0}
             paddingV={14}

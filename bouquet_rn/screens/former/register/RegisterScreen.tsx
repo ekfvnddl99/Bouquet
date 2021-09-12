@@ -15,6 +15,8 @@ import * as area from '../../../styles/styled-components/area';
 // logics
 import { registerEmailAsync } from '../../../logics/server/EmailLogin';
 import useLogin from '../../../logics/hooks/useLogin';
+import uploadImageAsync from '../../../logics/server/UploadImage';
+import { editUserAsync } from '../../../logics/server/User';
 
 // components
 import ProgressItem from '../../../components/item/ProgressItem';

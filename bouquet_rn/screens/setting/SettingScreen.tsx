@@ -26,8 +26,6 @@ export default function SettingScreen(): React.ReactElement {
   async function goOut() {
     await logout();
     navigation.reset({ index: 0, routes: [{ name: 'Welcome' }] });
-    // navigation.popToTop();
-    // navigation.replace('Welcome');
   }
 
   return (

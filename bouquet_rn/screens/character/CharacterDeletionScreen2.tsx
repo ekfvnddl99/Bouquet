@@ -32,7 +32,7 @@ export default function CharacterDeletionScreen2({
 }: CharacterDeletionScreen2Props): React.ReactElement {
   // 돌아가기 버튼 누르면 실행되는 함수. 프로필 탭으로 이동한다.
   function goProfile() {
-    navigation.replace('Profile');
+    navigation.reset({ index: 0, routes: [{ name: 'Profile' }] });
   }
 
   return (

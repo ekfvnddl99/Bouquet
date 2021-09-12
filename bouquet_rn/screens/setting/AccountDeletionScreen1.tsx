@@ -23,8 +23,13 @@ export default function AccountDeletionScreenOne(): React.ReactElement {
 
   const navigation = useNavigation();
   const deleteNgoScreenTwo = useCallback(async () => {
-    await deleteUserAsync();
-    navigation.navigate('SettingAccountDeletionTwo');
+    const serverResult = await deleteUserAsync();
+    if (serverResult.isSuccess) {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'SettingAccountDeletion2' }],
+      });
+    } else alert(serverResult.result.errorMsg);
   }, [deleteUserAsync]);
 
   return (

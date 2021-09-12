@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import i18n from 'i18n-js';
+import { useNavigation } from '@react-navigation/native';
 
 // styles
 import colors from '../../styles/colors';
@@ -19,8 +20,11 @@ import useUser from '../../logics/hooks/useUser';
 export default function AccountDeletionScreenTwo(): React.ReactElement {
   const [, logout] = useLogin();
   const user = useUser();
+  const navigation = useNavigation();
+
   async function goOut() {
     await logout();
+    navigation.reset({ index: 0, routes: [{ name: 'Welcome' }] });
   }
 
   return (

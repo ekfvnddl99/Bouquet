@@ -8,6 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 import i18n from 'i18n-js';
+import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 
 // styles
@@ -30,13 +31,11 @@ import uploadImageAsync from '../../logics/server/UploadImage';
 import ConditionText from '../../components/text/ConditionText';
 import ConditionButton from '../../components/button/ConditionButton';
 import ConditionTextInput from '../../components/input/ConditionTextInput';
-import { SettingProps } from '../../utils/types/NavigationTypes';
 import HeaderItem from '../../components/item/HeaderItem';
 
-export default function SettingProfileScreen({
-  navigation,
-}: SettingProps): React.ReactElement {
+export default function SettingProfileScreen(): React.ReactElement {
   const user = useUser();
+  const navigation = useNavigation();
   const [name, setName] = useState(user.name);
   const [profileImg, setProfileImg] = useState(user.profile_img);
 
@@ -121,8 +120,9 @@ export default function SettingProfileScreen({
 
   const changeNgoProfile = async () => {
     const result = await editUserAsync(name, profileImg);
-    if (result.isSuccess) navigation.popToTop();
-    else alert(result.result.errorMsg);
+    if (result.isSuccess) {
+      navigation.reset({ index: 0, routes: [{ name: 'Profile' }] });
+    } else alert(result.result.errorMsg);
   };
 
   const goDeletion = () => {

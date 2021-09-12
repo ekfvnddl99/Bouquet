@@ -155,7 +155,7 @@ export default function CharacterGenerationScreen3({
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ flexGrow: 1 }}
-          keyboardShouldPersistTaps="always"
+          keyboardShouldPersistTaps="handled"
         >
           <ConditionTextInput
             height={44}

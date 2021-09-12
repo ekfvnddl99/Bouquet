@@ -75,7 +75,7 @@ export async function editUserAsync(
   type EditUserAsyncOutput = null;
 
   const tmpResult = await APIs.patchAsync<EditUserAsyncOutput>(
-    '/user/',
+    '/user',
     JSON.stringify({ profile_img: profileImg, name }),
     true,
   );
@@ -123,7 +123,7 @@ export async function deleteUserAsync(): APIs.ServerResult<null> {
   type DeleteUserAsyncOutput = null;
 
   const tmpResult = await APIs.deleteAsync<DeleteUserAsyncOutput>(
-    'user/',
+    '/user',
     true,
   );
 

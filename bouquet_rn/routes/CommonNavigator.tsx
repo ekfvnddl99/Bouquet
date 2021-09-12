@@ -17,7 +17,6 @@ import SettingProfileScreen from '../screens/setting/SettingProfileScreen';
 import SettingAlarmScreen from '../screens/setting/SettingAlarmScreen';
 import SettingAlarmCustomScreen from '../screens/setting/SettingAlarmCustomScreen';
 import AccountDeletionScreen1 from '../screens/setting/AccountDeletionScreen1';
-import AccountDeletionScreen2 from '../screens/setting/AccountDeletionScreen2';
 
 // writing - fab
 const WritingStack = createStackNavigator<Types.WritingStackParam>();
@@ -122,11 +121,6 @@ export function SettingStackNavigator(): React.ReactElement {
       <SettingStack.Screen
         name="SettingAccountDeletion1"
         component={AccountDeletionScreen1}
-        options={{ headerShown: false }}
-      />
-      <SettingStack.Screen
-        name="SettingAccountDeletion2"
-        component={AccountDeletionScreen2}
         options={{ headerShown: false }}
       />
     </SettingStack.Navigator>
