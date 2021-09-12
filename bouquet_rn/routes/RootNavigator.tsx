@@ -17,10 +17,7 @@ export default function AppStack(): React.ReactElement {
   const [login] = useLogin();
 
   useEffect(() => {
-    async function goLogin() {
-      await login();
-    }
-    goLogin();
+    login();
     setTimeout(() => {
       setIsSplash(false);
     }, 2000);
