@@ -50,7 +50,7 @@ export default function SelectTemplateItem({
         <text.Subtitle3 textColor={colors.black}>{templateName}</text.Subtitle3>
         <View style={{ flex: 1 }} />
         <ConditionButton
-          isActive={selectId === thisId}
+          isActive={selectId !== thisId}
           onPress={() => [setSelectId(thisId), goBack()]}
           height={22}
           paddingH={12}

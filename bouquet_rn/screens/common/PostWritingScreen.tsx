@@ -130,18 +130,14 @@ export default function PostWritingScreen(): React.ReactElement {
         name={myCharacter.name}
         profileImg={myCharacter.profile_img}
       />
-
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <KeyboardAvoidingView
-          style={{ flex: 1, justifyContent: 'center' }}
-          behavior="height"
-        >
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ flexGrow: 1 }}
-            keyboardShouldPersistTaps="handled"
-          >
-            <area.ContainerBlank30>
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior="height">
+          <area.ContainerBlank30>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{ flexGrow: 1 }}
+              keyboardShouldPersistTaps="handled"
+            >
               <area.RowArea>
                 <View style={{ flex: 1 }}>
                   <ProfileButton
@@ -154,7 +150,7 @@ export default function PostWritingScreen(): React.ReactElement {
                 </View>
                 {select !== -1 ? (
                   <LineButton
-                    onPress={() => goSelect}
+                    onPress={() => goSelect()}
                     content={I18n.t('템플릿 변경')}
                     borderColor={colors.black}
                   />
@@ -180,14 +176,15 @@ export default function PostWritingScreen(): React.ReactElement {
               <View style={{ marginTop: 40 }} />
               <ConditionButton
                 isActive
-                onPress={() => goUpload}
+                onPress={() => goUpload()}
                 content={I18n.t('게시글 올리기')}
                 paddingH={0}
                 paddingV={14}
                 height={45}
               />
-            </area.ContainerBlank30>
-          </ScrollView>
+              <View style={{ marginTop: 40 }} />
+            </ScrollView>
+          </area.ContainerBlank30>
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     </area.Container>

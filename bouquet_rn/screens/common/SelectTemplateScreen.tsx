@@ -1,7 +1,8 @@
-import React, { useRef } from 'react';
-import { FlatList, View, Animated } from 'react-native';
+import React, { useRef, useEffect } from 'react';
+import { FlatList, View, Animated, BackHandler } from 'react-native';
 import styled from 'styled-components/native';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
+import { useNavigation } from '@react-navigation/native';
 
 // styles
 import colors from '../../styles/colors';
@@ -30,10 +31,22 @@ const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 export default function SelectTemplateScreen(): React.ReactElement {
   const [myCharacter] = useCharacter();
+  const navigation = useNavigation();
 
   // 내가 고른 템플릿 아이디와, 그 아이디의 set 함수
   const select = useRecoilValue(selectTemplate);
   const setSelect = useSetRecoilState(selectTemplate);
+
+  // 백핸들러 - for Android
+  const backAction = () => {
+    navigation.goBack();
+    return true;
+  };
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', backAction);
+    return () =>
+      BackHandler.removeEventListener('hardwareBackPress', backAction);
+  });
 
   /**
    * scroll - animation 변수
