@@ -12,6 +12,7 @@ import TabNavigator from './TabNavigator';
 import CharacterGenerationScreen from '../screens/character/CharacterGenerationScreen';
 import AccountDeletionScreen2 from '../screens/setting/AccountDeletionScreen2';
 
+// CharacterGeneration과 AccountDeletion2는 바텀 탭이 필요없는 스크린입니다.
 const WelcomeStack = createStackNavigator<Types.WelcomeStackParam>();
 export default function WelcomeStackNavigator(): React.ReactElement {
   const user = useUser();

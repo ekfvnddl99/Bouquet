@@ -10,6 +10,7 @@ import {
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
+import { useSetRecoilState } from 'recoil';
 
 // styles
 import colors from '../../styles/colors';
@@ -32,12 +33,14 @@ import ConditionText from '../../components/text/ConditionText';
 import ConditionButton from '../../components/button/ConditionButton';
 import ConditionTextInput from '../../components/input/ConditionTextInput';
 import HeaderItem from '../../components/item/HeaderItem';
+import { userState } from '../../logics/atoms';
 
 export default function SettingProfileScreen(): React.ReactElement {
   const user = useUser();
   const navigation = useNavigation();
   const [name, setName] = useState(user.name);
   const [profileImg, setProfileImg] = useState(user.profile_img);
+  const setNewAccount = useSetRecoilState(userState);
 
   // 모든 조건이 만족됐는지 확인하기 위한 state
   const [IsOK, setIsOK] = useState(false);
@@ -121,6 +124,7 @@ export default function SettingProfileScreen(): React.ReactElement {
   const changeNgoProfile = async () => {
     const result = await editUserAsync(name, profileImg);
     if (result.isSuccess) {
+      setNewAccount({ ...user, name, profile_img: profileImg });
       navigation.reset({ index: 0, routes: [{ name: 'Profile' }] });
     } else alert(result.result.errorMsg);
   };

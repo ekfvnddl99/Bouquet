@@ -33,7 +33,6 @@ import BackButton from '../../components/button/BackButton';
 import ConditionButton from '../../components/button/ConditionButton';
 import PrimaryTextButton from '../../components/button/PrimaryTextButton';
 import WarningText from '../../components/text/WarningText';
-import useUser from '../../logics/hooks/useUser';
 
 /**
  * '로그인' 화면
@@ -45,7 +44,6 @@ export default function LoginScreen(): React.ReactElement {
   // safearea 밖의 공간
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
-  const user = useUser();
   const [login] = useLogin();
 
   // TextInput으로 받는 정보를 저장하는 state
@@ -79,7 +77,6 @@ export default function LoginScreen(): React.ReactElement {
     if (serverResult.isSuccess) {
       await SecureStore.setItemAsync('auth', serverResult.result);
       await login();
-      setErr('');
       goTabs();
     } else {
       setErr(serverResult.result.errorMsg);

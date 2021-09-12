@@ -137,7 +137,7 @@ export async function getPostAsync(
 
   const tmpResult = await APIs.getAsync<GetPostAsyncOutput>(
     `/post/${postId}`,
-    true,
+    false,
     { 'character-id': characterId },
   );
 
