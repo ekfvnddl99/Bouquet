@@ -18,9 +18,10 @@ export default function AppStack(): React.ReactElement {
 
   useEffect(() => {
     login();
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       setIsSplash(false);
     }, 2000);
+    return () => clearTimeout(timer);
   }, []);
 
   // // 2
