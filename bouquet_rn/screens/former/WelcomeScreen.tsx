@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import i18n from 'i18n-js';
@@ -14,6 +14,7 @@ import Svg from '../../assets/Icon';
 
 // logics
 import GoogleSignInAsync from '../../logics/server/GoogleLogin';
+import useLogin from '../../logics/hooks/useLogin';
 
 // components
 import LoginButton from '../../components/button/LoginButton';
@@ -28,6 +29,11 @@ export default function WelcomeScreen(): React.ReactElement {
   // safearea 밖의 공간
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
+
+  const [login] = useLogin();
+  useEffect(() => {
+    login();
+  }, []);
 
   /**
    * tab이 있는 main으로 이동

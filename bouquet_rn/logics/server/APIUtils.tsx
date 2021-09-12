@@ -162,7 +162,14 @@ export async function getAsync<Result>(
       method: 'GET',
       headers: header,
     });
-    const result = await response.json();
+
+    let result: any;
+    try {
+      result = await response.json();
+    } catch {
+      result = null;
+    }
+
     return [result, response];
   } catch (err) {
     // fetch가 실패한 경우(= 서버 연결에 실패한 경우) ServerErrorOutput 타입의 객체 반환
@@ -222,7 +229,13 @@ export async function postAsync<Result>(
       headers: header,
       body,
     });
-    const result = await response.json();
+
+    let result: any;
+    try {
+      result = await response.json();
+    } catch {
+      result = null;
+    }
 
     return [result, response];
   } catch (err) {
@@ -280,7 +293,13 @@ export async function putAsync<Result>(
       headers: header,
       body,
     });
-    const result = await response.json();
+
+    let result: any;
+    try {
+      result = await response.json();
+    } catch {
+      result = null;
+    }
 
     return [result, response];
   } catch (err) {
@@ -340,7 +359,13 @@ export async function deleteAsync<Result>(
       method: 'DELETE',
       headers: header,
     });
-    const result = await response.json();
+
+    let result: any;
+    try {
+      result = await response.json();
+    } catch {
+      result = null;
+    }
 
     return [result, response];
   } catch (err) {
@@ -403,7 +428,13 @@ export async function patchAsync<Result>(
       headers: header,
       body,
     });
-    const result = await response.json();
+
+    let result: any;
+    try {
+      result = await response.json();
+    } catch {
+      result = null;
+    }
 
     return [result, response];
   } catch (err) {

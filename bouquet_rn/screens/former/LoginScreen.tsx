@@ -80,7 +80,7 @@ export default function LoginScreen(): React.ReactElement {
       await SecureStore.setItemAsync('auth', serverResult.result);
       await login();
       setErr('');
-      if (user.name !== '') goTabs();
+      goTabs();
     } else {
       setErr(serverResult.result.errorMsg);
     }

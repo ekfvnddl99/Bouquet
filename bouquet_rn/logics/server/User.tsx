@@ -12,7 +12,7 @@ export async function getUserAsync(): APIs.ServerResult<User> {
   // 서버 응답 타입 정의
   type GetUserAsyncOutput = User;
 
-  const tmpResult = await APIs.getAsync<GetUserAsyncOutput>('/user/', true);
+  const tmpResult = await APIs.getAsync<GetUserAsyncOutput>('/user', true);
 
   // 사전 처리된 에러는 바로 반환
   if (APIs.isServerErrorOutput(tmpResult)) {
