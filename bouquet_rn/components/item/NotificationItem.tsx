@@ -52,16 +52,17 @@ export default function NotificationItem({
   });
   const panResponder = useRef(
     PanResponder.create({
-      onMoveShouldSetPanResponderCapture: () => true,
-      onPanResponderMove: Animated.event([null, { dx: drag }]),
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        // @ts-ignore
+        drag.setOffset(TranslateX.__getValue());
+      },
+      onPanResponderMove: Animated.event([null, { dx: drag }], {
+        useNativeDriver: false,
+      }),
       onPanResponderRelease: (e, { dx }) => {
-        if (dx > 0) {
-          // spring처럼 통통 튀는 animation
-          Animated.spring(drag, {
-            toValue: 0,
-            useNativeDriver: false,
-          }).start();
-        }
+        // @ts-ignore
+        drag.setValue(dx < SWIPE / 2 ? -SWIPE : +SWIPE);
       },
     }),
   ).current;

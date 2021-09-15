@@ -1,10 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import {
-  View,
-  Animated,
-  FlatList,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import { View, Animated, FlatList } from 'react-native';
 import i18n from 'i18n-js';
 import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
@@ -99,22 +94,23 @@ export default function NotificationScreen(): React.ReactElement {
    */
   function setNotification(notificationNumber: number) {
     if (notificationNumber) {
-      <FlatList
-        data={Data}
-        keyExtractor={(item, idx) => idx.toString()}
-        renderItem={(obj) => (
-          <TouchableWithoutFeedback>
+      return (
+        <FlatList
+          data={Data}
+          keyExtractor={(item, idx) => idx.toString()}
+          renderItem={(obj) => (
             <NotificationItem name={obj.item.a} content={obj.item.b} />
-          </TouchableWithoutFeedback>
-        )}
-      />;
-    } else {
+          )}
+        />
+      );
+    }
+    return (
       <View style={{ alignItems: 'center' }}>
         <text.Caption textColor={colors.gray6}>
           {i18n.t('이제 확인할 알림이 없어요')}
         </text.Caption>
-      </View>;
-    }
+      </View>
+    );
   }
 
   return (
