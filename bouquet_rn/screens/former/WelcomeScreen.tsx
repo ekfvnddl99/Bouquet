@@ -14,6 +14,7 @@ import Svg from '../../assets/Icon';
 
 // logics
 import GoogleSignInAsync from '../../logics/server/GoogleLogin';
+import useLogin from '../../logics/hooks/useLogin';
 
 // components
 import LoginButton from '../../components/button/LoginButton';
@@ -28,12 +29,14 @@ export default function WelcomeScreen(): React.ReactElement {
   // safearea 밖의 공간
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
+  const [, logout] = useLogin();
 
   /**
    * tab이 있는 main으로 이동
    * @description 미리보기 버튼 눌렀을 때
    */
-  function goTabs() {
+  async function goTabs() {
+    await logout();
     navigation.navigate('Tab');
   }
 
