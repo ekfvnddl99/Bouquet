@@ -4,7 +4,6 @@ import {
   Animated,
   FlatList,
   TouchableWithoutFeedback,
-  TouchableOpacity,
 } from 'react-native';
 import i18n from 'i18n-js';
 import styled from 'styled-components/native';
@@ -186,12 +185,10 @@ export default function NotificationScreen(): React.ReactElement {
       {isLogined ? (
         <FloatingButton />
       ) : (
-        <TouchableOpacity
-          style={{ flex: 1, justifyContent: 'flex-end' }}
-          onPress={() => navigation.navigate('CharacterGeneration')}
-        >
+        <>
+          <View style={{ flex: 1 }} />
           <NotLoginPrimaryButton />
-        </TouchableOpacity>
+        </>
       )}
     </area.Container>
   );

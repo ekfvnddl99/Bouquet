@@ -171,9 +171,10 @@ export default function HomeScreen(): React.ReactElement {
       {isLogined ? (
         <FloatingButton />
       ) : (
-        <View style={{ justifyContent: 'flex-end' }}>
+        <>
+          <View style={{ flex: 1 }} />
           <NotLoginPrimaryButton />
-        </View>
+        </>
       )}
     </area.Container>
   );
