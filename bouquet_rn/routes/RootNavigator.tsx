@@ -14,11 +14,13 @@ export default function AppStack(): React.ReactElement {
   const [login] = useLogin();
 
   useEffect(() => {
-    login();
-    const timer = setTimeout(() => {
-      setIsSplash(false);
-    }, 2000);
-    return () => clearTimeout(timer);
+    async function callLogin() {
+      await login();
+      setTimeout(() => {
+        setIsSplash(false);
+      }, 2000);
+    }
+    callLogin();
   }, []);
 
   return (

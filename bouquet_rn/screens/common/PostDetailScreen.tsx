@@ -150,24 +150,24 @@ export default function PostDetailScreen(): React.ReactElement {
         profileImg={myCharacter.profile_img}
       />
 
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <KeyboardAvoidingView
-          style={{
-            flex: 1,
-            flexDirection: 'column',
-            justifyContent: 'center',
-          }}
-          behavior="padding"
-          enabled
-        >
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior="position"
+        contentContainerStyle={{
+          flex: 1,
+          justifyContent: 'center',
+          flexDirection: 'column',
+        }}
+        enabled
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <Animated.ScrollView
             contentContainerStyle={{
               marginHorizontal: 30,
               flexGrow: 1,
-              flexDirection: 'column',
             }}
             showsVerticalScrollIndicator={false}
-            keyboardShouldPersistTaps="handled"
+            keyboardShouldPersistTaps="always"
             onScroll={Animated.event(
               [{ nativeEvent: { contentOffset: { y: scroll } } }],
               { useNativeDriver: true },
@@ -268,19 +268,19 @@ export default function PostDetailScreen(): React.ReactElement {
               )}
             />
           </Animated.ScrollView>
-          {user.name !== '' ? (
-            <CommentTextInput
-              textValue={comment}
-              onChangeText={setComment}
-              onPress={() => onUpload()}
-              isChild={parentComment !== undefined}
-              targetComment={parentComment}
-              setTargetComment={setParentComment}
-              setTargetCommentId={setParentCommentById}
-            />
-          ) : null}
-        </KeyboardAvoidingView>
-      </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+        {user.name !== '' ? (
+          <CommentTextInput
+            textValue={comment}
+            onChangeText={setComment}
+            onPress={() => onUpload()}
+            isChild={parentComment !== undefined}
+            targetComment={parentComment}
+            setTargetComment={setParentComment}
+            setTargetCommentId={setParentCommentById}
+          />
+        ) : null}
+      </KeyboardAvoidingView>
     </area.Container>
   );
 }

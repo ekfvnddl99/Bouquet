@@ -1,23 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import * as Font from 'expo-font';
+import React from 'react';
+import { useFonts } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
 import i18n from 'i18n-js';
 import { RecoilRoot } from 'recoil';
 
 import AppStack from './routes/RootNavigator';
 import SplashScreen from './screens/former/SplashScreen';
-
-async function getFonts() {
-  const font = await Font.loadAsync({
-    bold: require('./assets/fonts/Pretendard-Bold.otf'),
-    light: require('./assets/fonts/Pretendard-Light.otf'),
-    regular: require('./assets/fonts/Pretendard-Regular.otf'),
-    semibold: require('./assets/fonts/Pretendard-SemiBold.otf'),
-    Bbold: require('./assets/fonts/NanumBarunpenB.otf'),
-    Bregular: require('./assets/fonts/NanumBarunpenR.otf'),
-  });
-  return font;
-}
 
 const translationGetters = {
   en: require('./utils/language/en.json'),
@@ -32,21 +20,25 @@ const setI18nConfig = () => {
 };
 
 export default function App(): React.ReactElement {
-  const [font, setFont] = useState(0);
+  const [loaded] = useFonts({
+    bold: require('./assets/fonts/Pretendard-Bold.otf'),
+    light: require('./assets/fonts/Pretendard-Light.otf'),
+    regular: require('./assets/fonts/Pretendard-Regular.otf'),
+    semibold: require('./assets/fonts/Pretendard-SemiBold.otf'),
+    Bbold: require('./assets/fonts/NanumBarunpenB.otf'),
+    Bregular: require('./assets/fonts/NanumBarunpenR.otf'),
+  });
 
-  useEffect(() => {
-    getFonts();
-    setFont(1);
-  }, []);
+  if (!loaded) {
+    return null;
+  }
 
   setI18nConfig();
-  if (font) {
-    return (
-      <RecoilRoot>
-        <StatusBar backgroundColor="transparent" />
-        <AppStack />
-      </RecoilRoot>
-    );
-  }
+  return (
+    <RecoilRoot>
+      <StatusBar backgroundColor="transparent" />
+      <AppStack />
+    </RecoilRoot>
+  );
   return <SplashScreen />;
 }

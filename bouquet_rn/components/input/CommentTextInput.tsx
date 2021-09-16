@@ -96,15 +96,14 @@ export default function CommentTextInput({
 const TargetCommentArea = styled.View`
   background-color: ${colors.gray1};
   height: 32;
-  justify-content: center;
   padding-horizontal: 15;
   padding-vertical: 7;
   align-items: center;
   flex-direction: row;
+  justify-content: center;
 `;
 const CommentInputArea = styled.View`
   align-items: flex-end;
-  background-color: ${colors.white};
   flex-direction: row;
   justify-content: center;
   padding-horizontal: 18;

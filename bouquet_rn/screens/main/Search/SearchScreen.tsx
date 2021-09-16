@@ -148,44 +148,44 @@ export default function SearchScreen(): React.ReactElement {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <area.Container>
-        <AnimationHeader
-          pointerEvents="none"
-          style={[{}, { opacity: OpacityHeader }]}
-        />
+    <area.Container>
+      <AnimationHeader
+        pointerEvents="none"
+        style={[{}, { opacity: OpacityHeader }]}
+      />
 
-        <View style={{ marginTop: 30, marginHorizontal: 30 }}>
-          <SearchArea
-            style={[
-              {},
-              searchColor,
-              { transform: [{ translateY: TranslateInput }] },
-            ]}
-          >
-            <View style={{ marginLeft: 18, marginRight: 10 }}>
-              {isFocus || searchInput.length > 0 ? (
-                <Svg icon="searchViewFocus" size={15} />
-              ) : (
-                <Svg icon="searchView" size={15} />
-              )}
-            </View>
-            <View style={{ flex: 1 }}>
-              <TextInput
-                placeholder={i18n.t('무엇이 궁금한가요')}
-                onFocus={() => setIsFocus(true)}
-                onBlur={() => setIsFocus(false)}
-                onChangeText={(textInput: string) => setSearchResult(textInput)}
-                value={searchInput}
-              />
-            </View>
-          </SearchArea>
-        </View>
+      <View style={{ marginTop: 30, marginHorizontal: 30 }}>
+        <SearchArea
+          style={[
+            {},
+            searchColor,
+            { transform: [{ translateY: TranslateInput }] },
+          ]}
+        >
+          <View style={{ marginLeft: 18, marginRight: 10 }}>
+            {isFocus || searchInput.length > 0 ? (
+              <Svg icon="searchViewFocus" size={15} />
+            ) : (
+              <Svg icon="searchView" size={15} />
+            )}
+          </View>
+          <View style={{ flex: 1 }}>
+            <TextInput
+              placeholder={i18n.t('무엇이 궁금한가요')}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              onChangeText={(textInput: string) => setSearchResult(textInput)}
+              value={searchInput}
+            />
+          </View>
+        </SearchArea>
+      </View>
 
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Animated.ScrollView
           style={{ marginTop: HEADER_MIN_HEIGHT - 30, flex: 1 }}
           showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps
+          keyboardShouldPersistTaps="handled"
           onScroll={Animated.event(
             [{ nativeEvent: { contentOffset: { y: scroll } } }],
             { useNativeDriver: false },
@@ -259,10 +259,10 @@ export default function SearchScreen(): React.ReactElement {
             </area.ContainerBlank30>
           ) : null}
         </Animated.ScrollView>
+      </TouchableWithoutFeedback>
 
-        {myCharacter.id === -1 ? null : <FloatingButton />}
-      </area.Container>
-    </TouchableWithoutFeedback>
+      {myCharacter.id === -1 ? null : <FloatingButton />}
+    </area.Container>
   );
 }
 
