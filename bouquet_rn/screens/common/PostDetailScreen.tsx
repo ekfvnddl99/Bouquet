@@ -1,278 +1,297 @@
-import React, {useRef, useState, useEffect, useMemo, useCallback} from 'react';
+import React, { useRef, useState, useMemo, useCallback } from 'react';
 import {
-    KeyboardAvoidingView,
-    FlatList,
-    View,
-    Animated,
-    TouchableOpacity,
-    Platform,
-    StyleSheet,
-    Text,
-    Dimensions,
-    ScrollView,
-    TouchableWithoutFeedback,
-    KeyboardEvent,
+  KeyboardAvoidingView,
+  FlatList,
+  View,
+  Animated,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
   Keyboard,
-  SafeAreaView
 } from 'react-native';
 import i18n from 'i18n-js';
-import {colors} from '../../styles/colors';
+import styled from 'styled-components/native';
+import { useRecoilValue } from 'recoil';
+
+// styles
+import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
-import * as button from '../../styles/styled-components/button';
-import * as elses from '../../styles/styled-components/elses';
 
-// props & logic
-import { StatusBarHeight } from '../logics/StatusbarHeight';
-import { userState, viewPostState } from '../logics/atoms';
-import { useRecoilValue, useRecoilState } from 'recoil';
-import * as Post from '../logics/Post';
-import useCharacter from '../logics/useCharacter';
+// logics
+import { StatusBarHeight } from '../../logics/non-server/StatusbarHeight';
+import { userState } from '../../logics/atoms';
+import { uploadCommentAsync } from '../../logics/server/Post';
+import useViewPost from '../../logics/hooks/useViewPost';
+import useCharacter from '../../logics/hooks/useCharacter';
+
+// utils
+import { PostComment, PostCommentRequest } from '../../utils/types/PostTypes';
 
 // components
-import ProfileButton from '../components/ProfileButton';
-import BackButton from '../components/BackButton';
-import SunButton from '../components/SunButton';
-import CommentItem from '../components/CommentItem';
-import CommentInputBar from '../components/CommentInputBar';
-import CommentInputComment from '../components/CommentInputComment';
-import LineButton from '../components/LineButton';
-import ConditionButton from '../components/ConditionButton';
-import ProfileItem from '../components/ProfileItem';
+import ProfileButton from '../../components/button/ProfileButton';
+import HeaderItem from '../../components/item/HeaderItem';
+import SunButton from '../../components/button/SunButton';
+import CommentItem from '../../components/item/CommentItem';
+import CommentTextInput from '../../components/input/CommentTextInput';
+import LineButton from '../../components/button/LineButton';
 
+// templates
 import TextTemplate from '../template/TextTemplate';
 import ImageTemplate from '../template/ImageTemplate';
 import AlbumTemplate from '../template/AlbumTemplate';
 import DiaryTemplate from '../template/DiaryTemplate';
 import ListTemplate from '../template/ListTemplate';
 
-const dummy_c : Post.Comment[]=[
-    {name: "오란지",
-  createdAt: "120",
-  updatedAt: "3",
-  profileImg: "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
-  id: 2,
-  comment: "뭐야 두리안씨 냄새나염",
-  liked: false,
-  parent: 1,}, 
-  {name: "두리안",
-  createdAt: "60",
-  updatedAt: "3",
-  profileImg: "https://img3.daumcdn.net/thumb/R658x0.q70/?fname=https://t1.daumcdn.net/news/202105/21/dailylife/20210521214351768duii.jpg",
-  id: 3,
-  comment: "무엄하다. 감히 A+ 주제에 과일들이 뽑은 최고의 향을 가진 나에게 냄새라니.",
-  liked: false,
-  parent: 1,},
-  {name: "오란지",
-  createdAt: "60",
-  updatedAt: "3",
-  profileImg: "https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg",
-  id: 4,
-  comment: "안쓰러워서 못봐주겠어용ㅠㅠ",
-  liked: false,
-  parent: 1,}
-  ]
-  const dummy_a : Post.Comment[]=[{
-    name: "두리안",
-    createdAt: "120",
-    "updatedAt": "3",
-    "profileImg": "https://img3.daumcdn.net/thumb/R658x0.q70/?fname=https://t1.daumcdn.net/news/202105/21/dailylife/20210521214351768duii.jpg",
-    "id": 1,
-    "comment": "나약한 녀석. A+ 밖에 안되다니. 난 S급이라서 우습고 유치하군.",
-    "liked": false,
-    "parent": 0,
-    children:[],
-  },
-  {name: "사과",
-  createdAt: "60",
-  updatedAt: "3",
-  profileImg: "https://lh3.googleusercontent.com/proxy/23GhlGE_ZlNQvAiMj-2kBTOxNlmVDx4y7cXRCcSYW3UiFm1DqbaQ5UW-BOFvLCLohq0v6uqQ-6og6PqWuHYXwyeG3v0p2U40gZa6665zYoMeB5Mf5dnDdMcxGFQvuPXRENvZ",
-  id: 5,
-  comment: "우와 둘이 싸운다",
-  liked: false,
-  parent: 0,},
-  {name: "블루베리",
-  createdAt: "45",
-  updatedAt: "3",
-  profileImg: "https://imagescdn.gettyimagesbank.com/500/19/328/458/0/1161802142.jpg",
-  id: 6,
-  comment: "이기는 편 우리 편~~",
-  liked: false,
-  parent: 0,},
-  {name: "자몽",
-  createdAt: "39",
-  updatedAt: "3",
-  profileImg: "https://t1.daumcdn.net/cfile/blog/99DE2C4F5BC8432617",
-  id: 7,
-  comment: "두리안이랑 둘이안 싸우면 안돼?",
-  liked: false,
-  parent: 0,}]
-
-  
 const HEADER_MAX_HEIGHT = 90;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
-export default function PostDetailScreen(){
-    const[secComm, setSecComm]=useState<Post.Comment[]>([]);
+/**
+ * TODO 댓글 삭제
+ * TODO 햇님 누르기
+ * @returns
+ */
+export default function PostDetailScreen(): React.ReactElement {
+  const user = useRecoilValue(userState);
+  const [myCharacter] = useCharacter();
+  const [viewPost, setViewPost] = useViewPost();
 
-    const user = useRecoilValue(userState);
-    const [character, setCharacter] = useCharacter();
-    const[selectId, setSelectId]=useState(-1);
-    const[clickedLowerId, setClickedLowerId]=useState<number[]>([]);
-    const[click, setClick]=useState(1);
-    const[comment, setComment]=useState('');
-    const[parentComm, setParentComm]=useState<Post.Comment>();
+  // 내가 고른 댓글의 아이디
+  const [selectId, setSelectId] = useState(-1);
+  // 대댓글이 보이는 댓글의 아이디가 들어가는 배열
+  const [openingCommentArray, setOpeningCommentArray] = useState<number[]>([]);
+  // 내가 쓴 댓글 값 state
+  const [comment, setComment] = useState('');
+  // 아래 2개를 그냥 1개의 PostComment 변수로 설정하면 되지 않냐고 생각할 수 있습니다.
+  // 따로 설정한 이유는, 대댓글A에 새 대댓글을 달 때 새 대댓글의 parent를 대댓글A를 담는 댓글의 아이디로 설정해야 합니다.
+  // PostComment에는 parent id만 있으니, id로만 set을 해줘야 하는데 대댓글을 달 때 input 창 위에 대댓글A 내용이 뜹니다.
+  // id도 필요하고, 대댓글A의 내용도 필요하니 불가피하게 따로 두게 되었습니다.
+  // 내가 쓴 댓글이 어떤 것의 대댓글일 때, 어떤 것을 맡고 있습니다.
+  const [parentComment, setParentComment] = useState<string>();
+  // 댓글 혹은 대댓글에 댓글을 달 때, 서버에 입력할 parent id 값을 저장하는 변수
+  const [parentCommentId, setParentCommentById] = useState(0);
 
-    const [viewPost, setViewPost] = useRecoilState(viewPostState);
+  /**
+   * 내가 쓴 댓글 업로드하는 함수
+   * @param comment 내가 쓴 댓글
+   */
+  async function onUpload() {
+    const newComment: PostCommentRequest = {
+      post_id: viewPost?.id,
+      character_id: myCharacter.id,
+      comment,
+      parent: parentCommentId,
+    };
+    const serverResult = await uploadCommentAsync(newComment);
+    if (serverResult.isSuccess) {
+      setComment('');
+      setSelectId(-1);
+      setParentComment(undefined);
+      setParentCommentById(-1);
+      // 새로고침을 위하여
+      setViewPost(viewPost.id);
+    } else alert(serverResult.result.errorMsg);
+  }
 
-    const onUpload=(newComm:string)=>{
-      let one : Post.Comment= {comment : newComm, createdAt:"1", id:5, liked:false, name:"두리안",parent:1, profileImg : "https://img3.daumcdn.net/thumb/R658x0.q70/?fname=https://t1.daumcdn.net/news/202105/21/dailylife/20210521214351768duii.jpg", updatedAt:"2021-08-19T17:39:41"}
-      // setSecComm([...secComm, one]);
-      dummy_c.push(one)
-      setComment('')
-      console.log(secComm)
+  // 이 게시글이 나의 게시글인지
+  const postOwner = useMemo(
+    () => myCharacter.name === viewPost?.character_info.name,
+    [myCharacter, viewPost],
+  );
+
+  // scroll - animation 변수
+  // OpacityHeader - 헤더 투명도
+  const scroll = useRef(new Animated.Value(0)).current;
+  const OpacityHeader = scroll.interpolate({
+    inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+    outputRange: [0, 0.5, 1],
+    extrapolate: 'clamp',
+  });
+
+  // 해당 게시글의 템플릿 내용을 얻어온다.
+  const getTemplate = useCallback(() => {
+    if (viewPost?.template) {
+      switch (viewPost?.template.type) {
+        case 'Image':
+          return <ImageTemplate mode="detail" post={viewPost.template} />;
+        case 'Diary':
+          return <DiaryTemplate mode="detail" post={viewPost.template} />;
+        case 'Album':
+          return <AlbumTemplate mode="detail" post={viewPost.template} />;
+        case 'List':
+          return <ListTemplate mode="detail" post={viewPost.template} />;
+        default:
+          return null;
+      }
     }
+    return true;
+  }, [viewPost]);
+  const template = useMemo(() => getTemplate(), [getTemplate]);
 
-    const getIsPostOwner = useCallback(() => {
-      return character.name === viewPost.characterName;
-    }, [character, viewPost]);
-    const postOwner = useMemo(() => getIsPostOwner(), [getIsPostOwner]);
+  function clickComment(commentInfo: PostComment) {
+    if (selectId === commentInfo.id) {
+      setSelectId(-1);
+    } else {
+      setSelectId(commentInfo.id);
+    }
+  }
 
+  return (
+    <area.Container>
+      <AnimationHeader
+        pointerEvents="none"
+        style={[{}, { opacity: OpacityHeader }]}
+      />
 
+      <HeaderItem
+        isAccount={false}
+        isBackButton
+        name={myCharacter.name}
+        profileImg={myCharacter.profile_img}
+      />
 
-    const scroll = useRef(new Animated.Value(0)).current;
-    const OpacityHeader=scroll.interpolate({
-      inputRange: [0, HEADER_SCROLL_DISTANCE/2, HEADER_SCROLL_DISTANCE],
-      outputRange: [0, 0.5, 1],
-      extrapolate: 'clamp',
-    });
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <KeyboardAvoidingView
+          style={{
+            flex: 1,
+            flexDirection: 'column',
+            justifyContent: 'center',
+          }}
+          behavior="padding"
+          enabled
+        >
+          <Animated.ScrollView
+            contentContainerStyle={{
+              marginHorizontal: 30,
+              flexGrow: 1,
+              flexDirection: 'column',
+            }}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+            onScroll={Animated.event(
+              [{ nativeEvent: { contentOffset: { y: scroll } } }],
+              { useNativeDriver: true },
+            )}
+          >
+            <View style={{ paddingTop: 20 }} />
 
-    const getSelectedComment = useCallback(() => {
-      if(viewPost.comments){
-        for (const comment of viewPost.comments) {
-          if (comment.id === selectId) {
-            return comment.comment;
-          }
-        }
-      }
-      return '';
-    }, [viewPost, selectId]);
-    const selectedComment = useMemo(() => getSelectedComment(), [getSelectedComment]);
-
-    const getTemplate = useCallback(() => {
-      console.log("ppppp", viewPost);
-      if (viewPost.template) {
-        switch (viewPost.template.template) {
-          case "Image":
-            return <ImageTemplate mode="detail" post={viewPost} />;
-          case "Diary":
-            return <DiaryTemplate mode="detail" post={viewPost} />;
-          case "Album":
-            return <AlbumTemplate mode="detail" post={viewPost} />;
-          case "List":
-            return <ListTemplate mode="detail" post={viewPost} />;
-          default:
-            return null;
-        }
-      }
-      
-    }, [viewPost]);
-    const template = useMemo(() => getTemplate(), [getTemplate]);
-
-    return(
-        <area.Container>
-          <Animated.View
-            pointerEvents="none"
-            style={[styles.header,{ opacity: OpacityHeader }]}>
-          </Animated.View>
-
-          <area.RowArea style={{paddingHorizontal:30, paddingVertical:16}}>
-            <BackButton/>
-            <View style={{flex:1}}/>
-            <ProfileItem diameter={28} picUrl={character.profileImg} characterId={character.id}/>
-          </area.RowArea>
-       
-            <KeyboardAvoidingView style={{flex:1, flexDirection:'column', justifyContent:"center"}} behavior={'padding'} enabled>
-              <Animated.ScrollView
-                contentContainerStyle={{marginHorizontal:30, flexGrow:1, flexDirection:'column'}}
-                showsVerticalScrollIndicator={false}
-                keyboardShouldPersistTaps={'always'}
-                onScroll={Animated.event(
-                [{ nativeEvent: { contentOffset: { y: scroll } } }],
-                { useNativeDriver: true })}>
-                <View style={{paddingTop: 20}}/>
-
-                <area.RowArea>
-                  <View style={{flex:1}}><ProfileButton diameter={30} account={0} name={viewPost.characterName} profile={viewPost.characterImg}/></View>
-                  {postOwner ? 
-                  <area.RowArea style={{paddingRight:1}}>
-                    <LineButton press={()=>{}} content={i18n.t("수정")} color={colors.black} incolor={colors.gray2} outcolor={'transparent'}/>
-                    <View style={{marginRight:4}}/>
-                    <LineButton press={()=>{}} content={i18n.t("삭제")} color={colors.warning_red} incolor={colors.alpha20_primary} outcolor={'transparent'}/>
-                  </area.RowArea> : null}
+            <area.RowArea>
+              <View style={{ flex: 1 }}>
+                <ProfileButton
+                  diameter={30}
+                  isAccount={false}
+                  isJustImg={false}
+                  name={viewPost?.character_info.name}
+                  profileImg={viewPost?.character_info.profile_img}
+                />
+              </View>
+              {postOwner ? (
+                <area.RowArea style={{ paddingRight: 1 }}>
+                  <LineButton
+                    onPress={() => {
+                      /**/
+                    }}
+                    content={i18n.t('수정')}
+                    borderColor={colors.black}
+                  />
+                  <View style={{ marginRight: 4 }} />
+                  <LineButton
+                    onPress={() => {
+                      /**/
+                    }}
+                    content={i18n.t('삭제')}
+                    borderColor={colors.warning_red}
+                  />
                 </area.RowArea>
-                <View style={{marginBottom: 12}}/>
-                {template}
-                {viewPost.template && viewPost.template.text ?
-                <TextTemplate mode="detail" content={viewPost.template.text} />
-                :
-                null
-                }
-                <View style={{alignItems:'flex-start'}}><SunButton sun={viewPost.numSunshines} active={viewPost.liked}/></View>
-                <text.Subtitle3 color={colors.black} style={{marginTop:36}}>{i18n.t('반응')}</text.Subtitle3>
+              ) : null}
+            </area.RowArea>
+            <View style={{ marginBottom: 12 }} />
+            {template}
+            {viewPost?.template && viewPost.text ? (
+              <TextTemplate mode="detail" post={viewPost.text} />
+            ) : null}
+            <View style={{ alignItems: 'flex-start' }}>
+              <SunButton
+                sunNum={viewPost?.num_sunshines}
+                setSunNum={() => {
+                  /* */
+                }}
+                active={viewPost?.liked}
+              />
+            </View>
+            <text.Subtitle3 textColor={colors.black} style={{ marginTop: 36 }}>
+              {i18n.t('반응')}
+            </text.Subtitle3>
 
-                <View style={{paddingTop: 12}}/>
-                <FlatList
-                  data={dummy_a}
-                  keyboardShouldPersistTaps={'always'}
-                  keyExtractor={(item) => item.id.toString()}
-                  renderItem={(obj)=>{
-                    return(
-                      <>
-                      <TouchableOpacity activeOpacity={1} onPress={()=>{selectId===obj.item.id ? setSelectId(-1) : setSelectId(obj.item.id)}}>
-                        <CommentItem info={obj.item} press={selectId} owner={character.name===obj.item.name} login={user.isLogined} IsClick={setClick} AddClicks={setClickedLowerId} clicks={clickedLowerId} setSelect={setSelectId} setParentComm={setParentComm}/>
-                      </TouchableOpacity>
-                      {clickedLowerId.includes(obj.item.id) && obj.item.children?
-                      <FlatList
-                        style={{marginLeft:16}}
-                        data={dummy_c}
-                        keyExtractor={(item) => item.id.toString()}
-                        renderItem={(lowerobj)=>{
-                          return(
-                            <TouchableOpacity activeOpacity={1} onPress={()=>{selectId===lowerobj.item.id ? setSelectId(-1) : setSelectId(lowerobj.item.id)}}>
-                              <CommentItem info={lowerobj.item} press={selectId} owner={character.name===lowerobj.item.name} login={user.isLogined} setSelect={setSelectId} setParentComm={setParentComm}/>
-                            </TouchableOpacity>
-                          );}}/>: null}</>
-                    ); 
-                  }}/>
-              </Animated.ScrollView>
-            {user.isLogined ?
-              <View style={{justifyContent:'flex-end'}}>
+            <View style={{ paddingTop: 12 }} />
+            <FlatList
+              data={viewPost?.comments}
+              keyboardShouldPersistTaps="handled"
+              keyExtractor={(item, idx) => idx.toString()}
+              renderItem={(obj) => (
+                <View>
+                  <TouchableOpacity
+                    activeOpacity={1}
+                    onPress={() => clickComment(obj.item)}
+                  >
+                    <CommentItem
+                      commentInfo={obj.item}
+                      selectId={selectId}
+                      setTargetComment={setParentComment}
+                      setTargetCommentId={setParentCommentById}
+                      openingCommentArray={openingCommentArray}
+                      setOpeningCommentArray={setOpeningCommentArray}
+                    />
+                  </TouchableOpacity>
 
-                {parentComm ? <CommentInputComment setParentComm={setParentComm} info={parentComm}/> : null}
-                <CommentInputBar selectId={selectId} value={comment} onChange={setComment} onUpload={onUpload}/>
-              </View> : null}
-            </KeyboardAvoidingView>
-        </area.Container>
-    )
+                  {openingCommentArray.includes(obj.item.id) ? (
+                    <FlatList
+                      style={{ marginLeft: 16 }}
+                      data={obj.item.children}
+                      keyExtractor={(item, idx) => idx.toString()}
+                      renderItem={(childObj) => (
+                        <TouchableOpacity
+                          activeOpacity={1}
+                          onPress={() => clickComment(childObj.item)}
+                        >
+                          <CommentItem
+                            commentInfo={childObj.item}
+                            selectId={selectId}
+                            setTargetComment={setParentComment}
+                            setTargetCommentId={setParentCommentById}
+                          />
+                        </TouchableOpacity>
+                      )}
+                    />
+                  ) : null}
+                </View>
+              )}
+            />
+          </Animated.ScrollView>
+          {user.name !== '' ? (
+            <CommentTextInput
+              textValue={comment}
+              onChangeText={setComment}
+              onPress={() => onUpload()}
+              isChild={parentComment !== undefined}
+              targetComment={parentComment}
+              setTargetComment={setParentComment}
+              setTargetCommentId={setParentCommentById}
+            />
+          ) : null}
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
+    </area.Container>
+  );
 }
 
-const styles=StyleSheet.create({
-  header: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top:0,
-    backgroundColor: colors.white,
-    overflow: 'hidden',
-    height: HEADER_MIN_HEIGHT+StatusBarHeight,
-    borderRadius:15
-  },
-  input:{
-    position:'absolute',
-    bottom:0,
-    left:0,
-    right:0,
-  }
-})
+const AnimationHeader = styled(Animated.View)`
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  background-color: ${colors.white};
+  overflow: hidden;
+  height: ${HEADER_MIN_HEIGHT + StatusBarHeight};
+  border-radius: 15;
+`;

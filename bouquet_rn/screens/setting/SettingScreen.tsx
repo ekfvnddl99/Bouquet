@@ -1,73 +1,82 @@
-import React, {Component, useState, useEffect} from 'react';
-import {
-  View,
-  TouchableOpacity
-} from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
-import * as SecureStore from 'expo-secure-store';
-import { useRecoilState } from 'recoil';
 
-import {colors} from '../../styles/colors';
+// styles
+import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
-import * as elses from '../../styles/styled-components/elses';
 
 // components
-import SettingItem from '../components/SettingItem';
-import BackButton from '../components/BackButton';
-import { SettingProps } from '../../utils/types';
-import ProfileItem from '../components/ProfileItem';
+import SettingItem from '../../components/item/SettingItem';
+import HeaderItem from '../../components/item/HeaderItem';
 
-import { guest, noCharacter, characterListState } from '../logics/atoms';
-import useUser from '../logics/useUser';
-import useCharacter from '../logics/useCharacter';
+// logics
+import useUser from '../../logics/hooks/useUser';
+import useLogin from '../../logics/hooks/useLogin';
 
-export default function SettingScreen(){
-  const [user, setUser] = useUser();
-  const [character, setCharacter] = useCharacter();
+export default function SettingScreen(): React.ReactElement {
+  const user = useUser();
+  const [, logout] = useLogin();
   const navigation = useNavigation();
-  const [chList, setChList] = useRecoilState(characterListState);
-
-  const logOut = async () => {
-    const auth = await SecureStore.getItemAsync('auth');
-    if (auth) {
-      await SecureStore.deleteItemAsync('auth');
-    }
-    alert('로그아웃했습니다.');
-    setUser(guest);
-    setCharacter(noCharacter);
-    setChList([]);
+  /**
+   * 로그아웃 하는 함수
+   */
+  async function goOut() {
+    await logout();
+    navigation.reset({ index: 0, routes: [{ name: 'Welcome' }] });
   }
 
-  return(
+  return (
     <area.Container>
-      <area.RowArea style={{paddingHorizontal:30, paddingVertical:16}}>
-        <BackButton/>
-        <View style={{flex:1}}/>
-        <TouchableOpacity onPress={()=>navigation.navigate('SettingAccount')}>
-          <elses.CircleImg diameter={28} source={{uri:user.profileImg}}/>
-        </TouchableOpacity>
-      </area.RowArea>
-      
-      <View style={{marginVertical:20, paddingHorizontal:30}}>
-        <text.Subtitle2B color={colors.black} style={{marginBottom:11}}>{i18n.t('기본 설정')}</text.Subtitle2B>
+      <HeaderItem
+        isAccount
+        isBackButton
+        name={user.name}
+        profileImg={user.profile_img}
+      />
+
+      <View style={{ marginVertical: 20, paddingHorizontal: 30 }}>
+        <text.Subtitle2B textColor={colors.black} style={{ marginBottom: 11 }}>
+          {i18n.t('기본 설정')}
+        </text.Subtitle2B>
         <area.NoHeightArea marBottom={0} paddingH={8} paddingV={8}>
-          <SettingItem content={i18n.t("계정 프로필 수정")} press={()=>navigation.navigate('SettingProfile')}/>
-          <SettingItem content={i18n.t("캐릭터별 알림 설정")} press={()=>navigation.navigate('SettingAlarm')}/>
-          <SettingItem content={i18n.t("로그아웃")} press={logOut}/>
+          <SettingItem
+            content={i18n.t('계정 프로필 수정')}
+            onPress={() => navigation.navigate('SettingProfile')}
+          />
+          <SettingItem
+            content={i18n.t('캐릭터별 알림 설정')}
+            onPress={() => navigation.navigate('SettingAlarm')}
+          />
+          <SettingItem content={i18n.t('로그아웃')} onPress={() => goOut()} />
         </area.NoHeightArea>
       </View>
 
-      <View style={{marginVertical:20, paddingHorizontal:30}}>
-        <text.Subtitle2B color={colors.black} style={{marginBottom:11}}>정보</text.Subtitle2B>
+      <View style={{ marginVertical: 20, paddingHorizontal: 30 }}>
+        <text.Subtitle2B textColor={colors.black} style={{ marginBottom: 11 }}>
+          정보
+        </text.Subtitle2B>
         <area.NoHeightArea marBottom={0} paddingH={8} paddingV={8}>
-          <SettingItem content={i18n.locale==='en' ? i18n.t('소개')+"Bouquet?" : "Bouquet "+i18n.t('소개')} press={()=>{}}/>
-          <SettingItem content={i18n.locale==='en' ? i18n.t('소개')+i18n.t('달달한 오렌지 떡볶이')+'?' : i18n.t('달달한 오렌지 떡볶이')+' '+i18n.t('소개')} press={()=>{}}/>
-          <SettingItem content={i18n.t("서비스 이용 약관")} press={()=>{}}/>
-          <SettingItem content={i18n.t("개인정보 취급 방침")} press={()=>{}}/>
-          <SettingItem content={i18n.t("오픈 소스 정보")} press={()=>{}}/>
-          <SettingItem content={i18n.t("문의/건의")} press={()=>{}}/>
+          <SettingItem
+            content={
+              i18n.locale === 'en'
+                ? `${i18n.t('소개')}Bouquet?`
+                : `Bouquet ${i18n.t('소개')}`
+            }
+          />
+          <SettingItem
+            content={
+              i18n.locale === 'en'
+                ? `${i18n.t('소개') + i18n.t('달달한 오렌지 떡볶이')}?`
+                : `${i18n.t('달달한 오렌지 떡볶이')} ${i18n.t('소개')}`
+            }
+          />
+          <SettingItem content={i18n.t('서비스 이용 약관')} />
+          <SettingItem content={i18n.t('개인정보 취급 방침')} />
+          <SettingItem content={i18n.t('오픈 소스 정보')} />
+          <SettingItem content={i18n.t('문의/건의')} />
         </area.NoHeightArea>
       </View>
     </area.Container>

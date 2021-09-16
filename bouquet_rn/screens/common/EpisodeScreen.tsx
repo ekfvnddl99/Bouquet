@@ -14,16 +14,16 @@ import * as text from '../../styles/styled-components/text';
 import * as elses from '../../styles/styled-components/elses';
 
 // props & logic
-import { StatusBarHeight } from '../logics/StatusbarHeight';
+import { StatusBarHeight } from '../../logics/non-server/StatusbarHeight';
 
 // components
-import PostingItem from '../components/PostingItem';
-import BackgroundButton from '../components/BackgroundButton';
-import SunButton from '../components/SunButton';
-import CommentButton from '../components/CommentButton';
-import EpisodeItem from '../components/EpisodeItem';
-import BackButton from '../components/BackButton';
-import ProfileItem from '../components/ProfileItem';
+import PostingItem from '../../components/item/PostingItem';
+import BackgroundButton from '../../components/button/BackgroundButton';
+import SunButton from '../../components/button/SunButton';
+import CommentButton from '../../components/button/CommentButton';
+import EpisodeItem from '../../components/item/EpisodeItem';
+import BackButton from '../../components/button/BackButton';
+import ProfileItem from '../../components/item/ProfileItem';
 
 const HEADER_MAX_HEIGHT = 90;
 const HEADER_MIN_HEIGHT = 60;

@@ -1,82 +1,112 @@
-import React, {Component, useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
   KeyboardAvoidingView,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import i18n from 'i18n-js';
+import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
-import {colors} from '../../styles/colors';
+import { useSetRecoilState } from 'recoil';
+
+// styles
+import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
-import * as input from '../../styles/styled-components/input';
 import * as elses from '../../styles/styled-components/elses';
 
-// icons
-import GallerySvg from '../../assets/Gallery';
+// assets
+import Icon from '../../assets/Icon';
 
-// props & logic
-import {getByte} from '../logics/Calculation';
-import { UserDupAsync } from '../logics/Auth';
-import { editUserAsync } from '../logics/User';
+// logics
+import { getByte } from '../../logics/non-server/Calculation';
+import { checkUserAsync } from '../../logics/server/Auth';
+import { editUserAsync } from '../../logics/server/User';
+import useUser from '../../logics/hooks/useUser';
+import uploadImageAsync from '../../logics/server/UploadImage';
 
 // components
-import ProgressArea from '../components/ProgressArea';
-import ConditionText from '../components/ConditionText';
-import ConditionButton from '../components/ConditionButton';
-import PrimaryTextButton from '../components/PrimaryTextButton';
-import ConditionTextInput from '../components/ConditionTextInput';
-import WarningText from '../components/WarningText';
-import BackButton from '../components/BackButton';
-import { SettingProps } from '../../utils/types';
-import ProfileItem from '../components/ProfileItem';
-import useUser from '../logics/useUser';
+import ConditionText from '../../components/text/ConditionText';
+import ConditionButton from '../../components/button/ConditionButton';
+import ConditionTextInput from '../../components/input/ConditionTextInput';
+import HeaderItem from '../../components/item/HeaderItem';
+import { userState } from '../../logics/atoms';
 
-export default function SettingProfileScreen({navigation} : SettingProps){
-  const[name, setName]=useState('');
-  const[profile, setProfile]=useState('');
+export default function SettingProfileScreen(): React.ReactElement {
+  const user = useUser();
+  const navigation = useNavigation();
+  const [name, setName] = useState(user.name);
+  const [profileImg, setProfileImg] = useState(user.profile_img);
+  const setNewAccount = useSetRecoilState(userState);
 
-  const[IsOK, setIsOK]=useState(false);
-  const[conArray, setConArray]=useState([false, false, false]);
-  const errText=["별명을 입력해 주세요.", "별명 규칙을 지켜야 해요."];
+  // 모든 조건이 만족됐는지 확인하기 위한 state
+  const [IsOK, setIsOK] = useState(false);
+  // 이미지 선택하려고 눌렀냐
+  // 여러번 누르면 여러번 갤러리가 떠서 방지하기 위해
+  const [isSelectImg, setIsSelectImg] = useState(false);
+  // 이름 입력 조건을 체크하는 배열
+  const [nameConditionArray, setNameConditionArray] = useState([
+    false,
+    false,
+    false,
+  ]);
+  // 이름 에러 메세지
+  const [nameErr, setNameErr] = useState('');
+  // 조건을 만족하지 못했을 때 뜨는 에러메세지
+  const errTextArray = [
+    '별명을 입력해 주세요.',
+    '별명 규칙을 지켜야 해요.',
+    '중복된 별명이에요.',
+  ];
 
-  const[dupResult, setDupResult]=useState(false);
-
-  useEffect(()=> {
-    const IsDupName=async()=>{
-      const result = await UserDupAsync(name);
-      if(typeof(result)!=='string') setDupResult(!result);
-      else alert(result);
+  /**
+   * 이름 조건을 확인하는 함수
+   * @description 이름 값이 바뀔 때마다 실행된다.
+   */
+  useEffect(() => {
+    async function checkUserName(arr: boolean[]) {
+      const serverResult = await checkUserAsync(name);
+      if (serverResult.isSuccess) {
+        const value =
+          user.name === name ? true : !serverResult.result && name.length > 0;
+        if (!tmpArray[0]) setNameErr(errTextArray[0]);
+        else if (!tmpArray[1]) setNameErr(errTextArray[1]);
+        else if (!value) setNameErr(errTextArray[2]);
+        else setNameErr('');
+        setNameConditionArray([arr[0], arr[1], value]);
+      }
     }
-    let tmpArray=[...conArray];
-    if(name.length>0) tmpArray[0]=true;
-    else tmpArray[0]=false;
-    if(getByte(name)<=20 && getByte(name)>0) tmpArray[1]=true;
-    else tmpArray[1]=false;
-    // 중복 조건
-    IsDupName();
-    if(name.length>0 && dupResult) tmpArray[2]=true;
-    else tmpArray[2]=false;
-    setConArray(tmpArray);
-  }, [name])
-  useEffect(()=>{
-    if(conArray.includes(false)) setIsOK(false);
+    const tmpArray = [...nameConditionArray];
+    tmpArray[0] = name.length > 0;
+    tmpArray[1] = getByte(name) <= 20 && getByte(name) > 0;
+    checkUserName(tmpArray);
+    setNameConditionArray(tmpArray);
+  }, [name]);
+
+  /**
+   * 매번 모든 조건이 다 충족됐는지 확인
+   */
+  useEffect(() => {
+    if (nameConditionArray.includes(false)) setIsOK(false);
     else setIsOK(true);
-  })
+  });
 
   useEffect(() => {
     (async () => {
-      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      const { status } =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== 'granted') {
         alert('이미지를 업로드하려면 권한이 필요해요.');
       }
     })();
   }, []);
-  const onPress = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+
+  async function setImage() {
+    setIsSelectImg(true);
+    const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
@@ -84,66 +114,114 @@ export default function SettingProfileScreen({navigation} : SettingProps){
     });
 
     if (!result.cancelled) {
-      setProfile(result.uri);
+      const serverResult = await uploadImageAsync(result.uri);
+      if (serverResult.isSuccess) setProfileImg(serverResult.result);
+      else alert(serverResult.result.errorMsg);
     }
+    setIsSelectImg(false);
+  }
+
+  const changeNgoProfile = async () => {
+    const result = await editUserAsync(name, profileImg);
+    if (result.isSuccess) {
+      setNewAccount({ ...user, name, profile_img: profileImg });
+      navigation.reset({ index: 0, routes: [{ name: 'Profile' }] });
+    } else alert(result.result.errorMsg);
   };
 
-  const changeNgoProfile=async()=>{
-    const result=await editUserAsync(name, profile);
-    console.log(result)
-    navigation.popToTop();
-  }
+  const goDeletion = () => {
+    navigation.navigate('SettingAccountDeletion1');
+  };
 
-  const goDeletion=()=>{
-    navigation.navigate('SettingAccountDeletionOne');
-  }
+  return (
+    <area.Container>
+      <HeaderItem
+        isAccount
+        isBackButton
+        name={user.name}
+        profileImg={user.profile_img}
+      />
 
-  return(
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <area.Container>
-        <area.RowArea style={{paddingHorizontal:30, paddingVertical:16}}>
-          <BackButton/>
-          <View style={{flex:1}}/>
-          <ProfileItem diameter={28}/>
-        </area.RowArea>
-
-        <KeyboardAvoidingView style={{flex:1}} behavior={'height'}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior="height">
           <area.ContainerBlank20>
-            <ScrollView contentContainerStyle={{flexGrow:1}} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'always'}>
-              <text.Subtitle1 color={colors.black} style={{marginBottom:32}}>{i18n.t('계정 프로필 수정')}</text.Subtitle1>
+            <ScrollView
+              contentContainerStyle={{ flexGrow: 1 }}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+            >
+              <text.Subtitle1
+                textColor={colors.black}
+                style={{ marginBottom: 32 }}
+              >
+                {i18n.t('계정 프로필 수정')}
+              </text.Subtitle1>
 
-              <View style={{alignItems:'center', marginBottom:32}}>
-                <TouchableOpacity onPress={onPress}>
-                {profile ? <elses.CircleImg diameter={180} source={{ uri: profile }}/>
-                  : <elses.Circle diameter={180}><GallerySvg w='24' h='24'/></elses.Circle>}
+              <View style={{ alignItems: 'center', marginBottom: 32 }}>
+                <TouchableOpacity
+                  onPress={() => (isSelectImg ? {} : setImage())}
+                >
+                  {profileImg ? (
+                    <elses.CircleImg
+                      diameter={180}
+                      source={{ uri: profileImg }}
+                    />
+                  ) : (
+                    <elses.Circle diameter={180} backgroundColor={colors.white}>
+                      <Icon icon="gallery" size={24} />
+                    </elses.Circle>
+                  )}
                 </TouchableOpacity>
               </View>
 
-              <ConditionTextInput height={44} placeholder={i18n.t("별명")}
-                onChange={(text: string) => setName(text)}
-                keyboard={'default'}
-                active={!(conArray[0]&&conArray[1]&&conArray[2])}
-                value={name}
-                warnText={!conArray[0] ? errText[0] : errText[1]}
-                conditions={
+              <ConditionTextInput
+                height={44}
+                placeholder={i18n.t('별명')}
+                onChangeText={(textInput: string) => setName(textInput)}
+                keyboardType="default"
+                isWarning={nameConditionArray.includes(false)}
+                textValue={name}
+                warnText={nameErr}
+                conditionTag={
                   <View>
-                    <ConditionText content={i18n.t("20 byte 이하")} active={conArray[1]}/>
-                    <ConditionText content={i18n.t("중복되지 않는 이름")} active={conArray[2]}/>
+                    <ConditionText
+                      content={i18n.t('20 byte 이하')}
+                      isActive={nameConditionArray[1]}
+                    />
+                    <ConditionText
+                      content={i18n.t('중복되지 않는 이름')}
+                      isActive={nameConditionArray[2]}
+                    />
                   </View>
                 }
-                byte={20}
+                byteNum={20}
               />
 
-              <area.BottomArea style={{marginBottom:16}}>
-                <TouchableOpacity style={{alignItems:'center'}} onPress={goDeletion}>
-                  <text.Button3 color={colors.warning_red} style={{marginBottom:16}}>{i18n.t('계정 삭제')}</text.Button3>
+              <area.BottomArea style={{ marginBottom: 16 }}>
+                <TouchableOpacity
+                  style={{ alignItems: 'center' }}
+                  onPress={() => goDeletion()}
+                >
+                  <text.Button3
+                    textColor={colors.warning_red}
+                    style={{ marginBottom: 16 }}
+                  >
+                    {i18n.t('계정 삭제')}
+                  </text.Button3>
                 </TouchableOpacity>
-                <ConditionButton active={IsOK} press={IsOK ? changeNgoProfile : ()=>{}} content={i18n.t("계정 프로필 수정 완료")} paddingH={0} paddingV={14} height={45}/>
+                <ConditionButton
+                  isActive={IsOK}
+                  onPress={() => (IsOK ? changeNgoProfile() : undefined)}
+                  content={i18n.t('계정 프로필 수정 완료')}
+                  paddingH={0}
+                  paddingV={14}
+                  height={45}
+                />
               </area.BottomArea>
             </ScrollView>
           </area.ContainerBlank20>
         </KeyboardAvoidingView>
-      </area.Container>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
+    </area.Container>
   );
 }

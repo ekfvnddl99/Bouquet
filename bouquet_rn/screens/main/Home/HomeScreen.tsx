@@ -1,43 +1,68 @@
-import React, {useRef, useState, useEffect} from 'react';
-import {
-    View,
-    FlatList,
-    Animated,
-    TouchableWithoutFeedback,
-    StyleSheet,
-    StatusBar,
-    TouchableOpacity
-} from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
+import { View, FlatList, Animated } from 'react-native';
 import i18n from 'i18n-js';
-import { useNavigation } from '@react-navigation/native';
-import {colors} from '../../../styles/colors';
+import styled from 'styled-components/native';
+
+// styles
+import colors from '../../../styles/colors';
 import * as area from '../../../styles/styled-components/area';
 import * as text from '../../../styles/styled-components/text';
-import * as elses from '../../../styles/styled-components/elses';
 
-// props & logic
-import { StatusBarHeight } from '../../logics/StatusbarHeight';
-import type {HomeProps, Character} from '../../../utils/types';
-import useUser from '../../logics/useUser';
-import useCharacter from '../../logics/useCharacter';
-import { PostInterface, AllPostRequestType, PostListResponseToPost } from '../../logics/Post';
-import { SearchTopPost, SearchTopCharacter } from '../../logics/Search';
+// logics
+import { StatusBarHeight } from '../../../logics/non-server/StatusbarHeight';
+import useCharacter from '../../../logics/hooks/useCharacter';
+import { getTopPostListAsync } from '../../../logics/server/Search';
+
+// utils
+import { AllTemplates, Post } from '../../../utils/types/PostTypes';
 
 // components
-import PostingItem from '../../components/PostingItem';
-import NameNText from '../../components/NameNText';
-import NotLoginPrimaryButton from '../../components/NotLoginPrimaryButton';
-import FloatingButton from '../../components/FloatingButton';
-import QnATextInput from '../../components/QnATextInput';
-import ProfileItem from '../../components/ProfileItem';
+import PostItem from '../../../components/item/PostItem';
+import NameNText from '../../../components/text/NameNText';
+import NotLoginPrimaryButton from '../../../components/button/NotLoginPrimaryButton';
+import FloatingButton from '../../../components/button/FloatingButton';
+import QnATextInput from '../../../components/input/QnATextInput';
+import ProfileButton from '../../../components/button/ProfileButton';
 
 const HEADER_MAX_HEIGHT = 94;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
-function InHomeScreen({ character, posts}: { character: Character, posts: Array< PostInterface<AllPostRequestType>> }){
-  const[selectId, setSelectId]=useState(-1);
+export default function HomeScreen(): React.ReactElement {
+  const [myCharacter] = useCharacter();
+  // 로그인한 상태인지 아닌지
+  const [isLogined, setIsLogined] = useState(false);
+  // 인기 게시글 담을 state
+  const [postArray, setPostArray] = useState<Post<AllTemplates>[]>();
 
+  // 로그인한 상태인지 아닌지 확인
+  useEffect(() => {
+    if (myCharacter.id === -1) setIsLogined(false);
+    else setIsLogined(true);
+  }, [myCharacter.id]);
+  // 가장 처음에 인기 게시물 가져옴
+  useEffect(() => {
+    async function getPost() {
+      const id = myCharacter.id ? myCharacter.id : undefined;
+      const serverResult = await getTopPostListAsync(1, id);
+      if (serverResult.isSuccess) {
+        setPostArray(serverResult.result);
+      } else {
+        alert(serverResult.result.errorMsg);
+      }
+    }
+    getPost();
+  }, []);
+
+  /**
+   * animation 관련
+   * scroll - animation 변수
+   * ScaleImg - 프로필 이미지 크기 조절
+   * TranslateImgX - 프로필 이미지 X축 이동
+   * TranslateImgY - 프로필 이미지 Y축 이동
+   * OpacityTitle - 제목 투명도 정도. 위로 올리면 제목 없어짐.
+   * OpacityHeader - 헤더 투명도 정도
+   */
   const scroll = useRef(new Animated.Value(0)).current;
   const ScaleImg = scroll.interpolate({
     inputRange: [0, HEADER_SCROLL_DISTANCE],
@@ -53,190 +78,137 @@ function InHomeScreen({ character, posts}: { character: Character, posts: Array<
   const TranslateImgY = scroll.interpolate({
     inputRange: [0, HEADER_SCROLL_DISTANCE],
     // 왜 -14-16이 되는 건지 잘 설명을 못하겠음...
-    outputRange: [0, -14-16],
+    outputRange: [0, -14 - 16],
     extrapolate: 'clamp',
   });
   const OpacityTitle = scroll.interpolate({
-    inputRange: [0, HEADER_SCROLL_DISTANCE / 2,HEADER_SCROLL_DISTANCE],
+    inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
     // 투명도 속도 맞춰서 설정함!
     outputRange: [1, 0, -3],
     extrapolate: 'clamp',
   });
-  const OpacityHeader=scroll.interpolate({
-    inputRange: [0, HEADER_SCROLL_DISTANCE/2, HEADER_SCROLL_DISTANCE],
-    outputRange: [0, 0, 1],
-    extrapolate: 'clamp',
-  });
-  return(
-    <area.Container>
-      <Animated.View
-        pointerEvents="none"
-        style={[styles.header, { opacity: OpacityHeader }]}>
-      </Animated.View>
-
-      <area.RowArea style={{marginHorizontal:30, marginTop:30}}>
-        <Animated.View style={[styles.a, {opacity : OpacityTitle}, {transform:[{translateY: TranslateImgY}]}]}>
-          <NameNText name={character.name} sub={i18n.t("의")}/>
-          <text.Subtitle2R color={colors.black}>{i18n.t('피드')}</text.Subtitle2R>
-        </Animated.View>
-        <Animated.View style={[styles.b, {transform:[{scale: ScaleImg},{translateY: TranslateImgY}, {translateX:TranslateImgX}]}]}>
-          <ProfileItem diameter={40} picUrl={character.profileImg} characterId={character.id} />
-        </Animated.View>
-      </area.RowArea>
-
-      <Animated.ScrollView 
-      // >>marginTop에 왜 30를 빼는가?
-      // 위에 있는 RowArea에서 marginTop을 30만큼 줬으니까, 이 ScrollView의 marginTop에도 영향을 준다.
-      // 따라서 스크롤 했을 때 HEADER_MIN 바로 아래까지 오려면 영향 받은 marginTop만큼 빼줘야 한다. 
-      // paddingTop은 HEADER에 영향을 주지 않는다. 그저 RowArea와의 간격에만 영향을 준다.
-      // >>paddingTop에 왜 14를 더하는가?
-      // header의 position이 absolute라서 스크롤뷰가 이를 무시한다.
-      // 그래서 header가 스크롤 전엔, 스크롤 올렸을 때 header가 있어야 할 곳에서 14만큼 내려와있다.
-      // 따라서 내려온만큼을 스크롤이 위치를 존중해줘야 하기 때문에 padding에 14만큼 더한다.
-      // >>paddingTop은 왜 FlatList 바로 위에다 해주는가?
-      // 스크롤뷰에 padding을 건다면 스크롤에 제한이 생겨서 아래가 잘리지만, FlatList에 padding을 건다면
-      // 아래로 조금씩 밀리되, 스크롤에 영향을 주지 않아서 다 볼 수 있다. 십년감수ㅠ
-        style={{marginTop: HEADER_MIN_HEIGHT-30, marginHorizontal:30}}
-        showsVerticalScrollIndicator={false}
-        scrollEventThrottle={1}
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { y: scroll } } }],
-          { useNativeDriver: true })}>
-        <View style={{paddingTop: 20+14}}/>
-        <QnATextInput/>
-        <FlatList
-          data={posts}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={(obj)=>{
-            return(
-              <TouchableWithoutFeedback onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
-                <PostingItem press={selectId} id={obj.index} info={obj.item}/>
-              </TouchableWithoutFeedback>
-            ); 
-          }}/>
-      </Animated.ScrollView>
-      <FloatingButton/>
-    </area.Container>      
-  )
-}
-
-function OutHomeScreen({posts}: {posts: Array< PostInterface<AllPostRequestType>>}){
-  const[selectId, setSelectId]=useState(-1);
-
-  const scroll = useRef(new Animated.Value(0)).current;
-  const TranslateImgY = scroll.interpolate({
-    inputRange: [0, HEADER_SCROLL_DISTANCE],
-    // 왜 -14-16이 되는 건지 잘 설명을 못하겠음...
-    outputRange: [0, -14-16],
-    extrapolate: 'clamp',
-  });
-  const OpacityTitle = scroll.interpolate({
-    inputRange: [0, HEADER_SCROLL_DISTANCE / 2,HEADER_SCROLL_DISTANCE],
-    // 투명도 속도 맞춰서 설정함!
-    outputRange: [1, 0, -3],
-    extrapolate: 'clamp',
-  });
-  const OpacityHeader=scroll.interpolate({
-    inputRange: [0, HEADER_SCROLL_DISTANCE/2, HEADER_SCROLL_DISTANCE],
+  const OpacityHeader = scroll.interpolate({
+    inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
     outputRange: [0, 0, 1],
     extrapolate: 'clamp',
   });
 
-  return(
+  return (
     <area.Container>
-      <Animated.View
+      <AnimationHeader
         pointerEvents="none"
-        style={[styles.header,{ opacity: OpacityHeader }]}>
-      </Animated.View>
+        style={[{}, { opacity: OpacityHeader }]}
+      />
 
-      <area.RowArea style={{marginHorizontal:30, marginTop:30}}>
-        <Animated.View style={[styles.a, {opacity : OpacityTitle}, {transform:[{translateY: TranslateImgY}]}]}>
-          <text.Subtitle2R color={colors.black}>{i18n.t('눈길이 가는')}</text.Subtitle2R>
-          <text.Subtitle2B color={colors.black}>{i18n.t('피드')}</text.Subtitle2B>
-        </Animated.View>
+      <area.RowArea style={{ marginHorizontal: 30, marginTop: 30 }}>
+        <AnimationText
+          style={[
+            {},
+            { opacity: OpacityTitle },
+            { transform: [{ translateY: TranslateImgY }] },
+          ]}
+        >
+          {isLogined ? (
+            <>
+              <NameNText name={myCharacter.name} sub={i18n.t('의')} />
+              <text.Subtitle2R textColor={colors.black}>
+                {i18n.t('피드')}
+              </text.Subtitle2R>
+            </>
+          ) : (
+            <>
+              <text.Subtitle2R textColor={colors.black}>
+                {i18n.t('눈길이 가는')}
+              </text.Subtitle2R>
+              <text.Subtitle2B textColor={colors.black}>
+                {i18n.t('피드')}
+              </text.Subtitle2B>
+            </>
+          )}
+        </AnimationText>
+        {isLogined ? (
+          <AnimationImg
+            style={[
+              {},
+              {
+                transform: [
+                  { scale: ScaleImg },
+                  { translateY: TranslateImgY },
+                  { translateX: TranslateImgX },
+                ],
+              },
+            ]}
+          >
+            <ProfileButton
+              diameter={40}
+              isAccount={false}
+              isJustImg
+              name={myCharacter.name}
+              profileImg={myCharacter.profile_img}
+            />
+          </AnimationImg>
+        ) : null}
       </area.RowArea>
 
-      <Animated.ScrollView 
-        style={{marginTop: HEADER_MIN_HEIGHT-30, marginHorizontal:30}}
+      <Animated.ScrollView
+        style={{ marginTop: HEADER_MIN_HEIGHT - 30, marginHorizontal: 30 }}
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={1}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scroll } } }],
-          { useNativeDriver: true })}>
-        <View style={{paddingTop: 20+14}}/>
+          { useNativeDriver: true },
+        )}
+      >
+        <View style={{ paddingTop: 20 + 14 }} />
+        {isLogined ? <QnATextInput /> : null}
         <FlatList
-          data={posts}
+          data={postArray}
           showsVerticalScrollIndicator={false}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={(obj)=>{
-            return(
-              <TouchableWithoutFeedback onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}}>
-                <PostingItem press={selectId} id={obj.index} info={obj.item}/>
-              </TouchableWithoutFeedback>
-            ); 
-          }}/>
+          keyExtractor={(item, idx) => idx.toString()}
+          renderItem={(obj) => <PostItem postInfo={obj.item} />}
+        />
       </Animated.ScrollView>
-      <View style={{justifyContent:'flex-end'}}>
-        <NotLoginPrimaryButton/>
-      </View>
+      {isLogined ? (
+        <FloatingButton />
+      ) : (
+        <>
+          <View style={{ flex: 1 }} />
+          <NotLoginPrimaryButton />
+        </>
+      )}
     </area.Container>
-  )
+  );
 }
 
-export default function HomeScreen(){
-  // dummy data - 서버에서 불러와야 함
-  const [user, setUser] = useUser();
-  const [character, setCharacter] = useCharacter();
-  const[postList, setPostList]=useState< Array< PostInterface<AllPostRequestType> > >([]);
+const AnimationText = styled(Animated.View)`
+  position: absolute;
+  resize-mode: cover;
+  background-color: ${'transparent'};
+  border-radius: 15;
+  align-items: flex-start;
+  justify-content: flex-start;
+  top: 0;
+  left: 0;
+`;
 
-  useEffect(()=>{
-    async function getPosts() {
-      const result = await SearchTopPost(undefined, true);
-      if(typeof(result)!=="string"){
-        setPostList(PostListResponseToPost(result));
-      }
-      else alert(result);
-    }
-    getPosts()
-  }, [])
+const AnimationImg = styled(Animated.View)`
+  position: absolute;
+  resize-mode: cover;
+  background-color: ${'transparent'};
+  border-radius: 15;
+  align-items: center;
+  justify-content: flex-start;
+  top: 0;
+  right: 0;
+`;
 
-  return(
-    <View style={{flex:1}}>
-      {character.id !== -1 ? <InHomeScreen character={character} posts={postList}/> : <OutHomeScreen posts={postList}/>}
-    </View>
-  )
-}
-
-const styles=StyleSheet.create({
-  a:{
-    position:'absolute',
-    resizeMode:'cover',
-    backgroundColor:'transparent',
-    borderRadius:15,
-    alignItems:'flex-start',
-    justifyContent:'flex-start',
-    top:0,
-    left:0,
-  },
-  b:{
-    position:'absolute',
-    resizeMode:'cover',
-    backgroundColor:'transparent',
-    borderRadius:15,
-    alignItems:'center',
-    justifyContent:'flex-start',
-    right:0,
-    top:0,
-  },
-  header: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top:0,
-    backgroundColor: colors.white,
-    overflow: 'hidden',
-    height: HEADER_MIN_HEIGHT+StatusBarHeight,
-    borderRadius:15
-  },
-})
+const AnimationHeader = styled(Animated.View)`
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  background-color: ${colors.white};
+  overflow: hidden;
+  height: ${HEADER_MIN_HEIGHT + StatusBarHeight};
+  border-radius: 15;
+`;

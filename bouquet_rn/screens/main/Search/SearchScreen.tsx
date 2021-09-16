@@ -1,227 +1,292 @@
-import React, {Component, useRef,useState, useCallback} from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import {
-    View,
-    Animated,
-    ScrollView, 
-    StyleSheet,
-    TextInput,
-    FlatList,
-    TouchableWithoutFeedback,
-  Keyboard
+  View,
+  Animated,
+  TextInput,
+  FlatList,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import i18n from 'i18n-js';
-import {colors} from '../../../styles/colors'
+import styled from 'styled-components/native';
+import { debounce } from 'lodash';
+
+// styles
+import colors from '../../../styles/colors';
 import * as area from '../../../styles/styled-components/area';
 import * as text from '../../../styles/styled-components/text';
 
-// icons
-import SearchViewSvg from '../../../assets/SearchView';
-import SearchViewFocusSvg from '../../../assets/SearchViewFocus';
+// assets
+import Svg from '../../../assets/Icon';
 
-// props & logic
-import type {SearchProps, MiniCharacter} from '../../../utils/types';
-import { StatusBarHeight } from '../../logics/StatusbarHeight';
-import { responseToCharacter, CharacterResponseType } from '../../logics/Character';
-import { SearchTopPost, SearchTopCharacter } from '../../logics/Search';
-import { PostInterface, AllPostRequestType, PostListResponseToPost } from '../../logics/Post';
+// logics
+import { StatusBarHeight } from '../../../logics/non-server/StatusbarHeight';
+import {
+  getTopCharacterListAsync,
+  getTopPostListAsync,
+} from '../../../logics/server/Search';
+import useCharacter from '../../../logics/hooks/useCharacter';
 
 // components
-import TagModifyItem from '../../components/TagModifyItem';
-import CharacterItem from '../../components/CharacterItem';
-import PostingItem from '../../components/PostingItem';
-import EpisodeMiniItem from '../../components/EpisodeMiniItem';
-import FloatingButton from '../../components/FloatingButton';
-import { useEffect } from 'react';
-import useCharacter from '../../logics/useCharacter';
-import SearchChaItem from '../../components/SearchChaItem';
+import TagModifyingItem from '../../../components/item/TagModifyingItem';
+import PostItem from '../../../components/item/PostItem';
+import CharacterItem from '../../../components/item/CharacterItem';
+import FloatingButton from '../../../components/button/FloatingButton';
+
+// utils
+import { AllTemplates, noPost, Post } from '../../../utils/types/PostTypes';
+import { CharacterMini, noCharacter } from '../../../utils/types/UserTypes';
 
 const HEADER_MAX_HEIGHT = 95;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
-export default function SearchScreen({navigation} : SearchProps){
-    const[recentList, setRecentList]=useState(["단호", "귀여움", "아이돌", "파란색", "먹방", "유튜버"]);
-    const[chaList, setChaList]=useState<MiniCharacter[]>([]);
-    const[postList, setPostList]=useState< Array< PostInterface<AllPostRequestType> > >([]);
-    const[character, setCharacter]=useCharacter();
+export default function SearchScreen(): React.ReactElement {
+  // 더미데이터
+  const [recentList, setRecentList] = useState([
+    '단호',
+    '귀여움',
+    '아이돌',
+    '파란색',
+    '먹방',
+    '유튜버',
+  ]);
 
-    const[selectIdCha, setSelectIdCha]=useState(-1);
-    const[selectIdEpi, setSelectIdEpi]=useState(-1);
-    const[selectIdPost, setSelectIdPost]=useState(-1);
-    const[selectIdRecent, setSelectIdRecent]=useState(-1);
-    const[focus, setFocus]=useState(0);
-    const[searchText, setSearchText]=useState('');
+  const [myCharacter] = useCharacter();
 
-    useEffect(()=>{
-      async function getPosts() {
-        const result = await SearchTopPost(character.id);
-        if(typeof(result)!=="string"){
-          setPostList(PostListResponseToPost(result));
-        }
-        else alert(result);
-      }
-      getPosts();
-    }, [])
+  // 검색창 눌러진 상태인지 아닌지
+  const [isFocus, setIsFocus] = useState(false);
+  // 검색어 값 state
+  const [searchInput, setSearchInput] = useState('');
+  // 인기 게시글 담을 state
+  const [postArray, setPostArray] = useState<Post<AllTemplates>[]>([]);
+  // 인기 캐릭터 담을 state
+  const [characterArray, setCharacterArray] = useState<CharacterMini[]>([]);
 
-    useEffect(()=>{
-      async function getChas() {
-        const result = await SearchTopCharacter();
-        if(typeof(result)!=="string"){
-          setChaList(result.characters)
-        }
-        else alert(result);
-      }
-      getChas();
-    }, [])
-
-    const scroll = useRef(new Animated.Value(0)).current;
-    const OpacityHeader=scroll.interpolate({
-      inputRange: [0, HEADER_SCROLL_DISTANCE/2, HEADER_SCROLL_DISTANCE],
-      outputRange: [0, 0.5, 1],
-      extrapolate: 'clamp',
-    });
-    const TranslateInput=scroll.interpolate({
-      inputRange:[0, HEADER_SCROLL_DISTANCE],
-      outputRange:[0, -18],
-      extrapolate:'clamp',
-    });
-    const ColorInput=scroll.interpolate({
-      inputRange:[0, HEADER_SCROLL_DISTANCE],
-      outputRange:[colors.white, colors.gray0],
-      extrapolate:'clamp',
-    });
-    const searchColor={
-      backgroundColor : ColorInput
+  /**
+   * 검색어에 따른 뷰 전환
+   * @param searchText 입력된 검색어
+   */
+  async function getSearch(searchText: string) {
+    if (searchText.length < 1) {
+      await getCharacter();
+      await getPost();
+    } else {
+      setCharacterArray([noCharacter]);
+      setPostArray([noPost]);
     }
+  }
+  /**
+   * debounce
+   */
+  const debounceHandler = useCallback(
+    debounce((input) => getSearch(input), 500),
+    [],
+  );
+  /**
+   * 검색어가 입력될 때마다 onChangeText에 의해 실행될 함수
+   * @param searchText 입력된 검색어
+   */
+  function setSearchResult(searchText: string) {
+    setSearchInput(searchText);
+    debounceHandler(searchText);
+  }
 
-    return(
-        <area.Container>
-          <Animated.View
-            pointerEvents="none"
-            style={[styles.header,{ opacity: OpacityHeader }]}>
-          </Animated.View>
+  /**
+   * 인기 캐릭터를 가져오는 함수
+   */
+  async function getCharacter() {
+    const serverResult = await getTopCharacterListAsync();
+    if (serverResult.isSuccess) {
+      setCharacterArray(serverResult.result);
+    } else alert(serverResult.result.errorMsg);
+  }
+  /**
+   * 인기 게시글을 가져오는 함수
+   */
+  async function getPost() {
+    const serverResult = await getTopPostListAsync(
+      1,
+      myCharacter.id ? myCharacter.id : undefined,
+    );
+    if (serverResult.isSuccess) {
+      setPostArray(serverResult.result);
+    } else alert(serverResult.result.errorMsg);
+  }
+  // 가장 처음에 인기 캐릭터 및 게시물 가져옴
+  useEffect(() => {
+    getCharacter();
+    getPost();
+  }, []);
 
-          <View style={{marginTop:30, marginHorizontal:30}}>
-            <Animated.View style={[styles.searchView, searchColor, {transform:[{translateY: TranslateInput}]}]}>
-              <View style={{marginLeft: 18, marginRight:10}}>
-                {focus===1 || searchText.length>0 ? <SearchViewFocusSvg w='15' h='15'/> : <SearchViewSvg w='15' h='15'/>}
-              </View>
-              <View style={{flex:1}}>
-                <TextInput placeholder={i18n.t("무엇이 궁금한가요")} 
-                  onFocus={()=>setFocus(1)} onBlur={()=>setFocus(0)} onChangeText={(str)=>setSearchText(str)} value={searchText}/>
-              </View>
-            </Animated.View>
-          </View>
+  /**
+   * animation 관련 변수
+   * scroll - animation 변수
+   * OpacityHeader - 헤더 투명도가 달라진다.
+   * TranslateInput - 검색창 이동 정도
+   * ColorInput - 검색창 색 변화
+   * searchColor - ColorInput을 담는 변수
+   */
+  const scroll = useRef(new Animated.Value(0)).current;
+  const OpacityHeader = scroll.interpolate({
+    inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+    outputRange: [0, 0.5, 1],
+    extrapolate: 'clamp',
+  });
+  const TranslateInput = scroll.interpolate({
+    inputRange: [0, HEADER_SCROLL_DISTANCE],
+    outputRange: [0, -18],
+    extrapolate: 'clamp',
+  });
+  const ColorInput = scroll.interpolate({
+    inputRange: [0, HEADER_SCROLL_DISTANCE],
+    outputRange: [colors.white, colors.gray0],
+    extrapolate: 'clamp',
+  });
+  const searchColor = {
+    backgroundColor: ColorInput,
+  };
 
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView 
-            style={{marginTop:HEADER_MIN_HEIGHT-30, flex:1}}
-            showsVerticalScrollIndicator={false}
-            onScroll={Animated.event(
+  return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <area.Container>
+        <AnimationHeader
+          pointerEvents="none"
+          style={[{}, { opacity: OpacityHeader }]}
+        />
+
+        <View style={{ marginTop: 30, marginHorizontal: 30 }}>
+          <SearchArea
+            style={[
+              {},
+              searchColor,
+              { transform: [{ translateY: TranslateInput }] },
+            ]}
+          >
+            <View style={{ marginLeft: 18, marginRight: 10 }}>
+              {isFocus || searchInput.length > 0 ? (
+                <Svg icon="searchViewFocus" size={15} />
+              ) : (
+                <Svg icon="searchView" size={15} />
+              )}
+            </View>
+            <View style={{ flex: 1 }}>
+              <TextInput
+                placeholder={i18n.t('무엇이 궁금한가요')}
+                onFocus={() => setIsFocus(true)}
+                onBlur={() => setIsFocus(false)}
+                onChangeText={(textInput: string) => setSearchResult(textInput)}
+                value={searchInput}
+              />
+            </View>
+          </SearchArea>
+        </View>
+
+        <Animated.ScrollView
+          style={{ marginTop: HEADER_MIN_HEIGHT - 30, flex: 1 }}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps
+          onScroll={Animated.event(
             [{ nativeEvent: { contentOffset: { y: scroll } } }],
-            { useNativeDriver: false })}>
-            <View style={{paddingTop:30+12}}/>
-            <Animated.View style={{marginLeft : 30}}>
-
+            { useNativeDriver: false },
+          )}
+        >
+          <View style={{ paddingTop: 30 + 12 }} />
+          <Animated.View style={{ marginLeft: 30 }}>
+            {searchInput.length === 0 ? (
               <Animated.View>
-                <text.Subtitle3 color={colors.black}>{i18n.t('최근 검색어')}</text.Subtitle3>
+                <text.Subtitle3 textColor={colors.black}>
+                  {i18n.t('최근 검색어')}
+                </text.Subtitle3>
                 <FlatList
-                  style={{marginTop:12}}
+                  style={{ marginTop: 12 }}
                   data={recentList}
-                  keyExtractor={(item) => item}
-                  horizontal={true}
+                  keyboardShouldPersistTaps="handled"
+                  keyExtractor={(item, idx) => idx.toString()}
+                  horizontal
                   showsHorizontalScrollIndicator={false}
-                  renderItem={(obj)=>{
-                    return(
-                      <TouchableWithoutFeedback onPress={()=>{selectIdRecent===obj.index ? setSelectIdRecent(-1) : setSelectIdRecent(obj.index)}}>
-                        <TagModifyItem content={obj.item} press={selectIdRecent} setSearch={setSearchText} index={obj.index} search={1} 
-                          array={recentList} setArray={setRecentList}/>
-                      </TouchableWithoutFeedback>
-                    ); 
-                  }}>
-                </FlatList>
+                  renderItem={(obj) => (
+                    <TagModifyingItem
+                      content={obj.item}
+                      setSearch={(input) => setSearchResult(input)}
+                      tagIndex={obj.index}
+                      isSearching
+                      tagArray={recentList}
+                      setTagArray={setRecentList}
+                    />
+                  )}
+                />
               </Animated.View>
+            ) : null}
 
-              <Animated.View style={{marginTop:40}}>
-                <text.Subtitle3 color={colors.black}>{i18n.t('인기 부캐')}</text.Subtitle3>
+            {characterArray.length > 0 ? (
+              <Animated.View
+                style={{ marginTop: searchInput.length > 0 ? 0 : 40 }}
+              >
+                <text.Subtitle3 textColor={colors.black}>
+                  {searchInput.length > 0 ? '캐릭터' : i18n.t('인기 부캐')}
+                </text.Subtitle3>
                 <FlatList
-                  style={{marginTop:12}}
-                  data={chaList}
-                  keyExtractor={(item, index) => index.toString()}
-                  horizontal={true}
+                  style={{ marginTop: 12 }}
+                  data={characterArray}
+                  keyboardShouldPersistTaps="handled"
+                  keyExtractor={(item, idx) => idx.toString()}
+                  horizontal
                   showsHorizontalScrollIndicator={false}
-                  renderItem={(obj)=>{
-                    return(
-                    <TouchableWithoutFeedback onPress={()=>{selectIdCha===obj.index ? setSelectIdCha(-1) : setSelectIdCha(obj.index)}}>
-                      <SearchChaItem press={selectIdCha} id={obj.index} character={obj.item}/>
-                    </TouchableWithoutFeedback>
-                    ); 
-                  }}></FlatList>
+                  renderItem={(obj) => (
+                    <CharacterItem characterInfo={obj.item} />
+                  )}
+                />
               </Animated.View>
-
-              {/* <Animated.View style={{marginTop:40}}>
-                <text.Subtitle3 color={colors.black}>인기 에피소드</text.Subtitle3>
-                <FlatList
-                  style={{marginTop:12}}
-                  data={Data}
-                  keyExtractor={(item) => item.id.toString()}
-                  horizontal={true}
-                  showsHorizontalScrollIndicator={false}
-                  renderItem={(obj)=>{
-                    return(
-                      <TouchableWithoutFeedback onPress={()=>{selectIdEpi===obj.index ? setSelectIdEpi(-1) : setSelectIdEpi(obj.index)}}>
-                        <EpisodeMiniItem navigation={navigation} press={selectIdEpi} id={obj.index}/>
-                      </TouchableWithoutFeedback>
-                    ); 
-                  }}></FlatList>
-              </Animated.View> */}
-
+            ) : null}
           </Animated.View>
 
-          <area.ContainerBlank30 style={{marginTop:10}}>
-            <text.Subtitle3 color={colors.black}>{i18n.t('인기 게시물')}</text.Subtitle3>
-            <FlatList
-              style={{marginTop:12}}
-              data={postList}
-              keyExtractor={(item, idx) => idx.toString()}
-              showsVerticalScrollIndicator={false}
-              renderItem={(obj)=>{
-                return(
-                  <TouchableWithoutFeedback onPress={()=>{selectIdPost===obj.index ? setSelectIdPost(-1) : setSelectIdPost(obj.index)}}>
-                    <PostingItem press={selectIdPost} id={obj.index} info={obj.item}/>
-                  </TouchableWithoutFeedback>
-                ); 
-              }}/>
-          </area.ContainerBlank30>
-          </ScrollView>
-          </TouchableWithoutFeedback>
-          <FloatingButton/>
-        </area.Container>
-    )
+          {postArray.length > 0 ? (
+            <area.ContainerBlank30
+              style={{ marginTop: searchInput.length > 0 ? 0 : 10 }}
+            >
+              <text.Subtitle3 textColor={colors.black}>
+                {searchInput.length > 0 ? '게시물' : i18n.t('인기 게시물')}
+              </text.Subtitle3>
+              <FlatList
+                style={{ marginTop: 12 }}
+                data={postArray}
+                keyboardShouldPersistTaps="handled"
+                keyExtractor={(item, idx) => idx.toString()}
+                showsVerticalScrollIndicator={false}
+                renderItem={(obj) => <PostItem postInfo={obj.item} />}
+              />
+            </area.ContainerBlank30>
+          ) : null}
+        </Animated.ScrollView>
+
+        {myCharacter.id === -1 ? null : <FloatingButton />}
+      </area.Container>
+    </TouchableWithoutFeedback>
+  );
 }
 
-const styles = StyleSheet.create({
-    searchView: {
-        height:40,
-        paddingVertical:10,
-        backgroundColor: colors.white,
-        flexDirection:'row',
-        alignItems:'center',
-        borderRadius:10,
-        position:'absolute',
-        // 0을 해주니까 상태바 길이만큼 위치가 내려간다!
-        top:0,
-        left:0,
-        right:0,
-    },
-    header: {
-      position: 'absolute',
-      left: 0,
-      right: 0,
-      top:0,
-      backgroundColor: colors.white,
-      overflow: 'hidden',
-      height: HEADER_MIN_HEIGHT+StatusBarHeight,
-      borderRadius:15
-    },
-})
+// 0을 해주니까 상태바 길이만큼 위치가 내려간다!
+const SearchArea = styled(Animated.View)`
+  height: 40;
+  padding-vertical: 10;
+  background-color: ${colors.white};
+  flex-direction: row;
+  align-items: center;
+  border-radius: 10;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+`;
+
+const AnimationHeader = styled(Animated.View)`
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  background-color: ${colors.white};
+  overflow: hidden;
+  height: ${HEADER_MIN_HEIGHT + StatusBarHeight};
+  border-radius: 15;
+`;

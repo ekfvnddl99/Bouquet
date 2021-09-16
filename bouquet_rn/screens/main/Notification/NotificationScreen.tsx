@@ -1,53 +1,65 @@
-import React, {useRef, useState} from 'react';
-import {
-    View,
-    Animated,
-    FlatList,
-    ScrollView,
-    Platform,
-    StyleSheet,
-    TouchableWithoutFeedback,
-    TouchableOpacity
-} from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
+import { View, Animated, FlatList } from 'react-native';
 import i18n from 'i18n-js';
+import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
-import {colors} from '../../../styles/colors';
+
+// styles
+import colors from '../../../styles/colors';
 import * as area from '../../../styles/styled-components/area';
 import * as text from '../../../styles/styled-components/text';
-import * as elses from '../../../styles/styled-components/elses';
 
-// props & logic
-import { StatusBarHeight } from '../../logics/StatusbarHeight';
-import useCharacter from '../../logics/useCharacter';
-import useUser from '../../logics/useUser';
+// logics
+import { StatusBarHeight } from '../../../logics/non-server/StatusbarHeight';
+import useCharacter from '../../../logics/hooks/useCharacter';
 
 // components
-import NotificationItem from '../../components/NotificationItem';
-import NameNText from '../../components/NameNText';
-import NotLoginPrimaryButton from '../../components/NotLoginPrimaryButton';
-import ProfileItem from '../../components/ProfileItem';
-import { characterState } from '../../logics/atoms';
-import { Character } from '../../../utils/types';
+import NotificationItem from '../../../components/item/NotificationItem';
+import NameNText from '../../../components/text/NameNText';
+import NotLoginPrimaryButton from '../../../components/button/NotLoginPrimaryButton';
+import ProfileButton from '../../../components/button/ProfileButton';
+import FloatingButton from '../../../components/button/FloatingButton';
 
 const HEADER_MAX_HEIGHT = 94;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
-function InNotificationScreen({character} : {character:Character}){
-  let Data=[{a : "오란지", b: "님이 당신을 팔로우해요."},
-  {a : "폭스처돌이1호님", b: "이 당신의 게시글을 좋아해요."},
-  {a : "비걸최고님", b: "이 당신의 게시글을 좋아해요."},
-  {a : "폭스럽님", b: "이 당신의 게시글에 댓글을 남겼어요."},
-  {a : "단호좌현지님", b: "님이 당신을 팔로우해요."},
-  {a : "러블리폭스님", b: "이 당신의 게시글에 댓글을 남겼어요."},
-  {a : "비스트걸스서포터", b: "님이 당신의 게시글에 댓글을 남겼어요."},
-  {a : "PO폭스WER님", b: "님이 당신의 게시글에 댓글을 남겼어요."},
-  {a : "PO폭스WER님", b: "이 당신의 게시글을 좋아해요."},
-  {a : "비걸핑크해", b: "님이 당신의 게시글에 댓글을 남겼어요."},
-  {a : "비걸핑크해", b: "님이 당신의 게시글을 좋아해요."},
-];
+export default function NotificationScreen(): React.ReactElement {
+  // 더미데이터
+  const Data = [
+    { a: '오란지', b: '님이 당신을 팔로우해요.' },
+    { a: '폭스처돌이1호님', b: '이 당신의 게시글을 좋아해요.' },
+    { a: '비걸최고님', b: '이 당신의 게시글을 좋아해요.' },
+    { a: '폭스럽님', b: '이 당신의 게시글에 댓글을 남겼어요.' },
+    { a: '단호좌현지님', b: '님이 당신을 팔로우해요.' },
+    { a: '러블리폭스님', b: '이 당신의 게시글에 댓글을 남겼어요.' },
+    { a: '비스트걸스서포터', b: '님이 당신의 게시글에 댓글을 남겼어요.' },
+    { a: 'PO폭스WER님', b: '님이 당신의 게시글에 댓글을 남겼어요.' },
+    { a: 'PO폭스WER님', b: '이 당신의 게시글을 좋아해요.' },
+    { a: '비걸핑크해', b: '님이 당신의 게시글에 댓글을 남겼어요.' },
+    { a: '비걸핑크해', b: '님이 당신의 게시글을 좋아해요.' },
+  ];
 
-  const[selectId, setSelectId]=useState(-1);
+  const navigation = useNavigation();
+  const [myCharacter] = useCharacter();
+  // 로그인한 상태인지 아닌지
+  const [isLogined, setIsLogined] = useState(false);
+
+  // 로그인한 상태인지 아닌지 확인
+  useEffect(() => {
+    if (myCharacter.id === -1) setIsLogined(false);
+    else setIsLogined(true);
+  }, [myCharacter.id]);
+
+  /**
+   * animation 관련
+   * scroll - animation 변수
+   * ScaleImg - 프로필 이미지 크기 조절
+   * TranslateImgX - 프로필 이미지 X축 이동
+   * TranslateImgY - 프로필 이미지 Y축 이동
+   * OpacityTitle - 제목 투명도 정도. 위로 올리면 제목 없어짐.
+   * OpacityHeader - 헤더 투명도 정도
+   */
   const scroll = useRef(new Animated.Value(0)).current;
   const ScaleImg = scroll.interpolate({
     inputRange: [0, HEADER_SCROLL_DISTANCE],
@@ -62,130 +74,151 @@ function InNotificationScreen({character} : {character:Character}){
   const TranslateImgY = scroll.interpolate({
     inputRange: [0, HEADER_SCROLL_DISTANCE],
     // 왜 -14-16이 되는 건지 잘 설명을 못하겠음...
-    outputRange: [0, -14-16],
+    outputRange: [0, -14 - 16],
     extrapolate: 'clamp',
   });
   const OpacityTitle = scroll.interpolate({
-    inputRange: [0, HEADER_SCROLL_DISTANCE / 2,HEADER_SCROLL_DISTANCE],
+    inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
     outputRange: [1, 0, -3],
     extrapolate: 'clamp',
   });
-  const OpacityHeader=scroll.interpolate({
-    inputRange: [0, HEADER_SCROLL_DISTANCE/2, HEADER_SCROLL_DISTANCE],
+  const OpacityHeader = scroll.interpolate({
+    inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
     outputRange: [0, 0, 1],
     extrapolate: 'clamp',
   });
 
-  return(
+  /**
+   * 알람 개수가 0이냐 아니냐에 따라 달라지는 구성
+   * @param notificationNumber 알람이 몇개 와있는가에 따라서 다르다.
+   */
+  function setNotification(notificationNumber: number) {
+    if (notificationNumber) {
+      return (
+        <FlatList
+          data={Data}
+          keyExtractor={(item, idx) => idx.toString()}
+          renderItem={(obj) => (
+            <NotificationItem name={obj.item.a} content={obj.item.b} />
+          )}
+        />
+      );
+    }
+    return (
+      <View style={{ alignItems: 'center' }}>
+        <text.Caption textColor={colors.gray6}>
+          {i18n.t('이제 확인할 알림이 없어요')}
+        </text.Caption>
+      </View>
+    );
+  }
+
+  return (
     <area.Container>
-      <Animated.View
+      <AnimationHeader
         pointerEvents="none"
-        style={[styles.header,{ opacity: OpacityHeader }]}>
-      </Animated.View>
-      <area.RowArea style={{marginHorizontal:30, marginTop:30}}>
-        <Animated.View style={[styles.a, {opacity : OpacityTitle}, {transform:[{translateY: TranslateImgY}]}]}>
-          < NameNText name={character.name} sub={i18n.t("의")}/>
-          <text.Subtitle2R color={colors.black}>{i18n.t('알림')}</text.Subtitle2R>
-        </Animated.View>
-        <Animated.View style={[styles.b, {transform:[{scale: ScaleImg},{translateY: TranslateImgY}, {translateX:TranslateImgX}]}]}>
-          <ProfileItem diameter={40} picUrl={character.profileImg} characterId={character.id}/>
-        </Animated.View>
+        style={[{}, { opacity: OpacityHeader }]}
+      />
+      <area.RowArea style={{ marginHorizontal: 30, marginTop: 30 }}>
+        <AnimationText
+          style={[
+            { opacity: OpacityTitle },
+            { transform: [{ translateY: TranslateImgY }] },
+          ]}
+        >
+          <NameNText
+            name={isLogined ? myCharacter.name : ''}
+            sub={isLogined ? i18n.t('의') : '당신의'}
+          />
+          <text.Subtitle2R textColor={colors.black}>
+            {i18n.t('알림')}
+          </text.Subtitle2R>
+        </AnimationText>
+        {isLogined ? (
+          <AnimationImg
+            style={[
+              {},
+              {
+                transform: [
+                  { scale: ScaleImg },
+                  { translateY: TranslateImgY },
+                  { translateX: TranslateImgX },
+                ],
+              },
+            ]}
+          >
+            <ProfileButton
+              diameter={40}
+              isAccount={false}
+              isJustImg
+              name={myCharacter.name}
+              profileImg={myCharacter.profile_img}
+            />
+          </AnimationImg>
+        ) : null}
       </area.RowArea>
+
       <Animated.ScrollView
-        style={{marginTop: HEADER_MIN_HEIGHT-30}}
+        style={{ marginTop: HEADER_MIN_HEIGHT - 30 }}
         showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps={'always'}
+        keyboardShouldPersistTaps="always"
         scrollEventThrottle={1}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scroll } } }],
-          { useNativeDriver: true })}>
-        <View style={{paddingTop: 30+14}}/>
-        {Data.length===0 ? 
-          <View style={{alignItems:'center'}}><text.Caption color={colors.gray6}>{i18n.t('이제 확인할 알림이 없어요')}</text.Caption></View>
-          :<FlatList 
-          data={Data} 
-          keyExtractor={(item) => item.a}
-          renderItem={(obj)=>{
-            return(
-              <TouchableWithoutFeedback onPress={()=>{selectId===obj.index ? setSelectId(-1) : setSelectId(obj.index)}} >
-                <NotificationItem press={selectId} id={obj.index} name={obj.item.a} content={obj.item.b}/>
-              </TouchableWithoutFeedback>
-            );}}>
-          </FlatList>}
+          { useNativeDriver: true },
+        )}
+      >
+        <View style={{ paddingTop: 30 + 14 }} />
+        {isLogined ? (
+          <>{setNotification(Data.length)}</>
+        ) : (
+          <NotificationItem
+            name="Bouquet"
+            content="이 꿈꾸던 부캐를 만들어 보자고 제안해요."
+          />
+        )}
       </Animated.ScrollView>
+      {isLogined ? (
+        <FloatingButton />
+      ) : (
+        <>
+          <View style={{ flex: 1 }} />
+          <NotLoginPrimaryButton />
+        </>
+      )}
     </area.Container>
-  )
+  );
 }
 
-function OutNotificationScreen(){
-  let Data=[{id:1}];
-  const navigation = useNavigation();
-  const[selectId, setSelectId]=useState(-1);
+const AnimationText = styled(Animated.View)`
+  position: absolute;
+  resize-mode: cover;
+  background-color: ${'transparent'};
+  border-radius: 15;
+  align-items: flex-start;
+  justify-content: flex-start;
+  top: 0;
+  left: 0;
+`;
 
-  return(
-    <area.Container>
-      <area.RowArea style={{marginHorizontal:30, marginTop:30}}>
-        <View>
-          <text.Subtitle2R color={colors.black}>{i18n.t('당신의')}</text.Subtitle2R>
-          <text.Subtitle2B color={colors.black}>{i18n.t('알림')}</text.Subtitle2B>
-        </View>
-      </area.RowArea>
-      <View style={{marginTop:30}}>
-      <FlatList 
-          data={Data} 
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={(obj)=>{
-            return(
-              <NotificationItem press={selectId} id={obj.index} name={"Bouquet"} content={"이 "+"꿈꾸던 부캐를 만들어 보자고 제안해요."}/>
-            );}}>
-          </FlatList>
-      </View>
-      <TouchableOpacity style={{flex:1, justifyContent:'flex-end'}} onPress={()=>navigation.navigate('Generation')}>
-        <NotLoginPrimaryButton/>
-      </TouchableOpacity>
-    </area.Container>
-  )
-}
+const AnimationImg = styled(Animated.View)`
+  position: absolute;
+  resize-mode: cover;
+  background-color: ${'transparent'};
+  border-radius: 15;
+  align-items: center;
+  justify-content: flex-start;
+  top: 0;
+  right: 0;
+`;
 
-export default function NotificationScreen(){
-  const [character, setCharacter] = useCharacter();
-  const [user, setUser]=useUser();
-  return(
-    <View style={{flex:1}}>
-      {user.isLogined && character.name!=='' ? <InNotificationScreen character={character}/> : <OutNotificationScreen/>}
-    </View>
-  )
-}
-
-const styles=StyleSheet.create({
-  a:{
-    position:'absolute',
-    resizeMode:'cover',
-    backgroundColor:'transparent',
-    borderRadius:15,
-    alignItems:'flex-start',
-    justifyContent:'flex-start',
-    top:0,
-    left:0,
-  },
-  b:{
-    position:'absolute',
-    resizeMode:'cover',
-    backgroundColor:'transparent',
-    borderRadius:15,
-    alignItems:'center',
-    justifyContent:'flex-start',
-    right:0,
-    top:0,
-  },
-  header: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top:0,
-    backgroundColor: colors.white,
-    overflow: 'hidden',
-    height: HEADER_MIN_HEIGHT+StatusBarHeight,
-    borderRadius:15
-  },
-})
+const AnimationHeader = styled(Animated.View)`
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  background-color: ${colors.white};
+  overflow: hidden;
+  height: ${HEADER_MIN_HEIGHT + StatusBarHeight};
+  border-radius: 15;
+`;

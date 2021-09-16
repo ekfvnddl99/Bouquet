@@ -13,16 +13,14 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "usesAppleSignIn" : true,
-      "bundleIdentifier" : "com.bouquet.bouquet",
-      "config":{
-        "googleSignIn":{
-          "reservedClientId" : "com.googleusercontent.apps.828159899837-kcksemp2itup93uk6bdic66cubug5go8"
+      "usesAppleSignIn": true,
+      "bundleIdentifier": "com.bouquet.bouquet",
+      "config": {
+        "googleSignIn": {
+          "reservedClientId": "com.googleusercontent.apps.828159899837-kcksemp2itup93uk6bdic66cubug5go8"
         }
       }
     },
