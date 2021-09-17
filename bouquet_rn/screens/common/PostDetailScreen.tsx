@@ -150,16 +150,7 @@ export default function PostDetailScreen(): React.ReactElement {
         profileImg={myCharacter.profile_img}
       />
 
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior="position"
-        contentContainerStyle={{
-          flex: 1,
-          justifyContent: 'center',
-          flexDirection: 'column',
-        }}
-        enabled
-      >
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <Animated.ScrollView
             contentContainerStyle={{
