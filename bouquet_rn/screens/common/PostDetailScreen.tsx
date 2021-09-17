@@ -226,7 +226,7 @@ export default function PostDetailScreen(): React.ReactElement {
             <View style={{ paddingTop: 12 }} />
             <FlatList
               data={viewPost?.comments}
-              keyboardShouldPersistTaps="handled"
+              keyboardShouldPersistTaps="never"
               keyExtractor={(item, idx) => idx.toString()}
               renderItem={(obj) => (
                 <View>
@@ -248,6 +248,7 @@ export default function PostDetailScreen(): React.ReactElement {
                     <FlatList
                       style={{ marginLeft: 16 }}
                       data={obj.item.children}
+                      keyboardShouldPersistTaps="never"
                       keyExtractor={(item, idx) => idx.toString()}
                       renderItem={(childObj) => (
                         <TouchableOpacity
