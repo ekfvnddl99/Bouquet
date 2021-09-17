@@ -167,7 +167,7 @@ export default function PostDetailScreen(): React.ReactElement {
               flexGrow: 1,
             }}
             showsVerticalScrollIndicator={false}
-            keyboardShouldPersistTaps="always"
+            keyboardShouldPersistTaps="handled"
             onScroll={Animated.event(
               [{ nativeEvent: { contentOffset: { y: scroll } } }],
               { useNativeDriver: true },
