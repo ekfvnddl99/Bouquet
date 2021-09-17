@@ -20,12 +20,19 @@ import * as text from '../../styles/styled-components/text';
 // logics
 import { StatusBarHeight } from '../../logics/non-server/StatusbarHeight';
 import { userState } from '../../logics/atoms';
-import { uploadCommentAsync } from '../../logics/server/Post';
+import {
+  deleteCommentAsync,
+  uploadCommentAsync,
+} from '../../logics/server/Post';
 import useViewPost from '../../logics/hooks/useViewPost';
 import useCharacter from '../../logics/hooks/useCharacter';
 
 // utils
-import { PostComment, PostCommentRequest } from '../../utils/types/PostTypes';
+import {
+  noComment,
+  PostComment,
+  PostCommentRequest,
+} from '../../utils/types/PostTypes';
 
 // components
 import ProfileButton from '../../components/button/ProfileButton';
@@ -57,7 +64,7 @@ export default function PostDetailScreen(): React.ReactElement {
   const [viewPost, setViewPost] = useViewPost();
 
   // 내가 고른 댓글의 아이디
-  const [selectId, setSelectId] = useState(-1);
+  const [selectComment, setSelectComment] = useState(noComment);
   // 대댓글이 보이는 댓글의 아이디가 들어가는 배열
   const [openingCommentArray, setOpeningCommentArray] = useState<number[]>([]);
   // 내가 쓴 댓글 값 state
@@ -85,9 +92,18 @@ export default function PostDetailScreen(): React.ReactElement {
     const serverResult = await uploadCommentAsync(newComment);
     if (serverResult.isSuccess) {
       setComment('');
-      setSelectId(-1);
+      setSelectComment(noComment);
       setParentComment(undefined);
       setParentCommentById(-1);
+      // 새로고침을 위하여
+      setViewPost(viewPost.id);
+    } else alert(serverResult.result.errorMsg);
+  }
+
+  async function deleteComment() {
+    if (selectComment.character_info.name !== myCharacter.name) return;
+    const serverResult = await deleteCommentAsync(selectComment.id);
+    if (serverResult.isSuccess) {
       // 새로고침을 위하여
       setViewPost(viewPost.id);
     } else alert(serverResult.result.errorMsg);
@@ -129,10 +145,10 @@ export default function PostDetailScreen(): React.ReactElement {
   const template = useMemo(() => getTemplate(), [getTemplate]);
 
   function clickComment(commentInfo: PostComment) {
-    if (selectId === commentInfo.id) {
-      setSelectId(-1);
+    if (selectComment.id === commentInfo.id) {
+      setSelectComment(noComment);
     } else {
-      setSelectId(commentInfo.id);
+      setSelectComment(commentInfo);
     }
   }
 
@@ -226,9 +242,10 @@ export default function PostDetailScreen(): React.ReactElement {
                   >
                     <CommentItem
                       commentInfo={obj.item}
-                      selectId={selectId}
+                      selectComment={selectComment}
                       setTargetComment={setParentComment}
                       setTargetCommentId={setParentCommentById}
+                      onDelete={() => deleteComment()}
                       openingCommentArray={openingCommentArray}
                       setOpeningCommentArray={setOpeningCommentArray}
                     />
@@ -250,9 +267,10 @@ export default function PostDetailScreen(): React.ReactElement {
                         >
                           <CommentItem
                             commentInfo={childObj.item}
-                            selectId={selectId}
+                            selectComment={selectComment}
                             setTargetComment={setParentComment}
                             setTargetCommentId={setParentCommentById}
+                            onDelete={() => deleteComment()}
                           />
                         </TouchableOpacity>
                       )}

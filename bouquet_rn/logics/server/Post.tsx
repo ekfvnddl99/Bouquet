@@ -174,3 +174,52 @@ export async function getPostAsync(
     isSuccess: false,
   };
 }
+
+/**
+ * 서버에서 댓글을 삭제하는 함수
+ * @returns -{result: null, isSuccess: true} 또는 {result: 에러 객체, isSuccess: false}
+ */
+export async function deleteCommentAsync(
+  commentId: number,
+): APIs.ServerResult<null> {
+  // 서버 응답 타입 정의
+  type DeleteCommentAsyncOutput = null;
+
+  const tmpResult = await APIs.deleteAsync<DeleteCommentAsyncOutput>(
+    `/post/comment/${commentId}`,
+    true,
+  );
+
+  // 사전 처리된 에러는 바로 반환
+  if (APIs.isServerErrorOutput(tmpResult)) {
+    return { result: tmpResult, isSuccess: false };
+  }
+
+  const [result, response] = tmpResult;
+
+  // 요청 성공 : null 반환
+  if (APIs.isSuccess<DeleteCommentAsyncOutput>(result, response)) {
+    return { result: null, isSuccess: true };
+  }
+
+  // 422 : Validation Error
+  if (APIs.isError<APIs.ServerError422>(result, response, 422)) {
+    return {
+      result: {
+        statusCode: 422,
+        errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
+        info: result.detail,
+      },
+      isSuccess: false,
+    };
+  }
+  // 에러
+  return {
+    result: {
+      statusCode: response.status,
+      errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
+      info: response,
+    },
+    isSuccess: false,
+  };
+}

@@ -71,6 +71,25 @@ export type PostComment = {
 };
 
 /**
+ * Comment의 초기값
+ */
+export const noComment: PostComment = {
+  id: -1,
+  created_at: '',
+  updated_at: '',
+  comment: '',
+  parent: 0,
+  deleted: false,
+  num_sunshines: 0,
+  character_info: {
+    name: '',
+    profile_img: '',
+  },
+  liked: false,
+  children: [],
+};
+
+/**
  * (POST 요청용) 댓글 Type
  * @description 상위 댓글이 없는 경우 parent === 0
  */

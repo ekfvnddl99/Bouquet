@@ -22,9 +22,10 @@ import ProfileButton from '../button/ProfileButton';
 
 type CommentItemProps = {
   commentInfo: PostComment;
-  selectId: number;
+  selectComment: PostComment;
   setTargetComment: (param: string) => void;
   setTargetCommentId: (param: number) => void;
+  onDelete: () => void;
   openingCommentArray?: number[];
   setOpeningCommentArray?: (param: number[]) => void;
 };
@@ -34,19 +35,21 @@ type CommentItemProps = {
  * TODO 햇살 set 함수
  *
  * @param commentInfo 댓글 객체. 서버에서 불러온다.
- * @param selectId 사용자가 클릭한 댓글.
+ * @param selectComment 사용자가 클릭한 댓글.
  * @param setTargetComment 대댓글 대상이 되는 댓글의 set 함수
  * @param setTargetCommentId 대댓글 대상이 되는 댓글의 아이디 set 함수
  * * 대댓글에 대댓글을 달 경우, 대상이 되는 대댓글을 담은 댓글의 아이디가 들어간다.
+ * @param onDelete 댓글 삭제 함수
  * ---------------
  * @param openingCommentArray 대댓글이 보이는 댓글들의 아이디가 담긴 배열
  * @param setOpeningCommentArray 대댓글이 보이는 댓글들의 아이디가 담긴 배열의 set 함수
  */
 export default function CommentItem({
   commentInfo,
-  selectId,
+  selectComment,
   setTargetComment,
   setTargetCommentId,
+  onDelete,
   openingCommentArray,
   setOpeningCommentArray,
 }: CommentItemProps): React.ReactElement {
@@ -59,7 +62,7 @@ export default function CommentItem({
       paddingV={12}
       style={{
         backgroundColor:
-          selectId === commentInfo.id &&
+          selectComment.id === commentInfo.id &&
           myCharacter.name === commentInfo.character_info.name
             ? colors.alpha10_primary
             : colors.white,
@@ -94,9 +97,9 @@ export default function CommentItem({
         />
         <View style={{ flex: 1 }} />
         <area.RowArea>
-          {selectId === commentInfo.id &&
+          {selectComment.id === commentInfo.id &&
           myCharacter.name === commentInfo.character_info.name ? (
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => onDelete()}>
               <Icon icon="bin" size={18} />
             </TouchableOpacity>
           ) : null}
