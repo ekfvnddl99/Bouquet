@@ -177,6 +177,7 @@ export async function getPostAsync(
 
 /**
  * 서버에서 댓글을 삭제하는 함수
+ * @param commentId 삭제할 댓글 아이디
  * @returns -{result: null, isSuccess: true} 또는 {result: 에러 객체, isSuccess: false}
  */
 export async function deleteCommentAsync(
@@ -214,6 +215,61 @@ export async function deleteCommentAsync(
     };
   }
   // 에러
+  return {
+    result: {
+      statusCode: response.status,
+      errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
+      info: response,
+    },
+    isSuccess: false,
+  };
+}
+
+/**
+ * 인기 게시글 목록을 서버에서 불러오는 함수
+ * @param pageNum 불러올 페이지
+ * ! 페이지 번호는 1부터 시작
+ * @param characterName 게시글 목록을 열람하려는 캐릭터 이름
+ *
+ * @returns -{result: Post 리스트, isSuccess: true} 또는 {result: 에러 객체, isSuccess: false}
+ */
+export async function getPostListAsync(
+  pageNum: number,
+  characterName: string,
+): APIs.ServerResult<Array<Post<AllTemplates>>> {
+  // 서버 응답 타입 정의
+  type GetPostListAsyncOutput = Array<Post<AllTemplates>>;
+
+  const tmpResult = await APIs.getAsync<GetPostListAsyncOutput>(
+    `/post/character/${characterName}/${pageNum}`,
+    false,
+    { 'page-num': pageNum, 'character-name': characterName },
+  );
+
+  // 사전 처리된 에러는 바로 반환
+  if (APIs.isServerErrorOutput(tmpResult)) {
+    return { result: tmpResult, isSuccess: false };
+  }
+
+  const [result, response] = tmpResult;
+
+  // 요청 성공 : Post List 반환
+  if (APIs.isSuccess<GetPostListAsyncOutput>(result, response)) {
+    return { result, isSuccess: true };
+  }
+
+  // 422 : Validation Error
+  if (APIs.isError<APIs.ServerError422>(result, response, 422)) {
+    return {
+      result: {
+        statusCode: 422,
+        errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
+        info: result.detail,
+      },
+      isSuccess: false,
+    };
+  }
+  // 나머지 에러
   return {
     result: {
       statusCode: response.status,
