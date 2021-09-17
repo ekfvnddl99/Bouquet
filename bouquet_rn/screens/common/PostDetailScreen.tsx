@@ -149,8 +149,7 @@ export default function PostDetailScreen(): React.ReactElement {
         name={myCharacter.name}
         profileImg={myCharacter.profile_img}
       />
-
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
+      <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <Animated.ScrollView
             contentContainerStyle={{
@@ -217,13 +216,13 @@ export default function PostDetailScreen(): React.ReactElement {
             <View style={{ paddingTop: 12 }} />
             <FlatList
               data={viewPost?.comments}
-              keyboardShouldPersistTaps="never"
+              keyboardShouldPersistTaps="always"
               keyExtractor={(item, idx) => idx.toString()}
               renderItem={(obj) => (
                 <View>
                   <TouchableOpacity
                     activeOpacity={1}
-                    onPress={() => clickComment(obj.item)}
+                    onPress={() => [clickComment(obj.item), Keyboard.dismiss()]}
                   >
                     <CommentItem
                       commentInfo={obj.item}
@@ -239,12 +238,15 @@ export default function PostDetailScreen(): React.ReactElement {
                     <FlatList
                       style={{ marginLeft: 16 }}
                       data={obj.item.children}
-                      keyboardShouldPersistTaps="never"
+                      keyboardShouldPersistTaps="always"
                       keyExtractor={(item, idx) => idx.toString()}
                       renderItem={(childObj) => (
                         <TouchableOpacity
                           activeOpacity={1}
-                          onPress={() => clickComment(childObj.item)}
+                          onPress={() => [
+                            clickComment(childObj.item),
+                            Keyboard.dismiss(),
+                          ]}
                         >
                           <CommentItem
                             commentInfo={childObj.item}
