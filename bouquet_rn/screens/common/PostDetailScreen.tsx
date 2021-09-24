@@ -11,6 +11,7 @@ import {
 import i18n from 'i18n-js';
 import styled from 'styled-components/native';
 import { useRecoilValue } from 'recoil';
+import { useRoute, RouteProp } from '@react-navigation/native';
 
 // styles
 import colors from '../../styles/colors';
@@ -53,6 +54,11 @@ const HEADER_MAX_HEIGHT = 90;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
+type ParamList = {
+  PostDetail: {
+    postId: number;
+  };
+};
 /**
  * TODO 댓글 삭제
  * TODO 햇님 누르기
@@ -62,6 +68,13 @@ export default function PostDetailScreen(): React.ReactElement {
   const user = useRecoilValue(userState);
   const [myCharacter] = useCharacter();
   const [viewPost, setViewPost] = useViewPost();
+
+  const route = useRoute<RouteProp<ParamList, 'PostDetail'>>();
+  console.log(route);
+  if (route !== undefined) {
+    const postId = route.params?.postId;
+    setViewPost(postId);
+  }
 
   // 내가 고른 댓글의 아이디
   const [selectComment, setSelectComment] = useState(noComment);

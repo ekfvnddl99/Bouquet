@@ -9,6 +9,7 @@ export type WelcomeStackParam = {
   Tab: undefined;
   CharacterGeneration: undefined;
   SettingAccountDeletion2: undefined;
+  WritingStack: undefined;
 };
 export type WelcomeProps = StackScreenProps<WelcomeStackParam, 'Welcome'>;
 
@@ -72,24 +73,22 @@ export type AccountProps = StackScreenProps<AccountStackParam, 'Account'>;
 // home
 export type HomeStackParam = {
   Home: undefined;
-  ProfileDetailStack: undefined;
-  PostStack: undefined;
-  WritingStack: undefined;
+  HomeTabProfileDetailStack: undefined;
+  HomeTabPostStack: undefined;
 };
 export type HomeProps = StackScreenProps<HomeStackParam, 'Home'>;
 // search
 export type SearchStackParam = {
   Search: undefined;
-  ProfileDetailStack: undefined;
-  PostStack: undefined;
-  WritingStack: undefined;
+  SearchTabProfileDetailStack: undefined;
+  SearchTabPostStack: undefined;
 };
 export type SearchProps = StackScreenProps<SearchStackParam, 'Search'>;
 // noti
 export type NotificationStackParam = {
   Notification: undefined;
-  ProfileDetailStack: undefined;
-  PostStack: undefined;
+  NotiTabProfileDetailStack: undefined;
+  NotiTabPostStack: undefined;
 };
 export type NotificationProps = StackScreenProps<
   NotificationStackParam,
@@ -98,10 +97,9 @@ export type NotificationProps = StackScreenProps<
 // profile
 export type ProfileStackParam = {
   ProfileOverview: undefined;
-  ProfileDetailStack: undefined;
+  ProfileTabProfileDetailStack: undefined;
   SettingStack: undefined;
-  WritingStack: undefined;
-  AccountStack: undefined;
+  ProfileTabAccountStack: undefined;
 };
 export type ProfileProps = StackScreenProps<
   ProfileStackParam,
