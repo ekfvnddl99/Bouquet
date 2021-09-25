@@ -234,7 +234,10 @@ export default function SearchScreen(): React.ReactElement {
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   renderItem={(obj) => (
-                    <CharacterItem characterInfo={obj.item} />
+                    <CharacterItem
+                      characterInfo={obj.item}
+                      routePrefix="SearchTab"
+                    />
                   )}
                 />
               </Animated.View>
@@ -254,7 +257,9 @@ export default function SearchScreen(): React.ReactElement {
                 keyboardShouldPersistTaps="handled"
                 keyExtractor={(item, idx) => idx.toString()}
                 showsVerticalScrollIndicator={false}
-                renderItem={(obj) => <PostItem postInfo={obj.item} />}
+                renderItem={(obj) => (
+                  <PostItem postInfo={obj.item} routePrefix="SearchTab" />
+                )}
               />
             </area.ContainerBlank30>
           ) : null}

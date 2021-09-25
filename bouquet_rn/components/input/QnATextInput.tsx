@@ -15,11 +15,18 @@ import QnAItem from '../item/QnAItem';
 // logics
 import useCharacter from '../../logics/hooks/useCharacter';
 
+type QnATextInputProps = {
+  routePrefix: string;
+};
 /**
  * Home의 피드 상단에 있는 질답
  * TODO 질문에 답하면 업로드 하는 함수를 연결해야 함
+ *
+ * @param routePrefix 라우트 접두사. 어느 탭에서 왔는가!
  */
-export default function QnATextInput(): React.ReactElement {
+export default function QnATextInput({
+  routePrefix,
+}: QnATextInputProps): React.ReactElement {
   const [myCharacter] = useCharacter();
   // '올리기' 버튼 눌렀는지 여부를 저장하는 state
   const [isUpload, setIsUpload] = useState(false);
@@ -38,6 +45,7 @@ export default function QnATextInput(): React.ReactElement {
         question={question}
         answer={answer}
         characterInfo={myCharacter}
+        routePrefix={routePrefix}
       />
     );
   }
@@ -49,8 +57,10 @@ export default function QnATextInput(): React.ReactElement {
             diameter={30}
             isAccount={false}
             isJustImg={false}
+            isPress={false}
             name={myCharacter.name}
             profileImg={myCharacter.profile_img}
+            routePrefix={routePrefix}
           />
         </View>
         <LineButton

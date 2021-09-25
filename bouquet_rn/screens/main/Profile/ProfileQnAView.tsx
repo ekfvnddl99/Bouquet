@@ -38,6 +38,7 @@ export default function ProfileQnAScreen(): React.ReactElement {
             question={obj.item.question}
             answer={obj.item.answer}
             characterInfo={obj.item.characterInfo}
+            routePrefix="ProfileTab"
           />
         )}
       />

@@ -39,6 +39,7 @@ export default function AccountDeletionScreenOne(): React.ReactElement {
         isBackButton
         name={user.name}
         profileImg={user.profile_img}
+        routePrefix="ProfileTab"
       />
 
       <area.ContainerBlank20>

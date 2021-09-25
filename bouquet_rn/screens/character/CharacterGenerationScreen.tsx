@@ -35,7 +35,7 @@ import { MyCharacter, noMyCharacter } from '../../utils/types/UserTypes';
 import { CharacterGenerationProps } from '../../utils/types/NavigationTypes';
 
 type ParamList = {
-  ProfileDetail: {
+  CharacterGeneration: {
     isModifying: boolean;
     characterInfo: MyCharacter;
   };
@@ -44,7 +44,7 @@ export default function CharacterGenerationScreen(): React.ReactElement {
   const navigation =
     useNavigation<StackNavigationProp<CharacterGenerationProps>>();
   // const navigation = useNavigation();
-  const route = useRoute<RouteProp<ParamList, 'ProfileDetail'>>();
+  const route = useRoute<RouteProp<ParamList, 'CharacterGeneration'>>();
   // navigation으로 받아온 param
   // 수정하는 거니?
   const isModifying = route.params?.isModifying;

@@ -16,8 +16,10 @@ type ProfileButtonProps = {
   diameter: number;
   isAccount: boolean;
   isJustImg: boolean;
+  isPress: boolean;
   name: string;
   profileImg: string;
+  routePrefix: string;
 };
 /**
  * (원형 모양의 프로필 사진, 해당 이름) 버튼
@@ -25,39 +27,43 @@ type ProfileButtonProps = {
  * @param diameter 원의 지름
  * @param isAccount 계정 화면에 쓰이는지 아닌지
  * @param isJustImg 프로필 이미지만 있는지 아닌지
+ * @param isPress 누르면 이동 하는 건지 아닌지
  * @param name 프로필 이름
  * @param profileImg 프로필 사진
+ * @param routePrefix 라우트 접두사. 어느 탭에서 왔는가!
  */
 export default function ProfileButton({
   diameter,
   isAccount,
   isJustImg,
+  isPress,
   name,
   profileImg,
+  routePrefix,
 }: ProfileButtonProps): React.ReactElement {
   const navigation = useNavigation();
   const [, setViewUser] = useViewUser();
   const [, setViewCharacter] = useViewCharacter();
   /**
-   * '상세 프로필' 화면으로 이동하는 함수
-   * @description 캐릭터 프로필을 눌렀을 때
+   * '상세 프로필' 또는 '계정' 화면으로 이동하는 함수
+   * @description 캐릭터/계정 프로필을 눌렀을 때
    */
-  async function goProfileDetail() {
-    await setViewCharacter(name);
-    navigation.navigate('ProfileDetailStack');
-  }
-  /**
-   * '계정' 화면으로 이동하는 함수
-   * @description 계정 프로필을 눌렀을 때
-   */
-  async function goAccount() {
-    await setViewUser(name);
-    navigation.navigate('AccountStack');
+  async function goNavigation() {
+    if (isAccount) {
+      await setViewUser(name);
+      navigation.navigate(`${routePrefix}AccountStack`, { routePrefix });
+    } else {
+      await setViewCharacter(name);
+      navigation.navigate(`${routePrefix}ProfileDetailStack`, {
+        screen: 'ProfileDetail',
+        params: { routePrefix },
+      });
+    }
   }
 
   return (
     <TouchableWithoutFeedback
-      onPress={() => (isAccount ? goAccount() : goProfileDetail())}
+      onPress={isPress ? () => goNavigation() : undefined}
     >
       <area.RowArea>
         <elses.CircleImg diameter={diameter} source={{ uri: profileImg }} />

@@ -26,6 +26,7 @@ type CommentItemProps = {
   setTargetComment: (param: string) => void;
   setTargetCommentId: (param: number) => void;
   onDelete: () => void;
+  routePrefix: string;
   openingCommentArray?: number[];
   setOpeningCommentArray?: (param: number[]) => void;
 };
@@ -40,6 +41,7 @@ type CommentItemProps = {
  * @param setTargetCommentId 대댓글 대상이 되는 댓글의 아이디 set 함수
  * * 대댓글에 대댓글을 달 경우, 대상이 되는 대댓글을 담은 댓글의 아이디가 들어간다.
  * @param onDelete 댓글 삭제 함수
+ * @param routePrefix 라우트 접두사. 어느 탭에서 왔는가!
  * ---------------
  * @param openingCommentArray 대댓글이 보이는 댓글들의 아이디가 담긴 배열
  * @param setOpeningCommentArray 대댓글이 보이는 댓글들의 아이디가 담긴 배열의 set 함수
@@ -50,6 +52,7 @@ export default function CommentItem({
   setTargetComment,
   setTargetCommentId,
   onDelete,
+  routePrefix,
   openingCommentArray,
   setOpeningCommentArray,
 }: CommentItemProps): React.ReactElement {
@@ -92,8 +95,10 @@ export default function CommentItem({
           diameter={20}
           isAccount={false}
           isJustImg={false}
+          isPress
           name={commentInfo.character_info.name}
           profileImg={commentInfo.character_info.profile_img}
+          routePrefix={routePrefix}
         />
         <View style={{ flex: 1 }} />
         <area.RowArea>

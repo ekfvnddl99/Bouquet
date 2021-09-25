@@ -7,7 +7,7 @@ import * as Types from '../utils/types/NavigationTypes';
 // screens
 import HomeScreen from '../screens/main/Home/HomeScreen';
 import {
-  ProfileDetailStackNavigator,
+  HomeProfileDetailStackNavigator,
   PostStackNavigator,
 } from './CommonNavigator';
 
@@ -23,7 +23,7 @@ export default function HomeStackNavigator(): React.ReactElement {
       />
       <HomeStack.Screen
         name="HomeTabProfileDetailStack"
-        component={ProfileDetailStackNavigator}
+        component={HomeProfileDetailStackNavigator}
         options={{ headerShown: false }}
       />
       <HomeStack.Screen

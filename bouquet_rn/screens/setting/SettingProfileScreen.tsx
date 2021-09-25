@@ -140,6 +140,7 @@ export default function SettingProfileScreen(): React.ReactElement {
         isBackButton
         name={user.name}
         profileImg={user.profile_img}
+        routePrefix="ProfileTab"
       />
 
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

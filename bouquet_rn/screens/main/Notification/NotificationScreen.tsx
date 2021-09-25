@@ -40,7 +40,6 @@ export default function NotificationScreen(): React.ReactElement {
     { a: '비걸핑크해', b: '님이 당신의 게시글을 좋아해요.' },
   ];
 
-  const navigation = useNavigation();
   const [myCharacter] = useCharacter();
   // 로그인한 상태인지 아닌지
   const [isLogined, setIsLogined] = useState(false);
@@ -151,8 +150,10 @@ export default function NotificationScreen(): React.ReactElement {
               diameter={40}
               isAccount={false}
               isJustImg
+              isPress={false}
               name={myCharacter.name}
               profileImg={myCharacter.profile_img}
+              routePrefix="NotiTab"
             />
           </AnimationImg>
         ) : null}

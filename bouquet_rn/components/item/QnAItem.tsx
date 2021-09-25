@@ -24,6 +24,7 @@ type QnAItemProps = {
   question: string;
   answer: string;
   characterInfo: Character | MyCharacter;
+  routePrefix: string;
 };
 /**
  * 질답 게시물 컴포넌트
@@ -35,11 +36,13 @@ type QnAItemProps = {
  * @param question 질문
  * @param answer 대답
  * @param characterInfo 해당 캐릭터 객체
+ * @param routePrefix 라우트 접두사. 어느 탭에서 왔는가!
  */
 export default function QnAItem({
   question,
   answer,
   characterInfo,
+  routePrefix,
 }: QnAItemProps): React.ReactElement {
   const navigation = useNavigation();
 
@@ -47,7 +50,7 @@ export default function QnAItem({
    * '상세 게시물' 화면으로 가는 함수
    * */
   function goPostStack() {
-    navigation.navigate('PostStack');
+    navigation.navigate(`${routePrefix}PostStack`, { routePrefix });
   }
 
   return (
@@ -59,8 +62,10 @@ export default function QnAItem({
               diameter={30}
               isAccount={false}
               isJustImg={false}
+              isPress
               name={characterInfo.name}
               profileImg={characterInfo.profile_img}
+              routePrefix={routePrefix}
             />
           </View>
           <text.Caption textColor={colors.gray5}>

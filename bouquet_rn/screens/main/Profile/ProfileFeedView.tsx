@@ -33,7 +33,9 @@ export default function ProfileFeedView({
         data={postArray}
         keyExtractor={(item) => item.id.toString()}
         showsVerticalScrollIndicator={false}
-        renderItem={(obj) => <PostItem postInfo={obj.item} />}
+        renderItem={(obj) => (
+          <PostItem postInfo={obj.item} routePrefix="ProfileTab" />
+        )}
       />
     </View>
   );

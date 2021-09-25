@@ -35,6 +35,7 @@ export default function SettingScreen(): React.ReactElement {
         isBackButton
         name={user.name}
         profileImg={user.profile_img}
+        routePrefix="ProfileTab"
       />
 
       <View style={{ marginVertical: 20, paddingHorizontal: 30 }}>

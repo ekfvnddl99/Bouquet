@@ -29,15 +29,18 @@ import ListTemplate from '../../screens/template/ListTemplate';
 
 type PostItemProps = {
   postInfo: Post<AllTemplates>;
+  routePrefix: string;
 };
 /**
  * 피드에 보이는 게시글 컴포넌트
  * TODO 햇살 set 함수
  *
  * @param postInfo 게시글 객체
+ * @param routePrefix 라우트 접두사. 어느 탭에서 왔는가!
  */
 export default function PostItem({
   postInfo,
+  routePrefix,
 }: PostItemProps): React.ReactElement {
   const navigation = useNavigation();
   const [, setViewPost] = useViewPost();
@@ -46,7 +49,7 @@ export default function PostItem({
    */
   async function goPostStack() {
     await setViewPost(postInfo.id);
-    navigation.navigate('PostStack');
+    navigation.navigate(`${routePrefix}PostStack`, { routePrefix });
   }
 
   /**
@@ -87,8 +90,10 @@ export default function PostItem({
             diameter={30}
             isAccount={false}
             isJustImg={false}
+            isPress
             name={postInfo ? postInfo.character_info.name : ''}
             profileImg={postInfo ? postInfo.character_info.profile_img : ''}
+            routePrefix={routePrefix}
           />
         </View>
         <View style={{ alignItems: 'flex-end', flex: 1 }}>

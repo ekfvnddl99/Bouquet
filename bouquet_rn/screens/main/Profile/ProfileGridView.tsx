@@ -53,6 +53,7 @@ export default function ProfileGridScreen({
                 characterInfo={obj.item}
                 onPress={() => onPress}
                 isAccount={false}
+                routePrefix="ProfileTab"
               />
             )}
           </View>

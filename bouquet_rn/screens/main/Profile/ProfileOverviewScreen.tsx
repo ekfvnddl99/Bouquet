@@ -79,8 +79,10 @@ export default function ProfileOverviewScreen(): React.ReactElement {
             diameter={24}
             isAccount
             isJustImg
+            isPress={false}
             name={user.name}
             profileImg={user.profile_img}
+            routePrefix="ProfileTab"
           />
         </View>
         <TouchableOpacity

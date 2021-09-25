@@ -34,7 +34,7 @@ export default function SunButton({
   const [backgroundColor, setBackgroundColor] = useState('transparent');
 
   async function send() {
-    const serverResult = await sendPushNotificationAsync('aaa', 'likePost');
+    await sendPushNotificationAsync('aaa', 'likePost');
   }
 
   return (

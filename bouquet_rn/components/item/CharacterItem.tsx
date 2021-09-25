@@ -16,15 +16,18 @@ import { CharacterMini } from '../../utils/types/UserTypes';
 
 type CharacterItemProps = {
   characterInfo: CharacterMini;
+  routePrefix: string;
 };
 /**
  * 캐릭터 리스트의 컴포넌트
  * @description 캐릭터 고를 때 보이는 컴포넌트
  *
  * @param characterInfo 해당 캐릭터 객체
+ * @param routePrefix 라우트 접두사. 어느 탭에서 왔는가!
  */
 export default function CharacterItem({
   characterInfo,
+  routePrefix,
 }: CharacterItemProps): React.ReactElement {
   const navigation = useNavigation();
   const [, setViewCharacter] = useViewCharacter();
@@ -34,7 +37,7 @@ export default function CharacterItem({
    */
   async function goProfileDetail() {
     await setViewCharacter(characterInfo.name);
-    navigation.navigate('ProfileDetailStack');
+    navigation.navigate(`${routePrefix}ProfileDetailStack`, { routePrefix });
   }
 
   return (

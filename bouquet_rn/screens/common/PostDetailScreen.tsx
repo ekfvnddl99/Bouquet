@@ -56,6 +56,7 @@ const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 type ParamList = {
   PostDetail: {
+    routePrefix: string;
     postId: number;
   };
 };
@@ -70,9 +71,11 @@ export default function PostDetailScreen(): React.ReactElement {
   const [viewPost, setViewPost] = useViewPost();
 
   const route = useRoute<RouteProp<ParamList, 'PostDetail'>>();
+  let prefix = '';
   console.log(route);
   if (route !== undefined) {
     const postId = route.params?.postId;
+    prefix = route.params.routePrefix;
     setViewPost(postId);
   }
 
@@ -177,6 +180,7 @@ export default function PostDetailScreen(): React.ReactElement {
         isBackButton
         name={myCharacter.name}
         profileImg={myCharacter.profile_img}
+        routePrefix={prefix}
       />
       <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -200,8 +204,10 @@ export default function PostDetailScreen(): React.ReactElement {
                   diameter={30}
                   isAccount={false}
                   isJustImg={false}
+                  isPress
                   name={viewPost?.character_info.name}
                   profileImg={viewPost?.character_info.profile_img}
+                  routePrefix={prefix}
                 />
               </View>
               {postOwner ? (
@@ -259,6 +265,7 @@ export default function PostDetailScreen(): React.ReactElement {
                       setTargetComment={setParentComment}
                       setTargetCommentId={setParentCommentById}
                       onDelete={() => deleteComment()}
+                      routePrefix={prefix}
                       openingCommentArray={openingCommentArray}
                       setOpeningCommentArray={setOpeningCommentArray}
                     />
@@ -284,6 +291,7 @@ export default function PostDetailScreen(): React.ReactElement {
                             setTargetComment={setParentComment}
                             setTargetCommentId={setParentCommentById}
                             onDelete={() => deleteComment()}
+                            routePrefix={prefix}
                           />
                         </TouchableOpacity>
                       )}

@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { FlatList, View, Animated } from 'react-native';
 import i18n from 'i18n-js';
 import styled from 'styled-components/native';
+import { useRoute, RouteProp } from '@react-navigation/native';
 
 // styles
 import colors from '../../styles/colors';
@@ -27,6 +28,11 @@ const HEADER_MAX_HEIGHT = 80;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
+type ParamList = {
+  Account: {
+    routePrefix: string;
+  };
+};
 /**
  * '계정' 화면
  * @returns
@@ -36,6 +42,13 @@ export default function AccountScreen(): React.ReactElement {
   const [viewUser] = useViewUser();
   // 해당 계정의 캐릭터들을 담는 배열
   const [characterArray, setCharacterArray] = useState<CharacterMini[]>();
+
+  const route = useRoute<RouteProp<ParamList, 'Account'>>();
+  let prefix = '';
+  console.log(route);
+  if (route !== undefined) {
+    prefix = route.params.routePrefix;
+  }
 
   // 캐릭터가 홀수 개일 때 grid가 이상하게 나오지 않도록 하나를 더 끼워준다.
   useEffect(() => {
@@ -69,6 +82,7 @@ export default function AccountScreen(): React.ReactElement {
         isBackButton
         name={myCharacter.name}
         profileImg={myCharacter.profile_img}
+        routePrefix={prefix}
       />
 
       <Animated.ScrollView
@@ -144,7 +158,11 @@ export default function AccountScreen(): React.ReactElement {
               {obj.item.name === '' ? (
                 <View />
               ) : (
-                <GridCharacterItem characterInfo={obj.item} isAccount />
+                <GridCharacterItem
+                  characterInfo={obj.item}
+                  isAccount
+                  routePrefix={prefix}
+                />
               )}
             </View>
           )}

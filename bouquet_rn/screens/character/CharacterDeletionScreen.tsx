@@ -10,6 +10,7 @@ import * as text from '../../styles/styled-components/text';
 // logics
 import { deleteCharacterAsync } from '../../logics/server/Character';
 import useLoadCharacter from '../../logics/hooks/useLoadCharacter';
+import useUser from '../../logics/hooks/useUser';
 
 // utils
 import { MyCharacter } from '../../utils/types/UserTypes';
@@ -27,6 +28,7 @@ type ParamList = {
   };
 };
 export default function CharacterDeletionScreen(): React.ReactElement {
+  const user = useUser();
   const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'ProfileDetail'>>();
   const targetCharacter = route.params?.characterInfo;
@@ -61,8 +63,9 @@ export default function CharacterDeletionScreen(): React.ReactElement {
       <HeaderItem
         isAccount
         isBackButton={step === 1}
-        name={targetCharacter.name}
-        profileImg={targetCharacter.profile_img}
+        name={user.name}
+        profileImg={user.profile_img}
+        routePrefix="ProfileTab"
       />
       <area.ContainerBlank20>
         <text.Subtitle1 textColor={colors.black} style={{ marginBottom: 32 }}>

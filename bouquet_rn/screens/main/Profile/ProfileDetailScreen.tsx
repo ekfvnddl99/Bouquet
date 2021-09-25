@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import i18n from 'i18n-js';
+import { useRoute, RouteProp } from '@react-navigation/native';
 
 // styles
 import colors from '../../../styles/colors';
@@ -28,13 +29,29 @@ const HEADER_MAX_HEIGHT = 80;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
-export default function ProfileDetailScreen(): React.ReactElement {
+type ParamList = {
+  ProfileDetail: {
+    routePrefix: string;
+  };
+};
+export default function ProfileDetailScreen({
+  route,
+}: {
+  route: any;
+}): React.ReactElement {
   // 상세 프로필마다 있는 하단의 탭 인덱스
   const [tabIndex, setTabIndex] = useState(0);
   const [character] = useCharacter();
   const [viewCharacter] = useViewCharacter();
   // 해당 캐릭터의 게시글 담을 state
   const [postArray, setPostArray] = useState<Post<AllTemplates>[]>();
+
+  // const route = useRoute<RouteProp<ParamList, 'ProfileDetail'>>();
+  let prefix = '';
+  console.log(route);
+  if (route !== undefined) {
+    prefix = route.params.routePrefix;
+  }
 
   // 해당 캐릭터의 게시글을 가져오는 api
   useEffect(() => {
@@ -66,6 +83,7 @@ export default function ProfileDetailScreen(): React.ReactElement {
         isBackButton
         name={character.name}
         profileImg={character.profile_img}
+        routePrefix={prefix}
       />
 
       <Animated.ScrollView
@@ -78,7 +96,7 @@ export default function ProfileDetailScreen(): React.ReactElement {
         )}
       >
         <View style={{ paddingTop: 20 }} />
-        <ProfileDetailItem isMini={false} />
+        <ProfileDetailItem isMini={false} routePrefix={prefix} />
 
         <View style={{ marginTop: 30 }}>
           <area.RowArea>

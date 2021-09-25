@@ -88,6 +88,34 @@ export function ProfileDetailStackNavigator(): React.ReactElement {
     </ProfileDetailStack.Navigator>
   );
 }
+const HomeProfileDetailStack =
+  createStackNavigator<Types.ProfileDetailStackParam>();
+export function HomeProfileDetailStackNavigator(): React.ReactElement {
+  return (
+    <HomeProfileDetailStack.Navigator initialRouteName="ProfileDetail">
+      <HomeProfileDetailStack.Screen
+        name="ProfileDetail"
+        component={ProfileDetailScreen}
+        options={{ headerShown: false }}
+      />
+      <HomeProfileDetailStack.Screen
+        name="ProfileDeletion"
+        component={CharacterDeletionScreen}
+        options={{ headerShown: false }}
+      />
+      <HomeProfileDetailStack.Screen
+        name="PostStack"
+        component={PostStackNavigator}
+        options={{ headerShown: false }}
+      />
+      <HomeProfileDetailStack.Screen
+        name="AccountStack"
+        component={AccountStackNavigator}
+        options={{ headerShown: false }}
+      />
+    </HomeProfileDetailStack.Navigator>
+  );
+}
 // setting
 const SettingStack = createStackNavigator<Types.SettingStackParam>();
 export function SettingStackNavigator(): React.ReactElement {

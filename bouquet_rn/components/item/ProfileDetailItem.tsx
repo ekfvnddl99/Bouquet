@@ -27,16 +27,19 @@ import { MyCharacter } from '../../utils/types/UserTypes';
 type ProfileDetailItemProps = {
   isMini: boolean;
   characterInfo?: MyCharacter;
+  routePrefix: string;
 };
 /**
  * Profile의 swipe view 캐릭터 컴포넌트 && '상세 프로필'의 캐릭터 정보
  * TODO 언팔로우
  * TODO 팔로우 여부
  * @param isMini swipe view에 사용되는지 아닌지
+ * @param routePrefix 라우트 접두사. 어느 탭에서 왔는가!
  */
 export default function ProfileDetailItem({
   isMini,
   characterInfo,
+  routePrefix,
 }: ProfileDetailItemProps): React.ReactElement {
   const navigation = useNavigation();
   const [viewCharacter, setViewCharacter] = useViewCharacter();
@@ -50,7 +53,9 @@ export default function ProfileDetailItem({
    */
   async function goProfileDetail() {
     await setViewCharacter(realCharacter.name);
-    navigation.navigate('ProfileDetailStack');
+    navigation.navigate(`${routePrefix}ProfileDetailStack`, {
+      routePrefix,
+    });
   }
   /**
    * '캐릭터 프로필 수정' 화면으로 이동하는 함수
@@ -174,6 +179,7 @@ export default function ProfileDetailItem({
               diameter={20}
               isAccount
               isJustImg={false}
+              isPress
               name={
                 // characterInfo가 있어도 이 경우는 유저 정보를 띄울 필요도 없고 띄울 수도 없음
                 // 어차피 profile detail로 이동하게 되면 알아서 setViewCharacter()가 실행될 때 이 정보를 불러올 것이므로 realCharacter가 아닌 viewCharacter로 처리
@@ -186,6 +192,7 @@ export default function ProfileDetailItem({
                   ? viewCharacter.user_info.profile_img
                   : ''
               }
+              routePrefix={routePrefix}
             />
             <text.Body2R textColor={colors.black}>
               {i18n.t('의')} {i18n.t('캐릭터')}

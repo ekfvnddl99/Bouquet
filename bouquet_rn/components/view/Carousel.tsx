@@ -13,6 +13,7 @@ type carouselProps = {
   gap: number;
   pageWidth: number;
   setPage: (param: number) => void;
+  routePrefix: string;
 };
 /**
  * '캐릭터 스와이프 뷰'에서 옆으로 넘기는 뷰
@@ -22,6 +23,7 @@ type carouselProps = {
  * @param gap 옆의 페이지와의 간격
  * @param pageWidth 페이지 너비
  * @param setPage 페이지 set 함수
+ * @param routePrefix 라우트 접두사. 어느 탭에서 왔는가!
  */
 export default function Carousel({
   pages,
@@ -29,6 +31,7 @@ export default function Carousel({
   gap,
   pageWidth,
   setPage,
+  routePrefix,
 }: carouselProps): React.ReactElement {
   const onScroll = (e: any) => {
     const newPage = Math.round(
@@ -58,6 +61,7 @@ export default function Carousel({
                   ...obj.item,
                   id: obj.item.id ? obj.item.id : -1,
                 }}
+                routePrefix={routePrefix}
               />
             </View>
           </TouchableWithoutFeedback>

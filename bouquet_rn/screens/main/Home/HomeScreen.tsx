@@ -143,8 +143,10 @@ export default function HomeScreen(): React.ReactElement {
               diameter={40}
               isAccount={false}
               isJustImg
+              isPress={false}
               name={myCharacter.name}
               profileImg={myCharacter.profile_img}
+              routePrefix="HomeTab"
             />
           </AnimationImg>
         ) : null}
@@ -160,12 +162,14 @@ export default function HomeScreen(): React.ReactElement {
         )}
       >
         <View style={{ paddingTop: 20 + 14 }} />
-        {isLogined ? <QnATextInput /> : null}
+        {isLogined ? <QnATextInput routePrefix="HomeTab" /> : null}
         <FlatList
           data={postArray}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item, idx) => idx.toString()}
-          renderItem={(obj) => <PostItem postInfo={obj.item} />}
+          renderItem={(obj) => (
+            <PostItem postInfo={obj.item} routePrefix="HomeTab" />
+          )}
         />
       </Animated.ScrollView>
       {isLogined ? (
