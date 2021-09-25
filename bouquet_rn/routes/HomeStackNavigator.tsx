@@ -23,18 +23,13 @@ export default function HomeStackNavigator(): React.ReactElement {
         options={{ headerShown: false }}
       />
       <HomeStack.Screen
-        name="ProfileDetailStack"
+        name="HomeTabProfileDetailStack"
         component={ProfileDetailStackNavigator}
         options={{ headerShown: false }}
       />
       <HomeStack.Screen
-        name="PostStack"
+        name="HomeTabPostStack"
         component={PostStackNavigator}
-        options={{ headerShown: false }}
-      />
-      <HomeStack.Screen
-        name="WritingStack"
-        component={WritingStackNavigator}
         options={{ headerShown: false }}
       />
     </HomeStack.Navigator>

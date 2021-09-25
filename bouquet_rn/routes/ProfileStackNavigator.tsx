@@ -25,7 +25,7 @@ export default function ProfileStackNavigator(): React.ReactElement {
         options={{ headerShown: false }}
       />
       <ProfileStack.Screen
-        name="ProfileDetailStack"
+        name="ProfileTabProfileDetailStack"
         component={ProfileDetailStackNavigator}
         options={{ headerShown: false }}
       />
@@ -35,12 +35,7 @@ export default function ProfileStackNavigator(): React.ReactElement {
         options={{ headerShown: false }}
       />
       <ProfileStack.Screen
-        name="WritingStack"
-        component={WritingStackNavigator}
-        options={{ headerShown: false }}
-      />
-      <ProfileStack.Screen
-        name="AccountStack"
+        name="ProfileTabAccountStack"
         component={AccountStackNavigator}
         options={{ headerShown: false }}
       />

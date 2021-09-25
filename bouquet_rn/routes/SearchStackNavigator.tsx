@@ -23,18 +23,13 @@ export default function SearchStackNavigator(): React.ReactElement {
         options={{ headerShown: false }}
       />
       <SearchStack.Screen
-        name="ProfileDetailStack"
+        name="SearchTabProfileDetailStack"
         component={ProfileDetailStackNavigator}
         options={{ headerShown: false }}
       />
       <SearchStack.Screen
-        name="PostStack"
+        name="SearchTabPostStack"
         component={PostStackNavigator}
-        options={{ headerShown: false }}
-      />
-      <SearchStack.Screen
-        name="WritingStack"
-        component={WritingStackNavigator}
         options={{ headerShown: false }}
       />
     </SearchStack.Navigator>

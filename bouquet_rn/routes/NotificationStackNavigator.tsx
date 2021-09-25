@@ -19,7 +19,12 @@ export default function NotificationStackNavigator(): React.ReactElement {
         options={{ headerShown: false }}
       />
       <NotificationStack.Screen
-        name="ProfileDetailStack"
+        name="NotiTabProfileDetailStack"
+        component={ProfileDetailStackNavigator}
+        options={{ headerShown: false }}
+      />
+      <NotificationStack.Screen
+        name="NotiTabPostStack"
         component={ProfileDetailStackNavigator}
         options={{ headerShown: false }}
       />
