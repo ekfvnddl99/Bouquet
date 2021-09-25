@@ -49,7 +49,11 @@ export default function PostItem({
    */
   async function goPostStack() {
     await setViewPost(postInfo.id);
-    navigation.navigate(`${routePrefix}PostStack`, { routePrefix });
+    alert(routePrefix);
+    navigation.navigate(`${routePrefix}PostStack`, {
+      screen: 'PostDetail',
+      params: { routePrefix },
+    });
   }
 
   /**

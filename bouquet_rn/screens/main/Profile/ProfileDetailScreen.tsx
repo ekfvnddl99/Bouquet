@@ -32,26 +32,26 @@ const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 type ParamList = {
   ProfileDetail: {
     routePrefix: string;
+    characterName?: string;
   };
 };
-export default function ProfileDetailScreen({
-  route,
-}: {
-  route: any;
-}): React.ReactElement {
+export default function ProfileDetailScreen(): React.ReactElement {
   // 상세 프로필마다 있는 하단의 탭 인덱스
   const [tabIndex, setTabIndex] = useState(0);
   const [character] = useCharacter();
-  const [viewCharacter] = useViewCharacter();
+  const [viewCharacter, setViewCharacter] = useViewCharacter();
   // 해당 캐릭터의 게시글 담을 state
   const [postArray, setPostArray] = useState<Post<AllTemplates>[]>();
 
-  // const route = useRoute<RouteProp<ParamList, 'ProfileDetail'>>();
-  let prefix = '';
-  console.log(route);
-  if (route !== undefined) {
-    prefix = route.params.routePrefix;
-  }
+  const route = useRoute<RouteProp<ParamList, 'ProfileDetail'>>();
+  let routePrefix = '';
+  useEffect(() => {
+    if (route.params !== undefined) {
+      const { characterName } = route.params;
+      if (characterName) setViewCharacter(characterName);
+      routePrefix = route.params.routePrefix;
+    }
+  }, []);
 
   // 해당 캐릭터의 게시글을 가져오는 api
   useEffect(() => {
@@ -61,8 +61,8 @@ export default function ProfileDetailScreen({
         setPostArray(serverResult.result);
       } else alert(serverResult.result.errorMsg);
     }
-    getPosts();
-  }, []);
+    if (viewCharacter.name !== '') getPosts();
+  }, [viewCharacter]);
 
   const scroll = useRef(new Animated.Value(0)).current;
   const OpacityHeader = scroll.interpolate({
@@ -83,7 +83,7 @@ export default function ProfileDetailScreen({
         isBackButton
         name={character.name}
         profileImg={character.profile_img}
-        routePrefix={prefix}
+        routePrefix={routePrefix}
       />
 
       <Animated.ScrollView
@@ -96,7 +96,7 @@ export default function ProfileDetailScreen({
         )}
       >
         <View style={{ paddingTop: 20 }} />
-        <ProfileDetailItem isMini={false} routePrefix={prefix} />
+        <ProfileDetailItem isMini={false} routePrefix={routePrefix} />
 
         <View style={{ marginTop: 30 }}>
           <area.RowArea>
@@ -117,9 +117,12 @@ export default function ProfileDetailScreen({
             </TouchableOpacity>
           </area.RowArea>
           {tabIndex === 0 ? (
-            <ProfileFeedScreen postArray={postArray} />
+            <ProfileFeedScreen
+              postArray={postArray}
+              routePrefix={routePrefix}
+            />
           ) : (
-            <ProfileQnAScreen />
+            <ProfileQnAScreen routePrefix={routePrefix} />
           )}
         </View>
       </Animated.ScrollView>

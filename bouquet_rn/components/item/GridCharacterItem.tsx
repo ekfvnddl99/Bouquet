@@ -48,7 +48,10 @@ export default function GridCharacterItem({
    */
   async function goProfileDetail() {
     await setViewCharacter(characterInfo.name);
-    navigation.navigate(`${routePrefix}ProfileDetailStack`, { routePrefix });
+    navigation.navigate(`${routePrefix}ProfileDetailStack`, {
+      screen: 'ProfileDetail',
+      params: { routePrefix },
+    });
   }
 
   return (

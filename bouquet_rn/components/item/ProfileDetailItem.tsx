@@ -26,8 +26,8 @@ import { MyCharacter } from '../../utils/types/UserTypes';
 
 type ProfileDetailItemProps = {
   isMini: boolean;
-  characterInfo?: MyCharacter;
   routePrefix: string;
+  characterInfo?: MyCharacter;
 };
 /**
  * Profile의 swipe view 캐릭터 컴포넌트 && '상세 프로필'의 캐릭터 정보
@@ -35,11 +35,12 @@ type ProfileDetailItemProps = {
  * TODO 팔로우 여부
  * @param isMini swipe view에 사용되는지 아닌지
  * @param routePrefix 라우트 접두사. 어느 탭에서 왔는가!
+ * @param characterInfo 보여줄 캐릭터 객체
  */
 export default function ProfileDetailItem({
   isMini,
-  characterInfo,
   routePrefix,
+  characterInfo,
 }: ProfileDetailItemProps): React.ReactElement {
   const navigation = useNavigation();
   const [viewCharacter, setViewCharacter] = useViewCharacter();
@@ -54,7 +55,8 @@ export default function ProfileDetailItem({
   async function goProfileDetail() {
     await setViewCharacter(realCharacter.name);
     navigation.navigate(`${routePrefix}ProfileDetailStack`, {
-      routePrefix,
+      screen: 'ProfileDetail',
+      params: { routePrefix },
     });
   }
   /**

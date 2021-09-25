@@ -1,4 +1,10 @@
-import React, { useRef, useState, useMemo, useCallback } from 'react';
+import React, {
+  useRef,
+  useState,
+  useMemo,
+  useCallback,
+  useEffect,
+} from 'react';
 import {
   KeyboardAvoidingView,
   FlatList,
@@ -57,7 +63,7 @@ const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 type ParamList = {
   PostDetail: {
     routePrefix: string;
-    postId: number;
+    postId?: number;
   };
 };
 /**
@@ -72,12 +78,13 @@ export default function PostDetailScreen(): React.ReactElement {
 
   const route = useRoute<RouteProp<ParamList, 'PostDetail'>>();
   let prefix = '';
-  console.log(route);
-  if (route !== undefined) {
-    const postId = route.params?.postId;
-    prefix = route.params.routePrefix;
-    setViewPost(postId);
-  }
+  useEffect(() => {
+    if (route.params !== undefined) {
+      const { postId } = route.params;
+      if (postId) setViewPost(postId);
+      prefix = route.params.routePrefix;
+    }
+  }, []);
 
   // 내가 고른 댓글의 아이디
   const [selectComment, setSelectComment] = useState(noComment);

@@ -13,7 +13,12 @@ import QnAItem from '../../../components/item/QnAItem';
 // utils
 import { noCharacter } from '../../../utils/types/UserTypes';
 
-export default function ProfileQnAScreen(): React.ReactElement {
+type ProfileQnAScreenProps = {
+  routePrefix: string;
+};
+export default function ProfileQnAScreen({
+  routePrefix,
+}: ProfileQnAScreenProps): React.ReactElement {
   // dummy data - 서버에서 불러와야 함
   const data = [
     { id: 1, question: 'asdf', answer: 'asdfasdf', characterInfo: noCharacter },
@@ -38,7 +43,7 @@ export default function ProfileQnAScreen(): React.ReactElement {
             question={obj.item.question}
             answer={obj.item.answer}
             characterInfo={obj.item.characterInfo}
-            routePrefix="ProfileTab"
+            routePrefix={routePrefix}
           />
         )}
       />

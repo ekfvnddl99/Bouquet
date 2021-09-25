@@ -45,7 +45,6 @@ export default function AccountScreen(): React.ReactElement {
 
   const route = useRoute<RouteProp<ParamList, 'Account'>>();
   let prefix = '';
-  console.log(route);
   if (route !== undefined) {
     prefix = route.params.routePrefix;
   }

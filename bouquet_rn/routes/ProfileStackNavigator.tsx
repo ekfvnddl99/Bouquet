@@ -9,6 +9,7 @@ import ProfileOverviewScreen from '../screens/main/Profile/ProfileOverviewScreen
 
 import {
   ProfileDetailStackNavigator,
+  PostStackNavigator,
   SettingStackNavigator,
   AccountStackNavigator,
 } from './CommonNavigator';
@@ -26,6 +27,11 @@ export default function ProfileStackNavigator(): React.ReactElement {
       <ProfileStack.Screen
         name="ProfileTabProfileDetailStack"
         component={ProfileDetailStackNavigator}
+        options={{ headerShown: false }}
+      />
+      <ProfileStack.Screen
+        name="ProfileTabPostStack"
+        component={PostStackNavigator}
         options={{ headerShown: false }}
       />
       <ProfileStack.Screen

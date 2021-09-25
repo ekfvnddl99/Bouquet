@@ -15,9 +15,11 @@ import PostItem from '../../../components/item/PostItem';
 
 type ProfileFeedViewProps = {
   postArray: Post<AllTemplates>[] | undefined;
+  routePrefix: string;
 };
 export default function ProfileFeedView({
   postArray,
+  routePrefix,
 }: ProfileFeedViewProps): React.ReactElement {
   return (
     <View style={{ marginTop: 16 }}>
@@ -34,7 +36,7 @@ export default function ProfileFeedView({
         keyExtractor={(item) => item.id.toString()}
         showsVerticalScrollIndicator={false}
         renderItem={(obj) => (
-          <PostItem postInfo={obj.item} routePrefix="ProfileTab" />
+          <PostItem postInfo={obj.item} routePrefix={routePrefix} />
         )}
       />
     </View>

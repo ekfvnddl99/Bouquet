@@ -51,7 +51,10 @@ export default function ProfileButton({
   async function goNavigation() {
     if (isAccount) {
       await setViewUser(name);
-      navigation.navigate(`${routePrefix}AccountStack`, { routePrefix });
+      navigation.navigate(`${routePrefix}AccountStack`, {
+        screen: 'Account',
+        params: { routePrefix },
+      });
     } else {
       await setViewCharacter(name);
       navigation.navigate(`${routePrefix}ProfileDetailStack`, {

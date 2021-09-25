@@ -2,7 +2,6 @@ import React, { useRef, useState, useEffect } from 'react';
 import { View, Animated, FlatList } from 'react-native';
 import i18n from 'i18n-js';
 import styled from 'styled-components/native';
-import { useNavigation } from '@react-navigation/native';
 
 // styles
 import colors from '../../../styles/colors';

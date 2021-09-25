@@ -49,15 +49,21 @@ export default function AppStack(): React.ReactElement {
             Home: {
               path: 'Home',
               screens: {
-                HomePostStack: {
-                  path: 'HomePostStack/:postId',
-                  parse: { postId: (postId) => Number(postId) },
+                HomeTabPostStack: {
+                  path: 'PostStack',
+                  screens: {
+                    PostDetail: {
+                      path: 'PostDetail/:postId/:routePrefix',
+                      parse: { postId: (postId) => Number(postId) },
+                    },
+                  },
                 },
-                ProfileDetailStack: {
-                  path: 'profile_detail/:id',
-                  exact: true,
-                  parse: {
-                    characterId: (characterId) => Number(characterId),
+                HomeTabProfileDetailStack: {
+                  path: 'ProfileStack',
+                  screens: {
+                    ProfileDetail: {
+                      path: 'ProfileDetail/:characterName/:routePrefix',
+                    },
                   },
                 },
               },
@@ -75,7 +81,8 @@ export default function AppStack(): React.ReactElement {
         return initialUrl;
       }
 
-      // return 'bouquet://Tab/Home/HomePostStack/1';
+      return 'bouquet://Tab/Home/PostStack/PostDetail/3/HomeTab';
+      // return 'bouquet://Tab/Home/ProfileStack/ProfileDetail/오란지수정/HomeTab';
 
       // Handle URL from expo push notifications
       const response = await Notifications.getLastNotificationResponseAsync();

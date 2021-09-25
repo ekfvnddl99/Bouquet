@@ -98,6 +98,7 @@ export type NotificationProps = StackScreenProps<
 export type ProfileStackParam = {
   ProfileOverview: undefined;
   ProfileTabProfileDetailStack: undefined;
+  ProfileTabPostStack: undefined;
   SettingStack: undefined;
   ProfileTabAccountStack: undefined;
 };
