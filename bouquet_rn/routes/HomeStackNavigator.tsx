@@ -9,7 +9,6 @@ import HomeScreen from '../screens/main/Home/HomeScreen';
 import {
   ProfileDetailStackNavigator,
   PostStackNavigator,
-  WritingStackNavigator,
 } from './CommonNavigator';
 
 // home

@@ -17,7 +17,7 @@ import * as APIs from './APIUtils';
 export async function sendPushNotificationAsync(
   from: string,
   category: string,
-): APIs.ServerResult<null> {
+): Promise<Response> {
   const messageArray = [
     {
       category: 'follow',
@@ -48,53 +48,66 @@ export async function sendPushNotificationAsync(
   const message = {
     to: await SecureStore.getItemAsync('pushToken'),
     sound: 'default',
-    title: messageArray[idx],
-    body: `${from}${messageArray[idx]}`,
+    title: messageArray[idx].title,
+    body: `${from}${messageArray[idx].body}`,
   };
+  console.log(message);
 
-  // 서버 응답 타입 정의
-  type SendNotificationAsyncOutput = null;
-
-  const tmpResult = await APIs.postAsync<SendNotificationAsyncOutput>(
-    '/post',
-    { 'Content-Type': 'application/json' },
-    JSON.stringify(message),
-    true,
-  );
-
-  // 사전 처리된 에러는 바로 반환
-  if (APIs.isServerErrorOutput(tmpResult)) {
-    return { result: tmpResult, isSuccess: false };
-  }
-
-  const [result, response] = tmpResult;
-
-  // 요청 성공
-  if (APIs.isSuccess<SendNotificationAsyncOutput>(result, response)) {
-    return { result: null, isSuccess: true };
-  }
-
-  // 422 : Validation Error
-  if (APIs.isError<APIs.ServerError422>(result, response, 422)) {
-    return {
-      result: {
-        statusCode: 422,
-        errorMsg:
-          '입력한 정보가 잘못되었어요. 수정해서 다시 시도해 보거나, 문의해 주세요.',
-        info: result.detail,
-      },
-      isSuccess: false,
-    };
-  }
-  // 나머지 에러
-  return {
-    result: {
-      statusCode: response.status,
-      errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
-      info: response,
+  const result = await fetch('https://exp.host/--/api/v2/push/send', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Accept-encoding': 'gzip, deflate',
+      'Content-Type': 'application/json',
     },
-    isSuccess: false,
-  };
+    body: JSON.stringify(message),
+  });
+
+  return result;
+
+  // // 서버 응답 타입 정의
+  // type SendNotificationAsyncOutput = null;
+
+  // const tmpResult = await APIs.postAsync<SendNotificationAsyncOutput>(
+  //   '/post',
+  //   { 'Content-Type': 'application/json' },
+  //   JSON.stringify(message),
+  //   true,
+  // );
+
+  // // 사전 처리된 에러는 바로 반환
+  // if (APIs.isServerErrorOutput(tmpResult)) {
+  //   return { result: tmpResult, isSuccess: false };
+  // }
+
+  // const [result, response] = tmpResult;
+
+  // // 요청 성공
+  // if (APIs.isSuccess<SendNotificationAsyncOutput>(result, response)) {
+  //   return { result: null, isSuccess: true };
+  // }
+
+  // // 422 : Validation Error
+  // if (APIs.isError<APIs.ServerError422>(result, response, 422)) {
+  //   return {
+  //     result: {
+  //       statusCode: 422,
+  //       errorMsg:
+  //         '입력한 정보가 잘못되었어요. 수정해서 다시 시도해 보거나, 문의해 주세요.',
+  //       info: result.detail,
+  //     },
+  //     isSuccess: false,
+  //   };
+  // }
+  // // 나머지 에러
+  // return {
+  //   result: {
+  //     statusCode: response.status,
+  //     errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
+  //     info: response,
+  //   },
+  //   isSuccess: false,
+  // };
 }
 
 export async function registerForPushNotificationsAsync(): Promise<void> {
@@ -112,6 +125,7 @@ export async function registerForPushNotificationsAsync(): Promise<void> {
     }
 
     const token = (await Notifications.getExpoPushTokenAsync()).data;
+    console.log(token);
     await SecureStore.setItemAsync('pushToken', token);
   } else {
     alert('Must use physical device for Push Notifications');

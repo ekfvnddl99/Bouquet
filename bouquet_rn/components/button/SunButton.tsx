@@ -10,6 +10,7 @@ import Svg from '../../assets/Icon';
 
 // logics
 import * as cal from '../../logics/non-server/Calculation';
+import { sendPushNotificationAsync } from '../../logics/server/Notification';
 
 type SunButtonProps = {
   sunNum: number;
@@ -32,10 +33,15 @@ export default function SunButton({
   const [isActive, setIsActive] = useState(active);
   const [backgroundColor, setBackgroundColor] = useState('transparent');
 
+  async function send() {
+    const serverResult = await sendPushNotificationAsync('aaa', 'likePost');
+    console.log(serverResult);
+  }
+
   return (
     <button.SunButton
       activeOpacity={1}
-      onPress={() => setIsActive(!isActive)}
+      onPress={() => [setIsActive(!isActive), send()]}
       backgroundColor={isActive ? colors.primary : backgroundColor}
       onPressIn={() => setBackgroundColor(colors.alpha20_primary)}
       onPressOut={() => [

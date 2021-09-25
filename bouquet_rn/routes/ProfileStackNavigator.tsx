@@ -10,7 +10,6 @@ import ProfileOverviewScreen from '../screens/main/Profile/ProfileOverviewScreen
 import {
   ProfileDetailStackNavigator,
   SettingStackNavigator,
-  WritingStackNavigator,
   AccountStackNavigator,
 } from './CommonNavigator';
 

@@ -9,7 +9,6 @@ import SearchScreen from '../screens/main/Search/SearchScreen';
 import {
   ProfileDetailStackNavigator,
   PostStackNavigator,
-  WritingStackNavigator,
 } from './CommonNavigator';
 
 // search
