@@ -66,7 +66,7 @@ export default function AppStack(): React.ReactElement {
         },
       },
     },
-    async getInitialURL(): Promise<string | undefined> {
+    async getInitialURL(): Promise<string> {
       // First, you may want to do the default deep link handling
       // Check if app was opened from a deep link
       const initialUrl = await Linking.getInitialURL();
@@ -76,9 +76,11 @@ export default function AppStack(): React.ReactElement {
       }
 
       // return 'bouquet://Tab/Home/HomePostStack/1';
+
       // Handle URL from expo push notifications
       const response = await Notifications.getLastNotificationResponseAsync();
-      return response?.notification.request.content.data;
+      const url = response?.notification.request.content.data.url;
+      return url;
     },
     subscribe(listener: (deeplink: string) => void) {
       const onReceiveURL = ({ url }: { url: string }) => listener(url);

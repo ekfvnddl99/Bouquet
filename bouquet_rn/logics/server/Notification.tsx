@@ -51,7 +51,6 @@ export async function sendPushNotificationAsync(
     title: messageArray[idx].title,
     body: `${from}${messageArray[idx].body}`,
   };
-  console.log(message);
 
   const result = await fetch('https://exp.host/--/api/v2/push/send', {
     method: 'POST',
@@ -125,7 +124,6 @@ export async function registerForPushNotificationsAsync(): Promise<void> {
     }
 
     const token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log(token);
     await SecureStore.setItemAsync('pushToken', token);
   } else {
     alert('Must use physical device for Push Notifications');

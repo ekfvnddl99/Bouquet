@@ -35,7 +35,6 @@ export default function SunButton({
 
   async function send() {
     const serverResult = await sendPushNotificationAsync('aaa', 'likePost');
-    console.log(serverResult);
   }
 
   return (
