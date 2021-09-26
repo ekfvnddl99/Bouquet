@@ -266,7 +266,9 @@ export default function SearchScreen(): React.ReactElement {
         </Animated.ScrollView>
       </TouchableWithoutFeedback>
 
-      {myCharacter.id === -1 ? null : <FloatingButton />}
+      {myCharacter.id === -1 ? null : (
+        <FloatingButton routePrefix="SearchTab" />
+      )}
     </area.Container>
   );
 }

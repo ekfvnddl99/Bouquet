@@ -8,7 +8,7 @@ import {
   Keyboard,
 } from 'react-native';
 import I18n from 'i18n-js';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
@@ -41,6 +41,11 @@ import ListTemplate from '../template/ListTemplate';
 import { WritingStackParam } from '../../utils/types/NavigationTypes';
 import { noPost } from '../../utils/types/PostTypes';
 
+type ParamList = {
+  PostWriting: {
+    routePrefix: string;
+  };
+};
 /**
  * 템플릿을 선택하고 게시글을 쓰는 화면
  * TODO template 내 setPost 함수 필요
@@ -50,6 +55,14 @@ export default function PostWritingScreen(): React.ReactElement {
   const navigation = useNavigation<StackNavigationProp<WritingStackParam>>();
   const [myCharacter] = useCharacter();
   const [, setViewPost] = useViewPost();
+
+  const route = useRoute<RouteProp<ParamList, 'PostWriting'>>();
+  let prefix = '';
+  useEffect(() => {
+    if (route.params !== undefined) {
+      prefix = route.params.routePrefix;
+    }
+  }, []);
 
   // 내가 선택한 템플릿 번호(enum 순서대로 0부터 시작)
   const select = useRecoilValue(selectTemplate);
@@ -129,6 +142,7 @@ export default function PostWritingScreen(): React.ReactElement {
         isBackButton
         name={myCharacter.name}
         profileImg={myCharacter.profile_img}
+        routePrefix={prefix}
       />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <KeyboardAvoidingView style={{ flex: 1 }} behavior="height">
@@ -144,8 +158,10 @@ export default function PostWritingScreen(): React.ReactElement {
                     diameter={30}
                     isAccount={false}
                     isJustImg={false}
+                    isPress={false}
                     name={myCharacter.name}
                     profileImg={myCharacter.profile_img}
+                    routePrefix={prefix}
                   />
                 </View>
                 {select !== -1 ? (

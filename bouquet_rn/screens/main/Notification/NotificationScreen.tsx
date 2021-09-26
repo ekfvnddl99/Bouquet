@@ -179,7 +179,7 @@ export default function NotificationScreen(): React.ReactElement {
         )}
       </Animated.ScrollView>
       {isLogined ? (
-        <FloatingButton />
+        <FloatingButton routePrefix="NotiTab" />
       ) : (
         <>
           <View style={{ flex: 1 }} />

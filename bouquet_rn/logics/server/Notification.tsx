@@ -63,66 +63,26 @@ export async function sendPushNotificationAsync(
   });
 
   return result;
-
-  // // 서버 응답 타입 정의
-  // type SendNotificationAsyncOutput = null;
-
-  // const tmpResult = await APIs.postAsync<SendNotificationAsyncOutput>(
-  //   '/post',
-  //   { 'Content-Type': 'application/json' },
-  //   JSON.stringify(message),
-  //   true,
-  // );
-
-  // // 사전 처리된 에러는 바로 반환
-  // if (APIs.isServerErrorOutput(tmpResult)) {
-  //   return { result: tmpResult, isSuccess: false };
-  // }
-
-  // const [result, response] = tmpResult;
-
-  // // 요청 성공
-  // if (APIs.isSuccess<SendNotificationAsyncOutput>(result, response)) {
-  //   return { result: null, isSuccess: true };
-  // }
-
-  // // 422 : Validation Error
-  // if (APIs.isError<APIs.ServerError422>(result, response, 422)) {
-  //   return {
-  //     result: {
-  //       statusCode: 422,
-  //       errorMsg:
-  //         '입력한 정보가 잘못되었어요. 수정해서 다시 시도해 보거나, 문의해 주세요.',
-  //       info: result.detail,
-  //     },
-  //     isSuccess: false,
-  //   };
-  // }
-  // // 나머지 에러
-  // return {
-  //   result: {
-  //     statusCode: response.status,
-  //     errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
-  //     info: response,
-  //   },
-  //   isSuccess: false,
-  // };
 }
 
 export async function registerForPushNotificationsAsync(): Promise<void> {
   if (Constants.isDevice) {
+    // 알림 허락 받았는지 확인
     const { status: existingStatus } =
       await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
+    // 허락 안 받았으면 사용자에게 허락해달라고 요구
     if (existingStatus !== 'granted') {
       const { status } = await Notifications.requestPermissionsAsync();
       finalStatus = status;
     }
+    // 사용자가 허락 안 하면 불가
     if (finalStatus !== 'granted') {
       alert('Failed to get push token for push notification!');
       return;
     }
 
+    // token 얻어서 저장함
     const token = (await Notifications.getExpoPushTokenAsync()).data;
     await SecureStore.setItemAsync('pushToken', token);
   } else {

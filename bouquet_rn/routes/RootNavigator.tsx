@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Linking } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer, LinkingOptions } from '@react-navigation/native';
@@ -23,17 +23,36 @@ Notifications.setNotificationHandler({
 export default function AppStack(): React.ReactElement {
   const [isSplash, setIsSplash] = useState(true);
   const [login] = useLogin();
+  const notificationListener = useRef();
+  const responseListener = useRef();
 
   // 실행되자마자 처리해야 하는 것
   useEffect(() => {
     async function callLogin() {
       await registerForPushNotificationsAsync();
+      // This listener is fired whenever a notification is received while the app is foregrounded
+      notificationListener.current =
+        Notifications.addNotificationReceivedListener((notification) => {
+          console.log(notification);
+        });
+
+      // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+      responseListener.current =
+        Notifications.addNotificationResponseReceivedListener((response) => {
+          console.log(response);
+        });
       await login();
       setTimeout(() => {
         setIsSplash(false);
       }, 2000);
     }
     callLogin();
+    return () => {
+      Notifications.removeNotificationSubscription(
+        notificationListener.current,
+      );
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
   }, []);
 
   const linking: LinkingOptions = {
@@ -81,7 +100,7 @@ export default function AppStack(): React.ReactElement {
         return initialUrl;
       }
 
-      return 'bouquet://Tab/Home/PostStack/PostDetail/3/HomeTab';
+      // return 'bouquet://Tab/Home/PostStack/PostDetail/3/HomeTab';
       // return 'bouquet://Tab/Home/ProfileStack/ProfileDetail/오란지수정/HomeTab';
 
       // Handle URL from expo push notifications

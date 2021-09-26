@@ -173,7 +173,7 @@ export default function HomeScreen(): React.ReactElement {
         />
       </Animated.ScrollView>
       {isLogined ? (
-        <FloatingButton />
+        <FloatingButton routePrefix="HomeTab" />
       ) : (
         <>
           <View style={{ flex: 1 }} />

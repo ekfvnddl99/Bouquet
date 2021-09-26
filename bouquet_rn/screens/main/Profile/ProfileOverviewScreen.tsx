@@ -113,7 +113,9 @@ export default function ProfileOverviewScreen(): React.ReactElement {
       ) : (
         <ProfileGridView scroll={scroll} characterList={characterList} />
       )}
-      {myCharacter.id === -1 ? null : <FloatingButton />}
+      {myCharacter.id === -1 ? null : (
+        <FloatingButton routePrefix="ProfileTab" />
+      )}
     </area.Container>
   );
 }
