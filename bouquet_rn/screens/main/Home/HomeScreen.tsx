@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { View, FlatList, Animated } from 'react-native';
+import { View, Animated } from 'react-native';
 import i18n from 'i18n-js';
 import styled from 'styled-components/native';
 
@@ -35,24 +35,34 @@ export default function HomeScreen(): React.ReactElement {
   // 인기 게시글 담을 state
   const [postArray, setPostArray] = useState<Post<AllTemplates>[]>();
 
+  const [pageNum, setPageNum] = useState(1);
+  const [isPageEnd, setIsPageEnd] = useState(false);
+
   // 로그인한 상태인지 아닌지 확인
   useEffect(() => {
     if (myCharacter.id === -1) setIsLogined(false);
     else setIsLogined(true);
   }, [myCharacter.id]);
+
   // 가장 처음에 인기 게시물 가져옴
   useEffect(() => {
     async function getPost() {
       const id = myCharacter.id ? myCharacter.id : undefined;
-      const serverResult = await getTopPostListAsync(1, id);
+      const serverResult = await getTopPostListAsync(pageNum, id);
       if (serverResult.isSuccess) {
-        setPostArray(serverResult.result);
+        if (postArray === undefined) setPostArray(serverResult.result);
+        else if (serverResult.result.length === 0) setIsPageEnd(true);
+        else {
+          const tmpArray = postArray;
+          serverResult.result.forEach((obj) => tmpArray.push(obj));
+          setPostArray(tmpArray);
+        }
       } else {
         alert(serverResult.result.errorMsg);
       }
     }
     getPost();
-  }, []);
+  }, [pageNum]);
 
   /**
    * animation 관련
@@ -152,26 +162,32 @@ export default function HomeScreen(): React.ReactElement {
         ) : null}
       </area.RowArea>
 
-      <Animated.ScrollView
-        style={{ marginTop: HEADER_MIN_HEIGHT - 30, marginHorizontal: 30 }}
-        showsVerticalScrollIndicator={false}
+      <Animated.FlatList
+        style={{
+          marginTop: HEADER_MIN_HEIGHT - 30,
+          marginHorizontal: 30,
+        }}
         scrollEventThrottle={1}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scroll } } }],
           { useNativeDriver: true },
         )}
-      >
-        <View style={{ paddingTop: 20 + 14 }} />
-        {isLogined ? <QnATextInput routePrefix="HomeTab" /> : null}
-        <FlatList
-          data={postArray}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item, idx) => idx.toString()}
-          renderItem={(obj) => (
-            <PostItem postInfo={obj.item} routePrefix="HomeTab" />
-          )}
-        />
-      </Animated.ScrollView>
+        data={postArray}
+        ListHeaderComponent={() => (
+          <View style={{ marginTop: 20 + 14 }}>
+            {isLogined ? <QnATextInput routePrefix="HomeTab" /> : null}
+          </View>
+        )}
+        onEndReached={() => {
+          if (!isPageEnd) setPageNum(pageNum + 1);
+        }}
+        onEndReachedThreshold={0.8}
+        showsVerticalScrollIndicator={false}
+        keyExtractor={(item, idx) => idx.toString()}
+        renderItem={(obj) => (
+          <PostItem postInfo={obj.item} routePrefix="HomeTab" />
+        )}
+      />
       {isLogined ? (
         <FloatingButton routePrefix="HomeTab" />
       ) : (

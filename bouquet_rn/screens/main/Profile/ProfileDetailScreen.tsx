@@ -1,16 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, TouchableOpacity, StyleSheet, Animated } from 'react-native';
-import i18n from 'i18n-js';
+import { StyleSheet, Animated, ScrollView } from 'react-native';
 import { useRoute, RouteProp } from '@react-navigation/native';
 
 // styles
 import colors from '../../../styles/colors';
 import * as area from '../../../styles/styled-components/area';
-import * as text from '../../../styles/styled-components/text';
 
 // view
-import ProfileFeedScreen from './ProfileFeedView';
-import ProfileQnAScreen from './ProfileQnAView';
+import ProfileFeedView from './ProfileFeedView';
+import ProfileQnAView from './ProfileQnAView';
+import ProfileDetailTopView from './ProfileDetailTopView';
 
 // logics
 import { StatusBarHeight } from '../../../logics/non-server/StatusbarHeight';
@@ -20,9 +19,9 @@ import useViewCharacter from '../../../logics/hooks/useViewCharacter';
 
 // utils
 import { Post, AllTemplates } from '../../../utils/types/PostTypes';
+import { noCharacter } from '../../../utils/types/UserTypes';
 
 // components
-import ProfileDetailItem from '../../../components/item/ProfileDetailItem';
 import HeaderItem from '../../../components/item/HeaderItem';
 
 const HEADER_MAX_HEIGHT = 80;
@@ -40,6 +39,7 @@ export default function ProfileDetailScreen(): React.ReactElement {
   const [tabIndex, setTabIndex] = useState(0);
   const [character] = useCharacter();
   const [viewCharacter, setViewCharacter] = useViewCharacter();
+
   // 해당 캐릭터의 게시글 담을 state
   const [postArray, setPostArray] = useState<Post<AllTemplates>[]>();
 
@@ -53,16 +53,27 @@ export default function ProfileDetailScreen(): React.ReactElement {
     }
   }, []);
 
+  const [postPageNum, setPostPageNum] = useState(1);
+  const [isPostPageEnd, setIsPostPageEnd] = useState(false);
   // 해당 캐릭터의 게시글을 가져오는 api
   useEffect(() => {
     async function getPosts() {
-      const serverResult = await getPostListAsync(1, viewCharacter.name);
+      const serverResult = await getPostListAsync(
+        postPageNum,
+        viewCharacter.name,
+      );
       if (serverResult.isSuccess) {
-        setPostArray(serverResult.result);
+        if (postArray === undefined) setPostArray(serverResult.result);
+        else if (serverResult.result.length === 0) setIsPostPageEnd(true);
+        else {
+          const tmpArray = postArray;
+          serverResult.result.forEach((obj) => tmpArray.push(obj));
+          setPostArray(tmpArray);
+        }
       } else alert(serverResult.result.errorMsg);
     }
     if (viewCharacter.name !== '') getPosts();
-  }, [viewCharacter]);
+  }, [viewCharacter, postPageNum]);
 
   const scroll = useRef(new Animated.Value(0)).current;
   const OpacityHeader = scroll.interpolate({
@@ -70,6 +81,17 @@ export default function ProfileDetailScreen(): React.ReactElement {
     outputRange: [0, 0.5, 1],
     extrapolate: 'clamp',
   });
+
+  function setTopView(arrayLength: number) {
+    return (
+      <ProfileDetailTopView
+        routePrefix={routePrefix}
+        arrayLength={arrayLength}
+        tabIndex={tabIndex}
+        setTabIndex={setTabIndex}
+      />
+    );
+  }
 
   return (
     <area.Container>
@@ -85,46 +107,36 @@ export default function ProfileDetailScreen(): React.ReactElement {
         profileImg={character.profile_img}
         routePrefix={routePrefix}
       />
-
       <Animated.ScrollView
         style={{ marginHorizontal: 30 }}
+        contentContainerStyle={{ flex: 1 }}
         showsVerticalScrollIndicator={false}
-        scrollEventThrottle={1}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scroll } } }],
           { useNativeDriver: true },
         )}
       >
-        <View style={{ paddingTop: 20 }} />
-        <ProfileDetailItem isMini={false} routePrefix={routePrefix} />
-
-        <View style={{ marginTop: 30 }}>
-          <area.RowArea>
-            <TouchableOpacity onPress={() => setTabIndex(0)}>
-              <text.Subtitle3
-                textColor={tabIndex === 0 ? colors.black : colors.gray5}
-              >
-                {i18n.t('게시글')}
-              </text.Subtitle3>
-            </TouchableOpacity>
-            <View style={{ marginRight: 16 }} />
-            <TouchableOpacity onPress={() => setTabIndex(2)}>
-              <text.Subtitle3
-                textColor={tabIndex === 2 ? colors.black : colors.gray5}
-              >
-                {i18n.t('질문')}
-              </text.Subtitle3>
-            </TouchableOpacity>
-          </area.RowArea>
-          {tabIndex === 0 ? (
-            <ProfileFeedScreen
-              postArray={postArray}
-              routePrefix={routePrefix}
-            />
-          ) : (
-            <ProfileQnAScreen routePrefix={routePrefix} />
-          )}
-        </View>
+        {tabIndex === 0 ? (
+          <ProfileFeedView
+            routePrefix={routePrefix}
+            postArray={postArray}
+            isPostPageEnd={isPostPageEnd}
+            postPageNum={postPageNum}
+            setPostPageNum={setPostPageNum}
+            setTopView={() => setTopView(postArray ? postArray.length : 0)}
+            animationValue={scroll}
+          />
+        ) : (
+          <ProfileQnAView
+            routePrefix={routePrefix}
+            postArray={postArray}
+            isPostPageEnd={isPostPageEnd}
+            postPageNum={postPageNum}
+            setPostPageNum={setPostPageNum}
+            setTopView={() => setTopView(3)}
+            animationValue={scroll}
+          />
+        )}
       </Animated.ScrollView>
     </area.Container>
   );
