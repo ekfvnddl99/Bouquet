@@ -11,33 +11,39 @@ import * as APIs from './APIUtils';
  * @param from 누구에게서 알림이 왔는지
  * @param category 어떤 내용의 알림인지
  * * follow(팔로우), likeComment(댓글 좋아요), likePost(글 좋아요), comment(댓글 달림)
+ * @param nameOrId PostDetail은 post id, ProfileDetail은 character name을 넣으면 된다.
  * @returns
  */
 // Can use this function below, OR use Expo's Push Notification Tool-> https://expo.dev/notifications
 export async function sendPushNotificationAsync(
   from: string,
   category: string,
+  nameOrId: string | number,
 ): Promise<Response> {
   const messageArray = [
     {
       category: 'follow',
       title: '당신을 팔로우해요.',
       body: '님이 당신을 팔로우해요.',
+      url: `bouquet://Tab/Home/ProfileStack/ProfileDetail/${nameOrId}/HomeTab`,
     },
     {
       category: 'likeComment',
       title: '당신의 댓글을 좋아해요.',
       body: '님이 당신의 댓글을 좋아해요.',
+      url: `bouquet://Tab/Home/PostStack/PostDetail/${nameOrId}/HomeTab`,
     },
     {
       category: 'likePost',
       title: '당신의 게시글을 좋아해요.',
       body: '님이 당신의 게시글을 좋아해요.',
+      url: `bouquet://Tab/Home/PostStack/PostDetail/${nameOrId}/HomeTab`,
     },
     {
       category: 'comment',
       title: '당신의 게시글에 댓글을 달았어요.',
       body: '님이 당신의 게시글에 댓글을 달았어요.',
+      url: `bouquet://Tab/Home/PostStack/PostDetail/${nameOrId}/HomeTab`,
     },
   ];
   let idx = 0;
@@ -50,6 +56,7 @@ export async function sendPushNotificationAsync(
     sound: 'default',
     title: messageArray[idx].title,
     body: `${from}${messageArray[idx].body}`,
+    data: { url: messageArray[idx].url },
   };
 
   const result = await fetch('https://exp.host/--/api/v2/push/send', {

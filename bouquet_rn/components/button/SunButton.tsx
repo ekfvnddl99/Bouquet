@@ -16,6 +16,7 @@ type SunButtonProps = {
   sunNum: number;
   setSunNum: (param: number) => void;
   active: boolean;
+  postId: number;
 };
 /**
  * 햇님 버튼
@@ -24,17 +25,19 @@ type SunButtonProps = {
  * @param sunNum 햇살 개수
  * @param setSunNum 햇살의 set 함수
  * @param active 버튼이 눌러졌는지
+ * @param postId 해당 포스트의 아이디
  */
 export default function SunButton({
   sunNum,
   setSunNum,
   active,
+  postId,
 }: SunButtonProps): React.ReactElement {
   const [isActive, setIsActive] = useState(active);
   const [backgroundColor, setBackgroundColor] = useState('transparent');
 
   async function send() {
-    await sendPushNotificationAsync('aaa', 'likePost');
+    await sendPushNotificationAsync('aaa', 'likePost', postId);
   }
 
   return (

@@ -13,7 +13,9 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "usesAppleSignIn": true,
@@ -22,6 +24,11 @@
         "googleSignIn": {
           "reservedClientId": "com.googleusercontent.apps.828159899837-kcksemp2itup93uk6bdic66cubug5go8"
         }
+      },
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "remote-notification"
+        ]
       }
     },
     "android": {
@@ -29,7 +36,8 @@
         "foregroundImage": "./assets/png/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "softwareKeyboardLayoutMode": "pan"
+      "softwareKeyboardLayoutMode": "pan",
+      "package": "com.bouquet.bouquet"
     },
     "web": {
       "favicon": "./assets/png/favicon.png"

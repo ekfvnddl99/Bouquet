@@ -49,7 +49,6 @@ export default function PostItem({
    */
   async function goPostStack() {
     await setViewPost(postInfo.id);
-    alert(routePrefix);
     navigation.navigate(`${routePrefix}PostStack`, {
       screen: 'PostDetail',
       params: { routePrefix },
@@ -112,6 +111,7 @@ export default function PostItem({
           active={postInfo ? postInfo.liked : false}
           sunNum={postInfo ? postInfo.num_sunshines : 0}
           setSunNum={() => undefined}
+          postId={postInfo.id}
         />
       </View>
     </button.BigListButton>

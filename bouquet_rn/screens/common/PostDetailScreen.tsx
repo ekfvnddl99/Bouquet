@@ -249,6 +249,7 @@ export default function PostDetailScreen(): React.ReactElement {
                   /* */
                 }}
                 active={viewPost?.liked}
+                postId={viewPost.id}
               />
             </View>
             <text.Subtitle3 textColor={colors.black} style={{ marginTop: 36 }}>

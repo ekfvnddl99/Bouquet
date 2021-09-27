@@ -48,6 +48,8 @@ export default function QnAItem({
 
   /**
    * '상세 게시물' 화면으로 가는 함수
+   *
+   * TODO SunButton의 postId 바꿔야함.
    * */
   function goPostStack() {
     navigation.navigate(`${routePrefix}PostStack`, { routePrefix });
@@ -85,7 +87,12 @@ export default function QnAItem({
           {answer}
         </text.Body2R>
         <View style={{ alignItems: 'flex-start' }}>
-          <SunButton sunNum={0} setSunNum={() => undefined} active={false} />
+          <SunButton
+            sunNum={0}
+            setSunNum={() => undefined}
+            active={false}
+            postId={0}
+          />
         </View>
       </WholeArea>
     </TouchableWithoutFeedback>
