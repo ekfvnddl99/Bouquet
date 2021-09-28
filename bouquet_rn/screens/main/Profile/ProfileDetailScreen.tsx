@@ -92,6 +92,25 @@ export default function ProfileDetailScreen(): React.ReactElement {
     );
   }
 
+  const tabIndexArray = [
+    {
+      arrayLength: postArray ? postArray.length : 0,
+      returnView: (
+        <ProfileFeedView
+          routePrefix={routePrefix}
+          postArray={postArray}
+          isPostPageEnd={isPostPageEnd}
+          postPageNum={postPageNum}
+          setPostPageNum={setPostPageNum}
+        />
+      ),
+    },
+    {
+      arrayLength: 3,
+      returnView: <ProfileQnAView routePrefix={routePrefix} />,
+    },
+  ];
+
   return (
     <area.Container>
       <Animated.View
@@ -108,26 +127,14 @@ export default function ProfileDetailScreen(): React.ReactElement {
       />
       <Animated.FlatList
         style={{ marginHorizontal: 30 }}
-        ListHeaderComponent={setTopView(3)}
+        ListHeaderComponent={setTopView(tabIndexArray[tabIndex].arrayLength)}
         showsVerticalScrollIndicator={false}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scroll } } }],
           { useNativeDriver: true },
         )}
         data={[1]}
-        renderItem={() => {
-          if (tabIndex === 0)
-            return (
-              <ProfileFeedView
-                routePrefix={routePrefix}
-                postArray={postArray}
-                isPostPageEnd={isPostPageEnd}
-                postPageNum={postPageNum}
-                setPostPageNum={setPostPageNum}
-              />
-            );
-          return <ProfileQnAView routePrefix={routePrefix} />;
-        }}
+        renderItem={() => tabIndexArray[tabIndex].returnView}
       />
     </area.Container>
   );

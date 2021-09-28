@@ -28,7 +28,7 @@ export default function ProfileQnAScreen({
       showsVerticalScrollIndicator={false}
       onEndReached={() => {
         // if (!isPostPageEnd) setPostPageNum(postPageNum + 1);
-        console.log('qna!!!');
+        // console.log('qna!!!');
       }}
       onEndReachedThreshold={0.8}
       keyExtractor={(item, idx) => idx.toString()}
