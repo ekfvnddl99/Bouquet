@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { StyleSheet, Animated, ScrollView } from 'react-native';
+import { StyleSheet, Animated } from 'react-native';
 import { useRoute, RouteProp } from '@react-navigation/native';
 
 // styles
@@ -19,7 +19,6 @@ import useViewCharacter from '../../../logics/hooks/useViewCharacter';
 
 // utils
 import { Post, AllTemplates } from '../../../utils/types/PostTypes';
-import { noCharacter } from '../../../utils/types/UserTypes';
 
 // components
 import HeaderItem from '../../../components/item/HeaderItem';
@@ -107,37 +106,29 @@ export default function ProfileDetailScreen(): React.ReactElement {
         profileImg={character.profile_img}
         routePrefix={routePrefix}
       />
-      <Animated.ScrollView
+      <Animated.FlatList
         style={{ marginHorizontal: 30 }}
-        contentContainerStyle={{ flex: 1 }}
+        ListHeaderComponent={setTopView(3)}
         showsVerticalScrollIndicator={false}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scroll } } }],
           { useNativeDriver: true },
         )}
-      >
-        {tabIndex === 0 ? (
-          <ProfileFeedView
-            routePrefix={routePrefix}
-            postArray={postArray}
-            isPostPageEnd={isPostPageEnd}
-            postPageNum={postPageNum}
-            setPostPageNum={setPostPageNum}
-            setTopView={() => setTopView(postArray ? postArray.length : 0)}
-            animationValue={scroll}
-          />
-        ) : (
-          <ProfileQnAView
-            routePrefix={routePrefix}
-            postArray={postArray}
-            isPostPageEnd={isPostPageEnd}
-            postPageNum={postPageNum}
-            setPostPageNum={setPostPageNum}
-            setTopView={() => setTopView(3)}
-            animationValue={scroll}
-          />
-        )}
-      </Animated.ScrollView>
+        data={[1]}
+        renderItem={() => {
+          if (tabIndex === 0)
+            return (
+              <ProfileFeedView
+                routePrefix={routePrefix}
+                postArray={postArray}
+                isPostPageEnd={isPostPageEnd}
+                postPageNum={postPageNum}
+                setPostPageNum={setPostPageNum}
+              />
+            );
+          return <ProfileQnAView routePrefix={routePrefix} />;
+        }}
+      />
     </area.Container>
   );
 }

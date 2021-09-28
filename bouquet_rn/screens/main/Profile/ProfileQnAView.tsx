@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated } from 'react-native';
+import { Animated, FlatList } from 'react-native';
 
 // utils
 import { Post, AllTemplates } from '../../../utils/types/PostTypes';
@@ -11,22 +11,10 @@ import QnAItem from '../../../components/item/QnAItem';
 import { noCharacter } from '../../../utils/types/UserTypes';
 
 type ProfileQnAViewProps = {
-  postArray: Post<AllTemplates>[] | undefined;
   routePrefix: string;
-  isPostPageEnd: boolean;
-  postPageNum: number;
-  setPostPageNum: (param: number) => void;
-  setTopView: () => React.ReactElement;
-  animationValue: Animated.Value;
 };
 export default function ProfileQnAScreen({
-  postArray,
   routePrefix,
-  isPostPageEnd,
-  postPageNum,
-  setPostPageNum,
-  setTopView,
-  animationValue,
 }: ProfileQnAViewProps): React.ReactElement {
   // dummy data - 서버에서 불러와야 함
   const data = [
@@ -36,14 +24,13 @@ export default function ProfileQnAScreen({
   ];
 
   return (
-    <Animated.FlatList
+    <FlatList
       showsVerticalScrollIndicator={false}
-      ListHeaderComponent={setTopView}
-      // onEndReached={() => {
-      //   if (!isPostPageEnd) setPostPageNum(postPageNum + 1);
-      //   // console.log('done!!!');
-      // }}
-      // onEndReachedThreshold={0.8}
+      onEndReached={() => {
+        // if (!isPostPageEnd) setPostPageNum(postPageNum + 1);
+        console.log('qna!!!');
+      }}
+      onEndReachedThreshold={0.8}
       keyExtractor={(item, idx) => idx.toString()}
       data={data}
       renderItem={(obj) => (
