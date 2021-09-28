@@ -1,6 +1,8 @@
 import React, { useMemo } from 'react';
-import { View, TextInput } from 'react-native';
+import { View, TextInput, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
+import { useNavigation } from '@react-navigation/native';
+import * as ImagePicker from 'expo-image-picker';
 
 // styles
 import colors from '../../styles/colors';
@@ -15,7 +17,7 @@ import LineButton from '../../components/button/LineButton';
 import Icon from '../../assets/Icon';
 
 // utils
-import { AlbumTemplate } from '../../utils/types/PostTypes';
+import { AlbumTemplate, AllTemplates } from '../../utils/types/PostTypes';
 
 /* eslint-disable global-require */
 
@@ -23,31 +25,86 @@ type AlbumProps = {
   isMini: boolean;
   isEditMode?: boolean;
   postInfo: AlbumTemplate;
+  setPost?: (template: AlbumTemplate) => void;
+  setImageInfo?: React.Dispatch<
+    React.SetStateAction<
+      [string[], ((images: string[]) => AllTemplates) | undefined]
+    >
+  >;
 };
 
-function Album({ isMini, isEditMode, postInfo }: AlbumProps) {
+function Album({
+  isMini,
+  isEditMode,
+  postInfo,
+  setPost,
+  setImageInfo,
+}: AlbumProps) {
   const realTracks = useMemo(
     () => (isMini ? postInfo.tracks.slice(0, 3) : postInfo.tracks),
     [isMini, postInfo],
   );
 
+  const navigation = useNavigation();
+  async function goNavigation(lyric: string) {
+    navigation.navigate('WritingStack', {
+      screen: 'AlbumLyric',
+      params: { lyric, setPost },
+    });
+  }
+
+  const setImage = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      alert('이미지를 업로드하려면 권한이 필요해요.');
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      if (setImageInfo && setPost) {
+        setPost({ ...postInfo, img: result.uri });
+        setImageInfo([
+          [result.uri],
+          (images: string[]) => {
+            const tmpPost = postInfo;
+            /* eslint-disable-next-line prefer-destructuring */
+            tmpPost.img = images[0];
+            setPost(tmpPost);
+            return tmpPost;
+          },
+        ]);
+      }
+    }
+  };
+
   return (
     <area.NoHeightArea marBottom={0} paddingH={15} paddingV={15}>
       <AlbumInfoWrap>
-        {isEditMode ? (
-          <AlbumBlankPic>
-            <Icon icon="gallery" size={24} />
-          </AlbumBlankPic>
+        {postInfo.img === '' ? (
+          <TouchableOpacity onPress={isEditMode ? () => setImage() : undefined}>
+            <AlbumBlankPic>
+              <Icon icon="gallery" size={24} />
+            </AlbumBlankPic>
+          </TouchableOpacity>
         ) : (
-          <AlbumPic
-            width={isMini ? 80 : 100}
-            height={isMini ? 80 : 100}
-            source={
-              postInfo.img
-                ? { uri: postInfo.img }
-                : require('../../assets/img.jpg')
-            }
-          />
+          <TouchableOpacity onPress={isEditMode ? () => setImage() : undefined}>
+            <AlbumPic
+              width={isMini ? 80 : 100}
+              height={isMini ? 80 : 100}
+              source={
+                postInfo.img
+                  ? { uri: postInfo.img }
+                  : require('../../assets/img.jpg')
+              }
+            />
+          </TouchableOpacity>
         )}
         <AlbumTextInfoWrap>
           <AlbumTitleWrap>
@@ -63,6 +120,12 @@ function Album({ isMini, isEditMode, postInfo }: AlbumProps) {
                   paddingBottom: 0,
                 }}
                 multiline
+                value={postInfo.title}
+                onChangeText={
+                  setPost
+                    ? (t: string) => setPost({ ...postInfo, title: t })
+                    : undefined
+                }
               />
             ) : (
               <text.Body2B textColor={colors.black}>
@@ -84,6 +147,12 @@ function Album({ isMini, isEditMode, postInfo }: AlbumProps) {
                 paddingTop: 0,
                 paddingBottom: 0,
               }}
+              value={postInfo.release_date}
+              onChangeText={
+                setPost
+                  ? (t: string) => setPost({ ...postInfo, release_date: t })
+                  : undefined
+              }
             />
           ) : (
             <text.Caption textColor={colors.gray6}>
@@ -107,6 +176,12 @@ function Album({ isMini, isEditMode, postInfo }: AlbumProps) {
               marginTop: 16,
             }}
             multiline
+            value={postInfo.description}
+            onChangeText={
+              setPost
+                ? (t: string) => setPost({ ...postInfo, description: t })
+                : undefined
+            }
           />
         ) : (
           <text.Caption textColor={colors.gray6} style={{ marginTop: 16 }}>
@@ -117,44 +192,86 @@ function Album({ isMini, isEditMode, postInfo }: AlbumProps) {
       {isEditMode ? (
         <>
           <SongsWrap>
-            <SongWrap>
-              <text.Body2B textColor={colors.black} style={{ width: 20 }}>
-                01
-              </text.Body2B>
-              <TextInput
-                placeholder="곡 제목 (필수)"
-                style={{
-                  fontWeight: 'normal',
-                  fontSize: 14,
-                  marginLeft: 5,
-                  marginRight: 12,
-                  flex: 1,
-                  textAlignVertical: 'top',
-                  paddingTop: 0,
-                  paddingBottom: 0,
-                }}
-                multiline
-              />
-              <View
-                style={{
-                  alignItems: 'center',
-                  flexDirection: 'row',
-                  height: 17,
-                }}
-              >
-                <Icon icon="write" size={15} />
-                <Icon icon="x" size={24} />
-              </View>
-            </SongWrap>
+            {postInfo.tracks.map((song, idx) => (
+              <SongWrap>
+                <text.Body2B textColor={colors.black} style={{ width: 20 }}>
+                  {idx + 1 <= 9 ? `0${idx + 1}` : idx + 1}
+                </text.Body2B>
+                <TextInput
+                  placeholder="곡 제목 (필수)"
+                  style={{
+                    fontWeight: 'normal',
+                    fontSize: 14,
+                    marginLeft: 5,
+                    marginRight: 12,
+                    flex: 1,
+                    textAlignVertical: 'top',
+                    paddingTop: 0,
+                    paddingBottom: 0,
+                  }}
+                  multiline
+                  value={song.title}
+                  onChangeText={
+                    setPost
+                      ? (t: string) => {
+                          const tmpPost = postInfo;
+                          tmpPost.tracks[idx].title = t;
+                          setPost(tmpPost);
+                        }
+                      : undefined
+                  }
+                />
+                <View
+                  style={{
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                    height: 17,
+                  }}
+                >
+                  <TouchableOpacity onPress={() => goNavigation(song.lyric)}>
+                    <Icon icon="write" size={15} />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={
+                      setPost
+                        ? () => {
+                            const tmpPost = postInfo;
+                            if (tmpPost.tracks.length > 1) {
+                              tmpPost.tracks.splice(idx, 1);
+                              setPost(tmpPost);
+                            }
+                          }
+                        : undefined
+                    }
+                  >
+                    <Icon icon="x" size={24} />
+                  </TouchableOpacity>
+                </View>
+              </SongWrap>
+            ))}
           </SongsWrap>
-          <View style={{ alignItems: 'flex-start', marginTop: 10 }}>
+          <TouchableOpacity
+            style={{ alignItems: 'flex-start', marginTop: 10 }}
+            onPress={
+              setPost
+                ? () => {
+                    const tmpPost = postInfo;
+                    tmpPost.tracks = [
+                      ...tmpPost.tracks,
+                      { title: '', lyric: '' },
+                    ];
+                    setPost(tmpPost);
+                  }
+                : undefined
+            }
+          >
             <LineButton content="곡 추가" borderColor={colors.black} />
-          </View>
+          </TouchableOpacity>
         </>
       ) : (
         <SongsWrap>
           {realTracks.map((song, idx) => (
-            <SongWrap key={idx}>
+            <SongWrap>
               <text.Body2B textColor={colors.black} style={{ width: 20 }}>
                 {idx + 1 <= 9 ? `0${idx + 1}` : idx + 1}
               </text.Body2B>
@@ -172,6 +289,8 @@ function Album({ isMini, isEditMode, postInfo }: AlbumProps) {
     </area.NoHeightArea>
   );
 }
+
+// TODO: SongWrap의 key에 array의 index가 아닌 다른 unique한 값을 넣기
 
 const AlbumInfoWrap = styled.View`
   flex: 1;
@@ -209,12 +328,20 @@ const SongWrap = styled.View`
 
 type TemplateProps = {
   mode: string;
-  post?: AlbumTemplate;
+  post: AlbumTemplate;
+  setPost?: (template: AlbumTemplate) => void;
+  setImageInfo?: React.Dispatch<
+    React.SetStateAction<
+      [string[], ((images: string[]) => AllTemplates) | undefined]
+    >
+  >;
 };
 
 export default function AlbumTemplateComp({
   mode,
   post,
+  setPost,
+  setImageInfo,
 }: TemplateProps): React.ReactElement {
   const exampleTemplate: AlbumTemplate = {
     type: 'Album',
@@ -246,28 +373,26 @@ export default function AlbumTemplateComp({
         <Album isMini={false} isEditMode={false} postInfo={exampleTemplate} />
       );
     case 'mini':
-      return (
-        <Album isMini isEditMode={false} postInfo={post || exampleTemplate} />
-      );
+      return <Album isMini isEditMode={false} postInfo={post} />;
     case 'detail':
       return (
         <area.NoHeightArea marBottom={12} paddingH={10} paddingV={10}>
-          <Album
-            isMini={false}
-            isEditMode={false}
-            postInfo={post || exampleTemplate}
-          />
+          <Album isMini={false} isEditMode={false} postInfo={post} />
         </area.NoHeightArea>
       );
     case 'edit':
       return (
         <area.NoHeightArea marBottom={12} paddingH={10} paddingV={10}>
-          <Album isMini={false} isEditMode postInfo={post || exampleTemplate} />
+          <Album
+            isMini={false}
+            isEditMode
+            postInfo={post}
+            setPost={setPost}
+            setImageInfo={setImageInfo}
+          />
         </area.NoHeightArea>
       );
     default:
-      return (
-        <Album isMini isEditMode={false} postInfo={post || exampleTemplate} />
-      );
+      return <Album isMini isEditMode={false} postInfo={post} />;
   }
 }

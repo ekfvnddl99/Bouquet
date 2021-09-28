@@ -6,6 +6,7 @@ import {
   Platform,
 } from 'react-native';
 import styled from 'styled-components/native';
+import * as ImagePicker from 'expo-image-picker';
 
 import colors from '../../styles/colors';
 import * as text from '../../styles/styled-components/text';
@@ -13,7 +14,7 @@ import * as area from '../../styles/styled-components/area';
 
 import Icon from '../../assets/Icon';
 
-import { DiaryTemplate } from '../../utils/types/PostTypes';
+import { DiaryTemplate, AllTemplates } from '../../utils/types/PostTypes';
 
 /* eslint-disable global-require */
 
@@ -23,10 +24,21 @@ type DiaryProps = {
   isMini: boolean;
   isEditMode?: boolean;
   diary: DiaryTemplate;
-  setPost?: React.Dispatch<React.SetStateAction<DiaryTemplate>>;
+  setPost?: (template: DiaryTemplate) => void;
+  setImageInfo?: React.Dispatch<
+    React.SetStateAction<
+      [string[], ((images: string[]) => AllTemplates) | undefined]
+    >
+  >;
 };
 
-function Diary({ isMini, isEditMode, diary, setPost }: DiaryProps) {
+function Diary({
+  isMini,
+  isEditMode,
+  diary,
+  setPost,
+  setImageInfo,
+}: DiaryProps) {
   const [contentHeight, setContentHeight] = useState(20);
   const [dateInfo, setDateInfo] = useState({
     year: Math.floor(diary.date / 10000),
@@ -34,9 +46,56 @@ function Diary({ isMini, isEditMode, diary, setPost }: DiaryProps) {
     day: diary.date % 100,
   });
 
+  const setDate = (year?: string, month?: string, day?: string) => {
+    const newDateInfo = {
+      year: year && !Number.isNaN(year) ? parseInt(year, 10) : dateInfo.year,
+      month:
+        month && !Number.isNaN(month) ? parseInt(month, 10) : dateInfo.month,
+      day: day && !Number.isNaN(day) ? parseInt(day, 10) : dateInfo.day,
+    };
+    setDateInfo(newDateInfo);
+    if (setPost)
+      setPost({
+        ...diary,
+        date:
+          newDateInfo.year * 10000 + newDateInfo.month * 100 + newDateInfo.day,
+      });
+  };
+
   const onLayout = (event: LayoutChangeEvent) => {
     const { height } = event.nativeEvent.layout;
     setContentHeight(height);
+  };
+
+  const setImage = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      alert('이미지를 업로드하려면 권한이 필요해요.');
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      if (setImageInfo && setPost) {
+        setPost({ ...diary, img: result.uri });
+        setImageInfo([
+          [result.uri],
+          (images: string[]) => {
+            const tmpPost = diary;
+            /* eslint-disable-next-line prefer-destructuring */
+            tmpPost.img = images[0];
+            setPost(tmpPost);
+            return tmpPost;
+          },
+        ]);
+      }
+    }
   };
 
   return (
@@ -47,6 +106,9 @@ function Diary({ isMini, isEditMode, diary, setPost }: DiaryProps) {
             <SmallInput
               placeholder="연도"
               placeholderTextColor={colors.gray5}
+              value={String(dateInfo.year)}
+              onChangeText={(t: string) => setDate(t)}
+              keyboardType="number-pad"
             />
           ) : (
             <text.DiaryBody2R textColor={colors.diary}>
@@ -60,7 +122,14 @@ function Diary({ isMini, isEditMode, diary, setPost }: DiaryProps) {
             년
           </text.DiaryBody2R>
           {isEditMode ? (
-            <SmallInput placeholder="월" placeholderTextColor={colors.gray5} />
+            <SmallInput
+              placeholder="월"
+              placeholderTextColor={colors.gray5}
+              maxLength={2}
+              onChangeText={(t: string) => setDate(undefined, t)}
+              value={String(dateInfo.month)}
+              keyboardType="number-pad"
+            />
           ) : (
             <text.DiaryBody2R textColor={colors.diary}>
               {dateInfo.month}
@@ -73,7 +142,14 @@ function Diary({ isMini, isEditMode, diary, setPost }: DiaryProps) {
             월
           </text.DiaryBody2R>
           {isEditMode ? (
-            <SmallInput placeholder="일" placeholderTextColor={colors.gray5} />
+            <SmallInput
+              placeholder="일"
+              placeholderTextColor={colors.gray5}
+              maxLength={2}
+              onChangeText={(t: string) => setDate(undefined, undefined, t)}
+              value={String(dateInfo.day)}
+              keyboardType="number-pad"
+            />
           ) : (
             <text.DiaryBody2R textColor={colors.diary}>
               {dateInfo.day}
@@ -87,7 +163,16 @@ function Diary({ isMini, isEditMode, diary, setPost }: DiaryProps) {
           </text.DiaryBody2R>
         </DateWrap>
         {isEditMode ? (
-          <SmallInput placeholder="날씨" placeholderTextColor={colors.gray5} />
+          <SmallInput
+            placeholder="날씨"
+            placeholderTextColor={colors.gray5}
+            value={diary.weather}
+            onChangeText={
+              setPost
+                ? (t: string) => setPost({ ...diary, weather: t })
+                : undefined
+            }
+          />
         ) : (
           <text.DiaryBody2R textColor={colors.diary}>
             {diary.weather}
@@ -108,6 +193,12 @@ function Diary({ isMini, isEditMode, diary, setPost }: DiaryProps) {
               color: colors.diary,
             }}
             multiline
+            value={diary.title}
+            onChangeText={
+              setPost
+                ? (t: string) => setPost({ ...diary, title: t })
+                : undefined
+            }
           />
         ) : (
           <text.DiarySubtitle3 textColor={colors.diary}>
@@ -118,11 +209,11 @@ function Diary({ isMini, isEditMode, diary, setPost }: DiaryProps) {
           /* eslint-disable-next-line no-nested-ternary */
           isEditMode ? (
             diary.img ? (
-              <TouchableOpacity>
+              <TouchableOpacity onPress={setImage}>
                 <MainImage isMini={isMini} source={{ uri: diary.img }} />
               </TouchableOpacity>
             ) : (
-              <MainBlankPic>
+              <MainBlankPic onPress={setImage}>
                 <Icon icon="gallery" size={24} />
               </MainBlankPic>
             )
@@ -165,7 +256,7 @@ function Diary({ isMini, isEditMode, diary, setPost }: DiaryProps) {
           <LineBackground>
             {[...Array(Math.round(contentHeight / LINE_HEIGHT))].map(
               (n, idx) => (
-                <Line key={idx} />
+                <Line />
               ),
             )}
           </LineBackground>
@@ -239,14 +330,20 @@ const Line = styled.View`
 
 type TemplateProps = {
   mode: string;
-  setPost?: React.Dispatch<React.SetStateAction<DiaryTemplate>>;
-  post?: DiaryTemplate;
+  setPost?: (template: DiaryTemplate) => void;
+  post: DiaryTemplate;
+  setImageInfo?: React.Dispatch<
+    React.SetStateAction<
+      [string[], ((images: string[]) => AllTemplates) | undefined]
+    >
+  >;
 };
 
 export default function DiaryTemplateComp({
   mode,
   setPost,
   post,
+  setImageInfo,
 }: TemplateProps): React.ReactElement {
   const diaryDataEx: DiaryTemplate = {
     type: 'Diary',
@@ -260,32 +357,13 @@ export default function DiaryTemplateComp({
 
   switch (mode) {
     case 'ex':
-      return (
-        <Diary
-          isMini={false}
-          isEditMode={false}
-          diary={diaryDataEx}
-          setPost={setPost}
-        />
-      );
+      return <Diary isMini={false} isEditMode={false} diary={diaryDataEx} />;
     case 'mini':
-      return (
-        <Diary
-          isMini
-          isEditMode={false}
-          diary={post || diaryDataEx}
-          setPost={setPost}
-        />
-      );
+      return <Diary isMini isEditMode={false} diary={post} />;
     case 'detail':
       return (
         <area.NoHeightArea marBottom={12} paddingH={10} paddingV={10}>
-          <Diary
-            isMini={false}
-            isEditMode={false}
-            diary={post || diaryDataEx}
-            setPost={setPost}
-          />
+          <Diary isMini={false} isEditMode={false} diary={post} />
         </area.NoHeightArea>
       );
     case 'edit':
@@ -294,19 +372,13 @@ export default function DiaryTemplateComp({
           <Diary
             isMini={false}
             isEditMode
-            diary={post || diaryDataEx}
+            diary={post}
             setPost={setPost}
+            setImageInfo={setImageInfo}
           />
         </area.NoHeightArea>
       );
     default:
-      return (
-        <Diary
-          isMini
-          isEditMode={false}
-          diary={post || diaryDataEx}
-          setPost={setPost}
-        />
-      );
+      return <Diary isMini isEditMode={false} diary={post} />;
   }
 }

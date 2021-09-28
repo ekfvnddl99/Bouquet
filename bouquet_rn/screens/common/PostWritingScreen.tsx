@@ -17,13 +17,13 @@ import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
 import * as button from '../../styles/styled-components/button';
-import * as input from '../../styles/styled-components/input';
 
 // logics
 import { selectTemplate } from '../../logics/atoms';
 import { uploadPostAsync } from '../../logics/server/Post';
 import useCharacter from '../../logics/hooks/useCharacter';
 import useViewPost from '../../logics/hooks/useViewPost';
+import uploadImageAsync from '../../logics/server/UploadImage';
 
 // components
 import ConditionButton from '../../components/button/ConditionButton';
@@ -32,6 +32,7 @@ import HeaderItem from '../../components/item/HeaderItem';
 import LineButton from '../../components/button/LineButton';
 
 // templates
+import TextTemplate from '../template/TextTemplate';
 import ImageTemplate from '../template/ImageTemplate';
 import AlbumTemplate from '../template/AlbumTemplate';
 import DiaryTemplate from '../template/DiaryTemplate';
@@ -39,7 +40,7 @@ import ListTemplate from '../template/ListTemplate';
 
 // utils
 import { WritingStackParam } from '../../utils/types/NavigationTypes';
-import { noPost } from '../../utils/types/PostTypes';
+import * as Post from '../../utils/types/PostTypes';
 
 type ParamList = {
   PostWriting: {
@@ -48,7 +49,6 @@ type ParamList = {
 };
 /**
  * 템플릿을 선택하고 게시글을 쓰는 화면
- * TODO template 내 setPost 함수 필요
  * @returns
  */
 export default function PostWritingScreen(): React.ReactElement {
@@ -68,14 +68,35 @@ export default function PostWritingScreen(): React.ReactElement {
   const select = useRecoilValue(selectTemplate);
   const setSelect = useSetRecoilState(selectTemplate);
 
-  // 기본적으로 들어가는 text 담는 state
-  const [defaultText, setDefaultText] = useState('');
   // 새 게시글 객체
-  const [newPost, setNewPost] = useState({
+  const [newPost, setNewPost] = useState<Post.PostRequest<Post.AllTemplates>>({
     character_id: myCharacter.id,
-    text: defaultText,
-    template: noPost.template,
+    text: '',
+    template: Post.noTemplate<Post.PlainTemplate>('None'),
   });
+
+  // 각 템플릿에 필요한 이미지 정보
+  // setImage는 각 템플릿으로부터 전달받는 함수
+  // 각 템플릿으로부터 전달받은 이미지들(images)을 서버에 업로드한 뒤 그 주소를 이 함수에 넣어서 실행하면 됨
+  const [[images, setImage], setImageInfo] = useState<
+    [Array<string>, ((images: Array<string>) => Post.AllTemplates) | undefined]
+  >([[], undefined]);
+
+  /**
+   * 템플릿이 있는 경우 템플릿 설정
+   * @param template 새로 설정할 템플릿 객체
+   */
+  const setTemplate = (template: Post.AllTemplates) => {
+    setNewPost({ ...newPost, template });
+  };
+
+  /**
+   * 텍스트 템플릿의 텍스트 설정
+   * @param newText 새로 설정할 텍스트
+   */
+  const setText = (newText: string) => {
+    setNewPost({ ...newPost, text: newText });
+  };
 
   /**
    * 백핸들러 처리
@@ -104,11 +125,22 @@ export default function PostWritingScreen(): React.ReactElement {
    */
   async function goUpload() {
     setSelect(-1);
-    const serverResult = await uploadPostAsync({
-      character_id: myCharacter.id,
-      template: newPost.template,
-      text: defaultText,
-    });
+
+    const realImages = await Promise.all(
+      images.map(async (img) => {
+        const imgResult = await uploadImageAsync(img);
+        if (imgResult.isSuccess) {
+          return imgResult.result;
+        }
+        // TODO: 빈 문자열 대신 기본 이미지 쓰기
+        return '';
+      }),
+    );
+
+    const realNewPost = newPost;
+    if (setImage) realNewPost.template = setImage(realImages);
+
+    const serverResult = await uploadPostAsync(realNewPost);
     if (serverResult.isSuccess) {
       setViewPost(serverResult.result);
       navigation.replace('PostStack');
@@ -120,16 +152,68 @@ export default function PostWritingScreen(): React.ReactElement {
    * @param idx 템플릿의 인덱스
    * @returns
    */
-  function setTemplate(idx: number) {
+  function getTemplate(idx: number) {
     switch (idx) {
       case 1:
-        return <ImageTemplate mode="edit" setPost={() => setNewPost} />;
+        setNewPost({
+          ...newPost,
+          template: Post.noTemplate<Post.ImageTemplate>('Image'),
+        });
+        return (
+          <ImageTemplate
+            mode="edit"
+            post={
+              newPost.template.type === 'Image'
+                ? newPost.template
+                : Post.noTemplate<Post.ImageTemplate>('Image')
+            }
+            setPost={setTemplate}
+            setImageInfo={setImageInfo}
+          />
+        );
       case 2:
-        return <AlbumTemplate mode="edit" setPost={() => setNewPost} />;
+        setNewPost({
+          ...newPost,
+          template: Post.noTemplate<Post.AlbumTemplate>('Album'),
+        });
+        return (
+          <AlbumTemplate
+            mode="edit"
+            post={
+              newPost.template.type === 'Album'
+                ? newPost.template
+                : Post.noTemplate<Post.AlbumTemplate>('Album')
+            }
+            setPost={setTemplate}
+            setImageInfo={setImageInfo}
+          />
+        );
       case 3:
-        return <DiaryTemplate mode="edit" setPost={() => setNewPost} />;
+        return (
+          <DiaryTemplate
+            mode="edit"
+            post={
+              newPost.template.type === 'Diary'
+                ? newPost.template
+                : Post.noTemplate<Post.DiaryTemplate>('Diary')
+            }
+            setPost={setTemplate}
+            setImageInfo={setImageInfo}
+          />
+        );
       case 4:
-        return <ListTemplate mode="edit" setPost={() => setNewPost} />;
+        return (
+          <ListTemplate
+            mode="edit"
+            post={
+              newPost.template.type === 'List'
+                ? newPost.template
+                : Post.noTemplate<Post.ListTemplate>('List')
+            }
+            setPost={setTemplate}
+            setImageInfo={setImageInfo}
+          />
+        );
       default:
         return null;
     }
@@ -180,15 +264,10 @@ export default function PostWritingScreen(): React.ReactElement {
                   </text.Button2B>
                 </button.AddTemplate>
               ) : (
-                <View style={{ marginTop: 12 }}>{setTemplate(select)}</View>
+                <View style={{ marginTop: 12 }}>{getTemplate(select)}</View>
               )}
 
-              <input.TextTemplate
-                onChangeText={(textInput: string) => setDefaultText(textInput)}
-                placeholder={I18n.t('내용을 입력해 주세요')}
-                value={defaultText}
-                multiline
-              />
+              <TextTemplate mode="edit" post={newPost.text} setPost={setText} />
               <View style={{ marginTop: 40 }} />
               <ConditionButton
                 isActive

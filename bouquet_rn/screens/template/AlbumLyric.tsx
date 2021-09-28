@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import {
   Animated,
   StyleSheet,
@@ -7,6 +7,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native';
+import { useRoute, RouteProp } from '@react-navigation/native';
 
 import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
@@ -59,6 +60,13 @@ type AlbumLyricProps = {
   isEdit: boolean;
 };
 
+type ParamList = {
+  AlbumLyric: {
+    lyric: string;
+    setPost?: () => void;
+  };
+};
+
 export default function AlbumLyric({
   isEdit,
 }: AlbumLyricProps): React.ReactElement {
@@ -84,6 +92,13 @@ export default function AlbumLyric({
 끝없는 밤 남겨진 반
 넌 어떨까 나와 같을까
 알 수 없음에 아파지던 맘`;
+
+  const route = useRoute<RouteProp<ParamList, 'AlbumLyric'>>();
+  useEffect(() => {
+    if (route.params !== undefined) {
+      const { lyric, setPost } = route.params;
+    }
+  }, []);
 
   const scroll = useRef(new Animated.Value(0)).current;
   const OpacityHeader = scroll.interpolate({

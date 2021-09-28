@@ -26,6 +26,7 @@ export type WritingStackParam = {
   PostWriting: undefined;
   SelectTemplate: undefined;
   PostStack: undefined;
+  AlbumLyric: undefined;
 };
 export type WritingProps = StackScreenProps<WritingStackParam, 'PostWriting'>;
 // post item

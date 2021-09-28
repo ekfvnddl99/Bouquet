@@ -1,6 +1,7 @@
-import React, { useMemo } from 'react';
-import { View, TextInput } from 'react-native';
+import React, { useMemo, useState } from 'react';
+import { View, TextInput, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
+import * as ImagePicker from 'expo-image-picker';
 
 import colors from '../../styles/colors';
 import * as text from '../../styles/styled-components/text';
@@ -10,7 +11,7 @@ import LineButton from '../../components/button/LineButton';
 
 import Icon from '../../assets/Icon';
 
-import { ListTemplate } from '../../utils/types/PostTypes';
+import { ListTemplate, AllTemplates } from '../../utils/types/PostTypes';
 
 /* eslint-disable global-require */
 
@@ -18,33 +19,105 @@ type ListProps = {
   isMini: boolean;
   isEditMode?: boolean;
   postInfo: ListTemplate;
+  setPost?: (template: ListTemplate) => void;
+  setImageInfo?: React.Dispatch<
+    React.SetStateAction<
+      [string[], ((images: string[]) => AllTemplates) | undefined]
+    >
+  >;
 };
 
-function List({ isMini, isEditMode, postInfo }: ListProps) {
+function List({
+  isMini,
+  isEditMode,
+  postInfo,
+  setPost,
+  setImageInfo,
+}: ListProps) {
   const realList = useMemo(
     () => (isMini ? postInfo.components.slice(0, 3) : postInfo.components),
     [isMini, postInfo],
   );
 
+  const [listImages, setListImages] = useState<Array<string>>([]);
+
+  const setImage = async (idx: number) => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      alert('이미지를 업로드하려면 권한이 필요해요.');
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      if (setImageInfo && setPost) {
+        if (idx === -1) {
+          setPost({ ...postInfo, img: result.uri });
+
+          const tmpListImages = listImages;
+          tmpListImages[0] = result.uri;
+          setListImages(tmpListImages);
+          setImageInfo([
+            tmpListImages,
+            (images: string[]) => {
+              const tmpPost = postInfo;
+              /* eslint-disable-next-line prefer-destructuring */
+              tmpPost.img = images[0];
+              images.forEach((value, index) => {
+                if (index !== 0) {
+                  tmpPost.components[index - 1].img = images[index];
+                }
+              });
+              setPost(tmpPost);
+              return tmpPost;
+            },
+          ]);
+        } else {
+          const tmpPost1 = postInfo;
+          tmpPost1.components[idx].img = result.uri;
+          setPost(tmpPost1);
+
+          const tmpListImages = listImages;
+          tmpListImages[idx + 1] = result.uri;
+          setListImages(tmpListImages);
+          setImageInfo([
+            tmpListImages,
+            (images: string[]) => {
+              const tmpPost = postInfo;
+              /* eslint-disable-next-line prefer-destructuring */
+              tmpPost.img = images[0];
+              images.forEach((value, index) => {
+                if (index !== 0) {
+                  tmpPost.components[index - 1].img = images[index];
+                }
+              });
+              setPost(tmpPost);
+              return tmpPost;
+            },
+          ]);
+        }
+      }
+    }
+  };
+
   return (
     <>
       {isMini ? null : (
-        <>
-          {isEditMode ? (
+        <TouchableOpacity onPress={isEditMode ? () => setImage(-1) : undefined}>
+          {postInfo.img === '' ? (
             <MainBlankPic>
               <Icon icon="gallery" size={24} />
             </MainBlankPic>
           ) : (
-            <MainPic
-              isMini={isMini}
-              source={
-                postInfo.img
-                  ? { uri: postInfo.img }
-                  : require('../../assets/img.jpg')
-              }
-            />
+            <MainPic isMini={isMini} source={{ uri: postInfo.img }} />
           )}
-        </>
+        </TouchableOpacity>
       )}
       <area.NoHeightArea marBottom={0} paddingH={15} paddingV={15}>
         {isMini ? (
@@ -76,6 +149,10 @@ function List({ isMini, isEditMode, postInfo }: ListProps) {
                     paddingBottom: 0,
                   }}
                   multiline
+                  value={postInfo.title}
+                  onChangeText={(t: string) => {
+                    if (setPost) setPost({ ...postInfo, title: t });
+                  }}
                 />
                 <TextInput
                   placeholder="목록 설명을 입력해 주세요."
@@ -89,6 +166,10 @@ function List({ isMini, isEditMode, postInfo }: ListProps) {
                     marginTop: 16,
                   }}
                   multiline
+                  value={postInfo.content}
+                  onChangeText={(t: string) => {
+                    if (setPost) setPost({ ...postInfo, content: t });
+                  }}
                 />
               </>
             ) : (
@@ -110,47 +191,98 @@ function List({ isMini, isEditMode, postInfo }: ListProps) {
         <ListWrap>
           {isEditMode ? (
             <>
-              <ContentWrap>
-                <ContentBlankPic>
-                  <Icon icon="gallery" size={24} />
-                </ContentBlankPic>
-                <ContentTextWrap>
-                  <TextInput
-                    placeholder="요소 제목 (필수)"
-                    style={{
-                      flex: 1,
-                      fontWeight: '600',
-                      fontSize: 14,
-                      textAlignVertical: 'top',
-                      paddingTop: 0,
-                      paddingBottom: 0,
+              {postInfo.components.map((content, idx) => (
+                <>
+                  <ContentWrap>
+                    <TouchableOpacity onPress={() => setImage(idx)}>
+                      {content.img === '' ? (
+                        <ContentBlankPic>
+                          <Icon icon="gallery" size={24} />
+                        </ContentBlankPic>
+                      ) : (
+                        <ContentPic
+                          isMini={isMini}
+                          source={{ uri: content.img }}
+                        />
+                      )}
+                    </TouchableOpacity>
+
+                    <ContentTextWrap>
+                      <TextInput
+                        placeholder="요소 제목 (필수)"
+                        style={{
+                          flex: 1,
+                          fontWeight: '600',
+                          fontSize: 14,
+                          textAlignVertical: 'top',
+                          paddingTop: 0,
+                          paddingBottom: 0,
+                        }}
+                        multiline
+                        value={content.title}
+                        onChangeText={(t: string) => {
+                          const tmpPost = postInfo;
+                          tmpPost.components[idx].title = t;
+                          if (setPost) setPost(tmpPost);
+                        }}
+                      />
+                      <TextInput
+                        placeholder="요소 설명을 입력해 주세요."
+                        style={{
+                          flex: 1,
+                          fontWeight: 'normal',
+                          fontSize: 12,
+                          textAlignVertical: 'top',
+                          paddingTop: 0,
+                          paddingBottom: 0,
+                          marginTop: 4,
+                        }}
+                        multiline
+                        value={content.content}
+                        onChangeText={(t: string) => {
+                          const tmpPost = postInfo;
+                          tmpPost.components[idx].content = t;
+                          if (setPost) setPost(tmpPost);
+                        }}
+                      />
+                    </ContentTextWrap>
+                    <TouchableOpacity
+                      onPress={() => {
+                        const tmpPost = postInfo;
+                        tmpPost.components.splice(idx, 1);
+                        const tmpListImages = listImages;
+                        tmpListImages.splice(idx + 1, 1);
+                        if (setPost) setPost(tmpPost);
+                        setListImages(tmpListImages);
+                      }}
+                    >
+                      <Icon icon="x" size={24} />
+                    </TouchableOpacity>
+                  </ContentWrap>
+                  <TouchableOpacity
+                    style={{ alignItems: 'flex-start', marginTop: 10 }}
+                    onPress={() => {
+                      const tmpPost = postInfo;
+                      tmpPost.components.push({
+                        title: '',
+                        img: '',
+                        content: '',
+                      });
+                      const tmpListImages = listImages;
+                      tmpListImages.push('');
+                      if (setPost) setPost(tmpPost);
+                      setListImages(tmpListImages);
                     }}
-                    multiline
-                  />
-                  <TextInput
-                    placeholder="요소 설명을 입력해 주세요."
-                    style={{
-                      flex: 1,
-                      fontWeight: 'normal',
-                      fontSize: 12,
-                      textAlignVertical: 'top',
-                      paddingTop: 0,
-                      paddingBottom: 0,
-                      marginTop: 4,
-                    }}
-                    multiline
-                  />
-                </ContentTextWrap>
-                <Icon icon="x" size={24} />
-              </ContentWrap>
-              <View style={{ alignItems: 'flex-start', marginTop: 10 }}>
-                <LineButton content="추가" borderColor={colors.black} />
-              </View>
+                  >
+                    <LineButton content="추가" borderColor={colors.black} />
+                  </TouchableOpacity>
+                </>
+              ))}
             </>
           ) : (
             <>
               {realList.map((content, idx) => (
-                <ContentWrap key={idx}>
+                <ContentWrap>
                   <ContentPic
                     isMini={isMini}
                     source={
@@ -238,12 +370,20 @@ const ContentTextWrap = styled.View`
 
 type TemplateProps = {
   mode: string;
-  post?: ListTemplate;
+  post: ListTemplate;
+  setPost?: (template: ListTemplate) => void;
+  setImageInfo?: React.Dispatch<
+    React.SetStateAction<
+      [string[], ((images: string[]) => AllTemplates) | undefined]
+    >
+  >;
 };
 
 export default function ListTemplateComp({
   mode,
   post,
+  setPost,
+  setImageInfo,
 }: TemplateProps): React.ReactElement {
   const exampleTemplate: ListTemplate = {
     type: 'List',
@@ -277,23 +417,23 @@ export default function ListTemplateComp({
         <List isMini={false} isEditMode={false} postInfo={exampleTemplate} />
       );
     case 'mini':
-      return (
-        <List isMini isEditMode={false} postInfo={post || exampleTemplate} />
-      );
+      return <List isMini isEditMode={false} postInfo={post} />;
     case 'detail':
       return (
         <area.NoHeightArea marBottom={12} paddingH={10} paddingV={10}>
-          <List
-            isMini={false}
-            isEditMode={false}
-            postInfo={post || exampleTemplate}
-          />
+          <List isMini={false} isEditMode={false} postInfo={post} />
         </area.NoHeightArea>
       );
     case 'edit':
       return (
         <area.NoHeightArea marBottom={12} paddingH={10} paddingV={10}>
-          <List isMini={false} isEditMode postInfo={post || exampleTemplate} />
+          <List
+            isMini={false}
+            isEditMode
+            postInfo={post}
+            setPost={setPost}
+            setImageInfo={setImageInfo}
+          />
         </area.NoHeightArea>
       );
     default:
