@@ -23,6 +23,7 @@ export default function ProfileFeedView({
 }: ProfileFeedViewProps): React.ReactElement {
   return (
     <FlatList
+      windowSize={3}
       showsVerticalScrollIndicator={false}
       onEndReached={() => {
         if (!isPostPageEnd) setPostPageNum(postPageNum + 1);
