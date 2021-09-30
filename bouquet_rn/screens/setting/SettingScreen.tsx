@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Linking } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
 
@@ -26,6 +26,12 @@ export default function SettingScreen(): React.ReactElement {
   async function goOut() {
     await logout();
     navigation.reset({ index: 0, routes: [{ name: 'Welcome' }] });
+  }
+
+  async function openURL(url: string) {
+    const isPossible = await Linking.canOpenURL(url);
+    if (isPossible) await Linking.openURL(url);
+    else alert('연결할 수 없는 링크예요. 다시 시도해 보거나, 문의해 주세요');
   }
 
   return (
@@ -57,7 +63,7 @@ export default function SettingScreen(): React.ReactElement {
 
       <View style={{ marginVertical: 20, paddingHorizontal: 30 }}>
         <text.Subtitle2B textColor={colors.black} style={{ marginBottom: 11 }}>
-          정보
+          {i18n.t('정보')}
         </text.Subtitle2B>
         <area.NoHeightArea marBottom={0} paddingH={8} paddingV={8}>
           <SettingItem
@@ -66,6 +72,11 @@ export default function SettingScreen(): React.ReactElement {
                 ? `${i18n.t('소개')}Bouquet?`
                 : `Bouquet ${i18n.t('소개')}`
             }
+            onPress={() =>
+              openURL(
+                'https://www.notion.so/Bouquet-a3c86aea53414679b2fc2944a35bfcb9',
+              )
+            }
           />
           <SettingItem
             content={
@@ -73,11 +84,17 @@ export default function SettingScreen(): React.ReactElement {
                 ? `${i18n.t('소개') + i18n.t('달달한 오렌지 떡볶이')}?`
                 : `${i18n.t('달달한 오렌지 떡볶이')} ${i18n.t('소개')}`
             }
+            onPress={() =>
+              openURL('https://www.notion.so/3a23a31569dd4a148b69a9d6a9461cbe')
+            }
           />
           <SettingItem content={i18n.t('서비스 이용 약관')} />
           <SettingItem content={i18n.t('개인정보 취급 방침')} />
           <SettingItem content={i18n.t('오픈 소스 정보')} />
-          <SettingItem content={i18n.t('문의/건의')} />
+          <SettingItem
+            content={i18n.t('문의/건의')}
+            onPress={() => openURL('mailto:ekfvnddl99@naver.com')}
+          />
         </area.NoHeightArea>
       </View>
     </area.Container>

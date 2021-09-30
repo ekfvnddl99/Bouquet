@@ -83,6 +83,20 @@ export default function SearchScreen(): React.ReactElement {
     debounce((input) => getSearch(input), 500),
     [],
   );
+  const debounceRecentSearchHandler = useCallback(
+    debounce((input) => {
+      if (input.length !== 0) {
+        let tmpArray = recentList;
+        tmpArray.unshift(input);
+        tmpArray = tmpArray.filter(
+          (item, index) => tmpArray.indexOf(item) === index,
+        );
+        setRecentList(tmpArray);
+        console.log(recentList);
+      }
+    }, 2000),
+    [],
+  );
   /**
    * 검색어가 입력될 때마다 onChangeText에 의해 실행될 함수
    * @param searchText 입력된 검색어
@@ -90,6 +104,7 @@ export default function SearchScreen(): React.ReactElement {
   function setSearchResult(searchText: string) {
     setSearchInput(searchText);
     debounceHandler(searchText);
+    debounceRecentSearchHandler(searchText);
   }
 
   /**

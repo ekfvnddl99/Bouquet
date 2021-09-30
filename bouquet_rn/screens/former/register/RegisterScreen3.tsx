@@ -21,6 +21,7 @@ import Svg from '../../../assets/Icon';
 import { getByte } from '../../../logics/non-server/Calculation';
 import { checkUserAsync } from '../../../logics/server/Auth';
 import uploadImageAsync from '../../../logics/server/UploadImage';
+import { getImagePickerPermission } from '../../../logics/server/Post';
 
 // components
 import ConditionText from '../../../components/text/ConditionText';
@@ -110,11 +111,7 @@ export default function RegisterScreen3({
    */
   useEffect(() => {
     (async () => {
-      const { status } =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== 'granted') {
-        alert('이미지를 업로드하려면 권한이 필요해요.');
-      }
+      await getImagePickerPermission();
     })();
   }, []);
 

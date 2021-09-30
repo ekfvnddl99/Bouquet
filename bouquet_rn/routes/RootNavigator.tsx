@@ -7,7 +7,6 @@ import * as TaskManager from 'expo-task-manager';
 
 // logics
 import useLogin from '../logics/hooks/useLogin';
-import { registerForPushNotificationsAsync } from '../logics/server/Notification';
 
 // screens, navigators
 import SplashScreen from '../screens/former/SplashScreen';
@@ -43,7 +42,7 @@ export default function AppStack(): React.ReactElement {
   // 실행되자마자 처리해야 하는 것
   useEffect(() => {
     async function callLogin() {
-      await registerForPushNotificationsAsync();
+      await login();
       // This listener is fired whenever a notification is received while the app is foregrounded
       // 안 봤을 때
       notificationListener.current =
@@ -51,17 +50,13 @@ export default function AppStack(): React.ReactElement {
           /**
            * TODO 알람 탭에 반영
            */
-          console.log(`This is noti`);
-          console.log(notification);
         });
       // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
       // 들어가서 확인했을 때
       responseListener.current =
         Notifications.addNotificationResponseReceivedListener((response) => {
-          console.log(`This is response`);
-          console.log(response);
+          /** */
         });
-      await login();
       setTimeout(() => {
         setIsSplash(false);
       }, 2000);

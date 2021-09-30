@@ -1,3 +1,5 @@
+import * as ImagePicker from 'expo-image-picker';
+
 // logics
 import * as APIs from './APIUtils';
 
@@ -278,4 +280,19 @@ export async function getPostListAsync(
     },
     isSuccess: false,
   };
+}
+
+export async function getImagePickerPermission(): Promise<void> {
+  const { status: existingStatus } =
+    await ImagePicker.getMediaLibraryPermissionsAsync();
+  let finalStatus = existingStatus;
+  // 허락 안 받았으면 사용자에게 허락해달라고 요구
+  if (existingStatus !== 'granted') {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    finalStatus = status;
+  }
+  // 사용자가 허락 안 하면 불가
+  if (finalStatus !== 'granted') {
+    alert('이미지를 업로드하려면 권한이 필요해요.');
+  }
 }

@@ -12,6 +12,7 @@ import Svg from '../../assets/Icon';
 
 // logics
 import type { MyCharacter } from '../../utils/types/UserTypes';
+import { getImagePickerPermission } from '../../logics/server/Post';
 
 // components
 import ConditionButton from '../../components/button/ConditionButton';
@@ -46,11 +47,7 @@ export default function CharacterGenerationScreen1({
   // 이미지 업로드 할 때 권한이 없다면 일단 권한부터 받는다.
   useEffect(() => {
     (async () => {
-      const { status } =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== 'granted') {
-        alert('이미지를 업로드하려면 권한이 필요해요.');
-      }
+      await getImagePickerPermission();
     })();
   }, []);
   // 만약 이미지 사진이 있다면 통과???

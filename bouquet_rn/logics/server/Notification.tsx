@@ -72,7 +72,7 @@ export async function sendPushNotificationAsync(
   return result;
 }
 
-export async function registerForPushNotificationsAsync(): Promise<void> {
+export async function getPushNotificationsPermission(): Promise<void> {
   if (Constants.isDevice) {
     // 알림 허락 받았는지 확인
     const { status: existingStatus } =
