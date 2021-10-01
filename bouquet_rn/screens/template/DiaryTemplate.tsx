@@ -283,7 +283,7 @@ const DateWrap = styled.View`
 const SmallInput = styled.TextInput`
   font-weight: normal;
   font-size: 14;
-  text-align-vertical: top;
+  text-align-vertical: center;
   padding-top: 0;
   padding-bottom: 0;
   padding-horizontal: 4;

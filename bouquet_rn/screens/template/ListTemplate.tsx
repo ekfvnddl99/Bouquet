@@ -1,5 +1,11 @@
 import React, { useMemo, useState } from 'react';
-import { View, TextInput, TouchableOpacity } from 'react-native';
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import styled from 'styled-components/native';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -107,7 +113,11 @@ function List({
   };
 
   return (
-    <>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      keyboardVerticalOffset={-400}
+    >
       {isMini ? null : (
         <TouchableOpacity onPress={isEditMode ? () => setImage(-1) : undefined}>
           {postInfo.img === '' ? (
@@ -318,7 +328,7 @@ function List({
           )}
         </ListWrap>
       </area.NoHeightArea>
-    </>
+    </KeyboardAvoidingView>
   );
 }
 

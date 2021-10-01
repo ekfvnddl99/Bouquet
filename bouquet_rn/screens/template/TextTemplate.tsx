@@ -23,6 +23,7 @@ function Text({
           placeholder={I18n.t('내용을 입력해 주세요')}
           value={post}
           onChangeText={setPost ? (t) => setPost(t) : undefined}
+          multiline
         />
       ) : (
         <text.Body2R textColor={colors.black}>{post}</text.Body2R>

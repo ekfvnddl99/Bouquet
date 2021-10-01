@@ -11,7 +11,7 @@ import * as text from '../../../styles/styled-components/text';
 // logics
 import { StatusBarHeight } from '../../../logics/non-server/StatusbarHeight';
 import useCharacter from '../../../logics/hooks/useCharacter';
-import { getTopPostListAsync } from '../../../logics/server/Search';
+import { getFeedPostListAsync } from '../../../logics/server/Home';
 
 // utils
 import { AllTemplates, Post } from '../../../utils/types/PostTypes';
@@ -47,8 +47,7 @@ export default function HomeScreen(): React.ReactElement {
   // 가장 처음에 인기 게시물 가져옴
   useEffect(() => {
     async function getPost() {
-      const id = myCharacter.id ? myCharacter.id : undefined;
-      const serverResult = await getTopPostListAsync(pageNum, id);
+      const serverResult = await getFeedPostListAsync(pageNum);
       if (serverResult.isSuccess) {
         if (postArray === undefined) setPostArray(serverResult.result);
         else if (serverResult.result.length === 0) setIsPageEnd(true);
