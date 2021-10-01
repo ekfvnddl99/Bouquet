@@ -11,6 +11,8 @@ import {
   AllTemplates,
 } from '../../utils/types/PostTypes';
 
+/* eslint-disable camelcase */
+
 /**
  * 서버에 게시글 업로드를 요청하는 함수
  * @param post 업로드하려는 게시글 정보
@@ -226,19 +228,22 @@ export async function deleteCommentAsync(
 }
 
 /**
- * 인기 게시글 목록을 서버에서 불러오는 함수
+ * 특정 캐릭터가 쓴 게시글 목록을 서버에서 불러오는 함수
  * @param pageNum 불러올 페이지
  * ! 페이지 번호는 1부터 시작
- * @param characterName 게시글 목록을 열람하려는 캐릭터 이름
+ * @param characterName 보고 싶은 대상 캐릭터의 이름
  *
- * @returns -{result: Post 리스트, isSuccess: true} 또는 {result: 에러 객체, isSuccess: false}
+ * @returns -{result: [Post 리스트, 전체 개수], isSuccess: true} 또는 {result: 에러 객체, isSuccess: false}
  */
 export async function getPostListAsync(
   pageNum: number,
   characterName: string,
-): APIs.ServerResult<Array<Post<AllTemplates>>> {
+): APIs.ServerResult<[Array<Post<AllTemplates>>, number]> {
   // 서버 응답 타입 정의
-  type GetPostListAsyncOutput = Array<Post<AllTemplates>>;
+  type GetPostListAsyncOutput = {
+    posts: Array<Post<AllTemplates>>;
+    total_post_num: number;
+  };
 
   const tmpResult = await APIs.getAsync<GetPostListAsyncOutput>(
     `/post/character/${characterName}/${pageNum}`,
@@ -255,7 +260,7 @@ export async function getPostListAsync(
 
   // 요청 성공 : Post List 반환
   if (APIs.isSuccess<GetPostListAsyncOutput>(result, response)) {
-    return { result, isSuccess: true };
+    return { result: [result.posts, result.total_post_num], isSuccess: true };
   }
 
   // 422 : Validation Error
@@ -264,6 +269,70 @@ export async function getPostListAsync(
       result: {
         statusCode: 422,
         errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
+        info: result.detail,
+      },
+      isSuccess: false,
+    };
+  }
+  // 나머지 에러
+  return {
+    result: {
+      statusCode: response.status,
+      errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
+      info: response,
+    },
+    isSuccess: false,
+  };
+}
+
+/**
+ * 게시글에 좋아요(햇빛) 요청을 보내는 함수
+ * @param postId 좋아요(햇빛) 요청을 보내려는 대상 게시글의 id
+ * @returns -{result: null, isSuccess: true} 또는 {result: 에러 객체, isSuccess: false}
+ */
+export async function likePostAsync(postId: number): APIs.ServerResult<null> {
+  // 서버 응답 타입 정의
+  type LikePostAsyncOutput = null;
+
+  const tmpResult = await APIs.postAsync<LikePostAsyncOutput>(
+    `/post/like/${postId}`,
+    { 'Content-Type': 'application/json' },
+    '',
+    true,
+  );
+
+  // 사전 처리된 에러는 바로 반환
+  if (APIs.isServerErrorOutput(tmpResult)) {
+    return { result: tmpResult, isSuccess: false };
+  }
+
+  const [result, response] = tmpResult;
+
+  // 요청 성공 : null 반환
+  if (APIs.isSuccess<LikePostAsyncOutput>(result, response)) {
+    return { result: null, isSuccess: true };
+  }
+
+  // 404 : No such post
+  if (APIs.isError<APIs.ServerError>(result, response, 404)) {
+    return {
+      result: {
+        statusCode: 404,
+        errorMsg:
+          '해당 게시글이 지금은 없어요. 재시작 후 다시 시도해 보거나, 문의해 주세요.',
+        info: result.msg,
+      },
+      isSuccess: false,
+    };
+  }
+
+  // 422 : Validation Error
+  if (APIs.isError<APIs.ServerError422>(result, response, 422)) {
+    return {
+      result: {
+        statusCode: 422,
+        errorMsg:
+          '게시글 정보가 잘못되었어요. 다시 시도해 보거나, 문의해 주세요.',
         info: result.detail,
       },
       isSuccess: false,
