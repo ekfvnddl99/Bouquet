@@ -197,7 +197,8 @@ export async function getAsync<Result>(
  */
 export async function postAsync<Result>(
   route: string,
-  info: Record<string, string>,
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  info: Record<string, any>,
   body: string | FormData,
   isAuth: boolean,
 ): ServerOutput<Result> {

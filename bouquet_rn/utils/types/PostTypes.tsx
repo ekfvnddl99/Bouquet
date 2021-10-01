@@ -101,6 +101,25 @@ export type PostCommentRequest = {
 };
 
 /**
+ * Q&A Type
+ */
+export type Qna = {
+  id: number;
+  question: string;
+  answer: string;
+  num_sunshines: number;
+  liked: boolean;
+};
+
+/**
+ * (POST 요청용) Q&A Type
+ */
+export type QnaRequest = {
+  question: string;
+  answer: string;
+};
+
+/**
  * ------------------------------------------------------------
  * * Templates
  * ------------------------------------------------------------

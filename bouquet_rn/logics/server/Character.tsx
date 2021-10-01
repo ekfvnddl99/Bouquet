@@ -12,6 +12,85 @@ import {
 /* eslint-disable camelcase */
 
 /**
+ * 다른 캐릭터를 선택하도록 요청하는 함수
+ * @param characterId 선택하려는 캐릭터의 id
+ * @returns 새로운 auth
+ */
+export async function changeCharacterAsync(
+  characterId: number,
+): APIs.ServerResult<string> {
+  // 서버 응답 타입 정의
+  type ChangeCharacterAsyncOutput = { Authorization: string };
+
+  const tmpResult = await APIs.postAsync<ChangeCharacterAsyncOutput>(
+    '/character/change',
+    { 'Content-Type': 'application/json', character_id: characterId },
+    '',
+    true,
+  );
+
+  // 사전 처리된 에러는 바로 반환
+  if (APIs.isServerErrorOutput(tmpResult)) {
+    return { result: tmpResult, isSuccess: false };
+  }
+
+  const [result, response] = tmpResult;
+
+  // 요청 성공 : auth 반환
+  if (APIs.isSuccess<ChangeCharacterAsyncOutput>(result, response)) {
+    return { result: result.Authorization, isSuccess: true };
+  }
+
+  // 400 : Given character doesn't belong to you
+  if (APIs.isError<APIs.ServerError>(result, response, 400)) {
+    return {
+      result: {
+        statusCode: 400,
+        errorMsg:
+          '당신의 캐릭터가 아닌 것 같아요. 로그인 정보를 확인하고 다시 시도해 보거나, 문의해 주세요.',
+        info: result.msg,
+      },
+      isSuccess: false,
+    };
+  }
+
+  // 404 : Given character doesn't exist
+  if (APIs.isError<APIs.ServerError>(result, response, 404)) {
+    return {
+      result: {
+        statusCode: 404,
+        errorMsg:
+          '바꾸려는 캐릭터가 지금은 없어요. 로그인 정보를 확인하고 다시 시도해 보거나, 문의해 주세요.',
+        info: result.msg,
+      },
+      isSuccess: false,
+    };
+  }
+
+  // 422 : Validation Error
+  if (APIs.isError<APIs.ServerError422>(result, response, 422)) {
+    return {
+      result: {
+        statusCode: 422,
+        errorMsg:
+          '요청한 캐릭터 정보가 잘못되었어요. 다시 시도해 보거나, 문의해 주세요.',
+        info: result.detail,
+      },
+      isSuccess: false,
+    };
+  }
+  // 나머지 에러
+  return {
+    result: {
+      statusCode: response.status,
+      errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
+      info: response,
+    },
+    isSuccess: false,
+  };
+}
+
+/**
  * 서버에 캐릭터 생성 요청을 보내는 함수
  * @param character 만들 캐릭터 정보를 담은 Character 객체
  *
