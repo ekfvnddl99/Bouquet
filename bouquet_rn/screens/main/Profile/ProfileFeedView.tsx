@@ -23,16 +23,12 @@ export default function ProfileFeedView({
 }: ProfileFeedViewProps): React.ReactElement {
   return (
     <FlatList
-      style={{ height: 500 }}
-      scrollEnabled={false}
-      nestedScrollEnabled
-      windowSize={3}
       showsVerticalScrollIndicator={false}
       onEndReached={() => {
         if (!isPostPageEnd) setPostPageNum(postPageNum + 1);
         // console.log('feed!!!');
       }}
-      onEndReachedThreshold={0.8}
+      onEndReachedThreshold={0.5}
       keyExtractor={(item, idx) => idx.toString()}
       data={postArray}
       renderItem={(obj) => (

@@ -22,7 +22,7 @@ export default function ProfileDetailTopView({
   setTabIndex,
 }: ProfileDetailTopViewProps): React.ReactElement {
   return (
-    <Animated.View style={{ paddingTop: 20, flexGrow: 1 }}>
+    <View style={{ paddingTop: 20 }}>
       <ProfileDetailItem isMini={false} routePrefix={routePrefix} />
 
       <View style={{ marginTop: 30 }} />
@@ -49,6 +49,6 @@ export default function ProfileDetailTopView({
         <text.Body2R textColor={colors.black}>{i18n.t('개')}</text.Body2R>
       </area.RowArea>
       <View style={{ marginTop: 16 }} />
-    </Animated.View>
+    </View>
   );
 }
