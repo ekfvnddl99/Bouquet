@@ -1,8 +1,8 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { FlatList, View, Animated, BackHandler } from 'react-native';
 import styled from 'styled-components/native';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 
 // styles
 import colors from '../../styles/colors';
@@ -24,14 +24,38 @@ import AlbumTemplate from '../template/AlbumTemplate';
 import DiaryTemplate from '../template/DiaryTemplate';
 import ListTemplate from '../template/ListTemplate';
 
+// utils
+import * as Post from '../../utils/types/PostTypes';
+
 // 헤더의 최대.최소 길이
 const HEADER_MAX_HEIGHT = 90;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
+type ParamType = {
+  newPost: Post.PostRequest<Post.AllTemplates>;
+  setNewPost: React.Dispatch<
+    React.SetStateAction<Post.PostRequest<Post.AllTemplates>>
+  >;
+};
+
+type ParamList = {
+  SelectTemplate: ParamType;
+};
+
 export default function SelectTemplateScreen(): React.ReactElement {
   const [myCharacter] = useCharacter();
   const navigation = useNavigation();
+
+  const [params, setParams] = useState<ParamType | undefined>(undefined);
+
+  const route = useRoute<RouteProp<ParamList, 'SelectTemplate'>>();
+  useEffect(() => {
+    if (route.params !== undefined) {
+      const realParams = route.params;
+      setParams(realParams);
+    }
+  }, []);
 
   // 내가 고른 템플릿 아이디와, 그 아이디의 set 함수
   const select = useRecoilValue(selectTemplate);
@@ -58,6 +82,40 @@ export default function SelectTemplateScreen(): React.ReactElement {
     outputRange: [0, 0.5, 1],
     extrapolate: 'clamp',
   });
+
+  const selectTemplateByIdx = (idx: number) => {
+    if (params) {
+      switch (idx) {
+        case 1:
+          params.setNewPost({
+            ...params.newPost,
+            template: Post.noTemplate<Post.ImageTemplate>('Image'),
+          });
+          break;
+        case 2:
+          params.setNewPost({
+            ...params.newPost,
+            template: Post.noTemplate<Post.AlbumTemplate>('Album'),
+          });
+          break;
+        case 3:
+          params.setNewPost({
+            ...params.newPost,
+            template: Post.noTemplate<Post.DiaryTemplate>('Diary'),
+          });
+          break;
+        case 4:
+          params.setNewPost({
+            ...params.newPost,
+            template: Post.noTemplate<Post.ListTemplate>('List'),
+          });
+          break;
+        default:
+          break;
+      }
+      setSelect(idx);
+    }
+  };
 
   // 템플릿 예시 설명
   const templates = [
@@ -126,7 +184,7 @@ export default function SelectTemplateScreen(): React.ReactElement {
               explain={obj.item.explain}
               exampleSvg={obj.item.svg}
               selectId={select}
-              setSelectId={setSelect}
+              setSelectId={selectTemplateByIdx}
               thisId={obj.index}
             />
           )}

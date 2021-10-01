@@ -52,7 +52,7 @@ type ParamList = {
  * @returns
  */
 export default function PostWritingScreen(): React.ReactElement {
-  const navigation = useNavigation<StackNavigationProp<WritingStackParam>>();
+  const navigation = useNavigation();
   const [myCharacter] = useCharacter();
   const [, setViewPost] = useViewPost();
 
@@ -118,8 +118,9 @@ export default function PostWritingScreen(): React.ReactElement {
    * 템플릿 고르는 화면 이동
    */
   function goSelect() {
-    navigation.navigate('SelectTemplate');
+    navigation.navigate('SelectTemplate', { newPost, setNewPost });
   }
+
   /**
    * 게시글 업로드하는 함수
    */
@@ -143,7 +144,7 @@ export default function PostWritingScreen(): React.ReactElement {
     const serverResult = await uploadPostAsync(realNewPost);
     if (serverResult.isSuccess) {
       setViewPost(serverResult.result);
-      navigation.replace('PostStack');
+      navigation.reset({ index: 0, routes: [{ name: 'PostStack' }] });
     } else alert(serverResult.result.errorMsg);
   }
 
@@ -155,10 +156,6 @@ export default function PostWritingScreen(): React.ReactElement {
   function getTemplate(idx: number) {
     switch (idx) {
       case 1:
-        setNewPost({
-          ...newPost,
-          template: Post.noTemplate<Post.ImageTemplate>('Image'),
-        });
         return (
           <ImageTemplate
             mode="edit"
@@ -172,10 +169,6 @@ export default function PostWritingScreen(): React.ReactElement {
           />
         );
       case 2:
-        setNewPost({
-          ...newPost,
-          template: Post.noTemplate<Post.AlbumTemplate>('Album'),
-        });
         return (
           <AlbumTemplate
             mode="edit"
