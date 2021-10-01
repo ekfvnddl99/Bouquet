@@ -22,37 +22,16 @@ Notifications.setNotificationHandler({
 export default function AppStack(): React.ReactElement {
   const [isSplash, setIsSplash] = useState(true);
   const [login, logout] = useLogin();
-  const notificationListener = useRef<any>();
-  const responseListener = useRef<any>();
 
   // 실행되자마자 처리해야 하는 것
   useEffect(() => {
     async function callLogin() {
       await login();
-      // This listener is fired whenever a notification is received while the app is foregrounded
-      // 안 봤을 때
-      notificationListener.current =
-        Notifications.addNotificationReceivedListener((notification) => {
-          // foreground
-          console.log(notification.request.content.data.url);
-        });
-      responseListener.current =
-        Notifications.addNotificationResponseReceivedListener((response) => {
-          // foreground, background
-          console.log(
-            `response${response.notification.request.content.data.url}`,
-          );
-        });
       setTimeout(() => {
         setIsSplash(false);
       }, 2000);
     }
     callLogin();
-    return () => {
-      Notifications.removeNotificationSubscription(
-        notificationListener.current,
-      );
-    };
   }, []);
 
   const linking: LinkingOptions = {
