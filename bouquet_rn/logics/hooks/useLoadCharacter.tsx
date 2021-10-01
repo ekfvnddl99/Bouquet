@@ -32,30 +32,31 @@ export default function useLoadCharacter(): [
     // 캐릭터 리스트 최신화 시도
     const loadedCharacterList = await loadCharacterList();
     if (loadedCharacterList) tmpCharacterList = loadedCharacterList;
+    await setCharacter(tmpCharacterList[0]);
 
-    // 마지막으로 선택한 캐릭터 이름 정보가 있는지 확인
-    const lastCharacterName = await SecureStore.getItemAsync(
-      'lastCharacterName',
-    );
+    // // 마지막으로 선택한 캐릭터 이름 정보가 있는지 확인
+    // const lastCharacterName = await SecureStore.getItemAsync(
+    //   'lastCharacterName',
+    // );
 
-    if (lastCharacterName) {
-      // 마지막으로 선택한 캐릭터를 캐릭터 리스트에서 찾아 선택
-      if (tmpCharacterList.length > 0) {
-        // 저장된 이름과 같은 이름인 캐릭터가 없으면 첫번째 선택
-        let tmpCharacter = tmpCharacterList[0];
-        for (let i = 0; i < tmpCharacterList.length; i += 1) {
-          if (tmpCharacterList[i].name === lastCharacterName) {
-            tmpCharacter = tmpCharacterList[i];
-            break;
-          }
-        }
-        await setCharacter(tmpCharacter);
-      }
-    } else if (tmpCharacterList.length > 0) {
-      // 마지막으로 선택한 캐릭터 정보가 없으면 첫번째 선택
-      await setCharacter(tmpCharacterList[0]);
-    }
-    // 캐릭터 리스트가 비어 있으면 캐릭터 선택되지 않음
+    // if (lastCharacterName) {
+    //   // 마지막으로 선택한 캐릭터를 캐릭터 리스트에서 찾아 선택
+    //   if (tmpCharacterList.length > 0) {
+    //     // 저장된 이름과 같은 이름인 캐릭터가 없으면 첫번째 선택
+    //     let tmpCharacter = tmpCharacterList[0];
+    //     for (let i = 0; i < tmpCharacterList.length; i += 1) {
+    //       if (tmpCharacterList[i].name === lastCharacterName) {
+    //         tmpCharacter = tmpCharacterList[i];
+    //         break;
+    //       }
+    //     }
+    //     await setCharacter(tmpCharacter);
+    //   }
+    // } else if (tmpCharacterList.length > 0) {
+    //   // 마지막으로 선택한 캐릭터 정보가 없으면 첫번째 선택
+    //   await setCharacter(tmpCharacterList[0]);
+    // }
+    // // 캐릭터 리스트가 비어 있으면 캐릭터 선택되지 않음
   }
 
   /**
@@ -67,7 +68,7 @@ export default function useLoadCharacter(): [
       setCharacterList(result.result);
       // setState가 바로 적용되지 않는 경우를 방지하기 위해 최신값 반환
       return result.result;
-    }
+    } else alert(result.result.statusCode);
     // 빈 배열인 경우와 요청이 실패한 경우 구별
     return undefined;
   }

@@ -250,23 +250,24 @@ function Album({
               </SongWrap>
             ))}
           </SongsWrap>
-          <TouchableOpacity
-            style={{ alignItems: 'flex-start', marginTop: 10 }}
-            onPress={
-              setPost
-                ? () => {
-                    const tmpPost = postInfo;
-                    tmpPost.tracks = [
-                      ...tmpPost.tracks,
-                      { title: '', lyric: '' },
-                    ];
-                    setPost(tmpPost);
-                  }
-                : undefined
-            }
-          >
-            <LineButton content="곡 추가" borderColor={colors.black} />
-          </TouchableOpacity>
+          <View style={{ alignItems: 'flex-start', marginTop: 10 }}>
+            <LineButton
+              content="곡 추가"
+              borderColor={colors.black}
+              onPress={
+                setPost
+                  ? () => {
+                      const tmpPost = postInfo;
+                      tmpPost.tracks = [
+                        ...tmpPost.tracks,
+                        { title: '', lyric: '' },
+                      ];
+                      setPost(tmpPost);
+                    }
+                  : undefined
+              }
+            />
+          </View>
         </>
       ) : (
         <SongsWrap>

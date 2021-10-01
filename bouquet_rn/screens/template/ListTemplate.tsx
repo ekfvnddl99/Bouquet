@@ -259,25 +259,27 @@ function List({
                       <Icon icon="x" size={24} />
                     </TouchableOpacity>
                   </ContentWrap>
-                  <TouchableOpacity
-                    style={{ alignItems: 'flex-start', marginTop: 10 }}
-                    onPress={() => {
-                      const tmpPost = postInfo;
-                      tmpPost.components.push({
-                        title: '',
-                        img: '',
-                        content: '',
-                      });
-                      const tmpListImages = listImages;
-                      tmpListImages.push('');
-                      if (setPost) setPost(tmpPost);
-                      setListImages(tmpListImages);
-                    }}
-                  >
-                    <LineButton content="추가" borderColor={colors.black} />
-                  </TouchableOpacity>
                 </>
               ))}
+              <View style={{ alignItems: 'flex-start', marginTop: 10 }}>
+                <LineButton
+                  content="추가"
+                  borderColor={colors.black}
+                  onPress={() => {
+                    console.log('a');
+                    const tmpPost = postInfo;
+                    tmpPost.components.push({
+                      title: '',
+                      img: '',
+                      content: '',
+                    });
+                    const tmpListImages = listImages;
+                    tmpListImages.push('');
+                    if (setPost) setPost(tmpPost);
+                    setListImages(tmpListImages);
+                  }}
+                />
+              </View>
             </>
           ) : (
             <>
