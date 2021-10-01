@@ -54,6 +54,9 @@ export default function ProfileDetailScreen(): React.ReactElement {
 
   const [postPageNum, setPostPageNum] = useState(1);
   const [isPostPageEnd, setIsPostPageEnd] = useState(false);
+  const [qnaPageNum, setQnaPageNum] = useState(1);
+  const [isQnaPageEnd, setIsQnaPageNum] = useState(false);
+
   // 해당 캐릭터의 게시글을 가져오는 api
   useEffect(() => {
     async function getPosts() {
@@ -107,7 +110,15 @@ export default function ProfileDetailScreen(): React.ReactElement {
     },
     {
       arrayLength: 3,
-      returnView: <ProfileQnAView routePrefix={routePrefix} />,
+      returnView: (
+        <ProfileQnAView
+          routePrefix={routePrefix}
+          qnaArray={[]}
+          isQnaPageEnd={isQnaPageEnd}
+          qnaPageNum={qnaPageNum}
+          setQnaPageNum={setQnaPageNum}
+        />
+      ),
     },
   ];
 
@@ -133,8 +144,10 @@ export default function ProfileDetailScreen(): React.ReactElement {
           [{ nativeEvent: { contentOffset: { y: scroll } } }],
           { useNativeDriver: true },
         )}
-        data={[1]}
-        renderItem={() => tabIndexArray[tabIndex].returnView}
+        data={tabIndexArray}
+        renderItem={(obj) =>
+          obj.index === tabIndex ? obj.item.returnView : null
+        }
       />
     </area.Container>
   );

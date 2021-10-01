@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, FlatList } from 'react-native';
+import { Animated } from 'react-native';
 
 // utils
 import { Post, AllTemplates } from '../../../utils/types/PostTypes';
@@ -11,23 +11,34 @@ import QnAItem from '../../../components/item/QnAItem';
 import { noCharacter } from '../../../utils/types/UserTypes';
 
 type ProfileQnAViewProps = {
+  qnaArray: Post<AllTemplates>[] | undefined;
   routePrefix: string;
+  isQnaPageEnd: boolean;
+  qnaPageNum: number;
+  setQnaPageNum: (param: number) => void;
 };
 export default function ProfileQnAScreen({
+  qnaArray,
   routePrefix,
+  isQnaPageEnd,
+  qnaPageNum,
+  setQnaPageNum,
 }: ProfileQnAViewProps): React.ReactElement {
   // dummy data - 서버에서 불러와야 함
   const data = [
     { id: 1, question: 'asdf', answer: 'asdfasdf', characterInfo: noCharacter },
     { id: 2, question: 'asdf', answer: 'asdfasdf', characterInfo: noCharacter },
     { id: 3, question: 'asdf', answer: 'asdfasdf', characterInfo: noCharacter },
+    { id: 4, question: 'asdf', answer: 'asdfasdf', characterInfo: noCharacter },
+    { id: 5, question: 'asdf', answer: 'asdfasdf', characterInfo: noCharacter },
+    { id: 6, question: 'asdf', answer: 'asdfasdf', characterInfo: noCharacter },
   ];
 
   return (
-    <FlatList
+    <Animated.FlatList
       showsVerticalScrollIndicator={false}
       onEndReached={() => {
-        // if (!isPostPageEnd) setPostPageNum(postPageNum + 1);
+        if (!isQnaPageEnd) setQnaPageNum(qnaPageNum + 1);
         // console.log('qna!!!');
       }}
       onEndReachedThreshold={0.8}
