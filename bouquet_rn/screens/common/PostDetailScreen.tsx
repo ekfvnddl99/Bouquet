@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
+  Platform,
 } from 'react-native';
 import i18n from 'i18n-js';
 import styled from 'styled-components/native';
@@ -189,7 +190,10 @@ export default function PostDetailScreen(): React.ReactElement {
         profileImg={myCharacter.profile_img}
         routePrefix={prefix}
       />
-      <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={{ flex: 1 }}
+      >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <Animated.ScrollView
             contentContainerStyle={{

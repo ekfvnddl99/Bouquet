@@ -3,7 +3,6 @@ import { Linking } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer, LinkingOptions } from '@react-navigation/native';
 import * as Notifications from 'expo-notifications';
-import * as TaskManager from 'expo-task-manager';
 
 // logics
 import useLogin from '../logics/hooks/useLogin';
@@ -11,19 +10,6 @@ import useLogin from '../logics/hooks/useLogin';
 // screens, navigators
 import SplashScreen from '../screens/former/SplashScreen';
 import WelcomeStackNavigator from './WelcomeStackNavigator';
-
-const BACKGROUND_NOTIFICATION_TASK = 'BACKGROUND-NOTIFICATION-TASK';
-
-TaskManager.defineTask(
-  BACKGROUND_NOTIFICATION_TASK,
-  ({ data, error, executionInfo }) => {
-    console.log(data);
-    console.log(error);
-    console.log(executionInfo);
-  },
-);
-
-Notifications.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK);
 
 // 앱 상태가 foreground 때 설정
 Notifications.setNotificationHandler({
@@ -35,7 +21,7 @@ Notifications.setNotificationHandler({
 });
 export default function AppStack(): React.ReactElement {
   const [isSplash, setIsSplash] = useState(true);
-  const [login] = useLogin();
+  const [login, logout] = useLogin();
   const notificationListener = useRef<any>();
   const responseListener = useRef<any>();
 
@@ -47,15 +33,15 @@ export default function AppStack(): React.ReactElement {
       // 안 봤을 때
       notificationListener.current =
         Notifications.addNotificationReceivedListener((notification) => {
-          /**
-           * TODO 알람 탭에 반영
-           */
+          // foreground
+          console.log(notification.request.content.data.url);
         });
-      // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
-      // 들어가서 확인했을 때
       responseListener.current =
         Notifications.addNotificationResponseReceivedListener((response) => {
-          /** */
+          // foreground, background
+          console.log(
+            `response${response.notification.request.content.data.url}`,
+          );
         });
       setTimeout(() => {
         setIsSplash(false);
@@ -66,7 +52,6 @@ export default function AppStack(): React.ReactElement {
       Notifications.removeNotificationSubscription(
         notificationListener.current,
       );
-      Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
 
@@ -109,16 +94,20 @@ export default function AppStack(): React.ReactElement {
     async getInitialURL(): Promise<string> {
       // First, you may want to do the default deep link handling
       // Check if app was opened from a deep link
-      const initialUrl = await Linking.getInitialURL();
 
+      const response = await Notifications.getLastNotificationResponseAsync();
+      const url = response?.notification.request.content.data.url;
+      const initialUrl = await Linking.getInitialURL();
       if (initialUrl != null) {
-        return initialUrl;
+        console.log(`init${initialUrl}`);
+        return url;
       }
 
       // Handle URL from expo push notifications
-      const response = await Notifications.getLastNotificationResponseAsync();
-      const url = response?.notification.request.content.data.url;
-      return url;
+
+      // killed
+      console.log(`init2${url}`);
+      return initialUrl;
     },
     subscribe(listener: (deeplink: string) => void) {
       const onReceiveURL = ({ url }: { url: string }) => listener(url);
@@ -128,6 +117,8 @@ export default function AppStack(): React.ReactElement {
       const subscription =
         Notifications.addNotificationResponseReceivedListener((response) => {
           const { url } = response.notification.request.content.data;
+          // foreground, background
+          console.log(`subscribe${url}`);
           listener(url);
         });
 

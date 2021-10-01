@@ -23,6 +23,9 @@ export default function ProfileFeedView({
 }: ProfileFeedViewProps): React.ReactElement {
   return (
     <FlatList
+      style={{ height: 500 }}
+      scrollEnabled={false}
+      nestedScrollEnabled
       windowSize={3}
       showsVerticalScrollIndicator={false}
       onEndReached={() => {

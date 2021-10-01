@@ -20,10 +20,10 @@ export default function useViewPost(): [
   const [character] = useCharacter();
 
   async function setViewPostById(postId: number): Promise<void> {
-    const result = await getPostAsync(postId, character.id);
+    const result = await getPostAsync(postId);
     if (result.isSuccess) {
       setViewPost(result.result);
-    }
+    } else alert(result.result.statusCode);
   }
 
   return [viewPost, setViewPostById];

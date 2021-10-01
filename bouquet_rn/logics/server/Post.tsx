@@ -132,7 +132,6 @@ export async function uploadCommentAsync(
  */
 export async function getPostAsync(
   postId: number,
-  characterId?: number,
 ): APIs.ServerResult<Post<AllTemplates>> {
   // 서버 응답 타입 정의
   type GetPostAsyncOutput = Post<AllTemplates>;
@@ -140,7 +139,6 @@ export async function getPostAsync(
   const tmpResult = await APIs.getAsync<GetPostAsyncOutput>(
     `/post/${postId}`,
     false,
-    { 'character-id': characterId },
   );
 
   // 사전 처리된 에러는 바로 반환
