@@ -1,4 +1,5 @@
 import * as ImagePicker from 'expo-image-picker';
+import * as SecureStore from 'expo-secure-store';
 
 // logics
 import * as APIs from './APIUtils';
@@ -138,9 +139,12 @@ export async function getPostAsync(
   // 서버 응답 타입 정의
   type GetPostAsyncOutput = Post<AllTemplates>;
 
+  const auth = await SecureStore.getItemAsync('auth');
+
   const tmpResult = await APIs.getAsync<GetPostAsyncOutput>(
     `/post/${postId}`,
     false,
+    auth ? { token: auth } : undefined,
   );
 
   // 사전 처리된 에러는 바로 반환
