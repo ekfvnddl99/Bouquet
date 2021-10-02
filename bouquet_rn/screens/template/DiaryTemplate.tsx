@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import styled from 'styled-components/native';
 import * as ImagePicker from 'expo-image-picker';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 import colors from '../../styles/colors';
 import * as text from '../../styles/styled-components/text';
@@ -82,10 +83,14 @@ function Diary({
     });
 
     if (!result.cancelled) {
+      const manipResult = await ImageManipulator.manipulateAsync(result.uri, [
+        { resize: { width: 1024, height: 1024 } },
+      ]);
+      const realUri = manipResult.uri;
       if (setImageInfo && setPost) {
-        setPost({ ...diary, img: result.uri });
+        setPost({ ...diary, img: realUri });
         setImageInfo([
-          [result.uri],
+          [realUri],
           (images: string[]) => {
             const tmpPost = diary;
             /* eslint-disable-next-line prefer-destructuring */
