@@ -12,7 +12,6 @@ import * as text from '../../../styles/styled-components/text';
 import { StatusBarHeight } from '../../../logics/non-server/StatusbarHeight';
 import useCharacter from '../../../logics/hooks/useCharacter';
 import { getFeedPostListAsync } from '../../../logics/server/Home';
-import { getTopPostListAsync } from '../../../logics/server/Search';
 
 // utils
 import { AllTemplates, Post } from '../../../utils/types/PostTypes';
@@ -47,10 +46,7 @@ export default function HomeScreen(): React.ReactElement {
   }, [myCharacter.id]);
 
   async function getPost(newPageNum?: number, isRefreshing?: boolean) {
-    const serverResult = await getTopPostListAsync(
-      newPageNum || pageNum,
-      myCharacter.id,
-    );
+    const serverResult = await getFeedPostListAsync(newPageNum || pageNum);
     if (serverResult.isSuccess) {
       if (serverResult.result.length === 0) {
         setIsPageEnd(true);
