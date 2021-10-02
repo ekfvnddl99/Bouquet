@@ -1,21 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Animated } from 'react-native';
 
-// utils
-import { Post, AllTemplates } from '../../../utils/types/PostTypes';
+// logics
+import { getQnaListAsync } from '../../../logics/server/QnAs';
 
 // components
 import QnAItem from '../../../components/item/QnAItem';
 
 // utils
-import { noCharacter } from '../../../utils/types/UserTypes';
+import { Qna } from '../../../utils/types/PostTypes';
+import { Character } from '../../../utils/types/UserTypes';
 
 type ProfileQnAViewProps = {
-  qnaArray: Post<AllTemplates>[] | undefined;
+  qnaArray: Array<Qna>;
   routePrefix: string;
   isQnaPageEnd: boolean;
   qnaPageNum: number;
   setQnaPageNum: (param: number) => void;
+  characterInfo: Character;
 };
 export default function ProfileQnAScreen({
   qnaArray,
@@ -23,17 +25,8 @@ export default function ProfileQnAScreen({
   isQnaPageEnd,
   qnaPageNum,
   setQnaPageNum,
+  characterInfo,
 }: ProfileQnAViewProps): React.ReactElement {
-  // dummy data - 서버에서 불러와야 함
-  const data = [
-    { id: 1, question: 'asdf', answer: 'asdfasdf', characterInfo: noCharacter },
-    { id: 2, question: 'asdf', answer: 'asdfasdf', characterInfo: noCharacter },
-    { id: 3, question: 'asdf', answer: 'asdfasdf', characterInfo: noCharacter },
-    { id: 4, question: 'asdf', answer: 'asdfasdf', characterInfo: noCharacter },
-    { id: 5, question: 'asdf', answer: 'asdfasdf', characterInfo: noCharacter },
-    { id: 6, question: 'asdf', answer: 'asdfasdf', characterInfo: noCharacter },
-  ];
-
   return (
     <Animated.FlatList
       showsVerticalScrollIndicator={false}
@@ -43,12 +36,12 @@ export default function ProfileQnAScreen({
       }}
       onEndReachedThreshold={0.8}
       keyExtractor={(item, idx) => idx.toString()}
-      data={data}
+      data={qnaArray}
       renderItem={(obj) => (
         <QnAItem
           question={obj.item.question}
           answer={obj.item.answer}
-          characterInfo={obj.item.characterInfo}
+          characterInfo={characterInfo}
           routePrefix={routePrefix}
         />
       )}

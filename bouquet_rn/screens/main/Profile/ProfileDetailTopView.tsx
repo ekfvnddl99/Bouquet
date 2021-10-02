@@ -43,7 +43,7 @@ export default function ProfileDetailTopView({
           </text.Subtitle3>
         </TouchableOpacity>
       </area.RowArea>
-      <area.RowArea style={{ marginBottom: 12 }}>
+      <area.RowArea style={{ marginTop: 16 }}>
         <text.Body2R textColor={colors.black}>{i18n.t('총')} </text.Body2R>
         <text.Body2B textColor={colors.black}>{arrayLength}</text.Body2B>
         <text.Body2R textColor={colors.black}>{i18n.t('개')}</text.Body2R>
