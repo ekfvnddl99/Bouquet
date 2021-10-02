@@ -16,9 +16,10 @@ import { StatusBarHeight } from '../../../logics/non-server/StatusbarHeight';
 import useCharacter from '../../../logics/hooks/useCharacter';
 import { getPostListAsync } from '../../../logics/server/Post';
 import useViewCharacter from '../../../logics/hooks/useViewCharacter';
+import { getQnaListAsync } from '../../../logics/server/QnAs';
 
 // utils
-import { Post, AllTemplates } from '../../../utils/types/PostTypes';
+import { Post, AllTemplates, Qna } from '../../../utils/types/PostTypes';
 
 // components
 import HeaderItem from '../../../components/item/HeaderItem';
@@ -41,6 +42,7 @@ export default function ProfileDetailScreen(): React.ReactElement {
 
   // 해당 캐릭터의 게시글 담을 state
   const [postArray, setPostArray] = useState<Post<AllTemplates>[]>();
+  const [qnaArray, setQnaArray] = useState<Array<Qna>>();
 
   const route = useRoute<RouteProp<ParamList, 'ProfileDetail'>>();
   let routePrefix = '';
@@ -55,7 +57,7 @@ export default function ProfileDetailScreen(): React.ReactElement {
   const [postPageNum, setPostPageNum] = useState(1);
   const [isPostPageEnd, setIsPostPageEnd] = useState(false);
   const [qnaPageNum, setQnaPageNum] = useState(1);
-  const [isQnaPageEnd, setIsQnaPageNum] = useState(false);
+  const [isQnaPageEnd, setIsQnaPageEnd] = useState(false);
 
   // 해당 캐릭터의 게시글을 가져오는 api
   useEffect(() => {
@@ -76,6 +78,25 @@ export default function ProfileDetailScreen(): React.ReactElement {
     }
     if (viewCharacter.name !== '') getPosts();
   }, [viewCharacter, postPageNum]);
+
+  useEffect(() => {
+    async function getQnas() {
+      const serverResult = await getQnaListAsync(
+        viewCharacter.name,
+        qnaPageNum,
+      );
+      if (serverResult.isSuccess) {
+        if (qnaArray === undefined) setQnaArray(serverResult.result);
+        else if (serverResult.result.length === 0) setIsQnaPageEnd(true);
+        else {
+          const tmpArray = qnaArray;
+          serverResult.result.forEach((obj) => tmpArray.push(obj));
+          setQnaArray(tmpArray);
+        }
+      } else alert(serverResult.result.errorMsg);
+    }
+    if (viewCharacter.name !== '') getQnas();
+  }, [viewCharacter, qnaPageNum]);
 
   const scroll = useRef(new Animated.Value(0)).current;
   const OpacityHeader = scroll.interpolate({
@@ -117,6 +138,7 @@ export default function ProfileDetailScreen(): React.ReactElement {
           isQnaPageEnd={isQnaPageEnd}
           qnaPageNum={qnaPageNum}
           setQnaPageNum={setQnaPageNum}
+          characterInfo={viewCharacter}
         />
       ),
     },
