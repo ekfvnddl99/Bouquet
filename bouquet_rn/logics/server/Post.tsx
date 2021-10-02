@@ -170,7 +170,61 @@ export async function getPostAsync(
       isSuccess: false,
     };
   }
+  // 422 : Validation Error
+  if (APIs.isError<APIs.ServerError>(result, response, 404)) {
+    return {
+      result: {
+        statusCode: 404,
+        errorMsg: '게시글이 지금은 없어요.',
+        info: result.msg,
+      },
+      isSuccess: false,
+    };
+  }
   // 나머지 에러
+  return {
+    result: {
+      statusCode: response.status,
+      errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
+      info: response,
+    },
+    isSuccess: false,
+  };
+}
+
+export async function deletePostAsync(postId: number): APIs.ServerResult<null> {
+  // 서버 응답 타입 정의
+  type DeletePostAsyncOutput = null;
+
+  const tmpResult = await APIs.deleteAsync<DeletePostAsyncOutput>(
+    `/post?post_id=${postId}`,
+    true,
+  );
+
+  // 사전 처리된 에러는 바로 반환
+  if (APIs.isServerErrorOutput(tmpResult)) {
+    return { result: tmpResult, isSuccess: false };
+  }
+
+  const [result, response] = tmpResult;
+
+  // 요청 성공 : null 반환
+  if (APIs.isSuccess<DeletePostAsyncOutput>(result, response)) {
+    return { result: null, isSuccess: true };
+  }
+
+  // 422 : Validation Error
+  if (APIs.isError<APIs.ServerError422>(result, response, 422)) {
+    return {
+      result: {
+        statusCode: 422,
+        errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
+        info: result.detail,
+      },
+      isSuccess: false,
+    };
+  }
+  // 에러
   return {
     result: {
       statusCode: response.status,

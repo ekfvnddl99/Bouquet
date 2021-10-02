@@ -23,6 +23,7 @@ type PostDetailTopViewProps = {
   prefix: string;
   postOwner: boolean;
   template: true | JSX.Element | null;
+  onDelete: () => void;
 };
 /**
  * TODO 댓글 삭제
@@ -34,6 +35,7 @@ export default function PostDetailTopView({
   prefix,
   postOwner,
   template,
+  onDelete,
 }: PostDetailTopViewProps): React.ReactElement {
   return (
     <View>
@@ -62,9 +64,7 @@ export default function PostDetailTopView({
             />
             <View style={{ marginRight: 4 }} />
             <LineButton
-              onPress={() => {
-                /**/
-              }}
+              onPress={() => onDelete()}
               content={i18n.t('삭제')}
               borderColor={colors.warning_red}
             />
