@@ -120,16 +120,17 @@ export default function NotificationScreen(): React.ReactElement {
         <FlatList
           data={Data}
           keyExtractor={(item, idx) => idx.toString()}
-          renderItem={(obj) => (
-            <NotificationItem
-              name={obj.item.a}
-              profileImg={}
-              content={obj.item.b}
-              createdAt={}
-              onPress={() => goNavigate()}
-              onDelete={}
-            />
-          )}
+          renderItem={
+            (obj) => console.log(obj)
+            // <NotificationItem
+            //   name={obj.item.a}
+            //   profileImg={}
+            //   content={obj.item.b}
+            //   createdAt={}
+            //   onPress={() => goNavigate()}
+            //   onDelete={}
+            // />
+          }
         />
       );
     }
@@ -200,11 +201,13 @@ export default function NotificationScreen(): React.ReactElement {
         )}
       >
         <View style={{ paddingTop: 30 + 14 }} />
-        {isLogined ? (
-          <>{setNotification(Data.length)}</>
-        ) : (
-          <button.NotificationButton activeOpacity={1}>
-            <elses.CircleImg diameter={20} source={{ uri: profileImg }} />
+        {isLogined ? null : (
+          // <>{setNotification(Data.length)}</>
+          <button.NotificationButton
+            activeOpacity={1}
+            style={{ marginHorizontal: 30 }}
+          >
+            {/* <elses.CircleImg diameter={20} source={{ uri: profileImg }} /> */}
             <View
               style={{
                 flex: 2,

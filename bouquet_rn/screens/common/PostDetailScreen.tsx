@@ -143,7 +143,7 @@ export default function PostDetailScreen(): React.ReactElement {
     const serverResult = await deletePostAsync(viewPost.id);
     if (serverResult.isSuccess) {
       alert('삭제 되었습니다.');
-    } else console.log(serverResult.result.info);
+    } else alert(serverResult.result.errorMsg);
   }
 
   // 이 게시글이 나의 게시글인지
@@ -203,90 +203,96 @@ export default function PostDetailScreen(): React.ReactElement {
         profileImg={myCharacter.profile_img}
         routePrefix={prefix}
       />
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <Animated.ScrollView
-          contentContainerStyle={{ paddingHorizontal: 30, flexGrow: 1 }}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
-          onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { y: scroll } } }],
-            { useNativeDriver: true },
-          )}
-        >
-          <FlatList
-            ListHeaderComponent={
-              <PostDetailTopView
-                viewPost={viewPost}
-                prefix={prefix}
-                postOwner={postOwner}
-                template={template}
-                onDelete={() => deletePost()}
-              />
-            }
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={{ flex: 1 }}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <Animated.ScrollView
+            style={{ flexGrow: 1 }}
+            contentContainerStyle={{ paddingHorizontal: 30, flexGrow: 1 }}
             showsVerticalScrollIndicator={false}
-            data={viewPost?.comments}
-            keyboardShouldPersistTaps="always"
-            keyExtractor={(item, idx) => idx.toString()}
-            renderItem={(obj) => (
-              <View>
-                <TouchableOpacity
-                  activeOpacity={1}
-                  onPress={() => [clickComment(obj.item), Keyboard.dismiss()]}
-                >
-                  <CommentItem
-                    commentInfo={obj.item}
-                    selectComment={selectComment}
-                    setTargetComment={setParentComment}
-                    setTargetCommentId={setParentCommentById}
-                    onDelete={() => deleteComment()}
-                    routePrefix={prefix}
-                    openingCommentArray={openingCommentArray}
-                    setOpeningCommentArray={setOpeningCommentArray}
-                  />
-                </TouchableOpacity>
-
-                {openingCommentArray.includes(obj.item.id) ? (
-                  <FlatList
-                    style={{ marginLeft: 16 }}
-                    data={obj.item.children}
-                    keyboardShouldPersistTaps="always"
-                    keyExtractor={(item, idx) => idx.toString()}
-                    renderItem={(childObj) => (
-                      <TouchableOpacity
-                        activeOpacity={1}
-                        onPress={() => [
-                          clickComment(childObj.item),
-                          Keyboard.dismiss(),
-                        ]}
-                      >
-                        <CommentItem
-                          commentInfo={childObj.item}
-                          selectComment={selectComment}
-                          setTargetComment={setParentComment}
-                          setTargetCommentId={setParentCommentById}
-                          onDelete={() => deleteComment()}
-                          routePrefix={prefix}
-                        />
-                      </TouchableOpacity>
-                    )}
-                  />
-                ) : null}
-              </View>
+            keyboardShouldPersistTaps="handled"
+            onScroll={Animated.event(
+              [{ nativeEvent: { contentOffset: { y: scroll } } }],
+              { useNativeDriver: true },
             )}
+          >
+            <FlatList
+              ListHeaderComponent={
+                <PostDetailTopView
+                  viewPost={viewPost}
+                  prefix={prefix}
+                  postOwner={postOwner}
+                  template={template}
+                  onDelete={() => deletePost()}
+                />
+              }
+              showsVerticalScrollIndicator={false}
+              data={viewPost?.comments}
+              keyboardShouldPersistTaps="always"
+              keyExtractor={(item, idx) => idx.toString()}
+              renderItem={(obj) => (
+                <View>
+                  <TouchableOpacity
+                    activeOpacity={1}
+                    onPress={() => [clickComment(obj.item), Keyboard.dismiss()]}
+                  >
+                    <CommentItem
+                      commentInfo={obj.item}
+                      selectComment={selectComment}
+                      setTargetComment={setParentComment}
+                      setTargetCommentId={setParentCommentById}
+                      onDelete={() => deleteComment()}
+                      routePrefix={prefix}
+                      openingCommentArray={openingCommentArray}
+                      setOpeningCommentArray={setOpeningCommentArray}
+                    />
+                  </TouchableOpacity>
+
+                  {openingCommentArray.includes(obj.item.id) ? (
+                    <FlatList
+                      style={{ marginLeft: 16 }}
+                      data={obj.item.children}
+                      keyboardShouldPersistTaps="always"
+                      keyExtractor={(item, idx) => idx.toString()}
+                      renderItem={(childObj) => (
+                        <TouchableOpacity
+                          activeOpacity={1}
+                          onPress={() => [
+                            clickComment(childObj.item),
+                            Keyboard.dismiss(),
+                          ]}
+                        >
+                          <CommentItem
+                            commentInfo={childObj.item}
+                            selectComment={selectComment}
+                            setTargetComment={setParentComment}
+                            setTargetCommentId={setParentCommentById}
+                            onDelete={() => deleteComment()}
+                            routePrefix={prefix}
+                          />
+                        </TouchableOpacity>
+                      )}
+                    />
+                  ) : null}
+                </View>
+              )}
+            />
+          </Animated.ScrollView>
+        </TouchableWithoutFeedback>
+        {user.name !== '' ? (
+          <CommentTextInput
+            textValue={comment}
+            onChangeText={setComment}
+            onPress={() => onUpload()}
+            isChild={parentComment !== undefined}
+            targetComment={parentComment}
+            setTargetComment={setParentComment}
+            setTargetCommentId={setParentCommentById}
           />
-        </Animated.ScrollView>
-      </TouchableWithoutFeedback>
-      {user.name !== '' ? (
-        <CommentTextInput
-          textValue={comment}
-          onChangeText={setComment}
-          onPress={() => onUpload()}
-          isChild={parentComment !== undefined}
-          targetComment={parentComment}
-          setTargetComment={setParentComment}
-          setTargetCommentId={setParentCommentById}
-        />
-      ) : null}
+        ) : null}
+      </KeyboardAvoidingView>
     </area.Container>
   );
 }
