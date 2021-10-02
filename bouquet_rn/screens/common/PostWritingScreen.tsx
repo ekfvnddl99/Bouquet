@@ -269,7 +269,9 @@ export default function PostWritingScreen(): React.ReactElement {
               <View style={{ marginTop: 12 }}>{getTemplate(select)}</View>
             )}
 
-            <TextTemplate mode="edit" post={newPost.text} setPost={setText} />
+            {select !== 5 ? (
+              <TextTemplate mode="edit" post={newPost.text} setPost={setText} />
+            ) : null}
             <View style={{ marginTop: 40 }} />
             {select !== 5 ? (
               <ConditionButton
