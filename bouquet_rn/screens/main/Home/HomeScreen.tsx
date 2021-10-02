@@ -12,6 +12,7 @@ import * as text from '../../../styles/styled-components/text';
 import { StatusBarHeight } from '../../../logics/non-server/StatusbarHeight';
 import useCharacter from '../../../logics/hooks/useCharacter';
 import { getFeedPostListAsync } from '../../../logics/server/Home';
+import { getTopPostListAsync } from '../../../logics/server/Search';
 
 // utils
 import { AllTemplates, Post } from '../../../utils/types/PostTypes';
@@ -37,6 +38,7 @@ export default function HomeScreen(): React.ReactElement {
 
   const [pageNum, setPageNum] = useState(1);
   const [isPageEnd, setIsPageEnd] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   // 로그인한 상태인지 아닌지 확인
   useEffect(() => {
@@ -44,24 +46,39 @@ export default function HomeScreen(): React.ReactElement {
     else setIsLogined(true);
   }, [myCharacter.id]);
 
+  async function getPost(newPageNum?: number, isRefreshing?: boolean) {
+    const serverResult = await getTopPostListAsync(
+      newPageNum || pageNum,
+      myCharacter.id,
+    );
+    if (serverResult.isSuccess) {
+      if (serverResult.result.length === 0) {
+        setIsPageEnd(true);
+        if (postArray === undefined) setPostArray(serverResult.result);
+      } else if (postArray === undefined || isRefreshing)
+        setPostArray(serverResult.result);
+      else {
+        const tmpArray = postArray;
+        serverResult.result.forEach((obj) => tmpArray.push(obj));
+        setPostArray(tmpArray);
+      }
+    } else {
+      alert(serverResult.result.errorMsg);
+    }
+    setRefreshing(false);
+  }
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    setPageNum(1);
+    setIsPageEnd(false);
+    await getPost(1, true);
+  };
+
   // 가장 처음에 인기 게시물 가져옴
   useEffect(() => {
-    async function getPost() {
-      const serverResult = await getFeedPostListAsync(pageNum);
-      if (serverResult.isSuccess) {
-        if (postArray === undefined) setPostArray(serverResult.result);
-        else if (serverResult.result.length === 0) setIsPageEnd(true);
-        else {
-          const tmpArray = postArray;
-          serverResult.result.forEach((obj) => tmpArray.push(obj));
-          setPostArray(tmpArray);
-        }
-      } else {
-        alert(serverResult.result.errorMsg);
-      }
-    }
     getPost();
-  }, [pageNum]);
+  }, []);
 
   /**
    * animation 관련
@@ -177,8 +194,12 @@ export default function HomeScreen(): React.ReactElement {
             {isLogined ? <QnATextInput routePrefix="HomeTab" /> : null}
           </View>
         )}
-        onEndReached={() => {
-          if (!isPageEnd) setPageNum(pageNum + 1);
+        onEndReached={async () => {
+          if (!isPageEnd) {
+            const nextPageNum = pageNum + 1;
+            setPageNum(nextPageNum);
+            await getPost(nextPageNum);
+          }
         }}
         onEndReachedThreshold={0.8}
         showsVerticalScrollIndicator={false}
@@ -186,6 +207,8 @@ export default function HomeScreen(): React.ReactElement {
         renderItem={(obj) => (
           <PostItem postInfo={obj.item} routePrefix="HomeTab" />
         )}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
       />
       {isLogined ? (
         <FloatingButton routePrefix="HomeTab" />
