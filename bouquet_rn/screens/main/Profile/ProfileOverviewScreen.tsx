@@ -56,6 +56,10 @@ export default function ProfileOverviewScreen(): React.ReactElement {
     navigation.navigate('SettingStack');
   }
 
+  function goLogin() {
+    navigation.navigate('Login');
+  }
+
   // animation에 필요한 변수들
   // animation 컨트롤 변수
   const scroll = useRef(new Animated.Value(0)).current;
@@ -87,7 +91,9 @@ export default function ProfileOverviewScreen(): React.ReactElement {
         </View>
         <TouchableOpacity
           style={{ marginRight: 16 }}
-          onPress={() => goCharacterGeneration()}
+          onPress={
+            user.name === '' ? () => goLogin() : () => goCharacterGeneration()
+          }
         >
           <Icon icon="plus" size={24} />
         </TouchableOpacity>
