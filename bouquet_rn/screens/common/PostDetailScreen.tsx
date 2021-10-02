@@ -49,6 +49,7 @@ import SunButton from '../../components/button/SunButton';
 import CommentItem from '../../components/item/CommentItem';
 import CommentTextInput from '../../components/input/CommentTextInput';
 import LineButton from '../../components/button/LineButton';
+import PostDetailTopView from './PostDetailTopView';
 
 // templates
 import TextTemplate from '../template/TextTemplate';
@@ -82,10 +83,13 @@ export default function PostDetailScreen(): React.ReactElement {
   useEffect(() => {
     if (route.params !== undefined) {
       const { postId } = route.params;
-      if (postId) setViewPost(postId);
+      if (postId) {
+        alert(postId);
+        setViewPost(postId);
+      }
       prefix = route.params.routePrefix;
     }
-  }, []);
+  }, [route]);
 
   // 내가 고른 댓글의 아이디
   const [selectComment, setSelectComment] = useState(noComment);
@@ -196,10 +200,7 @@ export default function PostDetailScreen(): React.ReactElement {
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <Animated.ScrollView
-            contentContainerStyle={{
-              marginHorizontal: 30,
-              flexGrow: 1,
-            }}
+            style={{ marginHorizontal: 30, flex: 1 }}
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
             onScroll={Animated.event(
@@ -207,61 +208,15 @@ export default function PostDetailScreen(): React.ReactElement {
               { useNativeDriver: true },
             )}
           >
-            <View style={{ paddingTop: 20 }} />
-
-            <area.RowArea>
-              <View style={{ flex: 1 }}>
-                <ProfileButton
-                  diameter={30}
-                  isAccount={false}
-                  isJustImg={false}
-                  isPress
-                  name={viewPost?.character_info.name}
-                  profileImg={viewPost?.character_info.profile_img}
-                  routePrefix={prefix}
-                />
-              </View>
-              {postOwner ? (
-                <area.RowArea style={{ paddingRight: 1 }}>
-                  <LineButton
-                    onPress={() => {
-                      /**/
-                    }}
-                    content={i18n.t('수정')}
-                    borderColor={colors.black}
-                  />
-                  <View style={{ marginRight: 4 }} />
-                  <LineButton
-                    onPress={() => {
-                      /**/
-                    }}
-                    content={i18n.t('삭제')}
-                    borderColor={colors.warning_red}
-                  />
-                </area.RowArea>
-              ) : null}
-            </area.RowArea>
-            <View style={{ marginBottom: 12 }} />
-            {template}
-            {viewPost?.template && viewPost.text ? (
-              <TextTemplate mode="detail" post={viewPost.text} />
-            ) : null}
-            <View style={{ alignItems: 'flex-start' }}>
-              <SunButton
-                sunNum={viewPost?.num_sunshines}
-                setSunNum={() => {
-                  /* */
-                }}
-                active={viewPost?.liked}
-                postId={viewPost.id}
-              />
-            </View>
-            <text.Subtitle3 textColor={colors.black} style={{ marginTop: 36 }}>
-              {i18n.t('반응')}
-            </text.Subtitle3>
-
-            <View style={{ paddingTop: 12 }} />
             <FlatList
+              ListHeaderComponent={
+                <PostDetailTopView
+                  viewPost={viewPost}
+                  prefix={prefix}
+                  postOwner={postOwner}
+                  template={template}
+                />
+              }
               data={viewPost?.comments}
               keyboardShouldPersistTaps="always"
               keyExtractor={(item, idx) => idx.toString()}
@@ -314,7 +269,16 @@ export default function PostDetailScreen(): React.ReactElement {
             />
           </Animated.ScrollView>
         </TouchableWithoutFeedback>
-        {user.name !== '' ? (
+        <CommentTextInput
+          textValue={comment}
+          onChangeText={setComment}
+          onPress={() => onUpload()}
+          isChild={parentComment !== undefined}
+          targetComment={parentComment}
+          setTargetComment={setParentComment}
+          setTargetCommentId={setParentCommentById}
+        />
+        {/* {user.name !== '' ? (
           <CommentTextInput
             textValue={comment}
             onChangeText={setComment}
@@ -324,7 +288,7 @@ export default function PostDetailScreen(): React.ReactElement {
             setTargetComment={setParentComment}
             setTargetCommentId={setParentCommentById}
           />
-        ) : null}
+        ) : null} */}
       </KeyboardAvoidingView>
     </area.Container>
   );

@@ -6,10 +6,10 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
+  Platform,
 } from 'react-native';
 import I18n from 'i18n-js';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 // styles
@@ -39,7 +39,6 @@ import DiaryTemplate from '../template/DiaryTemplate';
 import ListTemplate from '../template/ListTemplate';
 
 // utils
-import { WritingStackParam } from '../../utils/types/NavigationTypes';
 import * as Post from '../../utils/types/PostTypes';
 
 type ParamList = {
@@ -221,60 +220,63 @@ export default function PostWritingScreen(): React.ReactElement {
         profileImg={myCharacter.profile_img}
         routePrefix={prefix}
       />
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <KeyboardAvoidingView style={{ flex: 1 }} behavior="height">
-          <area.ContainerBlank30>
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ flexGrow: 1 }}
-              keyboardShouldPersistTaps="handled"
-            >
-              <area.RowArea>
-                <View style={{ flex: 1 }}>
-                  <ProfileButton
-                    diameter={30}
-                    isAccount={false}
-                    isJustImg={false}
-                    isPress={false}
-                    name={myCharacter.name}
-                    profileImg={myCharacter.profile_img}
-                    routePrefix={prefix}
-                  />
-                </View>
-                {select !== -1 ? (
-                  <LineButton
-                    onPress={() => goSelect()}
-                    content={I18n.t('템플릿 변경')}
-                    borderColor={colors.black}
-                  />
-                ) : null}
-              </area.RowArea>
 
-              {select === -1 ? (
-                <button.AddTemplate onPress={goSelect}>
-                  <text.Button2B textColor={colors.black}>
-                    {I18n.t('템플릿 선택')}
-                  </text.Button2B>
-                </button.AddTemplate>
-              ) : (
-                <View style={{ marginTop: 12 }}>{getTemplate(select)}</View>
-              )}
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ScrollView
+            style={{ paddingHorizontal: 30, paddingTop: 30 }}
+            contentContainerStyle={{ flexGrow: 1 }}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+          >
+            <area.RowArea>
+              <View style={{ flex: 1 }}>
+                <ProfileButton
+                  diameter={30}
+                  isAccount={false}
+                  isJustImg={false}
+                  isPress={false}
+                  name={myCharacter.name}
+                  profileImg={myCharacter.profile_img}
+                  routePrefix={prefix}
+                />
+              </View>
+              {select !== -1 ? (
+                <LineButton
+                  onPress={() => goSelect()}
+                  content={I18n.t('템플릿 변경')}
+                  borderColor={colors.black}
+                />
+              ) : null}
+            </area.RowArea>
 
-              <TextTemplate mode="edit" post={newPost.text} setPost={setText} />
-              <View style={{ marginTop: 40 }} />
-              <ConditionButton
-                isActive
-                onPress={() => goUpload()}
-                content={I18n.t('게시글 올리기')}
-                paddingH={0}
-                paddingV={14}
-                height={45}
-              />
-              <View style={{ marginTop: 40 }} />
-            </ScrollView>
-          </area.ContainerBlank30>
-        </KeyboardAvoidingView>
-      </TouchableWithoutFeedback>
+            {select === -1 ? (
+              <button.AddTemplate onPress={goSelect}>
+                <text.Button2B textColor={colors.black}>
+                  {I18n.t('템플릿 선택')}
+                </text.Button2B>
+              </button.AddTemplate>
+            ) : (
+              <View style={{ marginTop: 12 }}>{getTemplate(select)}</View>
+            )}
+
+            <TextTemplate mode="edit" post={newPost.text} setPost={setText} />
+            <View style={{ marginTop: 40 }} />
+            <ConditionButton
+              isActive
+              onPress={() => goUpload()}
+              content={I18n.t('게시글 올리기')}
+              paddingH={0}
+              paddingV={14}
+              height={45}
+            />
+            <View style={{ marginTop: 40 }} />
+          </ScrollView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </area.Container>
   );
 }

@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "bouquet",
+    "scheme": "bouquet",
     "slug": "bouquet",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -13,9 +14,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "usesAppleSignIn": true,
@@ -26,9 +25,7 @@
         }
       },
       "infoPlist": {
-        "UIBackgroundModes": [
-          "remote-notification"
-        ]
+        "UIBackgroundModes": ["remote-notification"]
       }
     },
     "android": {
