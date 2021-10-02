@@ -23,8 +23,8 @@ export async function changeCharacterAsync(
   type ChangeCharacterAsyncOutput = { Authorization: string };
 
   const tmpResult = await APIs.postAsync<ChangeCharacterAsyncOutput>(
-    '/character/change',
-    { 'Content-Type': 'application/json', character_id: characterId },
+    `/character/change?character_id=${characterId}`,
+    { 'Content-Type': 'application/json' },
     '',
     true,
   );
@@ -275,6 +275,56 @@ export async function getCharacterListAsync(
         statusCode: 422,
         errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
         info: result.detail,
+      },
+      isSuccess: false,
+    };
+  }
+  // 나머지 에러
+  return {
+    result: {
+      statusCode: response.status,
+      errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
+      info: response,
+    },
+    isSuccess: false,
+  };
+}
+
+/**
+ * token을 이용해서 현재 선택된 캐릭터의 정보를 서버에서 불러오는 함수
+ * @returns -{result: 선택된 캐릭터 id, isSuccess: true} 또는 {result: 에러 객체, isSuccess: false}
+ */
+export async function getCurrentCharacterAsync(): APIs.ServerResult<number> {
+  // 서버 응답 타입 정의
+  type GetCurrentCharacterAsyncOutput = { id: number };
+
+  const tmpResult = await APIs.postAsync(
+    '/character/me',
+    { 'Content-Type': 'application/json' },
+    '',
+    true,
+  );
+
+  // 사전 처리된 에러는 바로 반환
+  if (APIs.isServerErrorOutput(tmpResult)) {
+    return { result: tmpResult, isSuccess: false };
+  }
+
+  const [result, response] = tmpResult;
+
+  // 요청 성공 : 캐릭터 id 반환
+  if (APIs.isSuccess<GetCurrentCharacterAsyncOutput>(result, response)) {
+    return { result: result.id, isSuccess: true };
+  }
+
+  // 404 : No such Character
+  if (APIs.isError<APIs.ServerError>(result, response, 404)) {
+    return {
+      result: {
+        statusCode: 404,
+        errorMsg:
+          '선택된 캐릭터가 없어요. 로그아웃하고 다시 시도해 보거나, 문의해 주세요.',
+        info: result.msg,
       },
       isSuccess: false,
     };

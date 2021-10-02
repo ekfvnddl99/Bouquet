@@ -5,6 +5,7 @@ import * as SecureStore from 'expo-secure-store';
 import { characterListState } from '../atoms';
 import useCharacter from './useCharacter';
 import { getMyCharacterListAsync } from '../server/User';
+import { getCurrentCharacterAsync } from '../server/Character';
 
 // utils
 import { MyCharacter } from '../../utils/types/UserTypes';
@@ -32,31 +33,58 @@ export default function useLoadCharacter(): [
     // 캐릭터 리스트 최신화 시도
     const loadedCharacterList = await loadCharacterList();
     if (loadedCharacterList) tmpCharacterList = loadedCharacterList;
-    await setCharacter(tmpCharacterList[0]);
 
-    // // 마지막으로 선택한 캐릭터 이름 정보가 있는지 확인
-    // const lastCharacterName = await SecureStore.getItemAsync(
-    //   'lastCharacterName',
-    // );
+    // 현재 캐릭터의 id 저장
+    let currentCharacterId: number | undefined;
+    const characterResult = await getCurrentCharacterAsync();
+    if (characterResult.isSuccess) {
+      currentCharacterId = characterResult.result;
+    }
 
-    // if (lastCharacterName) {
-    //   // 마지막으로 선택한 캐릭터를 캐릭터 리스트에서 찾아 선택
-    //   if (tmpCharacterList.length > 0) {
-    //     // 저장된 이름과 같은 이름인 캐릭터가 없으면 첫번째 선택
-    //     let tmpCharacter = tmpCharacterList[0];
-    //     for (let i = 0; i < tmpCharacterList.length; i += 1) {
-    //       if (tmpCharacterList[i].name === lastCharacterName) {
-    //         tmpCharacter = tmpCharacterList[i];
-    //         break;
-    //       }
-    //     }
-    //     await setCharacter(tmpCharacter);
-    //   }
-    // } else if (tmpCharacterList.length > 0) {
-    //   // 마지막으로 선택한 캐릭터 정보가 없으면 첫번째 선택
-    //   await setCharacter(tmpCharacterList[0]);
-    // }
-    // // 캐릭터 리스트가 비어 있으면 캐릭터 선택되지 않음
+    // 마지막으로 선택한 캐릭터 이름 정보가 있는지 확인
+    const lastCharacterId = await SecureStore.getItemAsync('lastCharacterId');
+
+    function findCharacterById(characterId: number): MyCharacter | undefined {
+      if (tmpCharacterList.length > 0) {
+        let tmpCharacter = tmpCharacterList[0];
+        let isUpdated = false;
+        for (let i = 0; i < tmpCharacterList.length; i += 1) {
+          if (tmpCharacterList[i].id === characterId) {
+            tmpCharacter = tmpCharacterList[i];
+            isUpdated = true;
+            break;
+          }
+        }
+        // 찾은 경우에만 반환
+        if (isUpdated) return tmpCharacter;
+      }
+      // 찾지 못했거나 리스트가 비어 있는 경우 undefined 반환
+      return undefined;
+    }
+
+    if (lastCharacterId) {
+      const realLastCharacterId = Number(lastCharacterId);
+      // 마지막으로 선택한 캐릭터를 캐릭터 리스트에서 찾아 선택
+      const realCharacter = findCharacterById(realLastCharacterId);
+      if (realCharacter) {
+        await setCharacter(realCharacter);
+        return;
+      }
+    }
+
+    if (currentCharacterId) {
+      const realCharacter = findCharacterById(currentCharacterId);
+      if (realCharacter) {
+        await setCharacter(realCharacter);
+        return;
+      }
+    }
+
+    if (tmpCharacterList.length > 0) {
+      await setCharacter(tmpCharacterList[0]);
+    }
+
+    // 캐릭터 리스트가 비어 있으면 캐릭터 선택되지 않음
   }
 
   /**
@@ -68,7 +96,7 @@ export default function useLoadCharacter(): [
       setCharacterList(result.result);
       // setState가 바로 적용되지 않는 경우를 방지하기 위해 최신값 반환
       return result.result;
-    } else alert(result.result.statusCode);
+    }
     // 빈 배열인 경우와 요청이 실패한 경우 구별
     return undefined;
   }

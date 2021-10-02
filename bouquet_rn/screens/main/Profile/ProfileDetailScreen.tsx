@@ -65,11 +65,11 @@ export default function ProfileDetailScreen(): React.ReactElement {
         viewCharacter.name,
       );
       if (serverResult.isSuccess) {
-        if (postArray === undefined) setPostArray(serverResult.result);
-        else if (serverResult.result.length === 0) setIsPostPageEnd(true);
+        if (postArray === undefined) setPostArray(serverResult.result[0]);
+        else if (serverResult.result[0].length === 0) setIsPostPageEnd(true);
         else {
           const tmpArray = postArray;
-          serverResult.result.forEach((obj) => tmpArray.push(obj));
+          serverResult.result[0].forEach((obj) => tmpArray.push(obj));
           setPostArray(tmpArray);
         }
       } else alert(serverResult.result.errorMsg);

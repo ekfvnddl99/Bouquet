@@ -3,6 +3,7 @@ import * as SecureStore from 'expo-secure-store';
 
 // logics
 import { characterState } from '../atoms';
+import { changeCharacterAsync } from '../server/Character';
 
 // utils
 import { MyCharacter } from '../../utils/types/UserTypes';
@@ -19,9 +20,17 @@ export default function useCharacter(): [
   const [character, setCharacter] = useRecoilState(characterState);
 
   async function selectCharacter(ch: MyCharacter): Promise<void> {
+    const changeResult = await changeCharacterAsync(ch.id);
+    if (changeResult.isSuccess) {
+      await SecureStore.setItemAsync('auth', changeResult.result);
+    } else {
+      alert(changeResult.result.errorMsg);
+      return;
+    }
+
     setCharacter(ch);
     // 마지막으로 선택한 캐릭터 이름을 로컬에 저장
-    await SecureStore.setItemAsync('lastCharacterName', ch.name);
+    await SecureStore.setItemAsync('lastCharacterId', String(ch.id));
   }
 
   return [character, selectCharacter];
