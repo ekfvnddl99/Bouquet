@@ -271,14 +271,16 @@ export default function PostWritingScreen(): React.ReactElement {
 
             <TextTemplate mode="edit" post={newPost.text} setPost={setText} />
             <View style={{ marginTop: 40 }} />
-            <ConditionButton
-              isActive
-              onPress={() => goUpload()}
-              content={I18n.t('게시글 올리기')}
-              paddingH={0}
-              paddingV={14}
-              height={45}
-            />
+            {select !== 5 ? (
+              <ConditionButton
+                isActive
+                onPress={() => goUpload()}
+                content={I18n.t('게시글 올리기')}
+                paddingH={0}
+                paddingV={14}
+                height={45}
+              />
+            ) : null}
             <View style={{ marginTop: 40 }} />
           </ScrollView>
         </TouchableWithoutFeedback>
