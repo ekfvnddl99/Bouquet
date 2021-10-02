@@ -18,7 +18,11 @@ import * as cal from '../../logics/non-server/Calculation';
 
 type NotificationItemProps = {
   name: string;
+  profileImg: string;
   content: string;
+  createdAt: string;
+  onPress: () => void;
+  onDelete: () => void;
 };
 /**
  * Notification 알람 컴포넌트
@@ -33,7 +37,11 @@ type NotificationItemProps = {
  */
 export default function NotificationItem({
   name,
+  profileImg,
   content,
+  createdAt,
+  onPress,
+  onDelete,
 }: NotificationItemProps): React.ReactElement {
   /**
    * swipe to delete의 animation 관련
@@ -69,7 +77,7 @@ export default function NotificationItem({
 
   return (
     <WholeArea>
-      <BinButton>
+      <BinButton onPress={() => onDelete()}>
         <View style={{ alignItems: 'center' }}>
           <Icon icon="binWhite" size={24} />
         </View>
@@ -78,8 +86,8 @@ export default function NotificationItem({
         {...panResponder.panHandlers}
         style={[{ width: '100%' }, { transform: [{ translateX: TranslateX }] }]}
       >
-        <button.NotificationButton activeOpacity={1}>
-          <elses.CircleImg diameter={20} source={{}} />
+        <button.NotificationButton activeOpacity={1} onPress={() => onPress()}>
+          <elses.CircleImg diameter={20} source={{ uri: profileImg }} />
           <View
             style={{
               flex: 2,
@@ -100,7 +108,7 @@ export default function NotificationItem({
             }}
           >
             <text.Caption textColor={colors.gray5}>
-              {cal.timeName('')} {i18n.t('전')}
+              {cal.timeName(createdAt)} {i18n.t('전')}
             </text.Caption>
           </View>
         </button.NotificationButton>

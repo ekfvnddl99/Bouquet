@@ -2,15 +2,20 @@ import React, { useRef, useState, useEffect } from 'react';
 import { View, Animated, FlatList } from 'react-native';
 import i18n from 'i18n-js';
 import styled from 'styled-components/native';
+import { useNavigation } from '@react-navigation/native';
 
 // styles
 import colors from '../../../styles/colors';
 import * as area from '../../../styles/styled-components/area';
 import * as text from '../../../styles/styled-components/text';
+import * as button from '../../../styles/styled-components/button';
+import * as elses from '../../../styles/styled-components/elses';
 
 // logics
 import { StatusBarHeight } from '../../../logics/non-server/StatusbarHeight';
 import useCharacter from '../../../logics/hooks/useCharacter';
+import useViewPost from '../../../logics/hooks/useViewPost';
+import useViewCharacter from '../../../logics/hooks/useViewCharacter';
 
 // components
 import NotificationItem from '../../../components/item/NotificationItem';
@@ -24,6 +29,9 @@ const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 export default function NotificationScreen(): React.ReactElement {
+  const navigation = useNavigation();
+  const [, setViewPost] = useViewPost();
+  const [, setViewCharacter] = useViewCharacter();
   // 더미데이터
   const Data = [
     { a: '오란지', b: '님이 당신을 팔로우해요.' },
@@ -48,6 +56,22 @@ export default function NotificationScreen(): React.ReactElement {
     if (myCharacter.id === -1) setIsLogined(false);
     else setIsLogined(true);
   }, [myCharacter.id]);
+
+  async function goNavigate(route: string, param: string | number) {
+    if (typeof param === 'number') {
+      await setViewPost(param);
+      navigation.navigate(`NotiTab${route}`, {
+        screen: 'PostDetail',
+        params: { routePrefix: 'NotiTab' },
+      });
+    } else {
+      await setViewCharacter(param);
+      navigation.navigate(`NotiTab${route}`, {
+        screen: 'ProfileDetail',
+        params: { routePrefix: 'NotiTab' },
+      });
+    }
+  }
 
   /**
    * animation 관련
@@ -97,7 +121,14 @@ export default function NotificationScreen(): React.ReactElement {
           data={Data}
           keyExtractor={(item, idx) => idx.toString()}
           renderItem={(obj) => (
-            <NotificationItem name={obj.item.a} content={obj.item.b} />
+            <NotificationItem
+              name={obj.item.a}
+              profileImg={}
+              content={obj.item.b}
+              createdAt={}
+              onPress={() => goNavigate()}
+              onDelete={}
+            />
           )}
         />
       );
@@ -172,10 +203,24 @@ export default function NotificationScreen(): React.ReactElement {
         {isLogined ? (
           <>{setNotification(Data.length)}</>
         ) : (
-          <NotificationItem
-            name="Bouquet"
-            content="이 꿈꾸던 부캐를 만들어 보자고 제안해요."
-          />
+          <button.NotificationButton activeOpacity={1}>
+            <elses.CircleImg diameter={20} source={{ uri: profileImg }} />
+            <View
+              style={{
+                flex: 2,
+                marginLeft: 10,
+              }}
+            >
+              <area.RowArea>
+                <text.Body2B textColor={colors.black}>
+                  Bouquet
+                  <text.Body2R textColor={colors.black}>
+                    이 꿈꾸던 부캐를 만들어 보자고 제안해요.
+                  </text.Body2R>
+                </text.Body2B>
+              </area.RowArea>
+            </View>
+          </button.NotificationButton>
         )}
       </Animated.ScrollView>
       {isLogined ? (
