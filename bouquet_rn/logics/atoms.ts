@@ -68,3 +68,11 @@ export const selectTemplate = atom({
   key: 'selectTemplate',
   default: -1,
 });
+
+/**
+ *
+ */
+export const recentSearchList = atom({
+  key: 'recentSearchList',
+  default: <Array<string>>[],
+});

@@ -37,6 +37,11 @@ import FloatingButton from '../../../components/button/FloatingButton';
 import { AllTemplates, noPost, Post } from '../../../utils/types/PostTypes';
 import { CharacterMini, noCharacter } from '../../../utils/types/UserTypes';
 
+// view
+import SearchRecentView from './SearchRecentView';
+import SearchCharacterView from './SearchCharacterView';
+import SearchPostView from './SearchPostView';
+
 const HEADER_MAX_HEIGHT = 95;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
@@ -162,6 +167,18 @@ export default function SearchScreen(): React.ReactElement {
     backgroundColor: ColorInput,
   };
 
+  const viewArray = [
+    <SearchRecentView
+      searchInput={searchInput}
+      setSearchResult={setSearchResult}
+    />,
+    <SearchCharacterView
+      searchInput={searchInput}
+      characterArray={characterArray}
+    />,
+    <SearchPostView searchInput={searchInput} postArray={postArray} />,
+  ];
+
   return (
     <area.Container>
       <AnimationHeader
@@ -196,89 +213,22 @@ export default function SearchScreen(): React.ReactElement {
         </SearchArea>
       </View>
 
+      <View style={{ paddingBottom: 30 + 12 }} />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <Animated.ScrollView
-          style={{ marginTop: HEADER_MIN_HEIGHT - 30, flex: 1 }}
+        <Animated.FlatList
+          style={{
+            marginTop: HEADER_MIN_HEIGHT - 30,
+            flex: 1,
+          }}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
           onScroll={Animated.event(
             [{ nativeEvent: { contentOffset: { y: scroll } } }],
             { useNativeDriver: false },
           )}
-        >
-          <View style={{ paddingTop: 30 + 12 }} />
-          <Animated.View style={{ marginLeft: 30 }}>
-            {searchInput.length === 0 ? (
-              <Animated.View>
-                <text.Subtitle3 textColor={colors.black}>
-                  {i18n.t('최근 검색어')}
-                </text.Subtitle3>
-                <FlatList
-                  style={{ marginTop: 12 }}
-                  data={recentList}
-                  keyboardShouldPersistTaps="handled"
-                  keyExtractor={(item, idx) => idx.toString()}
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  renderItem={(obj) => (
-                    <TagModifyingItem
-                      content={obj.item}
-                      setSearch={(input) => setSearchResult(input)}
-                      tagIndex={obj.index}
-                      isSearching
-                      tagArray={recentList}
-                      setTagArray={setRecentList}
-                    />
-                  )}
-                />
-              </Animated.View>
-            ) : null}
-
-            {characterArray.length > 0 ? (
-              <Animated.View
-                style={{ marginTop: searchInput.length > 0 ? 0 : 40 }}
-              >
-                <text.Subtitle3 textColor={colors.black}>
-                  {searchInput.length > 0 ? '캐릭터' : i18n.t('인기 부캐')}
-                </text.Subtitle3>
-                <FlatList
-                  style={{ marginTop: 12 }}
-                  data={characterArray}
-                  keyboardShouldPersistTaps="handled"
-                  keyExtractor={(item, idx) => idx.toString()}
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  renderItem={(obj) => (
-                    <CharacterItem
-                      characterInfo={obj.item}
-                      routePrefix="SearchTab"
-                    />
-                  )}
-                />
-              </Animated.View>
-            ) : null}
-          </Animated.View>
-
-          {postArray.length > 0 ? (
-            <area.ContainerBlank30
-              style={{ marginTop: searchInput.length > 0 ? 0 : 10 }}
-            >
-              <text.Subtitle3 textColor={colors.black}>
-                {searchInput.length > 0 ? '게시물' : i18n.t('인기 게시물')}
-              </text.Subtitle3>
-              <FlatList
-                style={{ marginTop: 12 }}
-                data={postArray}
-                keyboardShouldPersistTaps="handled"
-                keyExtractor={(item, idx) => idx.toString()}
-                showsVerticalScrollIndicator={false}
-                renderItem={(obj) => (
-                  <PostItem postInfo={obj.item} routePrefix="SearchTab" />
-                )}
-              />
-            </area.ContainerBlank30>
-          ) : null}
-        </Animated.ScrollView>
+          data={viewArray}
+          renderItem={(obj) => obj.item}
+        />
       </TouchableWithoutFeedback>
 
       {myCharacter.id === -1 ? null : (
