@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
+  Text,
 } from 'react-native';
 import I18n from 'i18n-js';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -125,7 +126,7 @@ export default function PostWritingScreen(): React.ReactElement {
    * 게시글 업로드하는 함수
    */
   async function goUpload() {
-    setSelect(-1);
+    setSelect(5);
 
     const realImages = await Promise.all(
       images.map(async (img) => {
@@ -144,6 +145,7 @@ export default function PostWritingScreen(): React.ReactElement {
     const serverResult = await uploadPostAsync(realNewPost);
     if (serverResult.isSuccess) {
       setViewPost(serverResult.result);
+      setSelect(-1);
       navigation.reset({ index: 0, routes: [{ name: 'PostStack' }] });
     } else alert(serverResult.result.errorMsg);
   }
@@ -206,6 +208,11 @@ export default function PostWritingScreen(): React.ReactElement {
             setPost={setTemplate}
             setImageInfo={setImageInfo}
           />
+        );
+      case 5:
+        // 게시글 업로드중 fallback
+        return (
+          <TextTemplate mode="detail" post="게시글을 업로드하고 있어요..." />
         );
       default:
         return null;
