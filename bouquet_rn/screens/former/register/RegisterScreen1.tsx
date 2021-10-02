@@ -200,12 +200,6 @@ export default function RegisterScreen1({
       ) : null}
 
       <area.BottomArea>
-        <View style={{ alignItems: 'center' }}>
-          <text.Caption textColor={colors.gray6}>
-            {i18n.t('이전 페이지로 돌아가면 소셜 계정으로도 가입할 수 있어요')}
-          </text.Caption>
-        </View>
-
         <View style={{ marginVertical: 16 }}>
           <ConditionButton
             isActive={isOK}
