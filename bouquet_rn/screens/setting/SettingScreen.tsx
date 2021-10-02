@@ -49,15 +49,29 @@ export default function SettingScreen(): React.ReactElement {
           {i18n.t('기본 설정')}
         </text.Subtitle2B>
         <area.NoHeightArea marBottom={0} paddingH={8} paddingV={8}>
-          <SettingItem
-            content={i18n.t('계정 프로필 수정')}
-            onPress={() => navigation.navigate('SettingProfile')}
-          />
-          <SettingItem
-            content={i18n.t('캐릭터별 알림 설정')}
-            onPress={() => navigation.navigate('SettingAlarm')}
-          />
-          <SettingItem content={i18n.t('로그아웃')} onPress={() => goOut()} />
+          {user.name === '' ? (
+            <>
+              <SettingItem
+                content="회원가입"
+                onPress={() => navigation.navigate('Register')}
+              />
+              <SettingItem
+                content="로그인"
+                onPress={() => navigation.navigate('Login')}
+              />
+            </>
+          ) : (
+            <>
+              <SettingItem
+                content={i18n.t('계정 프로필 수정')}
+                onPress={() => navigation.navigate('SettingProfile')}
+              />
+              <SettingItem
+                content={i18n.t('로그아웃')}
+                onPress={() => goOut()}
+              />
+            </>
+          )}
         </area.NoHeightArea>
       </View>
 

@@ -164,19 +164,6 @@ export default function LoginScreen(): React.ReactElement {
           </ScrollView>
 
           <area.BottomArea style={{ overflow: 'hidden' }}>
-            <LoginButton
-              content={i18n.t('Google로 계속하기')}
-              icon="google"
-              onPress={GoogleSignInAsync}
-            />
-            {Platform.OS === 'ios' ? (
-              <LoginButton
-                content={i18n.t('Apple로 계속하기')}
-                icon="apple"
-                onPress={GoogleSignInAsync}
-              />
-            ) : null}
-
             <area.RowArea
               style={{
                 marginTop: 15,
