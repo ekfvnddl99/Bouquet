@@ -3,9 +3,6 @@ import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import * as SecureStore from 'expo-secure-store';
 
-// logics
-import * as APIs from './APIUtils';
-
 /**
  * TODO route 이름 바꿔야함.
  * @param from 누구에게서 알림이 왔는지
@@ -25,25 +22,25 @@ export async function sendPushNotificationAsync(
       category: 'follow',
       title: '당신을 팔로우해요.',
       body: '님이 당신을 팔로우해요.',
-      url: `bouquet://Tab/Home/ProfileStack/ProfileDetail/${nameOrId}/HomeTab`,
+      data: { screen: 'NotiTabProfileDetailStack', params: `${nameOrId}` },
     },
     {
       category: 'likeComment',
       title: '당신의 댓글을 좋아해요.',
       body: '님이 당신의 댓글을 좋아해요.',
-      url: `bouquet://Tab/Home/PostStack/PostDetail/${nameOrId}/HomeTab`,
+      data: { screen: 'NotiTabPostStack', params: `${nameOrId}` },
     },
     {
       category: 'likePost',
       title: '당신의 게시글을 좋아해요.',
       body: '님이 당신의 게시글을 좋아해요.',
-      url: `bouquet://Tab/Home/PostStack/PostDetail/${nameOrId}/HomeTab`,
+      data: { screen: 'NotiTabPostStack', params: `${nameOrId}` },
     },
     {
       category: 'comment',
       title: '당신의 게시글에 댓글을 달았어요.',
       body: '님이 당신의 게시글에 댓글을 달았어요.',
-      url: `bouquet://Tab/Home/PostStack/PostDetail/${nameOrId}/HomeTab`,
+      data: { screen: 'NotiTabPostStack', params: `${nameOrId}` },
     },
   ];
   let idx = 0;
@@ -56,7 +53,7 @@ export async function sendPushNotificationAsync(
     sound: 'default',
     title: messageArray[idx].title,
     body: `${from}${messageArray[idx].body}`,
-    data: { url: messageArray[idx].url },
+    data: messageArray[idx].data,
   };
 
   const result = await fetch('https://exp.host/--/api/v2/push/send', {

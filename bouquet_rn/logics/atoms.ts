@@ -70,9 +70,17 @@ export const selectTemplate = atom({
 });
 
 /**
- *
+ * 최근 검색어
  */
 export const recentSearchList = atom({
   key: 'recentSearchList',
   default: <Array<string>>[],
+});
+
+/**
+ * notification 새로 온 거 확인했나 안 했나
+ */
+export const isNewNotification = atom({
+  key: 'isNewNotification',
+  default: false,
 });

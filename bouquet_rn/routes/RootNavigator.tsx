@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer, LinkingOptions } from '@react-navigation/native';
 import * as Notifications from 'expo-notifications';
 import * as Linking from 'expo-linking';
+import { useSetRecoilState } from 'recoil';
 
 // logics
 import useLogin from '../logics/hooks/useLogin';
+import { isNewNotification } from '../logics/atoms';
 
 // screens, navigators
 import SplashScreen from '../screens/former/SplashScreen';
@@ -16,12 +18,14 @@ const prefix = Linking.createURL('/');
 export default function AppStack(): React.ReactElement {
   const [isSplash, setIsSplash] = useState(true);
   const [login] = useLogin();
+  const setIsNew = useSetRecoilState(isNewNotification);
 
   // 실행되자마자 처리해야 하는 것
   useEffect(() => {
     async function callLogin() {
       await login();
       await getPushNotificationsPermission();
+      await Notifications.addNotificationReceivedListener(() => setIsNew(true));
       setTimeout(() => {
         setIsSplash(false);
       }, 2000);
@@ -70,15 +74,17 @@ export default function AppStack(): React.ReactElement {
     async getInitialURL(): Promise<string> {
       const init = await Linking.getInitialURL();
 
-      const response = await Notifications.getLastNotificationResponseAsync();
-      const url = response?.notification.request.content.data.url;
-      console.log(`init ${init}\nurl ${url}`);
+      console.log(`init ${init}`);
 
       if (init !== null) {
         return init;
       }
 
-      return url;
+      /**
+       * TODO Add Noti - killed
+       */
+      // 어차피 꺼진 상태에서 바로 가기 때문에 setIsNew 필요없음
+      return `${prefix}Tab/Notification`;
     },
     subscribe(listener: (deeplink: string) => void) {
       const onReceiveURL = ({ url }: { url: string }) => listener(url);
@@ -87,18 +93,19 @@ export default function AppStack(): React.ReactElement {
       Linking.addEventListener('url', onReceiveURL);
 
       // Listen to expo push notifications
-      const subscription =
+      const tapNotification =
         Notifications.addNotificationResponseReceivedListener((response) => {
-          const { url } = response.notification.request.content.data;
-          console.log(url);
-          listener(`${prefix}Tab/Home`); // 우선 최초화면으로 먼저 이동합니다. 이렇게 하지 않으면, 변수만 다른(:roomId) 동일한 화면이(ChatRoom) 이미 열려있던 경우, deep link로 인한 화면이동이 발생하지 않습니다.
-          listener(url); // 원하는 화면으로 이동합니다.
+          /**
+           * TODO Add Noti - fore, back
+           */
+          setIsNew(false);
+          listener(`${prefix}Tab/Notification`);
         });
 
       return () => {
         // Clean up the event listeners
         Linking.removeEventListener('url', onReceiveURL);
-        subscription.remove();
+        tapNotification.remove();
       };
     },
   };
