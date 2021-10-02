@@ -3,73 +3,7 @@ import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import * as SecureStore from 'expo-secure-store';
 
-/**
- * TODO route 이름 바꿔야함.
- * @param from 누구에게서 알림이 왔는지
- * @param category 어떤 내용의 알림인지
- * * follow(팔로우), likeComment(댓글 좋아요), likePost(글 좋아요), comment(댓글 달림)
- * @param nameOrId PostDetail은 post id, ProfileDetail은 character name을 넣으면 된다.
- * @returns
- */
-// Can use this function below, OR use Expo's Push Notification Tool-> https://expo.dev/notifications
-export async function sendPushNotificationAsync(
-  from: string,
-  category: string,
-  nameOrId: string | number,
-): Promise<Response> {
-  const messageArray = [
-    {
-      category: 'follow',
-      title: '당신을 팔로우해요.',
-      body: '님이 당신을 팔로우해요.',
-      data: { screen: 'NotiTabProfileDetailStack', params: `${nameOrId}` },
-    },
-    {
-      category: 'likeComment',
-      title: '당신의 댓글을 좋아해요.',
-      body: '님이 당신의 댓글을 좋아해요.',
-      data: { screen: 'NotiTabPostStack', params: `${nameOrId}` },
-    },
-    {
-      category: 'likePost',
-      title: '당신의 게시글을 좋아해요.',
-      body: '님이 당신의 게시글을 좋아해요.',
-      data: { screen: 'NotiTabPostStack', params: `${nameOrId}` },
-    },
-    {
-      category: 'comment',
-      title: '당신의 게시글에 댓글을 달았어요.',
-      body: '님이 당신의 게시글에 댓글을 달았어요.',
-      data: { screen: 'NotiTabPostStack', params: `${nameOrId}` },
-    },
-  ];
-  let idx = 0;
-  messageArray.map((obj, index) => {
-    if (obj.category === category) idx = index;
-    return true;
-  });
-  const message = {
-    to: await SecureStore.getItemAsync('pushToken'),
-    sound: 'default',
-    title: messageArray[idx].title,
-    body: `${from}${messageArray[idx].body}`,
-    data: messageArray[idx].data,
-  };
-
-  const result = await fetch('https://exp.host/--/api/v2/push/send', {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Accept-encoding': 'gzip, deflate',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(message),
-  });
-
-  return result;
-}
-
-export async function getPushNotificationsPermission(): Promise<void> {
+export default async function getPushNotificationsPermission(): Promise<void> {
   if (Constants.isDevice) {
     // 알림 허락 받았는지 확인
     const { status: existingStatus } =
@@ -82,7 +16,7 @@ export async function getPushNotificationsPermission(): Promise<void> {
     }
     // 사용자가 허락 안 하면 불가
     if (finalStatus !== 'granted') {
-      alert('Failed to get push token for push notification!');
+      alert('권한이 없어서 알림을 받을 수 없어요. 권한 설정을 해주세요.');
       return;
     }
 
@@ -90,7 +24,7 @@ export async function getPushNotificationsPermission(): Promise<void> {
     const token = (await Notifications.getExpoPushTokenAsync()).data;
     await SecureStore.setItemAsync('pushToken', token);
   } else {
-    alert('Must use physical device for Push Notifications');
+    alert('실기기에서 이용해주세요.');
   }
 
   if (Platform.OS === 'android') {

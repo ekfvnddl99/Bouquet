@@ -12,7 +12,7 @@ import { isNewNotification } from '../logics/atoms';
 // screens, navigators
 import SplashScreen from '../screens/former/SplashScreen';
 import WelcomeStackNavigator from './WelcomeStackNavigator';
-import { getPushNotificationsPermission } from '../logics/server/Notification';
+import getPushNotificationsPermission from '../logics/server/Notification';
 
 const prefix = Linking.createURL('/');
 export default function AppStack(): React.ReactElement {

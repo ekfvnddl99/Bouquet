@@ -61,7 +61,6 @@ export default function SearchScreen(): React.ReactElement {
     const getRecentList = async () => {
       const jsonValue = await AsyncStorage.getItem('recentList');
       const result = jsonValue != null ? JSON.parse(jsonValue) : null;
-      console.log(result);
       setRecentList(result);
       return result;
     };
