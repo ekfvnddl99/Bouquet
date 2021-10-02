@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   View,
   TouchableOpacity,
@@ -7,6 +7,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 import colors from '../../styles/colors';
 import * as elses from '../../styles/styled-components/elses';
@@ -48,10 +49,14 @@ function Img({
     });
 
     if (!result.cancelled) {
+      const manipResult = await ImageManipulator.manipulateAsync(result.uri, [
+        { resize: { width: 1024, height: 1024 } },
+      ]);
+      const realUri = manipResult.uri;
       if (setImageInfo && setPost) {
-        setPost({ type: 'Image', img: result.uri });
+        setPost({ type: 'Image', img: realUri });
         setImageInfo([
-          [result.uri],
+          [realUri],
           (images: string[]) => {
             setPost({ type: 'Image', img: images[0] });
             return { type: 'Image', img: images[0] };
@@ -65,16 +70,26 @@ function Img({
     <View style={{ marginBottom: isMini ? 0 : 12, alignItems: 'center' }}>
       {
         /* eslint-disable-next-line no-nested-ternary */
-        isEditMode ? (
-          <TouchableOpacity onPress={onPress} style={styles.selectImg}>
-            <Icon icon="gallery" size={24} />
+        !img || img === '' ? (
+          isEditMode ? (
+            <TouchableOpacity onPress={onPress} style={styles.selectImg}>
+              <Icon icon="gallery" size={24} />
+            </TouchableOpacity>
+          ) : (
+            <elses.RectangleImg
+              width={windowWidth / 2}
+              height={windowWidth / 2}
+              source={{}}
+            />
+          )
+        ) : isEditMode ? (
+          <TouchableOpacity onPress={onPress}>
+            <Image
+              source={{ uri: img }}
+              resizeMode="cover"
+              style={styles.setImg}
+            />
           </TouchableOpacity>
-        ) : img === '' ? (
-          <elses.RectangleImg
-            width={windowWidth / 2}
-            height={windowWidth / 2}
-            source={{}}
-          />
         ) : (
           <Image
             source={{ uri: img }}
@@ -110,6 +125,7 @@ export default function ImageTemplateComp({
         <Img
           isMini={false}
           isEditMode
+          img={post.img}
           setPost={setPost}
           setImageInfo={setImageInfo}
         />

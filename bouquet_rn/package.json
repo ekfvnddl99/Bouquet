@@ -46,7 +46,8 @@
     "react-native-svg": "12.1.1",
     "react-native-web": "~0.13.12",
     "recoil": "^0.3.1",
-    "styled-components": "^5.3.0"
+    "styled-components": "^5.3.0",
+    "expo-image-manipulator": "~9.2.2"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",

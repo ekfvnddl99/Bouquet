@@ -3,6 +3,7 @@ import { View, TextInput, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 // styles
 import colors from '../../styles/colors';
@@ -68,10 +69,14 @@ function Album({
     });
 
     if (!result.cancelled) {
+      const manipResult = await ImageManipulator.manipulateAsync(result.uri, [
+        { resize: { width: 1024, height: 1024 } },
+      ]);
+      const realUri = manipResult.uri;
       if (setImageInfo && setPost) {
-        setPost({ ...postInfo, img: result.uri });
+        setPost({ ...postInfo, img: realUri });
         setImageInfo([
-          [result.uri],
+          [realUri],
           (images: string[]) => {
             const tmpPost = postInfo;
             /* eslint-disable-next-line prefer-destructuring */
