@@ -32,9 +32,8 @@ export default function AppStack(): React.ReactElement {
   const linking: LinkingOptions = {
     prefixes: [prefix],
     config: {
-      initialRouteName: 'Welcome',
+      initialRouteName: 'Tab',
       screens: {
-        Welcome: 'Welcome',
         Tab: {
           path: 'Tab',
           initialRouteName: 'Home',
@@ -75,9 +74,11 @@ export default function AppStack(): React.ReactElement {
       const url = response?.notification.request.content.data.url;
       console.log(`init ${init}\nurl ${url}`);
 
-      if (init !== null) return url;
+      if (init !== null) {
+        return init;
+      }
 
-      return init;
+      return url;
     },
     subscribe(listener: (deeplink: string) => void) {
       const onReceiveURL = ({ url }: { url: string }) => listener(url);

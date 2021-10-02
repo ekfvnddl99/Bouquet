@@ -228,13 +228,15 @@ export default function PostWritingScreen(): React.ReactElement {
       />
 
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <ScrollView
-            style={{ paddingHorizontal: 30, paddingTop: 30 }}
-            contentContainerStyle={{ flexGrow: 1 }}
+            contentContainerStyle={{
+              paddingHorizontal: 30,
+              paddingTop: 30,
+              flexGrow: 1,
+            }}
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
           >

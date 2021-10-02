@@ -6,7 +6,6 @@ import i18n from 'i18n-js';
 import { RecoilRoot } from 'recoil';
 
 import AppStack from './routes/RootNavigator';
-import SplashScreen from './screens/former/SplashScreen';
 
 const translationGetters = {
   en: require('./utils/language/en.json'),
@@ -50,5 +49,4 @@ export default function App(): React.ReactElement {
       <AppStack />
     </RecoilRoot>
   );
-  return <SplashScreen />;
 }
