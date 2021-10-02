@@ -16,17 +16,15 @@ import TagModifyingItem from '../../../components/item/TagModifyingItem';
 type SearchRecentViewProps = {
   searchInput: string;
   setSearchResult: (input: string) => void;
+  recentList: string[];
+  setRecentList: (input: string[]) => void;
 };
 export default function SearchRecentView({
   searchInput,
   setSearchResult,
+  recentList,
+  setRecentList,
 }: SearchRecentViewProps): React.ReactElement {
-  // 더미데이터
-  const [recentList, setRecentList] = useRecoilState(recentSearchList);
-
-  useEffect(() => {
-    setRecentList(['단호', '귀여움', '아이돌', '파란색', '먹방', '유튜버']);
-  }, []);
   return (
     <>
       {searchInput.length === 0 ? (

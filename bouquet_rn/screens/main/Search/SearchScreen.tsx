@@ -3,18 +3,17 @@ import {
   View,
   Animated,
   TextInput,
-  FlatList,
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
 import i18n from 'i18n-js';
 import styled from 'styled-components/native';
 import { debounce } from 'lodash';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // styles
 import colors from '../../../styles/colors';
 import * as area from '../../../styles/styled-components/area';
-import * as text from '../../../styles/styled-components/text';
 
 // assets
 import Svg from '../../../assets/Icon';
@@ -28,9 +27,6 @@ import {
 import useCharacter from '../../../logics/hooks/useCharacter';
 
 // components
-import TagModifyingItem from '../../../components/item/TagModifyingItem';
-import PostItem from '../../../components/item/PostItem';
-import CharacterItem from '../../../components/item/CharacterItem';
 import FloatingButton from '../../../components/button/FloatingButton';
 
 // utils
@@ -48,14 +44,7 @@ const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 export default function SearchScreen(): React.ReactElement {
   // 더미데이터
-  const [recentList, setRecentList] = useState([
-    '단호',
-    '귀여움',
-    '아이돌',
-    '파란색',
-    '먹방',
-    '유튜버',
-  ]);
+  const [recentList, setRecentList] = useState<string[]>([]);
 
   const [myCharacter] = useCharacter();
 
@@ -67,6 +56,17 @@ export default function SearchScreen(): React.ReactElement {
   const [postArray, setPostArray] = useState<Post<AllTemplates>[]>([]);
   // 인기 캐릭터 담을 state
   const [characterArray, setCharacterArray] = useState<CharacterMini[]>([]);
+
+  useEffect(() => {
+    const getRecentList = async () => {
+      const jsonValue = await AsyncStorage.getItem('recentList');
+      const result = jsonValue != null ? JSON.parse(jsonValue) : null;
+      console.log(result);
+      setRecentList(result);
+      return result;
+    };
+    getRecentList();
+  }, []);
 
   /**
    * 검색어에 따른 뷰 전환
@@ -81,6 +81,15 @@ export default function SearchScreen(): React.ReactElement {
       setPostArray([noPost]);
     }
   }
+
+  /**
+   * async storage
+   */
+  const storeRecentList = async (value: string[]) => {
+    setRecentList(value);
+    const jsonValue = JSON.stringify(value);
+    await AsyncStorage.setItem('recentList', jsonValue);
+  };
   /**
    * debounce
    */
@@ -96,7 +105,7 @@ export default function SearchScreen(): React.ReactElement {
         tmpArray = tmpArray.filter(
           (item, index) => tmpArray.indexOf(item) === index,
         );
-        setRecentList(tmpArray);
+        storeRecentList(tmpArray);
         console.log(recentList);
       }
     }, 2000),
@@ -106,11 +115,11 @@ export default function SearchScreen(): React.ReactElement {
    * 검색어가 입력될 때마다 onChangeText에 의해 실행될 함수
    * @param searchText 입력된 검색어
    */
-  function setSearchResult(searchText: string) {
+  const setSearchResult = (searchText: string) => {
     setSearchInput(searchText);
     debounceHandler(searchText);
     debounceRecentSearchHandler(searchText);
-  }
+  };
 
   /**
    * 인기 캐릭터를 가져오는 함수
@@ -171,6 +180,8 @@ export default function SearchScreen(): React.ReactElement {
     <SearchRecentView
       searchInput={searchInput}
       setSearchResult={setSearchResult}
+      recentList={recentList}
+      setRecentList={storeRecentList}
     />,
     <SearchCharacterView
       searchInput={searchInput}
