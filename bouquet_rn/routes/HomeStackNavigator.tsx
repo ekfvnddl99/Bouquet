@@ -9,6 +9,7 @@ import HomeScreen from '../screens/main/Home/HomeScreen';
 import {
   ProfileDetailStackNavigator,
   PostStackNavigator,
+  AccountStackNavigator,
 } from './CommonNavigator';
 
 // home
@@ -29,6 +30,11 @@ export default function HomeStackNavigator(): React.ReactElement {
       <HomeStack.Screen
         name="HomeTabPostStack"
         component={PostStackNavigator}
+        options={{ headerShown: false }}
+      />
+      <HomeStack.Screen
+        name="HomeTabAccountStack"
+        component={AccountStackNavigator}
         options={{ headerShown: false }}
       />
     </HomeStack.Navigator>

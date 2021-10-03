@@ -9,6 +9,7 @@ import NotificationScreen from '../screens/main/Notification/NotificationScreen'
 import {
   ProfileDetailStackNavigator,
   PostStackNavigator,
+  AccountStackNavigator,
 } from './CommonNavigator';
 
 // noti
@@ -29,6 +30,11 @@ export default function NotificationStackNavigator(): React.ReactElement {
       <NotificationStack.Screen
         name="NotiTabPostStack"
         component={PostStackNavigator}
+        options={{ headerShown: false }}
+      />
+      <NotificationStack.Screen
+        name="NotiTabAccountStack"
+        component={AccountStackNavigator}
         options={{ headerShown: false }}
       />
     </NotificationStack.Navigator>

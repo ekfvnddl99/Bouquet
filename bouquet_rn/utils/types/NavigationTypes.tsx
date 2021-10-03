@@ -77,6 +77,7 @@ export type HomeStackParam = {
   Home: undefined;
   HomeTabProfileDetailStack: undefined;
   HomeTabPostStack: undefined;
+  HomeTabAccountStack: undefined;
 };
 export type HomeProps = StackScreenProps<HomeStackParam, 'Home'>;
 // search
@@ -84,6 +85,7 @@ export type SearchStackParam = {
   Search: undefined;
   SearchTabProfileDetailStack: undefined;
   SearchTabPostStack: undefined;
+  SearchTabAccountStack: undefined;
 };
 export type SearchProps = StackScreenProps<SearchStackParam, 'Search'>;
 // noti
@@ -91,6 +93,7 @@ export type NotificationStackParam = {
   Notification: undefined;
   NotiTabProfileDetailStack: undefined;
   NotiTabPostStack: undefined;
+  NotiTabAccountStack: undefined;
 };
 export type NotificationProps = StackScreenProps<
   NotificationStackParam,
