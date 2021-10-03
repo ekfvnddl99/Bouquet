@@ -14,6 +14,7 @@ import { isNewNotification } from '../logics/atoms';
 // screens, navigators
 import SplashScreen from '../screens/former/SplashScreen';
 import WelcomeStackNavigator from './WelcomeStackNavigator';
+import { getPushNotificationsPermission } from '../logics/server/Notification';
 
 const prefix = Linking.createURL('/');
 export default function AppStack(): React.ReactElement {
@@ -25,6 +26,7 @@ export default function AppStack(): React.ReactElement {
   useEffect(() => {
     async function callLogin() {
       await login();
+      await getPushNotificationsPermission();
       await Notifications.addNotificationReceivedListener(() => setIsNew(true));
       setTimeout(() => {
         setIsSplash(false);
@@ -56,11 +58,6 @@ export default function AppStack(): React.ReactElement {
         storeNotificationCount(now);
       }
     });
-
-    return () => {
-      // @ts-ignore
-      subscription.remove();
-    };
   }, []);
 
   const linking: LinkingOptions = {

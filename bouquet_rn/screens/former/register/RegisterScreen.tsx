@@ -26,6 +26,10 @@ import RegisterScreen1 from './RegisterScreen1';
 import RegisterScreen2 from './RegisterScreen2';
 import RegisterScreen3 from './RegisterScreen3';
 import RegisterScreen4 from './RegisterScreen4';
+import {
+  getPushNotificationsPermission,
+  registerNotificationTokenAsync,
+} from '../../../logics/server/Notification';
 
 export default function RegisterScreen(): React.ReactElement {
   // 현재 몇 단계인지 나타내는 state. 1부터 시작
@@ -48,6 +52,7 @@ export default function RegisterScreen(): React.ReactElement {
       realProfileImg =
         'https://bouquet-storage.s3.ap-northeast-2.amazonaws.com/5b6ee222-2415-11ec-ab3a-0242ac110002.png';
     }
+
     const serverResult = await registerEmailAsync(
       email,
       password,
@@ -57,7 +62,15 @@ export default function RegisterScreen(): React.ReactElement {
     if (serverResult.isSuccess) {
       await SecureStore.setItemAsync('auth', serverResult.result);
       await login();
-      setStep(step + 1);
+
+      await getPushNotificationsPermission();
+      const getToken = await SecureStore.getItemAsync('pushToken');
+      if (typeof getToken === 'string') {
+        const postToken = await registerNotificationTokenAsync(getToken);
+        if (postToken.isSuccess) {
+          setStep(step + 1);
+        } else console.log(postToken.result.info);
+      } else alert('다시 시도해주세요.');
     } else alert(serverResult.result.errorMsg);
   }
 

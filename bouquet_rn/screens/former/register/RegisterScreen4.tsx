@@ -43,8 +43,8 @@ export default function RegisterScreen4({
    * '메인 탭'으로 이동하는 함수
    */
   async function goTabs() {
-    navigation.reset({ index: 0, routes: [{ name: 'Tab' }] });
     await getPermissions();
+    navigation.reset({ index: 0, routes: [{ name: 'Tab' }] });
   }
 
   return (

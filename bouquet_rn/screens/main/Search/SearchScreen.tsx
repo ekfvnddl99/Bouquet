@@ -109,7 +109,6 @@ export default function SearchScreen(): React.ReactElement {
           (item, index) => tmpArray.indexOf(item) === index,
         );
         storeRecentList(tmpArray);
-        console.log(recentList);
       }
     }, 2000),
     [],

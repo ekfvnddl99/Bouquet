@@ -53,8 +53,6 @@ export default function SunButton({
       activeOpacity={1}
       onPress={() => likePost()}
       backgroundColor={isActive ? colors.primary : backgroundColor}
-      onPressIn={() => setBackgroundColor(colors.alpha20_primary)}
-      onPressOut={() => [setBackgroundColor('transparent')]}
     >
       {isActive ? (
         <Svg icon="sunFocus" size={20} />

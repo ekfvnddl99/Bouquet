@@ -281,7 +281,6 @@ function List({
                   content="추가"
                   borderColor={colors.black}
                   onPress={() => {
-                    console.log('a');
                     const tmpPost = postInfo;
                     tmpPost.components.push({
                       title: '',

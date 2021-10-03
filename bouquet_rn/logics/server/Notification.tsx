@@ -1,6 +1,7 @@
 import { Platform } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
+import * as SecureStore from 'expo-secure-store';
 
 import * as APIs from './APIUtils';
 
@@ -27,11 +28,8 @@ export async function getPushNotificationsPermission(): Promise<void> {
 
     // token 얻어서 저장함
     const token = (await Notifications.getExpoPushTokenAsync()).data;
-    await registerNotificationTokenAsync(token);
-  } else {
-    alert('실기기에서 이용해주세요.');
-  }
-
+    await SecureStore.setItemAsync('pushToken', token);
+  } else alert('실기기에서 이용해주세요.');
   if (Platform.OS === 'android') {
     Notifications.setNotificationChannelAsync('default', {
       name: 'default',
@@ -52,11 +50,10 @@ export async function registerNotificationTokenAsync(
 ): APIs.ServerResult<null> {
   // 서버 응답 타입 정의
   type registerNotificationTokenAsyncOutput = null;
-
   const tmpResult = await APIs.postAsync<registerNotificationTokenAsyncOutput>(
     `/notification/token`,
     { 'Content-Type': 'application/json' },
-    token,
+    JSON.stringify({ token }),
     true,
   );
 
