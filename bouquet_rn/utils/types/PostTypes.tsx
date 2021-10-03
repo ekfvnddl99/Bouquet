@@ -119,6 +119,15 @@ export type QnaRequest = {
   answer: string;
 };
 
+export type Notification = {
+  id: number;
+  created_at: string;
+  sender_name: string;
+  sender_profile_img: string;
+  category: string;
+  post_id: number;
+};
+
 /**
  * ------------------------------------------------------------
  * * Templates

@@ -16,6 +16,13 @@ import { StatusBarHeight } from '../../../logics/non-server/StatusbarHeight';
 import useCharacter from '../../../logics/hooks/useCharacter';
 import useViewPost from '../../../logics/hooks/useViewPost';
 import useViewCharacter from '../../../logics/hooks/useViewCharacter';
+import {
+  deleteNotificationAsync,
+  getNotificationListAsync,
+} from '../../../logics/server/Notification';
+
+// utils
+import { Notification } from '../../../utils/types/PostTypes';
 
 // components
 import NotificationItem from '../../../components/item/NotificationItem';
@@ -32,24 +39,17 @@ export default function NotificationScreen(): React.ReactElement {
   const navigation = useNavigation();
   const [, setViewPost] = useViewPost();
   const [, setViewCharacter] = useViewCharacter();
-  // 더미데이터
-  const Data = [
-    { a: '오란지', b: '님이 당신을 팔로우해요.' },
-    { a: '폭스처돌이1호님', b: '이 당신의 게시글을 좋아해요.' },
-    { a: '비걸최고님', b: '이 당신의 게시글을 좋아해요.' },
-    { a: '폭스럽님', b: '이 당신의 게시글에 댓글을 남겼어요.' },
-    { a: '단호좌현지님', b: '님이 당신을 팔로우해요.' },
-    { a: '러블리폭스님', b: '이 당신의 게시글에 댓글을 남겼어요.' },
-    { a: '비스트걸스서포터', b: '님이 당신의 게시글에 댓글을 남겼어요.' },
-    { a: 'PO폭스WER님', b: '님이 당신의 게시글에 댓글을 남겼어요.' },
-    { a: 'PO폭스WER님', b: '이 당신의 게시글을 좋아해요.' },
-    { a: '비걸핑크해', b: '님이 당신의 게시글에 댓글을 남겼어요.' },
-    { a: '비걸핑크해', b: '님이 당신의 게시글을 좋아해요.' },
-  ];
 
   const [myCharacter] = useCharacter();
   // 로그인한 상태인지 아닌지
   const [isLogined, setIsLogined] = useState(false);
+
+  // 인기 게시글 담을 state
+  const [notificationArray, setNotificationArray] = useState<Notification[]>();
+
+  const [pageNum, setPageNum] = useState(1);
+  const [isPageEnd, setIsPageEnd] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   // 로그인한 상태인지 아닌지 확인
   useEffect(() => {
@@ -57,21 +57,60 @@ export default function NotificationScreen(): React.ReactElement {
     else setIsLogined(true);
   }, [myCharacter.id]);
 
-  async function goNavigate(route: string, param: string | number) {
+  const deleteNotification = async (id: number) => {
+    const serverResult = await deleteNotificationAsync(id);
+    if (serverResult.isSuccess) {
+      await getNotification(1, true);
+    } else alert(serverResult.result.errorMsg);
+  };
+
+  async function getNotification(newPageNum?: number, isRefreshing?: boolean) {
+    const serverResult = await getNotificationListAsync(newPageNum || pageNum);
+    if (serverResult.isSuccess) {
+      if (serverResult.result.length === 0) {
+        setIsPageEnd(true);
+        if (notificationArray === undefined || isRefreshing)
+          setNotificationArray(serverResult.result);
+      } else if (notificationArray === undefined || isRefreshing)
+        setNotificationArray(serverResult.result);
+      else {
+        const tmpArray = notificationArray;
+        serverResult.result.forEach((obj) => tmpArray.push(obj));
+        setNotificationArray(tmpArray);
+      }
+    } else {
+      console.log(serverResult.result.info);
+    }
+    setRefreshing(false);
+  }
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    setPageNum(1);
+    setIsPageEnd(false);
+    await getNotification(1, true);
+  };
+
+  // 가장 처음에 인기 게시물 가져옴
+  useEffect(() => {
+    getNotification();
+  }, []);
+
+  const goNavigate = async (param: string | number) => {
     if (typeof param === 'number') {
       await setViewPost(param);
-      navigation.navigate(`NotiTab${route}`, {
+      navigation.navigate(`NotiTabPostStack`, {
         screen: 'PostDetail',
         params: { routePrefix: 'NotiTab' },
       });
     } else {
       await setViewCharacter(param);
-      navigation.navigate(`NotiTab${route}`, {
+      navigation.navigate(`NotiTabProfileDetailStack`, {
         screen: 'ProfileDetail',
         params: { routePrefix: 'NotiTab' },
       });
     }
-  }
+  };
 
   /**
    * animation 관련
@@ -112,25 +151,31 @@ export default function NotificationScreen(): React.ReactElement {
 
   /**
    * 알람 개수가 0이냐 아니냐에 따라 달라지는 구성
-   * @param notificationNumber 알람이 몇개 와있는가에 따라서 다르다.
    */
-  function setNotification(notificationNumber: number) {
-    if (notificationNumber) {
+  function setNotification() {
+    if (notificationArray?.length) {
       return (
         <FlatList
-          data={Data}
+          data={notificationArray}
+          onEndReached={async () => {
+            if (!isPageEnd) {
+              const nextPageNum = pageNum + 1;
+              setPageNum(nextPageNum);
+              await getNotification(nextPageNum);
+            }
+          }}
+          onEndReachedThreshold={0.8}
+          showsVerticalScrollIndicator={false}
           keyExtractor={(item, idx) => idx.toString()}
-          renderItem={
-            (obj) => console.log(obj)
-            // <NotificationItem
-            //   name={obj.item.a}
-            //   profileImg={}
-            //   content={obj.item.b}
-            //   createdAt={}
-            //   onPress={() => goNavigate()}
-            //   onDelete={}
-            // />
-          }
+          renderItem={(obj) => (
+            <NotificationItem
+              notificationInfo={obj.item}
+              onPress={goNavigate}
+              onDelete={deleteNotification}
+            />
+          )}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
         />
       );
     }
@@ -201,8 +246,9 @@ export default function NotificationScreen(): React.ReactElement {
         )}
       >
         <View style={{ paddingTop: 30 + 14 }} />
-        {isLogined ? null : (
-          // <>{setNotification(Data.length)}</>
+        {isLogined ? (
+          <>{setNotification()}</>
+        ) : (
           <button.NotificationButton
             activeOpacity={1}
             style={{ marginHorizontal: 30 }}

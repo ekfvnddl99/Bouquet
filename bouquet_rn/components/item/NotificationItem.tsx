@@ -16,13 +16,13 @@ import Icon from '../../assets/Icon';
 // logics
 import * as cal from '../../logics/non-server/Calculation';
 
+// utils
+import { Notification } from '../../utils/types/PostTypes';
+
 type NotificationItemProps = {
-  name: string;
-  profileImg: string;
-  content: string;
-  createdAt: string;
-  onPress: () => void;
-  onDelete: () => void;
+  notificationInfo: Notification;
+  onPress: (param: string | number) => void;
+  onDelete: (input: number) => void;
 };
 /**
  * Notification 알람 컴포넌트
@@ -36,10 +36,7 @@ type NotificationItemProps = {
  * @param content 알람 내용
  */
 export default function NotificationItem({
-  name,
-  profileImg,
-  content,
-  createdAt,
+  notificationInfo,
   onPress,
   onDelete,
 }: NotificationItemProps): React.ReactElement {
@@ -75,9 +72,24 @@ export default function NotificationItem({
     }),
   ).current;
 
+  function setContent() {
+    switch (notificationInfo.category) {
+      case 'Follow':
+        return '님이 당신을 팔로우해요.';
+      case 'LikeComment':
+        return '님이 당신의 댓글을 좋아해요.';
+      case 'LikePost':
+        return '님이 당신의 게시글을 좋아해요.';
+      case 'Comment':
+        return '님이 당신의 게시글에 댓글을 달았어요.';
+      default:
+        return '';
+    }
+  }
+
   return (
     <WholeArea>
-      <BinButton onPress={() => onDelete()}>
+      <BinButton onPress={() => onDelete(notificationInfo.id)}>
         <View style={{ alignItems: 'center' }}>
           <Icon icon="binWhite" size={24} />
         </View>
@@ -86,8 +98,14 @@ export default function NotificationItem({
         {...panResponder.panHandlers}
         style={[{ width: '100%' }, { transform: [{ translateX: TranslateX }] }]}
       >
-        <button.NotificationButton activeOpacity={1} onPress={() => onPress()}>
-          <elses.CircleImg diameter={20} source={{ uri: profileImg }} />
+        <button.NotificationButton
+          activeOpacity={1}
+          onPress={() => onPress(notificationInfo.post_id)}
+        >
+          <elses.CircleImg
+            diameter={20}
+            source={{ uri: notificationInfo.sender_profile_img }}
+          />
           <View
             style={{
               flex: 2,
@@ -96,8 +114,10 @@ export default function NotificationItem({
           >
             <area.RowArea>
               <text.Body2B textColor={colors.black}>
-                {name}
-                <text.Body2R textColor={colors.black}>{content}</text.Body2R>
+                {notificationInfo.sender_name}
+                <text.Body2R textColor={colors.black}>
+                  {setContent()}
+                </text.Body2R>
               </text.Body2B>
             </area.RowArea>
           </View>
@@ -108,7 +128,7 @@ export default function NotificationItem({
             }}
           >
             <text.Caption textColor={colors.gray5}>
-              {cal.timeName(createdAt)} {i18n.t('전')}
+              {cal.timeName(notificationInfo.created_at)} {i18n.t('전')}
             </text.Caption>
           </View>
         </button.NotificationButton>
