@@ -11,6 +11,7 @@ import Svg from '../../assets/Icon';
 // logics
 import * as cal from '../../logics/non-server/Calculation';
 import { likePostAsync } from '../../logics/server/Post';
+import useCharacter from '../../logics/hooks/useCharacter';
 
 type SunButtonProps = {
   sunNum: number;
@@ -31,11 +32,17 @@ export default function SunButton({
   active,
   postId,
 }: SunButtonProps): React.ReactElement {
+  const [myCharacter] = useCharacter();
+
   const [isActive, setIsActive] = useState(active);
   const [sunshineNum, setSunshineNum] = useState(sunNum);
   const [backgroundColor, setBackgroundColor] = useState('transparent');
 
   async function likePost() {
+    if (myCharacter.name !== '') {
+      alert('캐릭터를 설정해주세요!');
+      return;
+    }
     const prevSunNum = sunshineNum;
     const newState = !isActive;
     setIsActive(newState);

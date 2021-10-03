@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { View, Animated, PanResponder, TouchableHighlight } from 'react-native';
+import { View, Animated, PanResponder } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import styled from 'styled-components/native';
 import i18n from 'i18n-js';
@@ -9,7 +9,6 @@ import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as elses from '../../styles/styled-components/elses';
 import * as text from '../../styles/styled-components/text';
-import * as button from '../../styles/styled-components/button';
 
 // assets
 import Icon from '../../assets/Icon';
