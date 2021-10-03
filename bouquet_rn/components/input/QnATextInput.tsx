@@ -14,6 +14,10 @@ import QnAItem from '../item/QnAItem';
 
 // logics
 import useCharacter from '../../logics/hooks/useCharacter';
+import { createQnaAsync } from '../../logics/server/QnAs';
+
+// utils
+import { QnaRequest } from '../../utils/types/PostTypes';
 
 type QnATextInputProps = {
   routePrefix: string;
@@ -36,6 +40,13 @@ export default function QnATextInput({
   async function getQuestion() {
     // 질문 가져오는 함수()
     // setQuestion(가져온 질문)
+  }
+
+  async function createQuestion(qna: QnaRequest) {
+    const serverResult = await createQnaAsync(qna);
+    if (serverResult.isSuccess) {
+      setIsUpload(true);
+    } else alert(serverResult.result.errorMsg);
   }
 
   if (isUpload) {
@@ -64,7 +75,7 @@ export default function QnATextInput({
           />
         </View>
         <LineButton
-          onPress={() => getQuestion}
+          onPress={() => getQuestion()}
           content="질문 바꾸기"
           borderColor={colors.black}
         />
@@ -81,7 +92,7 @@ export default function QnATextInput({
       />
       <View style={{ alignItems: 'flex-end' }}>
         <LineButton
-          onPress={() => setIsUpload(true)}
+          onPress={() => createQuestion({ question, answer })}
           content="올리기"
           borderColor={colors.primary}
         />
