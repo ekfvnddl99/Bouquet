@@ -16,10 +16,12 @@ import { Post, AllTemplates } from '../../../utils/types/PostTypes';
 type SearchPostViewProps = {
   searchInput: string;
   postArray: Post<AllTemplates>[];
+  onEndReached: () => Promise<void>;
 };
 export default function SearchPostView({
   searchInput,
   postArray,
+  onEndReached,
 }: SearchPostViewProps): React.ReactElement {
   return (
     <>
@@ -39,6 +41,8 @@ export default function SearchPostView({
             renderItem={(obj) => (
               <PostItem postInfo={obj.item} routePrefix="SearchTab" />
             )}
+            onEndReached={onEndReached}
+            onEndReachedThreshold={0.8}
           />
         </area.ContainerBlank30>
       ) : null}
