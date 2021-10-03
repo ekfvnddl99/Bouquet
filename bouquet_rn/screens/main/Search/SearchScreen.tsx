@@ -252,13 +252,13 @@ export default function SearchScreen(): React.ReactElement {
         </SearchArea>
       </View>
 
-      <View style={{ paddingBottom: 30 + 12 }} />
+      <View style={{ marginTop: HEADER_MIN_HEIGHT - 30 }} />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Animated.FlatList
           style={{
-            marginTop: HEADER_MIN_HEIGHT - 30,
-            flex: 1,
+            marginBottom: HEADER_MIN_HEIGHT - 30,
           }}
+          contentContainerStyle={{ paddingTop: 30 + 12 }}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
           onScroll={Animated.event(

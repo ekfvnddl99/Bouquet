@@ -17,12 +17,13 @@ export async function getFeedPostListAsync(
   // 서버 응답 타입 정의
   type GetFeedPostListAsyncOutput = { posts: Array<Post<AllTemplates>> };
 
+  const header: Record<string, any> = { 'page-num': pageNum };
   const auth = await SecureStore.getItemAsync('auth');
-
+  if (auth) header.token = auth;
   const tmpResult = await APIs.getAsync<GetFeedPostListAsyncOutput>(
-    `/?page_num=${pageNum}`,
+    `/`,
     false,
-    auth ? { token: auth } : undefined,
+    header,
   );
 
   // 사전 처리된 에러는 바로 반환
