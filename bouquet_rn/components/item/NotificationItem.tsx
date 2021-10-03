@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
-import { View, Animated, PanResponder } from 'react-native';
+import { View, Animated, PanResponder, TouchableHighlight } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import styled from 'styled-components/native';
 import i18n from 'i18n-js';
 
@@ -57,7 +58,8 @@ export default function NotificationItem({
   });
   const panResponder = useRef(
     PanResponder.create({
-      onMoveShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: (e, gestureState) =>
+        Math.abs(gestureState.dx) >= 1 || Math.abs(gestureState.dy) >= 1,
       onPanResponderGrant: () => {
         // @ts-ignore
         drag.setOffset(TranslateX.__getValue());
@@ -67,7 +69,7 @@ export default function NotificationItem({
       }),
       onPanResponderRelease: (e, { dx }) => {
         // @ts-ignore
-        drag.setValue(dx < SWIPE / 2 ? -SWIPE : +SWIPE);
+        // drag.setValue(dx > SWIPE / 2 ? +SWIPE : -SWIPE);
       },
     }),
   ).current;
@@ -98,7 +100,17 @@ export default function NotificationItem({
         {...panResponder.panHandlers}
         style={[{ width: '100%' }, { transform: [{ translateX: TranslateX }] }]}
       >
-        <button.NotificationButton
+        <TouchableOpacity
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            backgroundColor: colors.white,
+            borderRadius: 10,
+            alignItems: 'center',
+            paddingHorizontal: 18,
+            paddingVertical: 12,
+            marginBottom: 10,
+          }}
           activeOpacity={1}
           onPress={() =>
             onPress(
@@ -137,7 +149,7 @@ export default function NotificationItem({
               {cal.timeName(notificationInfo.created_at)} {i18n.t('전')}
             </text.Caption>
           </View>
-        </button.NotificationButton>
+        </TouchableOpacity>
       </Animated.View>
     </WholeArea>
   );
