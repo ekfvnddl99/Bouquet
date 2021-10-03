@@ -60,44 +60,45 @@ export default function ProfileDetailScreen(): React.ReactElement {
   const [qnaPageNum, setQnaPageNum] = useState(1);
   const [isQnaPageEnd, setIsQnaPageEnd] = useState(false);
 
+  async function getPosts(newPageNum?: number) {
+    const serverResult = await getPostListAsync(
+      newPageNum || postPageNum,
+      viewCharacter.name,
+    );
+    if (serverResult.isSuccess) {
+      if (postArray === undefined) setPostArray(serverResult.result[0]);
+      else if (serverResult.result[0].length === 0) setIsPostPageEnd(true);
+      else {
+        const tmpArray = postArray;
+        serverResult.result[0].forEach((obj) => tmpArray.push(obj));
+        setPostArray(tmpArray);
+      }
+    } else alert(serverResult.result.errorMsg);
+  }
+
+  async function getQnas(newPageNum?: number) {
+    const serverResult = await getQnaListAsync(
+      viewCharacter.name,
+      newPageNum || qnaPageNum,
+    );
+    if (serverResult.isSuccess) {
+      if (qnaArray === undefined) setQnaArray(serverResult.result);
+      else if (serverResult.result.length === 0) setIsQnaPageEnd(true);
+      else {
+        const tmpArray = qnaArray;
+        serverResult.result.forEach((obj) => tmpArray.push(obj));
+        setQnaArray(tmpArray);
+      }
+    } else alert(serverResult.result.errorMsg);
+  }
+
   // 해당 캐릭터의 게시글을 가져오는 api
   useEffect(() => {
-    async function getPosts() {
-      const serverResult = await getPostListAsync(
-        postPageNum,
-        viewCharacter.name,
-      );
-      if (serverResult.isSuccess) {
-        if (postArray === undefined) setPostArray(serverResult.result[0]);
-        else if (serverResult.result[0].length === 0) setIsPostPageEnd(true);
-        else {
-          const tmpArray = postArray;
-          serverResult.result[0].forEach((obj) => tmpArray.push(obj));
-          setPostArray(tmpArray);
-        }
-      } else alert(serverResult.result.errorMsg);
+    if (viewCharacter.name !== '') {
+      getPosts();
+      getQnas();
     }
-    if (viewCharacter.name !== '') getPosts();
-  }, [viewCharacter, postPageNum]);
-
-  useEffect(() => {
-    async function getQnas() {
-      const serverResult = await getQnaListAsync(
-        viewCharacter.name,
-        qnaPageNum,
-      );
-      if (serverResult.isSuccess) {
-        if (qnaArray === undefined) setQnaArray(serverResult.result);
-        else if (serverResult.result.length === 0) setIsQnaPageEnd(true);
-        else {
-          const tmpArray = qnaArray;
-          serverResult.result.forEach((obj) => tmpArray.push(obj));
-          setQnaArray(tmpArray);
-        }
-      } else alert(serverResult.result.errorMsg);
-    }
-    if (viewCharacter.name !== '') getQnas();
-  }, [viewCharacter, qnaPageNum]);
+  }, [viewCharacter]);
 
   const scroll = useRef(new Animated.Value(0)).current;
   const OpacityHeader = scroll.interpolate({
@@ -106,11 +107,10 @@ export default function ProfileDetailScreen(): React.ReactElement {
     extrapolate: 'clamp',
   });
 
-  function setTopView(arrayLength: number) {
+  function setTopView() {
     return (
       <ProfileDetailTopView
         routePrefix={routePrefix}
-        arrayLength={arrayLength}
         tabIndex={tabIndex}
         setTabIndex={setTabIndex}
       />
@@ -119,26 +119,32 @@ export default function ProfileDetailScreen(): React.ReactElement {
 
   const tabIndexArray = [
     {
-      arrayLength: postArray ? postArray.length : 0,
       returnView: (
         <ProfileFeedView
           routePrefix={routePrefix}
           postArray={postArray}
-          isPostPageEnd={isPostPageEnd}
-          postPageNum={postPageNum}
-          setPostPageNum={setPostPageNum}
+          onEndReached={async () => {
+            if (!isPostPageEnd) {
+              const newPageNum = postPageNum + 1;
+              setPostPageNum(newPageNum);
+              await getPosts(newPageNum);
+            }
+          }}
         />
       ),
     },
     {
-      arrayLength: 3,
       returnView: (
         <ProfileQnAView
           routePrefix={routePrefix}
           qnaArray={[]}
-          isQnaPageEnd={isQnaPageEnd}
-          qnaPageNum={qnaPageNum}
-          setQnaPageNum={setQnaPageNum}
+          onEndReached={async () => {
+            if (!isQnaPageEnd) {
+              const newPageNum = qnaPageNum + 1;
+              setQnaPageNum(newPageNum);
+              await getQnas(newPageNum);
+            }
+          }}
           characterInfo={viewCharacter}
         />
       ),
@@ -161,7 +167,7 @@ export default function ProfileDetailScreen(): React.ReactElement {
       />
       <Animated.FlatList
         style={{ marginHorizontal: 30 }}
-        ListHeaderComponent={setTopView(tabIndexArray[tabIndex].arrayLength)}
+        ListHeaderComponent={setTopView()}
         showsVerticalScrollIndicator={false}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scroll } } }],
