@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import i18n from 'i18n-js';
 import * as ImagePicker from 'expo-image-picker';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 // styles
 import colors from '../../../styles/colors';
@@ -128,9 +129,11 @@ export default function RegisterScreen3({
     });
 
     if (!result.cancelled) {
-      const serverResult = await uploadImageAsync(result.uri);
-      if (serverResult.isSuccess) setProfileImg(serverResult.result);
-      else alert(serverResult.result.errorMsg);
+      const manipResult = await ImageManipulator.manipulateAsync(result.uri, [
+        { resize: { width: 1024, height: 1024 } },
+      ]);
+      const realUri = manipResult.uri;
+      setProfileImg(realUri);
     }
     setIsSelectImg(false);
   }

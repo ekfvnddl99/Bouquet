@@ -76,8 +76,7 @@ export default function SearchScreen(): React.ReactElement {
    */
   async function getSearch(searchText: string) {
     if (searchText.length < 1) {
-      await getCharacter();
-      await getPost();
+      await onRefresh();
     } else {
       setCharacterArray([noCharacter]);
       setPostArray([noPost]);
