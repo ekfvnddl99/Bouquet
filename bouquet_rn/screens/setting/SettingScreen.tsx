@@ -88,7 +88,7 @@ export default function SettingScreen(): React.ReactElement {
             }
             onPress={() =>
               openURL(
-                'https://www.notion.so/Bouquet-a3c86aea53414679b2fc2944a35bfcb9',
+                'https://bouquet-dot.notion.site/Bouquet-a3c86aea53414679b2fc2944a35bfcb9',
               )
             }
           />
@@ -99,7 +99,9 @@ export default function SettingScreen(): React.ReactElement {
                 : `${i18n.t('달달한 오렌지 떡볶이')} ${i18n.t('소개')}`
             }
             onPress={() =>
-              openURL('https://www.notion.so/3a23a31569dd4a148b69a9d6a9461cbe')
+              openURL(
+                'https://bouquet-dot.notion.site/eb5c313a52884914b62d000bd96fa0db',
+              )
             }
           />
           <SettingItem content={i18n.t('서비스 이용 약관')} />
