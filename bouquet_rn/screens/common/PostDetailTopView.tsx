@@ -79,9 +79,6 @@ export default function PostDetailTopView({
       <View style={{ alignItems: 'flex-start' }}>
         <SunButton
           sunNum={viewPost?.num_sunshines}
-          setSunNum={() => {
-            /* */
-          }}
           active={viewPost?.liked}
           postId={viewPost.id}
         />

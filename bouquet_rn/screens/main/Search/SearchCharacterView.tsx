@@ -33,7 +33,7 @@ export default function SearchCharacterView({
             style={{ marginTop: 12 }}
             data={characterArray}
             keyboardShouldPersistTaps="handled"
-            keyExtractor={(item, idx) => idx.toString()}
+            keyExtractor={(item, idx) => item.name}
             horizontal
             showsHorizontalScrollIndicator={false}
             renderItem={(obj) => (

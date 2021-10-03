@@ -22,7 +22,7 @@ export default function ProfileFeedView({
       showsVerticalScrollIndicator={false}
       onEndReached={onEndReached}
       onEndReachedThreshold={0.5}
-      keyExtractor={(item, idx) => idx.toString()}
+      keyExtractor={(item, idx) => item.id.toString()}
       data={postArray}
       renderItem={(obj) => (
         <PostItem postInfo={obj.item} routePrefix={routePrefix} />

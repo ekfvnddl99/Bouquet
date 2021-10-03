@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // styles
 import colors from '../../styles/colors';
@@ -14,7 +14,6 @@ import { likePostAsync } from '../../logics/server/Post';
 
 type SunButtonProps = {
   sunNum: number;
-  setSunNum: (param: number) => void;
   active: boolean;
   postId: number;
 };
@@ -29,19 +28,23 @@ type SunButtonProps = {
  */
 export default function SunButton({
   sunNum,
-  setSunNum,
   active,
   postId,
 }: SunButtonProps): React.ReactElement {
   const [isActive, setIsActive] = useState(active);
+  const [sunshineNum, setSunshineNum] = useState(sunNum);
   const [backgroundColor, setBackgroundColor] = useState('transparent');
 
   async function likePost() {
+    const prevSunNum = sunshineNum;
+    const newState = !isActive;
+    setIsActive(newState);
+    if (newState) setSunshineNum(prevSunNum + 1);
+    else setSunshineNum(prevSunNum - 1);
     const serverResult = await likePostAsync(postId);
     if (serverResult.isSuccess) {
-      setIsActive(!isActive);
-      if (isActive) setSunNum(sunNum + 1);
-      else setSunNum(sunNum - 1);
+      const realState = serverResult.result;
+      setIsActive(realState);
     } else alert(serverResult.result.errorMsg);
   }
 
@@ -51,11 +54,7 @@ export default function SunButton({
       onPress={() => likePost()}
       backgroundColor={isActive ? colors.primary : backgroundColor}
       onPressIn={() => setBackgroundColor(colors.alpha20_primary)}
-      onPressOut={() => [
-        setIsActive(!isActive),
-        setBackgroundColor('transparent'),
-        isActive ? setSunNum(sunNum - 1) : setSunNum(sunNum + 1),
-      ]}
+      onPressOut={() => [setBackgroundColor('transparent')]}
     >
       {isActive ? (
         <Svg icon="sunFocus" size={20} />
@@ -66,7 +65,7 @@ export default function SunButton({
         textColor={isActive ? colors.white : colors.primary}
         style={{ marginLeft: 4 }}
       >
-        {cal.numName(sunNum)}
+        {cal.numName(sunshineNum)}
       </text.Body3>
     </button.SunButton>
   );

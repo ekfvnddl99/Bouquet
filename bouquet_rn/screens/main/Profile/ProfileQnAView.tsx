@@ -28,7 +28,7 @@ export default function ProfileQnAScreen({
       showsVerticalScrollIndicator={false}
       onEndReached={onEndReached}
       onEndReachedThreshold={0.8}
-      keyExtractor={(item, idx) => idx.toString()}
+      keyExtractor={(item, idx) => item.id.toString()}
       data={qnaArray}
       renderItem={(obj) => (
         <QnAItem

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
@@ -108,9 +108,8 @@ export default function PostItem({
       <View style={{ marginVertical: 10 }}>{template}</View>
       <View style={{ alignItems: 'flex-start' }}>
         <SunButton
-          active={postInfo ? postInfo.liked : false}
-          sunNum={postInfo ? postInfo.num_sunshines : 0}
-          setSunNum={() => undefined}
+          active={postInfo.liked}
+          sunNum={postInfo.num_sunshines}
           postId={postInfo.id}
         />
       </View>

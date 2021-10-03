@@ -50,7 +50,8 @@ export default function HomeScreen(): React.ReactElement {
     if (serverResult.isSuccess) {
       if (serverResult.result.length === 0) {
         setIsPageEnd(true);
-        if (postArray === undefined) setPostArray(serverResult.result);
+        if (postArray === undefined || isRefreshing)
+          setPostArray(serverResult.result);
       } else if (postArray === undefined || isRefreshing)
         setPostArray(serverResult.result);
       else {
@@ -199,7 +200,7 @@ export default function HomeScreen(): React.ReactElement {
         }}
         onEndReachedThreshold={0.8}
         showsVerticalScrollIndicator={false}
-        keyExtractor={(item, idx) => idx.toString()}
+        keyExtractor={(item, idx) => item.id.toString()}
         renderItem={(obj) => (
           <PostItem postInfo={obj.item} routePrefix="HomeTab" />
         )}

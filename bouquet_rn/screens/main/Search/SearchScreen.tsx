@@ -141,7 +141,8 @@ export default function SearchScreen(): React.ReactElement {
     if (serverResult.isSuccess) {
       if (serverResult.result.length === 0) {
         setIsPageEnd(true);
-        if (postArray === undefined) setPostArray(serverResult.result);
+        if (postArray === undefined || isRefreshing)
+          setPostArray(serverResult.result);
       } else if (postArray === undefined || isRefreshing)
         setPostArray(serverResult.result);
       else {
