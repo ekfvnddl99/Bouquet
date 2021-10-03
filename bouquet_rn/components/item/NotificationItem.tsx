@@ -100,7 +100,13 @@ export default function NotificationItem({
       >
         <button.NotificationButton
           activeOpacity={1}
-          onPress={() => onPress(notificationInfo.post_id)}
+          onPress={() =>
+            onPress(
+              notificationInfo.post_id
+                ? notificationInfo.post_id
+                : notificationInfo.sender_name,
+            )
+          }
         >
           <elses.CircleImg
             diameter={20}

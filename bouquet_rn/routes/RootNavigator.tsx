@@ -10,11 +10,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // logics
 import useLogin from '../logics/hooks/useLogin';
 import { isNewNotification } from '../logics/atoms';
+import {
+  getPushNotificationsPermission,
+  getNotificationCountAsync,
+} from '../logics/server/Notification';
 
 // screens, navigators
 import SplashScreen from '../screens/former/SplashScreen';
 import WelcomeStackNavigator from './WelcomeStackNavigator';
-import { getPushNotificationsPermission } from '../logics/server/Notification';
 
 const prefix = Linking.createURL('/');
 export default function AppStack(): React.ReactElement {
@@ -27,7 +30,12 @@ export default function AppStack(): React.ReactElement {
     async function callLogin() {
       await login();
       await getPushNotificationsPermission();
-      await Notifications.addNotificationReceivedListener(() => setIsNew(true));
+      await Notifications.addNotificationReceivedListener(async () => {
+        getNowNotificationCount().then((now) => {
+          setIsNew(true);
+          storeNotificationCount(now);
+        });
+      });
       setTimeout(() => {
         setIsSplash(false);
       }, 2000);
@@ -36,28 +44,42 @@ export default function AppStack(): React.ReactElement {
   }, []);
 
   const appState = useRef(AppState.currentState);
-  const [notiCount, setNotiCount] = useState(0);
+  const getNotificationCount = async (): Promise<number> => {
+    const jsonValue = await AsyncStorage.getItem('notificationCount');
+    const result = jsonValue != null ? JSON.parse(jsonValue) : null;
+    return result;
+  };
+  const storeNotificationCount = async (value: number): Promise<void> => {
+    const jsonValue = JSON.stringify(value);
+    await AsyncStorage.setItem('notificationCount', jsonValue);
+  };
+  const getNowNotificationCount = async () => {
+    const serverResult = await getNotificationCountAsync();
+    if (serverResult.isSuccess) return serverResult.result;
+    alert(serverResult.result.errorMsg);
+    return -1;
+  };
   useEffect(() => {
-    const getNotificationCount = async (): Promise<void> => {
-      const jsonValue = await AsyncStorage.getItem('notificationCount');
-      const result = jsonValue != null ? JSON.parse(jsonValue) : null;
-      setNotiCount(result);
+    const subscription = AppState.addEventListener(
+      'change',
+      async (nextAppState) => {
+        appState.current = nextAppState;
+        if (appState.current === 'active') {
+          await getNotificationCount().then((before) => {
+            getNowNotificationCount().then((now) => {
+              if (now !== -1) {
+                console.log(`before ${before} now ${now}`);
+                if (before < now) setIsNew(true);
+                storeNotificationCount(now);
+              }
+            });
+          });
+        }
+      },
+    );
+    return () => {
+      subscription.remove();
     };
-    const storeNotificationCount = async (value: number): Promise<void> => {
-      const jsonValue = JSON.stringify(value);
-      await AsyncStorage.setItem('notificationCount', jsonValue);
-    };
-    const subscription = AppState.addEventListener('change', (nextAppState) => {
-      appState.current = nextAppState;
-      if (appState.current === 'active') {
-        getNotificationCount();
-        const before = notiCount;
-        // now -> 실제 noti 목록 개수가 들어가야 함
-        const now = 3;
-        if (before < now) setIsNew(true);
-        storeNotificationCount(now);
-      }
-    });
   }, []);
 
   const linking: LinkingOptions = {

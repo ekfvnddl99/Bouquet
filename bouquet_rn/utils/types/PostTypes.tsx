@@ -125,7 +125,7 @@ export type Notification = {
   sender_name: string;
   sender_profile_img: string;
   category: string;
-  post_id: number;
+  post_id: number | null;
 };
 
 /**
