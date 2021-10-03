@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import i18n from 'i18n-js';
 import * as ImagePicker from 'expo-image-picker';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 // styles
 import * as area from '../../styles/styled-components/area';
@@ -68,9 +69,14 @@ export default function CharacterGenerationScreen1({
     });
 
     if (!imgResult.cancelled) {
+      const manipResult = await ImageManipulator.manipulateAsync(
+        imgResult.uri,
+        [{ resize: { width: 1024, height: 1024 } }],
+      );
+      const realUri = manipResult.uri;
       setNewCharacter({
         ...newCharacter,
-        profile_img: imgResult.uri,
+        profile_img: realUri,
       });
     }
     setIsSelectImg(false);

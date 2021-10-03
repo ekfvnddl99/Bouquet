@@ -40,11 +40,19 @@ export default function RegisterScreen(): React.ReactElement {
   const [profileImg, setProfileImg] = useState('');
 
   async function registerUser() {
+    let realProfileImg = profileImg;
+    const imgServerResult = await uploadImageAsync(profileImg);
+    if (imgServerResult.isSuccess) realProfileImg = imgServerResult.result;
+    else {
+      alert('이미지 업로드에 실패했어요. 대신 기본 이미지를 사용할게요.');
+      realProfileImg =
+        'https://bouquet-storage.s3.ap-northeast-2.amazonaws.com/5b6ee222-2415-11ec-ab3a-0242ac110002.png';
+    }
     const serverResult = await registerEmailAsync(
       email,
       password,
       name,
-      profileImg,
+      realProfileImg,
     );
     if (serverResult.isSuccess) {
       await SecureStore.setItemAsync('auth', serverResult.result);
