@@ -86,7 +86,9 @@ export default function SearchScreen(): React.ReactElement {
    * async storage
    */
   const storeRecentList = async (value: string[]) => {
-    setRecentList(value);
+    let tmpArray = value;
+    if (tmpArray.length > 10) tmpArray = tmpArray.slice(0, 10);
+    setRecentList(tmpArray);
     const jsonValue = JSON.stringify(value);
     await AsyncStorage.setItem('recentList', jsonValue);
   };
