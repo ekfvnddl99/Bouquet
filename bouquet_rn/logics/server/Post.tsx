@@ -346,11 +346,13 @@ export async function getPostListAsync(
 /**
  * 게시글에 좋아요(햇빛) 요청을 보내는 함수
  * @param postId 좋아요(햇빛) 요청을 보내려는 대상 게시글의 id
- * @returns -{result: null, isSuccess: true} 또는 {result: 에러 객체, isSuccess: false}
+ * @returns -{result: 좋아요 여부, isSuccess: true} 또는 {result: 에러 객체, isSuccess: false}
  */
-export async function likePostAsync(postId: number): APIs.ServerResult<null> {
+export async function likePostAsync(
+  postId: number,
+): APIs.ServerResult<boolean> {
   // 서버 응답 타입 정의
-  type LikePostAsyncOutput = null;
+  type LikePostAsyncOutput = { msg: 'LIKE_SUCCESS' | 'UNLIKE_SUCCESS' };
 
   const tmpResult = await APIs.postAsync<LikePostAsyncOutput>(
     `/post/like/${postId}`,
@@ -366,9 +368,9 @@ export async function likePostAsync(postId: number): APIs.ServerResult<null> {
 
   const [result, response] = tmpResult;
 
-  // 요청 성공 : null 반환
+  // 요청 성공 : 좋아요 여부 반환
   if (APIs.isSuccess<LikePostAsyncOutput>(result, response)) {
-    return { result: null, isSuccess: true };
+    return { result: result.msg === 'LIKE_SUCCESS', isSuccess: true };
   }
 
   // 404 : No such post
@@ -420,4 +422,69 @@ export async function getImagePickerPermission(): Promise<void> {
   if (finalStatus !== 'granted') {
     alert('이미지를 업로드하려면 권한이 필요해요.');
   }
+}
+
+/**
+ * 댓글에 좋아요(햇빛) 요청을 보내는 함수
+ * @param commentId 좋아요(햇빛) 요청을 보내려는 대상 댓글의 id
+ * @returns -{result: 좋아요 여부, isSuccess: true} 또는 {result: 에러 객체, isSuccess: false}
+ */
+export async function likeCommentAsync(
+  commentId: number,
+): APIs.ServerResult<boolean> {
+  // 서버 응답 타입 정의
+  type LikeCommentAsyncOutput = { msg: 'LIKE_SUCCESS' | 'UNLIKE_SUCCESS' };
+
+  const tmpResult = await APIs.postAsync<LikeCommentAsyncOutput>(
+    `/post/comment/like/${commentId}`,
+    { 'Content-Type': 'application/json' },
+    '',
+    true,
+  );
+
+  // 사전 처리된 에러는 바로 반환
+  if (APIs.isServerErrorOutput(tmpResult)) {
+    return { result: tmpResult, isSuccess: false };
+  }
+
+  const [result, response] = tmpResult;
+
+  // 요청 성공 : 좋아요 여부 반환
+  if (APIs.isSuccess<LikeCommentAsyncOutput>(result, response)) {
+    return { result: result.msg === 'LIKE_SUCCESS', isSuccess: true };
+  }
+
+  // 404 : No such comment
+  if (APIs.isError<APIs.ServerError>(result, response, 404)) {
+    return {
+      result: {
+        statusCode: 404,
+        errorMsg: '해당 댓글이 지금은 없어요.',
+        info: result.msg,
+      },
+      isSuccess: false,
+    };
+  }
+
+  // 422 : Validation Error
+  if (APIs.isError<APIs.ServerError422>(result, response, 422)) {
+    return {
+      result: {
+        statusCode: 422,
+        errorMsg:
+          '댓글 정보가 잘못되었어요. 다시 시도해 보거나, 문의해 주세요.',
+        info: result.detail,
+      },
+      isSuccess: false,
+    };
+  }
+  // 나머지 에러
+  return {
+    result: {
+      statusCode: response.status,
+      errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
+      info: response,
+    },
+    isSuccess: false,
+  };
 }
