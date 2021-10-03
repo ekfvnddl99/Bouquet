@@ -155,14 +155,18 @@ export default function SearchScreen(): React.ReactElement {
   }
   // 가장 처음에 인기 캐릭터 및 게시물 가져옴
   useEffect(() => {
-    getCharacter();
-    getPost();
+    async function init() {
+      await getPost();
+      await getCharacter();
+    }
+    init();
   }, []);
 
   const onRefresh = async () => {
     setRefreshing(true);
+    setPageNum(1);
     await getCharacter();
-    await getPost();
+    await getPost(1, true);
     setRefreshing(false);
   };
 
