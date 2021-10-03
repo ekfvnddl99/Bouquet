@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components/native';
 
@@ -14,7 +14,7 @@ import QnAItem from '../item/QnAItem';
 
 // logics
 import useCharacter from '../../logics/hooks/useCharacter';
-import { createQnaAsync } from '../../logics/server/QnAs';
+import { createQnaAsync, getQuestionAsync } from '../../logics/server/QnAs';
 
 // utils
 import { QnaRequest } from '../../utils/types/PostTypes';
@@ -34,13 +34,8 @@ export default function QnATextInput({
   const [myCharacter] = useCharacter();
   // '올리기' 버튼 눌렀는지 여부를 저장하는 state
   const [isUpload, setIsUpload] = useState(false);
-  const [question] = useState('');
+  const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
-
-  async function getQuestion() {
-    // 질문 가져오는 함수()
-    // setQuestion(가져온 질문)
-  }
 
   async function createQuestion(qna: QnaRequest) {
     const serverResult = await createQnaAsync(qna);
@@ -48,6 +43,17 @@ export default function QnATextInput({
       setIsUpload(true);
     } else alert(serverResult.result.errorMsg);
   }
+
+  async function getQuestion() {
+    const serverResult = await getQuestionAsync();
+    if (serverResult.isSuccess) {
+      setQuestion(serverResult.result);
+    } else alert(serverResult.result.errorMsg);
+  }
+
+  useEffect(() => {
+    getQuestion();
+  }, []);
 
   if (isUpload) {
     return (
