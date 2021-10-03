@@ -47,7 +47,7 @@ export default function ProfileInfoTag({
         }}
       >
         {isMini ? list[0] : list}
-        {isMini ? (
+        {isMini && list.length > 1 ? (
           <text.Body2R textColor={colors.black}>{`외 ${
             list.length - 1
           }개`}</text.Body2R>

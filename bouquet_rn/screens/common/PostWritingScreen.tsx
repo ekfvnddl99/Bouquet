@@ -56,10 +56,10 @@ export default function PostWritingScreen(): React.ReactElement {
   const [, setViewPost] = useViewPost();
 
   const route = useRoute<RouteProp<ParamList, 'PostWriting'>>();
-  let prefix = '';
+  const [routePrefix, setRoutePrefix] = useState('');
   useEffect(() => {
-    if (route.params !== undefined) {
-      prefix = route.params.routePrefix;
+    if (route !== undefined) {
+      setRoutePrefix(route.params.routePrefix);
     }
   }, []);
 
@@ -224,7 +224,7 @@ export default function PostWritingScreen(): React.ReactElement {
         isBackButton
         name={myCharacter.name}
         profileImg={myCharacter.profile_img}
-        routePrefix={prefix}
+        routePrefix={routePrefix}
       />
 
       <KeyboardAvoidingView
@@ -249,7 +249,7 @@ export default function PostWritingScreen(): React.ReactElement {
                   isPress={false}
                   name={myCharacter.name}
                   profileImg={myCharacter.profile_img}
-                  routePrefix={prefix}
+                  routePrefix={routePrefix}
                 />
               </View>
               {select !== -1 ? (

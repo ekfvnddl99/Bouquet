@@ -20,7 +20,7 @@ import TextTemplate from '../template/TextTemplate';
 
 type PostDetailTopViewProps = {
   viewPost: Post<AllTemplates>;
-  prefix: string;
+  routePrefix: string;
   postOwner: boolean;
   template: true | JSX.Element | null;
   onDelete: () => void;
@@ -32,7 +32,7 @@ type PostDetailTopViewProps = {
  */
 export default function PostDetailTopView({
   viewPost,
-  prefix,
+  routePrefix,
   postOwner,
   template,
   onDelete,
@@ -50,7 +50,7 @@ export default function PostDetailTopView({
             isPress
             name={viewPost?.character_info.name}
             profileImg={viewPost?.character_info.profile_img}
-            routePrefix={prefix}
+            routePrefix={routePrefix}
           />
         </View>
         {postOwner ? (

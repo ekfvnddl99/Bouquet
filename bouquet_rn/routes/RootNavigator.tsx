@@ -4,6 +4,7 @@ import { NavigationContainer, LinkingOptions } from '@react-navigation/native';
 import * as Notifications from 'expo-notifications';
 import * as Linking from 'expo-linking';
 import { useSetRecoilState } from 'recoil';
+import { AppState } from 'react-native';
 
 // logics
 import useLogin from '../logics/hooks/useLogin';
@@ -31,6 +32,25 @@ export default function AppStack(): React.ReactElement {
       }, 2000);
     }
     callLogin();
+  }, []);
+
+  const appState = useRef(AppState.currentState);
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (nextAppState) => {
+      if (
+        appState.current.match(/inactive|background/) &&
+        nextAppState === 'active'
+      ) {
+        alert('App has come to the foreground!');
+      }
+
+      appState.current = nextAppState;
+      alert(appState.current);
+    });
+
+    return () => {
+      subscription.remove();
+    };
   }, []);
 
   const linking: LinkingOptions = {

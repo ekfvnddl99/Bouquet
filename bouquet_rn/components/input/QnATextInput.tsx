@@ -68,7 +68,7 @@ export default function QnATextInput({
             diameter={30}
             isAccount={false}
             isJustImg={false}
-            isPress={false}
+            isPress
             name={myCharacter.name}
             profileImg={myCharacter.profile_img}
             routePrefix={routePrefix}

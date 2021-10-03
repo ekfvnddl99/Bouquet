@@ -165,7 +165,7 @@ export default function HomeScreen(): React.ReactElement {
               diameter={40}
               isAccount={false}
               isJustImg
-              isPress={false}
+              isPress
               name={myCharacter.name}
               profileImg={myCharacter.profile_img}
               routePrefix="HomeTab"

@@ -44,13 +44,14 @@ export default function ProfileDetailScreen(): React.ReactElement {
   const [postArray, setPostArray] = useState<Post<AllTemplates>[]>();
   const [qnaArray, setQnaArray] = useState<Array<Qna>>();
 
+  const [routePrefix, setRoutePrefix] = useState('');
+
   const route = useRoute<RouteProp<ParamList, 'ProfileDetail'>>();
-  let routePrefix = '';
   useEffect(() => {
     if (route.params !== undefined) {
       const { characterName } = route.params;
       if (characterName) setViewCharacter(characterName);
-      routePrefix = route.params.routePrefix;
+      setRoutePrefix(route.params.routePrefix);
     }
   }, []);
 

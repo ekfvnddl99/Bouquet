@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableWithoutFeedback } from 'react-native';
+import { View } from 'react-native';
 
 // styles
 import * as area from '../../styles/styled-components/area';
@@ -36,17 +36,15 @@ export default function HeaderItem({
     <area.RowArea style={{ paddingHorizontal: 30, paddingVertical: 16 }}>
       {isBackButton ? <BackButton /> : null}
       <View style={{ flex: 1 }} />
-      <TouchableWithoutFeedback>
-        <ProfileButton
-          diameter={28}
-          isAccount={isAccount}
-          isJustImg
-          isPress
-          name={name}
-          profileImg={profileImg}
-          routePrefix={routePrefix}
-        />
-      </TouchableWithoutFeedback>
+      <ProfileButton
+        diameter={28}
+        isAccount={isAccount}
+        isJustImg
+        isPress
+        name={name}
+        profileImg={profileImg}
+        routePrefix={routePrefix}
+      />
     </area.RowArea>
   );
 }

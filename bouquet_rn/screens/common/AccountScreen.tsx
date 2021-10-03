@@ -44,10 +44,12 @@ export default function AccountScreen(): React.ReactElement {
   const [characterArray, setCharacterArray] = useState<CharacterMini[]>();
 
   const route = useRoute<RouteProp<ParamList, 'Account'>>();
-  let prefix = '';
-  if (route !== undefined) {
-    prefix = route.params.routePrefix;
-  }
+  const [routePrefix, setRoutePrefix] = useState('');
+  useEffect(() => {
+    if (route !== undefined) {
+      setRoutePrefix(route.params.routePrefix);
+    }
+  }, []);
 
   // 캐릭터가 홀수 개일 때 grid가 이상하게 나오지 않도록 하나를 더 끼워준다.
   useEffect(() => {
@@ -81,7 +83,7 @@ export default function AccountScreen(): React.ReactElement {
         isBackButton
         name={myCharacter.name}
         profileImg={myCharacter.profile_img}
-        routePrefix={prefix}
+        routePrefix={routePrefix}
       />
 
       <Animated.ScrollView
@@ -160,7 +162,7 @@ export default function AccountScreen(): React.ReactElement {
                 <GridCharacterItem
                   characterInfo={obj.item}
                   isAccount
-                  routePrefix={prefix}
+                  routePrefix={routePrefix}
                 />
               )}
             </View>

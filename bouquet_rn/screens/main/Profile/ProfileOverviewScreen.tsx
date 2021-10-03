@@ -83,7 +83,7 @@ export default function ProfileOverviewScreen(): React.ReactElement {
             diameter={24}
             isAccount
             isJustImg
-            isPress={false}
+            isPress
             name={user.name}
             profileImg={user.profile_img}
             routePrefix="ProfileTab"
