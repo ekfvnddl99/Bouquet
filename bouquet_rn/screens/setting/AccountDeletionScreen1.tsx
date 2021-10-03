@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { View } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // styles
 import colors from '../../styles/colors';
@@ -22,9 +23,13 @@ export default function AccountDeletionScreenOne(): React.ReactElement {
   const user = useUser();
 
   const navigation = useNavigation();
+  const resetRecentList = async () => {
+    await AsyncStorage.setItem('recentList', '');
+  };
   const deleteNgoScreenTwo = useCallback(async () => {
     const serverResult = await deleteUserAsync();
     if (serverResult.isSuccess) {
+      await resetRecentList();
       navigation.reset({
         index: 0,
         routes: [{ name: 'SettingAccountDeletion2' }],

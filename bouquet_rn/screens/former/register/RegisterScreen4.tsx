@@ -9,7 +9,7 @@ import * as text from '../../../styles/styled-components/text';
 import * as elses from '../../../styles/styled-components/elses';
 
 // logics
-import getPushNotificationsPermission from '../../../logics/server/Notification';
+import { getPushNotificationsPermission } from '../../../logics/server/Notification';
 
 // components
 import ConditionButton from '../../../components/button/ConditionButton';
