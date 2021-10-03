@@ -1,3 +1,5 @@
+import * as SecureStore from 'expo-secure-store';
+
 // logics
 import * as APIs from './APIUtils';
 
@@ -49,23 +51,26 @@ export async function getTopCharacterListAsync(): APIs.ServerResult<
  * 인기 게시글 목록을 서버에서 불러오는 함수
  * @param pageNum 불러올 페이지
  * ! 페이지 번호는 1부터 시작
- * @param characterId 게시글 목록을 열람하려는 캐릭터 id
  *
  * @returns -{result: Post 리스트, isSuccess: true} 또는 {result: 에러 객체, isSuccess: false}
  */
 export async function getTopPostListAsync(
   pageNum: number,
-  characterId?: number,
 ): APIs.ServerResult<Array<Post<AllTemplates>>> {
   // 서버 응답 타입 정의
   type GetTopPostListAsyncOutput = {
     posts: Array<Post<AllTemplates>>;
   };
 
+  const auth = await SecureStore.getItemAsync('auth');
+
+  const header: Record<string, any> = { 'page-num': pageNum };
+  if (auth) header.token = auth;
+
   const tmpResult = await APIs.getAsync<GetTopPostListAsyncOutput>(
     '/search/top-posts',
     false,
-    { 'page-num': pageNum, 'character-id': characterId || -1 },
+    header,
   );
 
   // 사전 처리된 에러는 바로 반환

@@ -56,6 +56,7 @@ export default function SearchScreen(): React.ReactElement {
   const [postArray, setPostArray] = useState<Post<AllTemplates>[]>([]);
   // 인기 캐릭터 담을 state
   const [characterArray, setCharacterArray] = useState<CharacterMini[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     const getRecentList = async () => {
@@ -133,19 +134,23 @@ export default function SearchScreen(): React.ReactElement {
    * 인기 게시글을 가져오는 함수
    */
   async function getPost() {
-    const serverResult = await getTopPostListAsync(
-      1,
-      myCharacter.id ? myCharacter.id : undefined,
-    );
+    const serverResult = await getTopPostListAsync(1);
     if (serverResult.isSuccess) {
       setPostArray(serverResult.result);
-    } else alert(serverResult.result.errorMsg);
+    } else alert(serverResult.result.statusCode);
   }
   // 가장 처음에 인기 캐릭터 및 게시물 가져옴
   useEffect(() => {
     getCharacter();
     getPost();
   }, []);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await getCharacter();
+    await getPost();
+    setRefreshing(false);
+  };
 
   /**
    * animation 관련 변수
@@ -238,6 +243,8 @@ export default function SearchScreen(): React.ReactElement {
           )}
           data={viewArray}
           renderItem={(obj) => obj.item}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
         />
       </TouchableWithoutFeedback>
 

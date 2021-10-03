@@ -482,7 +482,6 @@ export async function deleteCharacterAsync(
 /**
  * 어떤 캐릭터가 다른 캐릭터를 팔로우하도록 서버에 요청하는 함수
  * @param characterId 팔로우를 받는 캐릭터의 id
- * @param followerId 팔로우 요청을 보내는 캐릭터(=>로그인된 유저의 캐릭터)의 id
  *
  * @returns -{result: 팔로우 여부, isSuccess: true} 또는 {result: 에러 객체, isSuccess: false}
  * @description 팔로우 여부가 true이면 '팔로우하지 않은 상태 -> 팔로우한 상태'로 바뀐 것 /
@@ -490,7 +489,6 @@ export async function deleteCharacterAsync(
  */
 export async function followCharacterAsync(
   characterId: number,
-  followerId: number,
 ): APIs.ServerResult<boolean> {
   // 서버 응답 타입 정의
   type FollowCharacterAsyncOutput = {
@@ -500,7 +498,7 @@ export async function followCharacterAsync(
   const tmpResult = await APIs.postAsync<FollowCharacterAsyncOutput>(
     '/character/follow',
     { 'Content-Type': 'application/json' },
-    JSON.stringify({ character_id: characterId, follower_id: followerId }),
+    JSON.stringify({ id: characterId }),
     true,
   );
 
