@@ -57,6 +57,8 @@ export default function SearchScreen(): React.ReactElement {
   // 인기 캐릭터 담을 state
   const [characterArray, setCharacterArray] = useState<CharacterMini[]>([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [pageNum, setPageNum] = useState(1);
+  const [isPageEnd, setIsPageEnd] = useState(false);
 
   useEffect(() => {
     const getRecentList = async () => {
@@ -135,11 +137,22 @@ export default function SearchScreen(): React.ReactElement {
   /**
    * 인기 게시글을 가져오는 함수
    */
-  async function getPost() {
-    const serverResult = await getTopPostListAsync(1);
+  async function getPost(newPageNum?: number, isRefreshing?: boolean) {
+    const serverResult = await getTopPostListAsync(newPageNum || pageNum);
     if (serverResult.isSuccess) {
-      setPostArray(serverResult.result);
-    } else alert(serverResult.result.statusCode);
+      if (serverResult.result.length === 0) {
+        setIsPageEnd(true);
+        if (postArray === undefined) setPostArray(serverResult.result);
+      } else if (postArray === undefined || isRefreshing)
+        setPostArray(serverResult.result);
+      else {
+        const tmpArray = postArray;
+        serverResult.result.forEach((obj) => tmpArray.push(obj));
+        setPostArray(tmpArray);
+      }
+    } else {
+      alert(serverResult.result.errorMsg);
+    }
   }
   // 가장 처음에 인기 캐릭터 및 게시물 가져옴
   useEffect(() => {
@@ -193,7 +206,17 @@ export default function SearchScreen(): React.ReactElement {
       searchInput={searchInput}
       characterArray={characterArray}
     />,
-    <SearchPostView searchInput={searchInput} postArray={postArray} />,
+    <SearchPostView
+      searchInput={searchInput}
+      postArray={postArray}
+      onEndReached={async () => {
+        if (!isPageEnd) {
+          const newPageNum = pageNum + 1;
+          setPageNum(newPageNum);
+          await getPost(newPageNum);
+        }
+      }}
+    />,
   ];
 
   return (

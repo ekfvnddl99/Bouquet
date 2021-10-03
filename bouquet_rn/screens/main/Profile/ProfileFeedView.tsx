@@ -10,24 +10,17 @@ import PostItem from '../../../components/item/PostItem';
 type ProfileFeedViewProps = {
   postArray: Post<AllTemplates>[] | undefined;
   routePrefix: string;
-  isPostPageEnd: boolean;
-  postPageNum: number;
-  setPostPageNum: (param: number) => void;
+  onEndReached: () => Promise<void>;
 };
 export default function ProfileFeedView({
   postArray,
   routePrefix,
-  isPostPageEnd,
-  postPageNum,
-  setPostPageNum,
+  onEndReached,
 }: ProfileFeedViewProps): React.ReactElement {
   return (
     <FlatList
       showsVerticalScrollIndicator={false}
-      onEndReached={() => {
-        if (!isPostPageEnd) setPostPageNum(postPageNum + 1);
-        // console.log('feed!!!');
-      }}
+      onEndReached={onEndReached}
       onEndReachedThreshold={0.5}
       keyExtractor={(item, idx) => idx.toString()}
       data={postArray}
