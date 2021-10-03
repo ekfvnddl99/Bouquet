@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import i18n from 'i18n-js';
 
@@ -13,6 +13,7 @@ import Icon from '../../assets/Icon';
 // logics
 import useCharacter from '../../logics/hooks/useCharacter';
 import * as cal from '../../logics/non-server/Calculation';
+import { likeCommentAsync } from '../../logics/server/Post';
 
 // utils
 import { PostComment } from '../../utils/types/PostTypes';
@@ -57,6 +58,7 @@ export default function CommentItem({
   setOpeningCommentArray,
 }: CommentItemProps): React.ReactElement {
   const [myCharacter] = useCharacter();
+  const [isActive, setIsActive] = useState(commentInfo.liked);
 
   return (
     <area.NoHeightArea
@@ -154,8 +156,16 @@ export default function CommentItem({
           </TouchableOpacity>
 
           <area.RowArea style={{ marginLeft: 8 }}>
-            <TouchableOpacity>
-              {commentInfo.liked ? (
+            <TouchableOpacity
+              onPress={async () => {
+                const newState = !isActive;
+                setIsActive(newState);
+                const serverResult = await likeCommentAsync(commentInfo.id);
+                if (serverResult.isSuccess) setIsActive(serverResult.result);
+                else setIsActive(!newState);
+              }}
+            >
+              {isActive ? (
                 <Icon icon="sunFocusPrimary" size={18} />
               ) : (
                 <Icon icon="sun" size={18} />
