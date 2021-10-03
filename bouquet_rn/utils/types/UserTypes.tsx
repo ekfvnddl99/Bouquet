@@ -69,6 +69,7 @@ export type Character = {
     name: string;
     profile_img: string;
   };
+  followed: boolean;
 };
 
 /**
@@ -90,6 +91,7 @@ export const noCharacter: Character = {
     name: '',
     profile_img: '',
   },
+  followed: false,
 };
 
 /**
