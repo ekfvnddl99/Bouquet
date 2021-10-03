@@ -5,6 +5,7 @@ import * as Notifications from 'expo-notifications';
 import * as Linking from 'expo-linking';
 import { useSetRecoilState } from 'recoil';
 import { AppState } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // logics
 import useLogin from '../logics/hooks/useLogin';
@@ -35,20 +36,31 @@ export default function AppStack(): React.ReactElement {
   }, []);
 
   const appState = useRef(AppState.currentState);
+  const [notiCount, setNotiCount] = useState(0);
   useEffect(() => {
+    const getNotificationCount = async (): Promise<void> => {
+      const jsonValue = await AsyncStorage.getItem('notificationCount');
+      const result = jsonValue != null ? JSON.parse(jsonValue) : null;
+      setNotiCount(result);
+    };
+    const storeNotificationCount = async (value: number): Promise<void> => {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem('notificationCount', jsonValue);
+    };
     const subscription = AppState.addEventListener('change', (nextAppState) => {
-      if (
-        appState.current.match(/inactive|background/) &&
-        nextAppState === 'active'
-      ) {
-        alert('App has come to the foreground!');
-      }
-
       appState.current = nextAppState;
-      alert(appState.current);
+      if (appState.current === 'active') {
+        getNotificationCount();
+        const before = notiCount;
+        // now -> 실제 noti 목록 개수가 들어가야 함
+        const now = 3;
+        if (before < now) setIsNew(true);
+        storeNotificationCount(now);
+      }
     });
 
     return () => {
+      // @ts-ignore
       subscription.remove();
     };
   }, []);
@@ -114,10 +126,7 @@ export default function AppStack(): React.ReactElement {
 
       // Listen to expo push notifications
       const tapNotification =
-        Notifications.addNotificationResponseReceivedListener((response) => {
-          /**
-           * TODO Add Noti - fore, back
-           */
+        Notifications.addNotificationResponseReceivedListener(() => {
           setIsNew(false);
           listener(`${prefix}Tab/Notification`);
         });
