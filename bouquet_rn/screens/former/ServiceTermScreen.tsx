@@ -1,7 +1,7 @@
 import React from 'react';
 import { WebView } from 'react-native-webview';
 
-export default function PersonalInfoScreen(): React.ReactElement {
+export default function ServiceTermScreen(): React.ReactElement {
   return (
     <WebView
       source={{
