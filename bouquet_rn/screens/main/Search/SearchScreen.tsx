@@ -256,7 +256,7 @@ export default function SearchScreen(): React.ReactElement {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Animated.FlatList
           style={{
-            marginBottom: HEADER_MIN_HEIGHT - 30,
+            paddingBottom: HEADER_MIN_HEIGHT - 30,
           }}
           contentContainerStyle={{ paddingTop: 30 + 12 }}
           showsVerticalScrollIndicator={false}
