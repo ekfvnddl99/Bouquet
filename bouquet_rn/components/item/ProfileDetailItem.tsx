@@ -85,7 +85,10 @@ export default function ProfileDetailItem({
   async function followOrUnfollow() {
     const realCharacterId = realCharacter.id ? realCharacter.id : -1;
     const myCharacterId = myCharacter.id;
-    const serverResult = await followCharacterAsync(realCharacterId);
+    const serverResult = await followCharacterAsync(
+      realCharacterId,
+      myCharacterId,
+    );
     if (serverResult.isSuccess) await setViewCharacter(realCharacter.name);
     else alert(serverResult.result.errorMsg);
   }

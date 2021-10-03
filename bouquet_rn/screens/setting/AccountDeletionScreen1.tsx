@@ -23,13 +23,14 @@ export default function AccountDeletionScreenOne(): React.ReactElement {
   const user = useUser();
 
   const navigation = useNavigation();
-  const resetRecentList = async () => {
+  const resetAllLocalStorage = async () => {
     await AsyncStorage.setItem('recentList', '');
+    await AsyncStorage.setItem('notificationCount', '');
   };
   const deleteNgoScreenTwo = useCallback(async () => {
     const serverResult = await deleteUserAsync();
     if (serverResult.isSuccess) {
-      await resetRecentList();
+      await resetAllLocalStorage();
       navigation.reset({
         index: 0,
         routes: [{ name: 'SettingAccountDeletion2' }],
