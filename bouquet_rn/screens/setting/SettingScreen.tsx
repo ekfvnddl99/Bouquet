@@ -28,6 +28,10 @@ export default function SettingScreen(): React.ReactElement {
     navigation.reset({ index: 0, routes: [{ name: 'Welcome' }] });
   }
 
+  function goWebview(screen: string) {
+    navigation.navigate('DocumentScreen', { screen });
+  }
+
   async function openURL(url: string) {
     const isPossible = await Linking.canOpenURL(url);
     if (isPossible) await Linking.openURL(url);
@@ -104,9 +108,18 @@ export default function SettingScreen(): React.ReactElement {
               )
             }
           />
-          <SettingItem content={i18n.t('서비스 이용 약관')} />
-          <SettingItem content={i18n.t('개인정보 취급 방침')} />
-          <SettingItem content={i18n.t('오픈 소스 정보')} />
+          <SettingItem
+            content={i18n.t('서비스 이용 약관')}
+            onPress={() => goWebview('ServiceTerm')}
+          />
+          <SettingItem
+            content={i18n.t('개인정보 취급 방침')}
+            onPress={() => goWebview('PersonalInfo')}
+          />
+          <SettingItem
+            content={i18n.t('오픈 소스 정보')}
+            onPress={() => goWebview('OpenSource')}
+          />
           <SettingItem
             content={i18n.t('문의/건의')}
             onPress={() => openURL('mailto:ekfvnddl99@naver.com')}

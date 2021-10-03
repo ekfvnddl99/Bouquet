@@ -10,6 +10,7 @@ export type WelcomeStackParam = {
   CharacterGeneration: undefined;
   SettingAccountDeletion2: undefined;
   WritingStack: undefined;
+  DocumentScreen: undefined;
 };
 export type WelcomeProps = StackScreenProps<WelcomeStackParam, 'Welcome'>;
 

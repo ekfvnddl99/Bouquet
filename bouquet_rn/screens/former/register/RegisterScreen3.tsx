@@ -8,6 +8,7 @@ import {
 import i18n from 'i18n-js';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
+import { useNavigation } from '@react-navigation/native';
 
 // styles
 import colors from '../../../styles/colors';
@@ -56,6 +57,7 @@ export default function RegisterScreen3({
   profileImg,
   setProfileImg,
 }: RegisterPropsThree): React.ReactElement {
+  const navigation = useNavigation();
   // 모든 조건이 만족됐는지 확인하기 위한 state
   const [IsOK, setIsOK] = useState(false);
   // 이미지 선택하려고 눌렀냐
@@ -138,6 +140,10 @@ export default function RegisterScreen3({
     setIsSelectImg(false);
   }
 
+  function goWebview(screen: string) {
+    navigation.navigate('DocumentScreen', { screen });
+  }
+
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior="height">
       <area.ContainerBlank20>
@@ -193,17 +199,13 @@ export default function RegisterScreen3({
               style={{ marginBottom: 16, justifyContent: 'center' }}
             >
               <PrimaryTextButton
-                onPress={() => {
-                  /**/
-                }}
+                onPress={() => goWebview('ServiceTerm')}
                 content={i18n.t('서비스 이용 약관')}
                 isBold={false}
               />
               <text.Caption textColor={colors.gray6}>, </text.Caption>
               <PrimaryTextButton
-                onPress={() => {
-                  /**/
-                }}
+                onPress={() => goWebview('PersonalInfo')}
                 content={i18n.t('개인정보 취급 방침')}
                 isBold={false}
               />

@@ -12,6 +12,7 @@ import TabNavigator from './TabNavigator';
 import CharacterGenerationScreen from '../screens/character/CharacterGenerationScreen';
 import AccountDeletionScreen2 from '../screens/setting/AccountDeletionScreen2';
 import { WritingStackNavigator } from './CommonNavigator';
+import DocumentScreen from '../screens/document/DocumentScreen';
 
 // CharacterGeneration과 AccountDeletion2는 바텀 탭이 필요없는 스크린입니다.
 const WelcomeStack = createStackNavigator<Types.WelcomeStackParam>();
@@ -54,6 +55,11 @@ export default function WelcomeStackNavigator(): React.ReactElement {
       <WelcomeStack.Screen
         name="WritingStack"
         component={WritingStackNavigator}
+        options={{ headerShown: false }}
+      />
+      <WelcomeStack.Screen
+        name="DocumentScreen"
+        component={DocumentScreen}
         options={{ headerShown: false }}
       />
     </WelcomeStack.Navigator>

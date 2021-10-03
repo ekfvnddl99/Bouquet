@@ -9,6 +9,7 @@ import * as text from '../../../styles/styled-components/text';
 
 // logics
 import { recentSearchList } from '../../../logics/atoms';
+import useUser from '../../../logics/hooks/useUser';
 
 // components
 import TagModifyingItem from '../../../components/item/TagModifyingItem';
@@ -25,9 +26,10 @@ export default function SearchRecentView({
   recentList,
   setRecentList,
 }: SearchRecentViewProps): React.ReactElement {
+  const user = useUser();
   return (
     <>
-      {searchInput.length === 0 ? (
+      {searchInput.length === 0 && user.name !== '' ? (
         <Animated.View style={{ marginLeft: 30 }}>
           <text.Subtitle3 textColor={colors.black}>
             {i18n.t('최근 검색어')}

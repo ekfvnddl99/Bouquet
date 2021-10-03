@@ -10,6 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // logics
 import useLogin from '../logics/hooks/useLogin';
 import { isNewNotification } from '../logics/atoms';
+import useUser from '../logics/hooks/useUser';
 
 // screens, navigators
 import SplashScreen from '../screens/former/SplashScreen';
@@ -20,13 +21,14 @@ const prefix = Linking.createURL('/');
 export default function AppStack(): React.ReactElement {
   const [isSplash, setIsSplash] = useState(true);
   const [login] = useLogin();
+  const user = useUser();
   const setIsNew = useSetRecoilState(isNewNotification);
 
   // 실행되자마자 처리해야 하는 것
   useEffect(() => {
     async function callLogin() {
       await login();
-      await getPushNotificationsPermission();
+      if (user.name !== '') await getPushNotificationsPermission();
       await Notifications.addNotificationReceivedListener(() => setIsNew(true));
       setTimeout(() => {
         setIsSplash(false);
