@@ -39,7 +39,7 @@ export default function SunButton({
   const [backgroundColor, setBackgroundColor] = useState('transparent');
 
   async function likePost() {
-    if (myCharacter.name !== '') {
+    if (myCharacter.name === '') {
       alert('캐릭터를 설정해주세요!');
       return;
     }

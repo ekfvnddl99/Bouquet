@@ -1,6 +1,5 @@
 import React, { useRef } from 'react';
 import { View, Animated, PanResponder } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import styled from 'styled-components/native';
 import i18n from 'i18n-js';
 
@@ -69,10 +68,6 @@ export default function NotificationItem({
       onPanResponderMove: Animated.event([null, { dx: drag }], {
         useNativeDriver: false,
       }),
-      onPanResponderRelease: (e, { dx }) => {
-        // @ts-ignore
-        // drag.setValue(dx > SWIPE / 2 ? +SWIPE : -SWIPE);
-      },
     }),
   ).current;
 
