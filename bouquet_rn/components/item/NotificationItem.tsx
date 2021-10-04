@@ -58,6 +58,8 @@ export default function NotificationItem({
   });
   const panResponder = useRef(
     PanResponder.create({
+      onStartShouldSetPanResponder: (e, gestureState) =>
+        Math.abs(gestureState.dx) >= 1 || Math.abs(gestureState.dy) >= 1,
       onMoveShouldSetPanResponder: (e, gestureState) =>
         Math.abs(gestureState.dx) >= 1 || Math.abs(gestureState.dy) >= 1,
       onPanResponderGrant: () => {
@@ -97,6 +99,7 @@ export default function NotificationItem({
         </View>
       </BinButton>
       <Animated.View
+        {...panResponder.panHandlers}
         style={[{ flex: 1 }, { transform: [{ translateX: TranslateX }] }]}
       >
         <button.NotificationButton
