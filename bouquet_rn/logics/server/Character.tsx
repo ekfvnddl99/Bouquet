@@ -1,3 +1,5 @@
+import * as SecureStore from 'expo-secure-store';
+
 // logics
 import * as APIs from './APIUtils';
 
@@ -352,9 +354,12 @@ export async function getCharacterAsync(
   // 서버 응답 타입 정의
   type GetCharacterAsyncOutput = Character;
 
+  const auth = await SecureStore.getItemAsync('auth');
+
   const tmpResult = await APIs.getAsync<GetCharacterAsyncOutput>(
     `/character/${characterName}`,
     false,
+    auth ? { token: auth } : undefined,
   );
 
   // 사전 처리된 에러는 바로 반환

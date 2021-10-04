@@ -76,13 +76,14 @@ export default function ProfileDetailScreen(): React.ReactElement {
     } else alert(serverResult.result.errorMsg);
   }
 
-  async function getQnas(newPageNum?: number) {
+  async function getQnas(newPageNum?: number, isRefreshing?: boolean) {
     const serverResult = await getQnaListAsync(
       viewCharacter.name,
       newPageNum || qnaPageNum,
     );
     if (serverResult.isSuccess) {
-      if (qnaArray === undefined) setQnaArray(serverResult.result);
+      if (qnaArray === undefined || isRefreshing)
+        setQnaArray(serverResult.result);
       else if (serverResult.result.length === 0) setIsQnaPageEnd(true);
       else {
         const tmpArray = qnaArray;
@@ -137,7 +138,7 @@ export default function ProfileDetailScreen(): React.ReactElement {
       returnView: (
         <ProfileQnAView
           routePrefix={routePrefix}
-          qnaArray={[]}
+          qnaArray={qnaArray}
           onEndReached={async () => {
             if (!isQnaPageEnd) {
               const newPageNum = qnaPageNum + 1;
@@ -146,6 +147,10 @@ export default function ProfileDetailScreen(): React.ReactElement {
             }
           }}
           characterInfo={viewCharacter}
+          refresh={async () => {
+            setQnaPageNum(1);
+            await getQnas(1, true);
+          }}
         />
       ),
     },

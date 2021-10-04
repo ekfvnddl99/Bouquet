@@ -11,9 +11,11 @@ import * as text from '../../styles/styled-components/text';
 
 // logics
 import * as cal from '../../logics/non-server/Calculation';
+import { deleteQnaAsync } from '../../logics/server/QnAs';
 
 // utils
 import { Character, MyCharacter } from '../../utils/types/UserTypes';
+import { Qna } from '../../utils/types/PostTypes';
 
 // components
 import ProfileButton from '../button/ProfileButton';
@@ -23,10 +25,10 @@ import SunButton from '../button/SunButton';
 import Icon from '../../assets/Icon';
 
 type QnAItemProps = {
-  question: string;
-  answer: string;
+  qna: Qna;
   characterInfo: Character | MyCharacter;
   routePrefix: string;
+  refresh?: () => Promise<void>;
 };
 /**
  * 질답 게시물 컴포넌트
@@ -41,10 +43,10 @@ type QnAItemProps = {
  * @param routePrefix 라우트 접두사. 어느 탭에서 왔는가!
  */
 export default function QnAItem({
-  question,
-  answer,
+  qna,
   characterInfo,
   routePrefix,
+  refresh,
 }: QnAItemProps): React.ReactElement {
   const navigation = useNavigation();
 
@@ -55,6 +57,14 @@ export default function QnAItem({
    * */
   function goPostStack() {
     navigation.navigate(`${routePrefix}PostStack`, { routePrefix });
+  }
+
+  async function deleteQna() {
+    const serverResult = await deleteQnaAsync(qna.id);
+    if (serverResult.isSuccess) {
+      alert('Q&A가 삭제되었어요.');
+      if (refresh) await refresh();
+    }
   }
 
   return (
@@ -72,11 +82,8 @@ export default function QnAItem({
               routePrefix={routePrefix}
             />
           </View>
-          <text.Caption textColor={colors.gray5}>
-            {cal.timeName('')} {i18n.t('전')}
-          </text.Caption>
         </area.RowArea>
-        <QuestionItem question={question} />
+        <QuestionItem question={qna.question} />
         <MiddleLine />
         <text.Body2R
           textColor={colors.black}
@@ -86,7 +93,7 @@ export default function QnAItem({
             paddingVertical: 10,
           }}
         >
-          {answer}
+          {qna.answer}
         </text.Body2R>
         <View
           style={{
@@ -95,8 +102,13 @@ export default function QnAItem({
             justifyContent: 'space-between',
           }}
         >
-          <SunButton sunNum={0} active={false} postId={0} />
-          <TouchableOpacity>
+          <SunButton
+            sunNum={qna.num_sunshines}
+            active={qna.liked}
+            postId={qna.id}
+            isQna
+          />
+          <TouchableOpacity onPress={() => deleteQna()}>
             <Icon icon="bin" size={20} />
           </TouchableOpacity>
         </View>

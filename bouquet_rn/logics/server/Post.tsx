@@ -306,7 +306,6 @@ export async function getPostListAsync(
   const tmpResult = await APIs.getAsync<GetPostListAsyncOutput>(
     `/post/character/${characterName}/${pageNum}`,
     false,
-    { 'page-num': pageNum, 'character-name': characterName },
   );
 
   // 사전 처리된 에러는 바로 반환

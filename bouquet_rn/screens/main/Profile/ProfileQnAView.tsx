@@ -12,16 +12,18 @@ import { Qna } from '../../../utils/types/PostTypes';
 import { Character } from '../../../utils/types/UserTypes';
 
 type ProfileQnAViewProps = {
-  qnaArray: Array<Qna>;
+  qnaArray: Array<Qna> | undefined;
   routePrefix: string;
   onEndReached: () => Promise<void>;
   characterInfo: Character;
+  refresh?: () => Promise<void>;
 };
 export default function ProfileQnAScreen({
   qnaArray,
   routePrefix,
   onEndReached,
   characterInfo,
+  refresh,
 }: ProfileQnAViewProps): React.ReactElement {
   return (
     <Animated.FlatList
@@ -32,10 +34,10 @@ export default function ProfileQnAScreen({
       data={qnaArray}
       renderItem={(obj) => (
         <QnAItem
-          question={obj.item.question}
-          answer={obj.item.answer}
+          qna={obj.item}
           characterInfo={characterInfo}
           routePrefix={routePrefix}
+          refresh={refresh}
         />
       )}
     />
