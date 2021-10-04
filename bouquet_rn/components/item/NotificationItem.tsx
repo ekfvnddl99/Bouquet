@@ -9,6 +9,7 @@ import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as elses from '../../styles/styled-components/elses';
 import * as text from '../../styles/styled-components/text';
+import * as button from '../../styles/styled-components/button';
 
 // assets
 import Icon from '../../assets/Icon';
@@ -96,20 +97,10 @@ export default function NotificationItem({
         </View>
       </BinButton>
       <Animated.View
-        {...panResponder.panHandlers}
-        style={[{ width: '100%' }, { transform: [{ translateX: TranslateX }] }]}
+        style={[{ flex: 1 }, { transform: [{ translateX: TranslateX }] }]}
       >
-        <TouchableOpacity
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            backgroundColor: colors.white,
-            borderRadius: 10,
-            alignItems: 'center',
-            paddingHorizontal: 18,
-            paddingVertical: 12,
-            marginBottom: 10,
-          }}
+        <button.NotificationButton
+          {...panResponder.panHandlers}
           activeOpacity={1}
           onPress={() =>
             onPress(
@@ -148,7 +139,7 @@ export default function NotificationItem({
               {cal.timeName(notificationInfo.created_at)} {i18n.t('전')}
             </text.Caption>
           </View>
-        </TouchableOpacity>
+        </button.NotificationButton>
       </Animated.View>
     </WholeArea>
   );

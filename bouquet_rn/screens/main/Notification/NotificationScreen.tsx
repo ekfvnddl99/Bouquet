@@ -67,11 +67,8 @@ export default function NotificationScreen(): React.ReactElement {
   async function getNotification(newPageNum?: number, isRefreshing?: boolean) {
     const serverResult = await getNotificationListAsync(newPageNum || pageNum);
     if (serverResult.isSuccess) {
-      if (serverResult.result.length === 0) {
-        setIsPageEnd(true);
-        if (notificationArray === undefined || isRefreshing)
-          setNotificationArray(serverResult.result);
-      } else if (notificationArray === undefined || isRefreshing)
+      if (serverResult.result.length === 0) setIsPageEnd(true);
+      if (notificationArray === undefined || isRefreshing)
         setNotificationArray(serverResult.result);
       else {
         const tmpArray = notificationArray;
@@ -237,6 +234,7 @@ export default function NotificationScreen(): React.ReactElement {
 
       <Animated.ScrollView
         style={{ marginTop: HEADER_MIN_HEIGHT - 30 }}
+        contentContainerStyle={{ flex: 1 }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="always"
         scrollEventThrottle={1}
