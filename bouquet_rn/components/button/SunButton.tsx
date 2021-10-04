@@ -11,12 +11,14 @@ import Svg from '../../assets/Icon';
 // logics
 import * as cal from '../../logics/non-server/Calculation';
 import { likePostAsync } from '../../logics/server/Post';
+import { likeQnaAsync } from '../../logics/server/QnAs';
 import useCharacter from '../../logics/hooks/useCharacter';
 
 type SunButtonProps = {
   sunNum: number;
   active: boolean;
   postId: number;
+  isQna?: boolean;
 };
 /**
  * 햇님 버튼
@@ -31,6 +33,7 @@ export default function SunButton({
   sunNum,
   active,
   postId,
+  isQna,
 }: SunButtonProps): React.ReactElement {
   const [myCharacter] = useCharacter();
 
@@ -48,7 +51,10 @@ export default function SunButton({
     setIsActive(newState);
     if (newState) setSunshineNum(prevSunNum + 1);
     else setSunshineNum(prevSunNum - 1);
-    const serverResult = await likePostAsync(postId);
+
+    const functionToExecute = isQna ? likeQnaAsync : likePostAsync;
+
+    const serverResult = await functionToExecute(postId);
     if (serverResult.isSuccess) {
       const realState = serverResult.result;
       setIsActive(realState);

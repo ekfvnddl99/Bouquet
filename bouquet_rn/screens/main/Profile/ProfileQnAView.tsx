@@ -32,8 +32,7 @@ export default function ProfileQnAScreen({
       data={qnaArray}
       renderItem={(obj) => (
         <QnAItem
-          question={obj.item.question}
-          answer={obj.item.answer}
+          qna={obj.item}
           characterInfo={characterInfo}
           routePrefix={routePrefix}
         />
