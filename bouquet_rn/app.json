@@ -15,6 +15,9 @@
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": ["**/*"],
+    "notification": {
+      "icon": "./assets/png/icon.png"
+    },
     "ios": {
       "supportsTablet": true,
       "usesAppleSignIn": true,

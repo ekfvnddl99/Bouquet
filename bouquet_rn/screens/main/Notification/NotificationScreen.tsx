@@ -72,6 +72,7 @@ export default function NotificationScreen(): React.ReactElement {
   useFocusEffect(
     useCallback(() => {
       async function setNotificationCount() {
+        await onRefresh();
         await getNowNotificationCount().then((now) => {
           if (now !== -1) {
             setIsNew(false);
@@ -80,10 +81,9 @@ export default function NotificationScreen(): React.ReactElement {
         });
       }
       if (isLogined) {
-        onRefresh();
         setNotificationCount();
       }
-    }, []),
+    }, [isLogined]),
   );
 
   // 로그인한 상태인지 아닌지 확인
