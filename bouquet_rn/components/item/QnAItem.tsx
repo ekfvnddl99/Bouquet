@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableWithoutFeedback } from 'react-native';
+import { View, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
@@ -19,6 +19,8 @@ import { Character, MyCharacter } from '../../utils/types/UserTypes';
 import ProfileButton from '../button/ProfileButton';
 import QuestionItem from './QuestionItem';
 import SunButton from '../button/SunButton';
+
+import Icon from '../../assets/Icon';
 
 type QnAItemProps = {
   question: string;
@@ -86,13 +88,17 @@ export default function QnAItem({
         >
           {answer}
         </text.Body2R>
-        <View style={{ alignItems: 'flex-start' }}>
-          <SunButton
-            sunNum={0}
-            setSunNum={() => undefined}
-            active={false}
-            postId={0}
-          />
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <SunButton sunNum={0} active={false} postId={0} />
+          <TouchableOpacity>
+            <Icon icon="bin" size={20} />
+          </TouchableOpacity>
         </View>
       </WholeArea>
     </TouchableWithoutFeedback>

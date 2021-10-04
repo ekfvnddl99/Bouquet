@@ -33,14 +33,15 @@ export default function QnATextInput({
 }: QnATextInputProps): React.ReactElement {
   const [myCharacter] = useCharacter();
   // '올리기' 버튼 눌렀는지 여부를 저장하는 state
-  const [isUpload, setIsUpload] = useState(false);
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
 
   async function createQuestion(qna: QnaRequest) {
     const serverResult = await createQnaAsync(qna);
     if (serverResult.isSuccess) {
-      setIsUpload(true);
+      alert('Q&A를 업로드했어요!');
+      setAnswer('');
+      await getQuestion();
     } else alert(serverResult.result.errorMsg);
   }
 
@@ -55,17 +56,6 @@ export default function QnATextInput({
     getQuestion();
   }, []);
 
-  if (isUpload) {
-    return (
-      // 여기로 질문이랑 답변 넘겨줘야 함!
-      <QnAItem
-        question={question}
-        answer={answer}
-        characterInfo={myCharacter}
-        routePrefix={routePrefix}
-      />
-    );
-  }
   return (
     <area.NoHeightArea paddingH={10} paddingV={10} marBottom={10}>
       <area.RowArea style={{ marginBottom: 10 }}>
@@ -95,6 +85,7 @@ export default function QnATextInput({
         placeholder="답변을 입력해 보세요."
         multiline
         onChangeText={(input) => setAnswer(input)}
+        value={answer}
       />
       <View style={{ alignItems: 'flex-end' }}>
         <LineButton
