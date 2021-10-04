@@ -1,8 +1,13 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { View, Animated, FlatList } from 'react-native';
 import i18n from 'i18n-js';
 import styled from 'styled-components/native';
-import { useNavigation } from '@react-navigation/native';
+import { useRecoilState } from 'recoil';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// assets
+import Svg from '../../../assets/Icon';
 
 // styles
 import colors from '../../../styles/colors';
@@ -19,7 +24,9 @@ import useViewCharacter from '../../../logics/hooks/useViewCharacter';
 import {
   deleteNotificationAsync,
   getNotificationListAsync,
+  getNotificationCountAsync,
 } from '../../../logics/server/Notification';
+import { isNewNotification } from '../../../logics/atoms';
 
 // utils
 import { Notification } from '../../../utils/types/PostTypes';
@@ -39,6 +46,7 @@ export default function NotificationScreen(): React.ReactElement {
   const navigation = useNavigation();
   const [, setViewPost] = useViewPost();
   const [, setViewCharacter] = useViewCharacter();
+  const [isNew, setIsNew] = useRecoilState(isNewNotification);
 
   const [myCharacter] = useCharacter();
   // 로그인한 상태인지 아닌지
@@ -51,6 +59,33 @@ export default function NotificationScreen(): React.ReactElement {
   const [isPageEnd, setIsPageEnd] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
+  const storeNotificationCount = async (value: number): Promise<void> => {
+    const jsonValue = JSON.stringify(value);
+    await AsyncStorage.setItem(`N${myCharacter.name}`, jsonValue);
+  };
+  const getNowNotificationCount = async () => {
+    const serverResult = await getNotificationCountAsync();
+    if (serverResult.isSuccess) return serverResult.result;
+    alert(serverResult.result.errorMsg);
+    return -1;
+  };
+  useFocusEffect(
+    useCallback(() => {
+      async function setNotificationCount() {
+        await getNowNotificationCount().then((now) => {
+          if (now !== -1) {
+            setIsNew(false);
+            storeNotificationCount(now);
+          }
+        });
+      }
+      if (isLogined) {
+        onRefresh();
+        setNotificationCount();
+      }
+    }, []),
+  );
+
   // 로그인한 상태인지 아닌지 확인
   useEffect(() => {
     if (myCharacter.id === -1) setIsLogined(false);
@@ -60,7 +95,7 @@ export default function NotificationScreen(): React.ReactElement {
   const deleteNotification = async (id: number) => {
     const serverResult = await deleteNotificationAsync(id);
     if (serverResult.isSuccess) {
-      await getNotification(1, true);
+      onRefresh();
     } else console.log(serverResult.result.info);
   };
 
@@ -247,11 +282,8 @@ export default function NotificationScreen(): React.ReactElement {
         {isLogined ? (
           <>{setNotification()}</>
         ) : (
-          <button.NotificationButton
-            activeOpacity={1}
-            style={{ marginHorizontal: 30 }}
-          >
-            {/* <elses.CircleImg diameter={20} source={{ uri: profileImg }} /> */}
+          <DefaultNotification activeOpacity={1}>
+            <Svg icon="logo" size={20} />
             <View
               style={{
                 flex: 2,
@@ -267,7 +299,7 @@ export default function NotificationScreen(): React.ReactElement {
                 </text.Body2B>
               </area.RowArea>
             </View>
-          </button.NotificationButton>
+          </DefaultNotification>
         )}
       </Animated.ScrollView>
       {isLogined ? (
@@ -313,4 +345,15 @@ const AnimationHeader = styled(Animated.View)`
   overflow: hidden;
   height: ${HEADER_MIN_HEIGHT + StatusBarHeight};
   border-radius: 15;
+`;
+
+const DefaultNotification = styled.TouchableOpacity`
+  flex-direction: row;
+  background-color: ${colors.white};
+  border-radius: 10;
+  align-items: center;
+  padding-horizontal: 18;
+  padding-vertical: 12;
+  margin-bottom: 10;
+  margin-horizontal: 30;
 `;

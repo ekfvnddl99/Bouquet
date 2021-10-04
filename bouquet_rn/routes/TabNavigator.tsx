@@ -1,7 +1,7 @@
 import React from 'react';
 import { Platform, TouchableOpacity, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 
 // utils
 import * as Types from '../utils/types/NavigationTypes';
@@ -23,13 +23,13 @@ import ProfileStackNavigator from './ProfileStackNavigator';
 
 const Tab = createBottomTabNavigator<Types.TabParam>();
 export default function TabNavigator(): React.ReactElement {
-  const [isNew, setIsNew] = useRecoilState(isNewNotification);
+  const isNew = useRecoilValue(isNewNotification);
   return (
     <Tab.Navigator
       initialRouteName="Home"
       backBehavior="none"
       tabBar={({ state, navigation }) =>
-        customTabBar({ state, navigation, isNew, setIsNew })
+        customTabBar({ state, navigation, isNew })
       }
       lazy={false}
       tabBarOptions={{
@@ -49,12 +49,10 @@ function customTabBar({
   state,
   navigation,
   isNew,
-  setIsNew,
 }: {
   state: any;
   navigation: any;
   isNew: boolean;
-  setIsNew: (input: boolean) => void;
 }) {
   return (
     <TabBarArea style={{ height: Platform.OS === 'ios' ? 60 + 18 : 60 }}>
@@ -71,10 +69,8 @@ function customTabBar({
             if (isFocused) icon = <Svg icon="searchFocus" size={len} />;
             else icon = <Svg icon="search" size={len} />;
           } else if (route.name === 'Notification') {
-            if (isFocused) {
-              setIsNew(false);
-              icon = <Svg icon="notificationFocus" size={len} />;
-            } else if (isNew) icon = <Svg icon="notificationNew" size={len} />;
+            if (isFocused) icon = <Svg icon="notificationFocus" size={len} />;
+            else if (isNew) icon = <Svg icon="notificationNew" size={len} />;
             else icon = <Svg icon="notification" size={len} />;
           } else if (route.name === 'Profile') {
             if (isFocused) icon = <Svg icon="profileFocus" size={len} />;

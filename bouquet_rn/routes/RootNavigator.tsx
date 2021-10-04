@@ -14,6 +14,7 @@ import {
   getPushNotificationsPermission,
   getNotificationCountAsync,
 } from '../logics/server/Notification';
+import useCharacter from '../logics/hooks/useCharacter';
 
 // screens, navigators
 import SplashScreen from '../screens/former/SplashScreen';
@@ -23,6 +24,7 @@ const prefix = Linking.createURL('/');
 export default function AppStack(): React.ReactElement {
   const [isSplash, setIsSplash] = useState(true);
   const [login] = useLogin();
+  const [myCharacter] = useCharacter();
   const setIsNew = useSetRecoilState(isNewNotification);
 
   // 실행되자마자 처리해야 하는 것
@@ -30,11 +32,9 @@ export default function AppStack(): React.ReactElement {
     async function callLogin() {
       await login();
       await getPushNotificationsPermission();
+      await checkIsNewNotification();
       await Notifications.addNotificationReceivedListener(async () => {
-        getNowNotificationCount().then((now) => {
-          setIsNew(true);
-          storeNotificationCount(now);
-        });
+        setIsNew(true);
       });
       setTimeout(() => {
         setIsSplash(false);
@@ -45,13 +45,9 @@ export default function AppStack(): React.ReactElement {
 
   const appState = useRef(AppState.currentState);
   const getNotificationCount = async (): Promise<number> => {
-    const jsonValue = await AsyncStorage.getItem('notificationCount');
+    const jsonValue = await AsyncStorage.getItem(`N${myCharacter.name}`);
     const result = jsonValue != null ? JSON.parse(jsonValue) : null;
     return result;
-  };
-  const storeNotificationCount = async (value: number): Promise<void> => {
-    const jsonValue = JSON.stringify(value);
-    await AsyncStorage.setItem('notificationCount', jsonValue);
   };
   const getNowNotificationCount = async () => {
     const serverResult = await getNotificationCountAsync();
@@ -59,28 +55,25 @@ export default function AppStack(): React.ReactElement {
     alert(serverResult.result.errorMsg);
     return -1;
   };
-  useEffect(() => {
-    const subscription = AppState.addEventListener(
-      'change',
-      async (nextAppState) => {
-        appState.current = nextAppState;
-        if (appState.current === 'active') {
-          await getNotificationCount().then((before) => {
-            getNowNotificationCount().then((now) => {
-              if (now !== -1) {
-                console.log(`before ${before} now ${now}`);
-                if (before < now) setIsNew(true);
-                storeNotificationCount(now);
-              }
-            });
-          });
+  const checkIsNewNotification = async () => {
+    await getNotificationCount().then((before) => {
+      getNowNotificationCount().then((now) => {
+        if (now !== -1) {
+          console.log(`before ${before} now ${now}`);
+          if (before < now) setIsNew(true);
         }
-      },
-    );
-    return () => {
-      subscription.remove();
-    };
-  }, []);
+      });
+    });
+  };
+  useEffect(() => {
+    AppState.addEventListener('change', async (nextAppState) => {
+      appState.current = nextAppState;
+
+      if (appState.current === 'active' && myCharacter.name !== '') {
+        await checkIsNewNotification();
+      }
+    });
+  }, [myCharacter]);
 
   const linking: LinkingOptions = {
     prefixes: [prefix],
@@ -144,7 +137,6 @@ export default function AppStack(): React.ReactElement {
       // Listen to expo push notifications
       const tapNotification =
         Notifications.addNotificationResponseReceivedListener(() => {
-          setIsNew(false);
           listener(`${prefix}Tab/Notification`);
         });
 

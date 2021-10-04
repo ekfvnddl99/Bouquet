@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import i18n from 'i18n-js';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // styles
 import colors from '../../styles/colors';
@@ -39,10 +40,14 @@ export default function CharacterDeletionScreen(): React.ReactElement {
   // 화면 몇 단계인지 나타내는 state
   const [step, setStep] = useState(1);
 
+  const deleteNotificationCount = async (key: string): Promise<void> => {
+    await AsyncStorage.removeItem(key);
+  };
   // 캐릭터 삭제 함수
   async function deleteCharacter() {
     const serverResult = await deleteCharacterAsync(targetCharacter.name);
     if (serverResult.isSuccess) {
+      await deleteNotificationCount(`N${targetCharacter.name}`);
       setStep(step + 1);
       loadCharacterList();
     } else alert(serverResult.result.errorMsg);

@@ -8,6 +8,7 @@ import {
 import i18n from 'i18n-js';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // styles
 import * as area from '../../styles/styled-components/area';
@@ -74,6 +75,13 @@ export default function CharacterGenerationScreen(): React.ReactElement {
       BackHandler.removeEventListener('hardwareBackPress', backAction);
   });
 
+  const storeNotificationCount = async (
+    key: string,
+    value: number,
+  ): Promise<void> => {
+    const jsonValue = JSON.stringify(value);
+    await AsyncStorage.setItem(key, jsonValue);
+  };
   /**
    * 캐릭터 생성 or 수정 함수
    * * 단계3일 때 이용됨.
@@ -102,10 +110,11 @@ export default function CharacterGenerationScreen(): React.ReactElement {
     } else serverResult = await createCharacterAsync(newCharacter);
     if (serverResult.isSuccess) {
       if (serverResult.result !== null)
-        setCharacter({
-          ...newCharacter,
-          id: serverResult.result,
-        });
+        await storeNotificationCount(`N${newCharacter.name}`, 0);
+      setCharacter({
+        ...newCharacter,
+        id: serverResult.result,
+      });
       await loadCharacterList();
       setStep(step + 1);
     } else {
