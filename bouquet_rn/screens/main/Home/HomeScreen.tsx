@@ -1,5 +1,10 @@
 import React, { useRef, useState, useEffect, useMemo } from 'react';
-import { View, Animated } from 'react-native';
+import {
+  View,
+  Animated,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 import i18n from 'i18n-js';
 import styled from 'styled-components/native';
 
@@ -189,35 +194,37 @@ export default function HomeScreen(): React.ReactElement {
           </AnimationImg>
         ) : null}
       </area.RowArea>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <Animated.FlatList
+          style={{
+            marginTop: HEADER_MIN_HEIGHT - 30,
+            marginHorizontal: 30,
+          }}
+          scrollEventThrottle={1}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { y: scroll } } }],
+            { useNativeDriver: true },
+          )}
+          data={postArray}
+          ListHeaderComponent={realQnaElement}
+          onEndReached={async () => {
+            if (!isPageEnd) {
+              const nextPageNum = pageNum + 1;
+              setPageNum(nextPageNum);
+              await getPost(nextPageNum);
+            }
+          }}
+          onEndReachedThreshold={0.8}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item, idx) => item.id.toString()}
+          renderItem={(obj) => (
+            <PostItem postInfo={obj.item} routePrefix="HomeTab" />
+          )}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+        />
+      </TouchableWithoutFeedback>
 
-      <Animated.FlatList
-        style={{
-          marginTop: HEADER_MIN_HEIGHT - 30,
-          marginHorizontal: 30,
-        }}
-        scrollEventThrottle={1}
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { y: scroll } } }],
-          { useNativeDriver: true },
-        )}
-        data={postArray}
-        ListHeaderComponent={realQnaElement}
-        onEndReached={async () => {
-          if (!isPageEnd) {
-            const nextPageNum = pageNum + 1;
-            setPageNum(nextPageNum);
-            await getPost(nextPageNum);
-          }
-        }}
-        onEndReachedThreshold={0.8}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={(item, idx) => item.id.toString()}
-        renderItem={(obj) => (
-          <PostItem postInfo={obj.item} routePrefix="HomeTab" />
-        )}
-        refreshing={refreshing}
-        onRefresh={onRefresh}
-      />
       {isLogined ? (
         <FloatingButton routePrefix="HomeTab" />
       ) : (
