@@ -45,7 +45,7 @@ export default function ProfileDetailItem({
   const [viewCharacter, setViewCharacter] = useViewCharacter();
   const characterList = useCharacterList();
 
-  const realCharacter = viewCharacter;
+  const realCharacter = characterInfo || viewCharacter;
 
   /**
    * '상세 프로필' 화면으로 이동하는 함수
