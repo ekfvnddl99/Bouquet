@@ -94,9 +94,9 @@ export default function NotificationScreen(): React.ReactElement {
 
   const deleteNotification = async (id: number) => {
     const serverResult = await deleteNotificationAsync(id);
-    if (serverResult.isSuccess) {
-      onRefresh();
-    } else console.log(serverResult.result.info);
+
+    if (serverResult.isSuccess) await onRefresh();
+    else console.log(serverResult.result.info);
   };
 
   async function getNotification(newPageNum?: number, isRefreshing?: boolean) {
@@ -185,6 +185,28 @@ export default function NotificationScreen(): React.ReactElement {
    * 알람 개수가 0이냐 아니냐에 따라 달라지는 구성
    */
   function setNotification() {
+    if (!isLogined) {
+      return (
+        <DefaultNotification activeOpacity={1}>
+          <Svg icon="logo" size={20} />
+          <View
+            style={{
+              flex: 2,
+              marginLeft: 10,
+            }}
+          >
+            <area.RowArea>
+              <text.Body2B textColor={colors.black}>
+                Bouquet
+                <text.Body2R textColor={colors.black}>
+                  이 꿈꾸던 부캐를 만들어 보자고 제안해요.
+                </text.Body2R>
+              </text.Body2B>
+            </area.RowArea>
+          </View>
+        </DefaultNotification>
+      );
+    }
     if (notificationArray?.length) {
       return (
         <FlatList
@@ -196,9 +218,10 @@ export default function NotificationScreen(): React.ReactElement {
               await getNotification(nextPageNum);
             }
           }}
+          scrollEventThrottle={1}
           onEndReachedThreshold={0.8}
           showsVerticalScrollIndicator={false}
-          keyExtractor={(item, idx) => idx.toString()}
+          keyExtractor={(item, idx) => item.id.toString()}
           renderItem={(obj) => (
             <NotificationItem
               notificationInfo={obj.item}
@@ -206,8 +229,6 @@ export default function NotificationScreen(): React.ReactElement {
               onDelete={deleteNotification}
             />
           )}
-          refreshing={refreshing}
-          onRefresh={onRefresh}
         />
       );
     }
@@ -267,9 +288,9 @@ export default function NotificationScreen(): React.ReactElement {
         ) : null}
       </area.RowArea>
 
-      <Animated.ScrollView
+      <Animated.FlatList
         style={{ marginTop: HEADER_MIN_HEIGHT - 30 }}
-        contentContainerStyle={{ flex: 1 }}
+        contentContainerStyle={{ paddingTop: 30 + 14 }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="always"
         scrollEventThrottle={1}
@@ -277,31 +298,11 @@ export default function NotificationScreen(): React.ReactElement {
           [{ nativeEvent: { contentOffset: { y: scroll } } }],
           { useNativeDriver: true },
         )}
-      >
-        <View style={{ paddingTop: 30 + 14 }} />
-        {isLogined ? (
-          <>{setNotification()}</>
-        ) : (
-          <DefaultNotification activeOpacity={1}>
-            <Svg icon="logo" size={20} />
-            <View
-              style={{
-                flex: 2,
-                marginLeft: 10,
-              }}
-            >
-              <area.RowArea>
-                <text.Body2B textColor={colors.black}>
-                  Bouquet
-                  <text.Body2R textColor={colors.black}>
-                    이 꿈꾸던 부캐를 만들어 보자고 제안해요.
-                  </text.Body2R>
-                </text.Body2B>
-              </area.RowArea>
-            </View>
-          </DefaultNotification>
-        )}
-      </Animated.ScrollView>
+        data={[1]}
+        renderItem={() => setNotification()}
+        refreshing={isLogined ? refreshing : false}
+        onRefresh={isLogined ? onRefresh : undefined}
+      />
       {isLogined ? (
         <FloatingButton routePrefix="NotiTab" />
       ) : (
