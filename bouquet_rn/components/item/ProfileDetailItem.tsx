@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
@@ -22,12 +22,12 @@ import ProfileButton from '../button/ProfileButton';
 import ProfileInfoTagItem from './ProfileInfoTagItem';
 import LineButton from '../button/LineButton';
 import useCharacterList from '../../logics/hooks/useCharacterList';
-import { MyCharacter } from '../../utils/types/UserTypes';
+import { MyCharacter, Character } from '../../utils/types/UserTypes';
 
 type ProfileDetailItemProps = {
   isMini: boolean;
   routePrefix: string;
-  characterInfo?: MyCharacter;
+  characterInfo?: MyCharacter | Character;
 };
 /**
  * Profile의 swipe view 캐릭터 컴포넌트 && '상세 프로필'의 캐릭터 정보
@@ -44,7 +44,6 @@ export default function ProfileDetailItem({
 }: ProfileDetailItemProps): React.ReactElement {
   const navigation = useNavigation();
   const [viewCharacter, setViewCharacter] = useViewCharacter();
-  const [myCharacter] = useCharacter();
   const characterList = useCharacterList();
 
   const realCharacter = characterInfo || viewCharacter;
@@ -78,21 +77,6 @@ export default function ProfileDetailItem({
     });
   }
 
-  /**
-   * 내가 다른 캐릭터를 follow하는 함수
-   * @returns followCharacterAsync 함수 결과
-   */
-  async function followOrUnfollow() {
-    const realCharacterId = realCharacter.id ? realCharacter.id : -1;
-    const myCharacterId = myCharacter.id;
-    const serverResult = await followCharacterAsync(
-      realCharacterId,
-      myCharacterId,
-    );
-    if (serverResult.isSuccess) await setViewCharacter(realCharacter.name);
-    else alert(serverResult.result.errorMsg);
-  }
-
   function checkMyCharacter() {
     let result = false;
     characterList.forEach((obj) => {
@@ -100,6 +84,35 @@ export default function ProfileDetailItem({
     });
     return result;
   }
+
+  /**
+   * 내가 다른 캐릭터를 follow하는 함수
+   * @returns followCharacterAsync 함수 결과
+   */
+  async function followOrUnfollow() {
+    const newState = !isFollowed;
+    setIsFollowed(newState);
+    const realCharacterId = realCharacter.id ? realCharacter.id : -1;
+    console.log(realCharacterId);
+    const serverResult = await followCharacterAsync(realCharacterId);
+    if (serverResult.isSuccess) await setViewCharacter(realCharacter.name);
+    else {
+      alert(serverResult.result.statusCode);
+      setIsFollowed(!newState);
+    }
+  }
+
+  function isMyCharacter(
+    chInfo: MyCharacter | Character | undefined,
+  ): chInfo is MyCharacter {
+    return checkMyCharacter();
+  }
+
+  const [isFollowed, setIsFollowed] = useState(
+    !isMyCharacter(characterInfo) && characterInfo
+      ? characterInfo.followed
+      : false,
+  );
 
   return (
     <button.ProfileDetailButton
@@ -142,7 +155,7 @@ export default function ProfileDetailItem({
           ) : (
             <LineButton
               onPress={() => followOrUnfollow()}
-              content={i18n.t('팔로우')}
+              content={!isFollowed ? '팔로우' : '팔로우 취소'}
               borderColor={colors.primary}
             />
           )}
