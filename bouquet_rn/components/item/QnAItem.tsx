@@ -28,6 +28,7 @@ type QnAItemProps = {
   qna: Qna;
   characterInfo: Character | MyCharacter;
   routePrefix: string;
+  refresh?: () => Promise<void>;
 };
 /**
  * 질답 게시물 컴포넌트
@@ -45,6 +46,7 @@ export default function QnAItem({
   qna,
   characterInfo,
   routePrefix,
+  refresh,
 }: QnAItemProps): React.ReactElement {
   const navigation = useNavigation();
 
@@ -61,6 +63,7 @@ export default function QnAItem({
     const serverResult = await deleteQnaAsync(qna.id);
     if (serverResult.isSuccess) {
       alert('Q&A가 삭제되었어요.');
+      if (refresh) await refresh();
     }
   }
 
@@ -79,9 +82,6 @@ export default function QnAItem({
               routePrefix={routePrefix}
             />
           </View>
-          <text.Caption textColor={colors.gray5}>
-            {cal.timeName('')} {i18n.t('전')}
-          </text.Caption>
         </area.RowArea>
         <QuestionItem question={qna.question} />
         <MiddleLine />

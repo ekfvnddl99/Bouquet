@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
@@ -14,7 +14,6 @@ import * as area from '../../styles/styled-components/area';
 import useViewCharacter from '../../logics/hooks/useViewCharacter';
 import { followCharacterAsync } from '../../logics/server/Character';
 import * as cal from '../../logics/non-server/Calculation';
-import useCharacter from '../../logics/hooks/useCharacter';
 
 // components
 import BoldNRegularText from '../text/BoldNRegularText';
@@ -46,7 +45,7 @@ export default function ProfileDetailItem({
   const [viewCharacter, setViewCharacter] = useViewCharacter();
   const characterList = useCharacterList();
 
-  const realCharacter = characterInfo || viewCharacter;
+  const realCharacter = viewCharacter;
 
   /**
    * '상세 프로필' 화면으로 이동하는 함수
@@ -95,24 +94,28 @@ export default function ProfileDetailItem({
     const realCharacterId = realCharacter.id ? realCharacter.id : -1;
     console.log(realCharacterId);
     const serverResult = await followCharacterAsync(realCharacterId);
-    if (serverResult.isSuccess) await setViewCharacter(realCharacter.name);
-    else {
+    if (serverResult.isSuccess) {
+      setIsFollowed(serverResult.result);
+      await setViewCharacter(realCharacter.name);
+    } else {
       alert(serverResult.result.statusCode);
       setIsFollowed(!newState);
     }
   }
 
   function isMyCharacter(
-    chInfo: MyCharacter | Character | undefined,
+    chInfo: MyCharacter | Character,
   ): chInfo is MyCharacter {
     return checkMyCharacter();
   }
 
   const [isFollowed, setIsFollowed] = useState(
-    !isMyCharacter(characterInfo) && characterInfo
-      ? characterInfo.followed
-      : false,
+    !isMyCharacter(realCharacter) ? realCharacter.followed : false,
   );
+
+  useEffect(() => {
+    console.log(realCharacter);
+  }, []);
 
   return (
     <button.ProfileDetailButton
