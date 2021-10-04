@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useMemo } from 'react';
 import { View, Animated } from 'react-native';
 import i18n from 'i18n-js';
 import styled from 'styled-components/native';
@@ -116,6 +116,21 @@ export default function HomeScreen(): React.ReactElement {
     extrapolate: 'clamp',
   });
 
+  function QnaElement({ logined }: { logined: boolean }) {
+    return (
+      <View style={{ marginTop: 20 + 14 }}>
+        {logined ? <QnATextInput routePrefix="HomeTab" /> : null}
+      </View>
+    );
+  }
+
+  const MemoizedQnaElement = React.memo(QnaElement);
+
+  const realQnaElement = useMemo(
+    () => <MemoizedQnaElement logined={isLogined} />,
+    [isLogined],
+  );
+
   return (
     <area.Container>
       <AnimationHeader
@@ -186,11 +201,7 @@ export default function HomeScreen(): React.ReactElement {
           { useNativeDriver: true },
         )}
         data={postArray}
-        ListHeaderComponent={() => (
-          <View style={{ marginTop: 20 + 14 }}>
-            {isLogined ? <QnATextInput routePrefix="HomeTab" /> : null}
-          </View>
-        )}
+        ListHeaderComponent={realQnaElement}
         onEndReached={async () => {
           if (!isPageEnd) {
             const nextPageNum = pageNum + 1;
