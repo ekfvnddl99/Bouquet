@@ -70,6 +70,13 @@ export default function LoginScreen(): React.ReactElement {
   }
 
   /**
+   * '비밀번호 재설정' 화면으로 이동
+   */
+  function goFindPassword() {
+    navigation.navigate('FindPassword');
+  }
+
+  /**
    * 로그인하는 서버 함수
    */
   async function emailLogin() {
@@ -156,7 +163,7 @@ export default function LoginScreen(): React.ReactElement {
                 {i18n.t('비밀번호를 잊었나요')}{' '}
               </text.Caption>
               <PrimaryTextButton
-                onPress={() => undefined}
+                onPress={() => goFindPassword()}
                 content={i18n.t('비밀번호 찾기')}
                 isBold={false}
               />

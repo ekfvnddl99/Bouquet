@@ -20,6 +20,7 @@ type RegisterScreen4Props = {
   name: string;
   profileImg: string;
   navigation: any;
+  setNewPasswordString?: string;
 };
 /**
  * 회원가입 네 번째 화면.
@@ -28,12 +29,14 @@ type RegisterScreen4Props = {
  * @param name 이름 변수
  * @param profileImg 이미지 변수
  * @param navigation 네비게이션 변수
+ * @param setNewPasswordString 비밀번호 재설정 때 사용하게 될 문장
  * @returns
  */
 export default function RegisterScreen4({
   name,
   profileImg,
   navigation,
+  setNewPasswordString,
 }: RegisterScreen4Props): React.ReactElement {
   async function getPermissions() {
     await getPushNotificationsPermission();
@@ -63,7 +66,9 @@ export default function RegisterScreen4({
         />
         <NameNText name={name} sub="님," />
         <text.Subtitle2R textColor={colors.black}>
-          {i18n.t('환영합니다')}
+          {setNewPasswordString !== undefined
+            ? setNewPasswordString
+            : i18n.t('환영합니다')}
         </text.Subtitle2R>
       </View>
 

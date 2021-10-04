@@ -26,6 +26,7 @@ type RegisterScreenProps = {
   setEmail: (param: string) => void;
   authNumber: string;
   setAuthNumber: (param: string) => void;
+  isFindPassword?: boolean;
 };
 /**
  * 회원가입 첫 번째 화면.
@@ -36,6 +37,7 @@ type RegisterScreenProps = {
  * @param setEmail 이메일 set 함수
  * @param authNumber 인증번호 변수
  * @param setAuthNumber 인증번호 set 함수
+ * @param isFindPassword 비밀번호 재설정 상황인지
  * @returns
  */
 export default function RegisterScreen1({
@@ -44,6 +46,7 @@ export default function RegisterScreen1({
   setEmail,
   authNumber,
   setAuthNumber,
+  isFindPassword,
 }: RegisterScreenProps): React.ReactElement {
   const navigation = useNavigation<StackNavigationProp<WelcomeStackParam>>();
   // 모든 조건이 만족됐는지 확인하기 위한 state
@@ -77,6 +80,7 @@ export default function RegisterScreen1({
     '메일을 인증해 주세요.',
     '인증 번호를 입력해 주세요.',
     '인증 번호가 틀렸나 봐요.',
+    '없는 메일이에요.',
   ];
   // 이메일 정규표현식
   const emailRegex =
@@ -92,10 +96,14 @@ export default function RegisterScreen1({
         const value = !serverResult.result && email.length > 0;
         if (!tmpArray[0]) setEmailErr(errTextArray[0]);
         else if (!tmpArray[1]) setEmailErr(errTextArray[1]);
-        else if (!value) setEmailErr(errTextArray[2]);
+        else if (isFindPassword && value) setEmailErr(errTextArray[6]);
+        else if (isFindPassword === undefined && !value)
+          setEmailErr(errTextArray[2]);
         else if (!tmpArray[3]) setEmailErr(errTextArray[3]);
         else setEmailErr('');
-        setEmailConditionArray([arr[0], arr[1], value, arr[3]]);
+        if (isFindPassword)
+          setEmailConditionArray([arr[0], arr[1], !value, arr[3]]);
+        else setEmailConditionArray([arr[0], arr[1], value, arr[3]]);
       }
     }
     const tmpArray = [...emailConditionArray];

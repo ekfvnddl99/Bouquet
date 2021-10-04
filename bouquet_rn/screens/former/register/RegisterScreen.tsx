@@ -146,6 +146,8 @@ export default function RegisterScreen(): React.ReactElement {
           <ProgressItem
             stepBack={() => setStep(step - 1)}
             step={step}
+            maxLength={100}
+            lastStep={4}
             title={setTitle(step)}
             navigation={navigation}
           />

@@ -78,6 +78,9 @@ export default function SearchScreen(): React.ReactElement {
     if (searchText.length < 1) {
       await onRefresh();
     } else {
+      /**
+       * TODO [noCharacter] 여기에 api 결과를 넣으면 된다.
+       */
       setCharacterArray([noCharacter]);
       setPostArray([noPost]);
     }

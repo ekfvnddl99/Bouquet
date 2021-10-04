@@ -11,6 +11,7 @@ export type WelcomeStackParam = {
   SettingAccountDeletion2: undefined;
   WritingStack: undefined;
   DocumentScreen: undefined;
+  FindPassword: undefined;
 };
 export type WelcomeProps = StackScreenProps<WelcomeStackParam, 'Welcome'>;
 
