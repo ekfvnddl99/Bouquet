@@ -12,6 +12,7 @@ import * as text from '../../../styles/styled-components/text';
 
 // logics
 import { checkEmailAsync } from '../../../logics/server/EmailLogin';
+import { checkAuthNumberAsync } from '../../../logics/server/Auth';
 
 // components
 import ConditionButton from '../../../components/button/ConditionButton';
@@ -135,15 +136,20 @@ export default function RegisterScreen1({
    * 인증번호를 확인하는 함수
    */
   useEffect(() => {
+    async function checkAuthNumber() {
+      const serverResult = await checkAuthNumberAsync(email);
+      if (serverResult.isSuccess) {
+        const code = serverResult.result;
+        setAuthNumber(code);
+        if (!tmpArray[0]) setAuthNumberErr(errTextArray[4]);
+        else if (authNumber !== code) setAuthNumberErr(errTextArray[5]);
+        else setAuthNumberErr('');
+        setAuthNumberConditionArray(tmpArray);
+      } else alert(serverResult.result.errorMsg);
+    }
     const tmpArray = [...authNumberConditionArray];
     tmpArray[0] = authNumber.length > 0;
-    /**
-     * TODO 여기에 인증번호 비교하기
-     */
-    tmpArray[1] = authNumber === '1234';
-    if (!tmpArray[0]) setAuthNumberErr(errTextArray[4]);
-    else if (!tmpArray[1]) setAuthNumberErr(errTextArray[5]);
-    else setAuthNumberErr('');
+    checkAuthNumber();
     setAuthNumberConditionArray(tmpArray);
   }, [authNumber]);
 

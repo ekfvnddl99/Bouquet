@@ -113,3 +113,71 @@ export async function checkCharacterAsync(
     isSuccess: false,
   };
 }
+
+/**
+ * 이메일에 대한 인증번호를 확인하는 함수
+ * @param email 인증 받으려는 이메일
+ *
+ * @returns -{result: 인증 번호, isSuccess: true} 또는 {result: 에러 객체, isSuccess: false}
+ */
+export async function checkAuthNumberAsync(
+  email: string,
+): APIs.ServerResult<string> {
+  // 서버 응답 타입 정의
+  type CheckAuthNumberAsyncOutput = {
+    verificationCode: string;
+  };
+
+  const tmpResult = await APIs.postAsync<CheckAuthNumberAsyncOutput>(
+    '/auth/email',
+    { 'Content-Type': 'application/json' },
+    JSON.stringify({ email }),
+    false,
+  );
+
+  // 사전 처리된 에러는 바로 반환
+  if (APIs.isServerErrorOutput(tmpResult)) {
+    return { result: tmpResult, isSuccess: false };
+  }
+
+  const [result, response] = tmpResult;
+
+  // 요청 성공 : 인증번호 반환
+  if (APIs.isSuccess<CheckAuthNumberAsyncOutput>(result, response)) {
+    return { result: result.verificationCode, isSuccess: true };
+  }
+
+  // 202 : Given email is already being used
+  if (APIs.isError<APIs.ServerError>(result, response, 202)) {
+    return {
+      result: {
+        statusCode: 202,
+        errorMsg:
+          '인증번호가 잘못 입력되었어요. 다시 시도해 보거나, 문의해 주세요.',
+        info: result.msg,
+      },
+      isSuccess: false,
+    };
+  }
+  // 422 : Validation Error
+  if (APIs.isError<APIs.ServerError422>(result, response, 422)) {
+    return {
+      result: {
+        statusCode: 422,
+        errorMsg:
+          '인증번호가 잘못 입력되었어요. 다시 시도해 보거나, 문의해 주세요.',
+        info: result.detail,
+      },
+      isSuccess: false,
+    };
+  }
+  // 나머지 에러
+  return {
+    result: {
+      statusCode: response.status,
+      errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
+      info: response,
+    },
+    isSuccess: false,
+  };
+}

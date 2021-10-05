@@ -15,6 +15,7 @@ import * as area from '../../styles/styled-components/area';
 // logics
 import useLogin from '../../logics/hooks/useLogin';
 import useUser from '../../logics/hooks/useUser';
+import { editPasswordAsync } from '../../logics/server/EmailLogin';
 
 // components
 import ProgressItem from '../../components/item/ProgressItem';
@@ -36,26 +37,11 @@ export default function FindPasswordScreen(): React.ReactElement {
   const [authNumber, setAuthNumber] = useState('');
 
   async function setNewPassword() {
-    /**
-     * TODO 여기에 api 연결하면 됩니당!!!
-     */
-    // const serverResult = await registerEmailAsync(
-    //   email,
-    //   password,
-    //   name,
-    //   realProfileImg,
-    // );
-    // if (serverResult.isSuccess) {
-    /**
-     * * 이것도 필요한가? 모르겠넹~~
-     */
-    // await SecureStore.setItemAsync('auth', serverResult.result);
-    /**
-     * TODO 아래(login, setStep)는 꼭 넣어주세용!!!
-     */
-    // await login();
-    setStep(step + 1);
-    // } else alert(serverResult.result.errorMsg);
+    const serverResult = await editPasswordAsync(email, password);
+    if (serverResult.isSuccess) {
+      await login();
+      setStep(step + 1);
+    } else alert(serverResult.result.errorMsg);
   }
 
   function backAction() {
