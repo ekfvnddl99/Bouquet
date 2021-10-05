@@ -44,14 +44,10 @@ export default function NotLoginPrimaryButton(): React.ReactElement {
           {i18n.t('여기를 눌러')}{' '}
         </text.Button2R>
 
+        <text.Button2B textColor={colors.white}>캐릭터</text.Button2B>
         <text.Button2R textColor={colors.white}>
-          {i18n.locale === 'en' ? i18n.t('를 만들어 보세요') : i18n.t('캐릭터')}{' '}
+          를 만들어 보세요!
         </text.Button2R>
-        <text.Button2B textColor={colors.white}>
-          {i18n.locale === 'en'
-            ? `${i18n.t('캐릭터')}!`
-            : i18n.t('를 만들어 보세요')}{' '}
-        </text.Button2B>
       </WholeArea>
     </TouchableOpacity>
   );

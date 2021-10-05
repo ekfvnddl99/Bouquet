@@ -66,12 +66,12 @@ export default function AccountDeletionScreenOne(): React.ReactElement {
         </View>
         <area.BottomArea style={{ marginBottom: 16 }}>
           <View style={{ alignItems: 'center' }}>
-            <text.Caption textColor={colors.gray6} style={{ marginBottom: 16 }}>
+            <text.Button3 textColor={colors.gray6} style={{ marginBottom: 16 }}>
               {i18n.t('아쉽지만 계정은 삭제하면 복구하지 못해요')}
-            </text.Caption>
+            </text.Button3>
           </View>
           <ConditionButton
-            height={44}
+            height={45}
             isActive
             onPress={deleteNgoScreenTwo}
             content={i18n.t('계정 삭제')}

@@ -92,13 +92,12 @@ export default function ProfileDetailItem({
     const newState = !isFollowed;
     setIsFollowed(newState);
     const realCharacterId = realCharacter.id ? realCharacter.id : -1;
-    console.log(realCharacterId);
     const serverResult = await followCharacterAsync(realCharacterId);
     if (serverResult.isSuccess) {
       setIsFollowed(serverResult.result);
       await setViewCharacter(realCharacter.name);
     } else {
-      alert(serverResult.result.statusCode);
+      alert(serverResult.result.errorMsg);
       setIsFollowed(!newState);
     }
   }
@@ -112,10 +111,6 @@ export default function ProfileDetailItem({
   const [isFollowed, setIsFollowed] = useState(
     !isMyCharacter(realCharacter) ? realCharacter.followed : false,
   );
-
-  useEffect(() => {
-    console.log(realCharacter);
-  }, []);
 
   return (
     <button.ProfileDetailButton

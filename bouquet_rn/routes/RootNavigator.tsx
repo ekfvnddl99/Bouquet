@@ -31,7 +31,6 @@ export default function AppStack(): React.ReactElement {
   useEffect(() => {
     async function callLogin() {
       await login();
-      await getPushNotificationsPermission();
       await checkIsNewNotification();
       await Notifications.addNotificationReceivedListener(async () => {
         setIsNew(true);
@@ -56,6 +55,7 @@ export default function AppStack(): React.ReactElement {
     return -1;
   };
   const checkIsNewNotification = async () => {
+    if (myCharacter.name === '') return;
     await getNotificationCount().then((before) => {
       getNowNotificationCount().then((now) => {
         if (now !== -1) {

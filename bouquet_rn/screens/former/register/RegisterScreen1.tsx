@@ -137,9 +137,12 @@ export default function RegisterScreen1({
   useEffect(() => {
     const tmpArray = [...authNumberConditionArray];
     tmpArray[0] = authNumber.length > 0;
-    tmpArray[1] = Number(authNumber) === 1234;
-    if (!tmpArray[0]) setAuthNumberErr(errTextArray[3]);
-    else if (!tmpArray[1]) setAuthNumberErr(errTextArray[4]);
+    /**
+     * TODO 여기에 인증번호 비교하기
+     */
+    tmpArray[1] = authNumber === '1234';
+    if (!tmpArray[0]) setAuthNumberErr(errTextArray[4]);
+    else if (!tmpArray[1]) setAuthNumberErr(errTextArray[5]);
     else setAuthNumberErr('');
     setAuthNumberConditionArray(tmpArray);
   }, [authNumber]);

@@ -69,7 +69,7 @@ export default function RegisterScreen(): React.ReactElement {
         const postToken = await registerNotificationTokenAsync(getToken);
         if (postToken.isSuccess) {
           setStep(step + 1);
-        } else console.log(postToken.result.info);
+        } else alert(postToken.result.errorMsg);
       } else alert('다시 시도해주세요.');
     } else alert(serverResult.result.errorMsg);
   }

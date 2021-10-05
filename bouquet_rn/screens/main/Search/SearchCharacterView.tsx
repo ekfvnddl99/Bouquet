@@ -6,6 +6,9 @@ import i18n from 'i18n-js';
 import colors from '../../../styles/colors';
 import * as text from '../../../styles/styled-components/text';
 
+// logics
+import useUser from '../../../logics/hooks/useUser';
+
 // utils
 import { CharacterMini } from '../../../utils/types/UserTypes';
 
@@ -20,11 +23,15 @@ export default function SearchCharacterView({
   searchInput,
   characterArray,
 }: SearchCharacterViewProps): React.ReactElement {
+  const user = useUser();
   return (
     <>
       {characterArray.length > 0 ? (
         <Animated.View
-          style={{ marginTop: searchInput.length > 0 ? 0 : 40, marginLeft: 30 }}
+          style={{
+            marginTop: searchInput.length > 0 || user.name === '' ? 0 : 40,
+            marginLeft: 30,
+          }}
         >
           <text.Subtitle3 textColor={colors.black}>
             {searchInput.length > 0 ? '캐릭터' : i18n.t('인기 부캐')}

@@ -59,7 +59,7 @@ export default function LoginScreen(): React.ReactElement {
    * @description 미리보기
    */
   function goTabs() {
-    navigation.reset({ index: 0, routes: [{ name: 'Tab' }] });
+    navigation.navigate('Tab');
   }
 
   /**
@@ -162,11 +162,14 @@ export default function LoginScreen(): React.ReactElement {
               <text.Caption textColor={colors.black}>
                 {i18n.t('비밀번호를 잊었나요')}{' '}
               </text.Caption>
-              <PrimaryTextButton
+              <TouchableOpacity
                 onPress={() => goFindPassword()}
-                content={i18n.t('비밀번호 찾기')}
-                isBold={false}
-              />
+                activeOpacity={1}
+              >
+                <text.Caption textColor={colors.primary}>
+                  비밀번호 찾기
+                </text.Caption>
+              </TouchableOpacity>
             </area.RowArea>
           </ScrollView>
 

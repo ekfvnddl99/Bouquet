@@ -122,7 +122,7 @@ export default function SettingScreen(): React.ReactElement {
           />
           <SettingItem
             content={i18n.t('문의/건의')}
-            onPress={() => openURL('mailto:ekfvnddl99@naver.com')}
+            onPress={() => openURL('mailto:support@bouquet.ooo')}
           />
         </area.NoHeightArea>
       </View>

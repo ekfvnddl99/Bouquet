@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View } from 'react-native';
-import { useRoute, RouteProp } from '@react-navigation/native';
+import { View, BackHandler } from 'react-native';
+import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 
 // styles
 import * as area from '../../styles/styled-components/area';
@@ -21,6 +21,7 @@ type ParamList = {
 };
 export default function DocumentScreen(): React.ReactElement {
   const [screen, setScreen] = useState('');
+  const navigation = useNavigation();
   const route = useRoute<RouteProp<ParamList, 'Document'>>();
   useEffect(() => {
     if (route.params !== undefined) setScreen(route.params.screen);
@@ -37,6 +38,16 @@ export default function DocumentScreen(): React.ReactElement {
     }
     return null;
   }
+
+  function backAction() {
+    navigation.goBack();
+    return true;
+  }
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', backAction);
+    return () =>
+      BackHandler.removeEventListener('hardwareBackPress', backAction);
+  });
 
   return (
     <area.Container style={{ backgroundColor: colors.white }}>

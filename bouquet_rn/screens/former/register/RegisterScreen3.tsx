@@ -198,17 +198,23 @@ export default function RegisterScreen3({
             <area.RowArea
               style={{ marginBottom: 16, justifyContent: 'center' }}
             >
-              <PrimaryTextButton
+              <TouchableOpacity
                 onPress={() => goWebview('ServiceTerm')}
-                content={i18n.t('서비스 이용 약관')}
-                isBold={false}
-              />
+                activeOpacity={1}
+              >
+                <text.Caption textColor={colors.primary}>
+                  서비스 이용 약관
+                </text.Caption>
+              </TouchableOpacity>
               <text.Caption textColor={colors.gray6}>, </text.Caption>
-              <PrimaryTextButton
+              <TouchableOpacity
                 onPress={() => goWebview('PersonalInfo')}
-                content={i18n.t('개인정보 취급 방침')}
-                isBold={false}
-              />
+                activeOpacity={1}
+              >
+                <text.Caption textColor={colors.primary}>
+                  개인정보 취급 방침
+                </text.Caption>
+              </TouchableOpacity>
               {i18n.locale === 'ko' ? (
                 <text.Caption textColor={colors.gray6}>
                   {i18n.t('에 모두 동의하시나요')}

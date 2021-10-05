@@ -258,9 +258,15 @@ export default function NotificationScreen(): React.ReactElement {
             name={isLogined ? myCharacter.name : ''}
             sub={isLogined ? i18n.t('의') : '당신의'}
           />
-          <text.Subtitle2R textColor={colors.black}>
-            {i18n.t('알림')}
-          </text.Subtitle2R>
+          {isLogined ? (
+            <text.Subtitle2R textColor={colors.black}>
+              {i18n.t('알림')}
+            </text.Subtitle2R>
+          ) : (
+            <text.Subtitle2B textColor={colors.black}>
+              {i18n.t('알림')}
+            </text.Subtitle2B>
+          )}
         </AnimationText>
         {isLogined ? (
           <AnimationImg

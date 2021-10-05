@@ -281,7 +281,7 @@ export default function PostDetailScreen(): React.ReactElement {
             />
           </Animated.ScrollView>
         </TouchableWithoutFeedback>
-        {user.name !== '' ? (
+        {myCharacter.name !== '' ? (
           <CommentTextInput
             textValue={comment}
             onChangeText={setComment}
