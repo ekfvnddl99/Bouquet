@@ -216,7 +216,7 @@ export default function HomeScreen(): React.ReactElement {
           }}
           onEndReachedThreshold={0.8}
           showsVerticalScrollIndicator={false}
-          keyExtractor={(item, idx) => item.id.toString()}
+          keyExtractor={(item) => `${item.id}N${item.num_sunshines}`}
           renderItem={(obj) => (
             <PostItem postInfo={obj.item} routePrefix="HomeTab" />
           )}

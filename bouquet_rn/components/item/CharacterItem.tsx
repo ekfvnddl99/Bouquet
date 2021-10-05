@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 // styles
 import colors from '../../styles/colors';
@@ -29,7 +30,7 @@ export default function CharacterItem({
   characterInfo,
   routePrefix,
 }: CharacterItemProps): React.ReactElement {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<any>>();
   const [, setViewCharacter] = useViewCharacter();
   /**
    * '상세 프로필' 화면으로 이동하는 함수
@@ -37,7 +38,7 @@ export default function CharacterItem({
    */
   async function goProfileDetail() {
     await setViewCharacter(characterInfo.name);
-    navigation.navigate(`${routePrefix}ProfileDetailStack`, {
+    navigation.push(`${routePrefix}ProfileDetailStack`, {
       screen: 'ProfileDetail',
       params: { routePrefix },
     });

@@ -2,6 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 // styles
 import colors from '../../styles/colors';
@@ -40,7 +41,7 @@ export default function GridCharacterItem({
   routePrefix,
   isAccount,
 }: GridCharacterItemProps): React.ReactElement {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<any>>();
   const [myCharacter] = useCharacter();
   const [, setViewCharacter] = useViewCharacter();
   /**
@@ -48,7 +49,7 @@ export default function GridCharacterItem({
    */
   async function goProfileDetail() {
     await setViewCharacter(characterInfo.name);
-    navigation.navigate(`${routePrefix}ProfileDetailStack`, {
+    navigation.push(`${routePrefix}ProfileDetailStack`, {
       screen: 'ProfileDetail',
       params: { routePrefix },
     });

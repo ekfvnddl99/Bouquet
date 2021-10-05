@@ -59,6 +59,28 @@ export default function CommentItem({
 }: CommentItemProps): React.ReactElement {
   const [myCharacter] = useCharacter();
   const [isActive, setIsActive] = useState(commentInfo.liked);
+  const [sunshineNum, setSunshineNum] = useState(commentInfo.num_sunshines);
+
+  async function likeComment() {
+    if (myCharacter.name === '') {
+      alert('캐릭터를 설정해주세요!');
+      return;
+    }
+    const prevSunNum = sunshineNum;
+    const newState = !isActive;
+    setIsActive(newState);
+    if (newState) setSunshineNum(prevSunNum + 1);
+    else setSunshineNum(prevSunNum - 1);
+
+    const serverResult = await likeCommentAsync(commentInfo.id);
+    if (serverResult.isSuccess) {
+      const realState = serverResult.result;
+      setIsActive(realState);
+    } else {
+      setIsActive(!newState);
+      alert(serverResult.result.errorMsg);
+    }
+  }
 
   return (
     <area.NoHeightArea
@@ -156,15 +178,7 @@ export default function CommentItem({
           </TouchableOpacity>
 
           <area.RowArea style={{ marginLeft: 8 }}>
-            <TouchableOpacity
-              onPress={async () => {
-                const newState = !isActive;
-                setIsActive(newState);
-                const serverResult = await likeCommentAsync(commentInfo.id);
-                if (serverResult.isSuccess) setIsActive(serverResult.result);
-                else setIsActive(!newState);
-              }}
-            >
+            <TouchableOpacity onPress={() => likeComment()}>
               {isActive ? (
                 <Icon icon="sunFocusPrimary" size={18} />
               ) : (
@@ -172,7 +186,7 @@ export default function CommentItem({
               )}
             </TouchableOpacity>
             <text.Body3 textColor={colors.primary} style={{ marginLeft: 4 }}>
-              {cal.numName(commentInfo.num_sunshines)}
+              {cal.numName(sunshineNum)}
             </text.Body3>
           </area.RowArea>
         </area.RowArea>

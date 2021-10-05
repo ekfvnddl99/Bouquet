@@ -123,10 +123,10 @@ export default function PostDetailScreen(): React.ReactElement {
       setComment('');
       setSelectComment(noComment);
       setParentComment(undefined);
-      setParentCommentById(-1);
+      setParentCommentById(0);
       // 새로고침을 위하여
-      setViewPost(viewPost.id);
-    } else alert(serverResult.result.errorMsg);
+      await setViewPost(viewPost.id);
+    } else console.log(serverResult.result.info);
   }
 
   async function deleteComment() {

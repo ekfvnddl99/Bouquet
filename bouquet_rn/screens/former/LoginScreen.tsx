@@ -84,7 +84,7 @@ export default function LoginScreen(): React.ReactElement {
     if (serverResult.isSuccess) {
       await SecureStore.setItemAsync('auth', serverResult.result);
       await login();
-      goTabs();
+      navigation.reset({ index: 0, routes: [{ name: 'Tab' }] });
     } else {
       setErr(serverResult.result.errorMsg);
     }

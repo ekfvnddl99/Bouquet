@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 // styles
 import colors from '../../styles/colors';
@@ -42,14 +43,14 @@ export default function PostItem({
   postInfo,
   routePrefix,
 }: PostItemProps): React.ReactElement {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<any>>();
   const [, setViewPost] = useViewPost();
   /**
    * '상세 게시글' 화면으로 이동하는 함수
    */
   async function goPostStack() {
     await setViewPost(postInfo.id);
-    navigation.navigate(`${routePrefix}PostStack`, {
+    navigation.push(`${routePrefix}PostStack`, {
       screen: 'PostDetail',
       params: { routePrefix },
     });

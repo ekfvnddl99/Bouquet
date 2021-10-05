@@ -1,6 +1,7 @@
 import React from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 // styles
 import colors from '../../styles/colors';
@@ -41,7 +42,7 @@ export default function ProfileButton({
   profileImg,
   routePrefix,
 }: ProfileButtonProps): React.ReactElement {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<any>>();
   const [, setViewUser] = useViewUser();
   const [, setViewCharacter] = useViewCharacter();
   /**
@@ -51,13 +52,13 @@ export default function ProfileButton({
   async function goNavigation() {
     if (isAccount) {
       await setViewUser(name);
-      navigation.navigate(`${routePrefix}AccountStack`, {
+      navigation.push(`${routePrefix}AccountStack`, {
         screen: 'Account',
         params: { routePrefix },
       });
     } else {
       await setViewCharacter(name);
-      navigation.navigate(`${routePrefix}ProfileDetailStack`, {
+      navigation.push(`${routePrefix}ProfileDetailStack`, {
         screen: 'ProfileDetail',
         params: { routePrefix },
       });

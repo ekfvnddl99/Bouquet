@@ -36,7 +36,7 @@ export default function SearchPostView({
             style={{ marginTop: 12 }}
             data={postArray}
             keyboardShouldPersistTaps="handled"
-            keyExtractor={(item, idx) => item.id.toString()}
+            keyExtractor={(item) => `${item.id}N${item.num_sunshines}`}
             showsVerticalScrollIndicator={false}
             renderItem={(obj) => (
               <PostItem postInfo={obj.item} routePrefix="SearchTab" />

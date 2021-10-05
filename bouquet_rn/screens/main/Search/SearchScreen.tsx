@@ -272,6 +272,7 @@ export default function SearchScreen(): React.ReactElement {
             [{ nativeEvent: { contentOffset: { y: scroll } } }],
             { useNativeDriver: false },
           )}
+          keyExtractor={(item, idx) => idx.toString()}
           data={viewArray}
           renderItem={(obj) => obj.item}
           refreshing={refreshing}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 // styles
 import colors from '../../styles/colors';
@@ -41,7 +42,7 @@ export default function ProfileDetailItem({
   routePrefix,
   characterInfo,
 }: ProfileDetailItemProps): React.ReactElement {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<any>>();
   const [viewCharacter, setViewCharacter] = useViewCharacter();
   const characterList = useCharacterList();
 
@@ -52,7 +53,7 @@ export default function ProfileDetailItem({
    */
   async function goProfileDetail() {
     await setViewCharacter(realCharacter.name);
-    navigation.navigate(`${routePrefix}ProfileDetailStack`, {
+    navigation.push(`${routePrefix}ProfileDetailStack`, {
       screen: 'ProfileDetail',
       params: { routePrefix },
     });
