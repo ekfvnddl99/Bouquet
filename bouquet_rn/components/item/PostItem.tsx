@@ -31,6 +31,7 @@ import ListTemplate from '../../screens/template/ListTemplate';
 type PostItemProps = {
   postInfo: Post<AllTemplates>;
   routePrefix: string;
+  refreshSunshine?: (newLiked: boolean, newNumSunshines: number) => void;
 };
 /**
  * 피드에 보이는 게시글 컴포넌트
@@ -42,6 +43,7 @@ type PostItemProps = {
 export default function PostItem({
   postInfo,
   routePrefix,
+  refreshSunshine,
 }: PostItemProps): React.ReactElement {
   const navigation = useNavigation<StackNavigationProp<any>>();
   const [, setViewPost] = useViewPost();
@@ -59,7 +61,7 @@ export default function PostItem({
   /**
    * 해당 게시글의 template과 그에 맞는 내용들을 가져오는 함수
    */
-  const getTemplate = useCallback(() => {
+  const getTemplate = () => {
     if (postInfo) {
       switch (postInfo.template.type) {
         case 'None':
@@ -76,9 +78,10 @@ export default function PostItem({
           return null;
       }
     } else return null;
-  }, [postInfo]);
+  };
   // 위의 함수 getTemplate에서 가져온 template 객체
-  const template = useMemo(() => getTemplate(), [getTemplate]);
+  // const template = useMemo(() => getTemplate(), [getTemplate]);
+  const template = getTemplate();
 
   return (
     <button.BigListButton
@@ -112,6 +115,7 @@ export default function PostItem({
           active={postInfo.liked}
           sunNum={postInfo.num_sunshines}
           postId={postInfo.id}
+          refreshSunshine={refreshSunshine}
         />
       </View>
     </button.BigListButton>

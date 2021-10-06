@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FlatList } from 'react-native';
 import i18n from 'i18n-js';
 
@@ -17,12 +17,19 @@ type SearchPostViewProps = {
   searchInput: string;
   postArray: Post<AllTemplates>[];
   onEndReached: () => Promise<void>;
+  refreshSunshine: (
+    newLiked: boolean,
+    newNumSunshines: number,
+    idx: number,
+  ) => void;
 };
 export default function SearchPostView({
   searchInput,
   postArray,
   onEndReached,
+  refreshSunshine,
 }: SearchPostViewProps): React.ReactElement {
+  const [shouldReRender, setShouldReRender] = useState(false);
   return (
     <>
       {postArray.length > 0 ? (
@@ -39,10 +46,21 @@ export default function SearchPostView({
             keyExtractor={(item) => `${item.id}N${item.num_sunshines}`}
             showsVerticalScrollIndicator={false}
             renderItem={(obj) => (
-              <PostItem postInfo={obj.item} routePrefix="SearchTab" />
+              <PostItem
+                postInfo={obj.item}
+                routePrefix="SearchTab"
+                refreshSunshine={(
+                  newLiked: boolean,
+                  newNumSunshines: number,
+                ) => {
+                  refreshSunshine(newLiked, newNumSunshines, obj.index);
+                  setShouldReRender(!shouldReRender);
+                }}
+              />
             )}
             onEndReached={onEndReached}
             onEndReachedThreshold={0.8}
+            extraData={shouldReRender}
           />
         </area.ContainerBlank30>
       ) : null}

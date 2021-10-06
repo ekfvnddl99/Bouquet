@@ -276,6 +276,18 @@ export default function SearchScreen(): React.ReactElement {
           );
         }
       }}
+      refreshSunshine={(
+        newLiked: boolean,
+        newNumSunshines: number,
+        idx: number,
+      ) => {
+        const tmpArray = postArray;
+        if (tmpArray) {
+          tmpArray[idx].liked = newLiked;
+          tmpArray[idx].num_sunshines = newNumSunshines;
+        }
+        setPostArray(tmpArray);
+      }}
     />,
   ];
 

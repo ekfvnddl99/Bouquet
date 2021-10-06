@@ -44,6 +44,8 @@ export default function HomeScreen(): React.ReactElement {
   const [isPageEnd, setIsPageEnd] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
+  const [shouldReRender, setShouldReRender] = useState(false);
+
   // 로그인한 상태인지 아닌지 확인
   useEffect(() => {
     if (myCharacter.id === -1) setIsLogined(false);
@@ -63,6 +65,7 @@ export default function HomeScreen(): React.ReactElement {
         const tmpArray = postArray;
         serverResult.result.forEach((obj) => tmpArray.push(obj));
         setPostArray(tmpArray);
+        // setPostArray(serverResult.result)
       }
     } else {
       alert(serverResult.result.errorMsg);
@@ -216,12 +219,30 @@ export default function HomeScreen(): React.ReactElement {
           }}
           onEndReachedThreshold={0.8}
           showsVerticalScrollIndicator={false}
-          keyExtractor={(item) => `${item.id}N${item.num_sunshines}`}
-          renderItem={(obj) => (
-            <PostItem postInfo={obj.item} routePrefix="HomeTab" />
-          )}
+          keyExtractor={(item) => `${item.id}`}
+          renderItem={(obj) => {
+            if (obj.item.id === 10) {
+              // console.log('=====obj', obj);
+            }
+            return (
+              <PostItem
+                postInfo={obj.item}
+                routePrefix="HomeTab"
+                refreshSunshine={(newLiked, newNumSunshines) => {
+                  const tmpArray = postArray;
+                  if (tmpArray) {
+                    tmpArray[obj.index].liked = newLiked;
+                    tmpArray[obj.index].num_sunshines = newNumSunshines;
+                  }
+                  setPostArray(tmpArray);
+                  setShouldReRender(!shouldReRender);
+                }}
+              />
+            );
+          }}
           refreshing={refreshing}
           onRefresh={onRefresh}
+          extraData={shouldReRender}
         />
       </TouchableWithoutFeedback>
 

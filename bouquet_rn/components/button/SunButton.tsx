@@ -19,6 +19,7 @@ type SunButtonProps = {
   active: boolean;
   postId: number;
   isQna?: boolean;
+  refreshSunshine?: (newLiked: boolean, newNumSunshines: number) => void;
 };
 /**
  * 햇님 버튼
@@ -34,11 +35,10 @@ export default function SunButton({
   active,
   postId,
   isQna,
+  refreshSunshine,
 }: SunButtonProps): React.ReactElement {
   const [myCharacter] = useCharacter();
 
-  const [isActive, setIsActive] = useState(active);
-  const [sunshineNum, setSunshineNum] = useState(sunNum);
   const [backgroundColor, setBackgroundColor] = useState('transparent');
 
   async function likePost() {
@@ -46,37 +46,46 @@ export default function SunButton({
       alert('캐릭터를 설정해주세요!');
       return;
     }
-    const prevSunNum = sunshineNum;
-    const newState = !isActive;
-    setIsActive(newState);
-    if (newState) setSunshineNum(prevSunNum + 1);
-    else setSunshineNum(prevSunNum - 1);
+    const newLiked = !active;
+    let newNumSunshines = sunNum;
+    if (newLiked) newNumSunshines += 1;
+    else newNumSunshines -= 1;
+    if (refreshSunshine) refreshSunshine(newLiked, newNumSunshines);
 
     const functionToExecute = isQna ? likeQnaAsync : likePostAsync;
 
     const serverResult = await functionToExecute(postId);
     if (serverResult.isSuccess) {
       const realState = serverResult.result;
-      setIsActive(realState);
-    } else alert(serverResult.result.errorMsg);
+      if (realState !== newLiked && refreshSunshine) {
+        if (realState) refreshSunshine(realState, newNumSunshines + 2);
+        else refreshSunshine(realState, newNumSunshines - 2);
+      }
+    } else {
+      alert(serverResult.result.errorMsg);
+      if (refreshSunshine) {
+        if (newLiked) refreshSunshine(!newLiked, newNumSunshines - 1);
+        else refreshSunshine(!newLiked, newNumSunshines + 1);
+      }
+    }
   }
 
   return (
     <button.SunButton
       activeOpacity={1}
       onPress={() => likePost()}
-      backgroundColor={isActive ? colors.primary : backgroundColor}
+      backgroundColor={active ? colors.primary : backgroundColor}
     >
-      {isActive ? (
+      {active ? (
         <Svg icon="sunFocus" size={20} />
       ) : (
         <Svg icon="sun" size={20} />
       )}
       <text.Body3
-        textColor={isActive ? colors.white : colors.primary}
+        textColor={active ? colors.white : colors.primary}
         style={{ marginLeft: 4 }}
       >
-        {cal.numName(sunshineNum)}
+        {cal.numName(sunNum)}
       </text.Body3>
     </button.SunButton>
   );

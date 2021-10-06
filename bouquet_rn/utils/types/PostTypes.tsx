@@ -188,7 +188,7 @@ export type AlbumTemplate = {
   title: string;
   img: string;
   artist: string;
-  release_date: string;
+  release_date: number;
   tracks: Array<{
     title: string;
     lyric: string;
@@ -260,7 +260,7 @@ export function noTemplate<T extends AllTemplates>(
     title: '',
     img: '',
     artist: '',
-    release_date: '',
+    release_date: 0,
     tracks: [{ title: '', lyric: '' }],
   };
   if (isTemplate<T>(result)) return result;

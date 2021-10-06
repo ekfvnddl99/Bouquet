@@ -152,10 +152,11 @@ function Album({
                 paddingTop: 0,
                 paddingBottom: 0,
               }}
-              value={postInfo.release_date}
+              value={String(postInfo.release_date)}
               onChangeText={
                 setPost
-                  ? (t: string) => setPost({ ...postInfo, release_date: t })
+                  ? (t: string) =>
+                      setPost({ ...postInfo, release_date: parseInt(t, 10) })
                   : undefined
               }
             />
@@ -353,7 +354,7 @@ export default function AlbumTemplateComp({
     type: 'Album',
     title: '봄의 정원',
     artist: '달오떡',
-    release_date: '20210814',
+    release_date: 20210814,
     description:
       "‘봄을 피우기 위한 기다림' 봄을 기다리며 달오떡이 심혈을 기울인 앨범. 전체적으로 수록곡 모두 부드러운 선율과 싱그러운 멜로디가 마음을 간질이지만, 그 속에 들어 있는 기다림의 애처로움이 역설적으로 드러난다.",
     img: '',

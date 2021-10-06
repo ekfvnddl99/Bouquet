@@ -537,7 +537,8 @@ export async function followCharacterAsync(
     return {
       result: {
         statusCode: 404,
-        errorMsg: '팔로우 상태를 바꾸려는 캐릭터가 지금은 없어요.',
+        errorMsg:
+          '캐릭터를 선택하지 않아서 팔로우를 할 수 없거나, 상대 캐릭터가 지금은 없어요.',
         info: result.msg,
       },
       isSuccess: false,
