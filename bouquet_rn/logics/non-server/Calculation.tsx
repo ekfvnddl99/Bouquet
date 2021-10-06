@@ -11,9 +11,23 @@ export function numName(num: number): string {
 }
 
 export function timeName(time: string): string {
-  const curr: number = Date.parse(time);
-  const now: number = new Date().getTime();
-  const diff = (now - curr) / 1000;
+  // Split timestamp into [ Y, M, D, h, m, s ]
+  const t = time.split(/[-T:]/);
+  // const t = '2010-06-09T13:12:01'.split(/[-T:]/);
+
+  // Apply each element to the Date function
+  const curr = new Date(
+    Date.UTC(
+      Number(t[0]),
+      Number(t[1]) - 1,
+      Number(t[2]),
+      Number(t[3]) - 9,
+      Number(t[4]),
+      Number(t[5]),
+    ),
+  ).getTime();
+  const now = new Date().getTime();
+  const diff = Math.floor((now - curr) / 1000);
 
   if (diff > 0 && diff < 60) return `${Math.floor(diff)}${i18n.t('초')}`;
   if (diff / 60 < 60 && diff / 60 > 0)
