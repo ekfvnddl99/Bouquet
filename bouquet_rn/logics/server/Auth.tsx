@@ -129,7 +129,7 @@ export async function checkAuthNumberAsync(
   };
 
   const tmpResult = await APIs.postAsync<CheckAuthNumberAsyncOutput>(
-    '/auth/email',
+    '/auth/user/email',
     { 'Content-Type': 'application/json' },
     JSON.stringify({ email }),
     false,
@@ -147,11 +147,11 @@ export async function checkAuthNumberAsync(
     return { result: result.verificationCode, isSuccess: true };
   }
 
-  // 202 : Given email is already being used
-  if (APIs.isError<APIs.ServerError>(result, response, 202)) {
+  // 404 : Given email doesn't exist.
+  if (APIs.isError<APIs.ServerError>(result, response, 404)) {
     return {
       result: {
-        statusCode: 202,
+        statusCode: 404,
         errorMsg:
           '인증번호가 잘못 입력되었어요. 다시 시도해 보거나, 문의해 주세요.',
         info: result.msg,
