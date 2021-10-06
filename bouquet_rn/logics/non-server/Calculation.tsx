@@ -11,8 +11,8 @@ export function numName(num: number): string {
 }
 
 export function timeName(time: string): string {
-  const curr = Date.parse(time);
-  const now = new Date().getTime();
+  const curr: number = Date.parse(time);
+  const now: number = new Date().getTime();
   const diff = (now - curr) / 1000;
 
   if (diff > 0 && diff < 60) return `${Math.floor(diff)}${i18n.t('초')}`;
