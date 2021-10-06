@@ -18,10 +18,12 @@ import CharacterItem from '../../../components/item/CharacterItem';
 type SearchCharacterViewProps = {
   searchInput: string;
   characterArray: CharacterMini[];
+  onEndReached: () => Promise<void>;
 };
 export default function SearchCharacterView({
   searchInput,
   characterArray,
+  onEndReached,
 }: SearchCharacterViewProps): React.ReactElement {
   const user = useUser();
   return (
@@ -46,6 +48,8 @@ export default function SearchCharacterView({
             renderItem={(obj) => (
               <CharacterItem characterInfo={obj.item} routePrefix="SearchTab" />
             )}
+            onEndReached={onEndReached}
+            onEndReachedThreshold={0.8}
           />
         </Animated.View>
       ) : null}
