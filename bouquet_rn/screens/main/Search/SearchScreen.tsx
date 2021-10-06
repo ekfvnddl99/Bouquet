@@ -23,6 +23,8 @@ import { StatusBarHeight } from '../../../logics/non-server/StatusbarHeight';
 import {
   getTopCharacterListAsync,
   getTopPostListAsync,
+  searchPostAsync,
+  searchCharacterAsync,
 } from '../../../logics/server/Search';
 import useCharacter from '../../../logics/hooks/useCharacter';
 
@@ -59,6 +61,8 @@ export default function SearchScreen(): React.ReactElement {
   const [refreshing, setRefreshing] = useState(false);
   const [pageNum, setPageNum] = useState(1);
   const [isPageEnd, setIsPageEnd] = useState(false);
+  const [chPageNum, setChPageNum] = useState(1);
+  const [isChPageEnd, setIsChPageEnd] = useState(false);
 
   useEffect(() => {
     const getRecentList = async () => {
@@ -78,11 +82,12 @@ export default function SearchScreen(): React.ReactElement {
     if (searchText.length < 1) {
       await onRefresh();
     } else {
-      /**
-       * TODO [noCharacter] 여기에 api 결과를 넣으면 된다.
-       */
-      setCharacterArray([noCharacter]);
-      setPostArray([noPost]);
+      setPageNum(1);
+      setChPageNum(1);
+      setIsPageEnd(false);
+      setIsChPageEnd(false);
+      await getCharacter(1, true, searchText);
+      await getPost(1, true, searchText);
     }
   }
 
@@ -129,17 +134,48 @@ export default function SearchScreen(): React.ReactElement {
   /**
    * 인기 캐릭터를 가져오는 함수
    */
-  async function getCharacter() {
-    const serverResult = await getTopCharacterListAsync();
+  async function getCharacter(
+    newPageNum?: number,
+    isRefreshing?: boolean,
+    searchText?: string,
+  ) {
+    let serverResult;
+    if (searchText) {
+      serverResult = await searchCharacterAsync(
+        searchText,
+        newPageNum || chPageNum,
+      );
+    } else serverResult = await getTopCharacterListAsync();
+
     if (serverResult.isSuccess) {
-      setCharacterArray(serverResult.result);
-    } else alert(serverResult.result.errorMsg);
+      if (serverResult.result.length === 0) {
+        setIsChPageEnd(true);
+        if (characterArray === undefined || isRefreshing)
+          setCharacterArray(serverResult.result);
+      } else if (characterArray === undefined || isRefreshing)
+        setCharacterArray(serverResult.result);
+      else {
+        const tmpArray = characterArray;
+        serverResult.result.forEach((obj) => tmpArray.push(obj));
+        setCharacterArray(tmpArray);
+      }
+    } else {
+      alert(serverResult.result.errorMsg);
+    }
   }
   /**
    * 인기 게시글을 가져오는 함수
    */
-  async function getPost(newPageNum?: number, isRefreshing?: boolean) {
-    const serverResult = await getTopPostListAsync(newPageNum || pageNum);
+  async function getPost(
+    newPageNum?: number,
+    isRefreshing?: boolean,
+    searchText?: string,
+  ) {
+    let serverResult;
+    if (searchText) {
+      serverResult = await searchPostAsync(searchText, newPageNum || pageNum);
+    } else serverResult = await getTopPostListAsync(newPageNum || pageNum);
+
     if (serverResult.isSuccess) {
       if (serverResult.result.length === 0) {
         setIsPageEnd(true);
@@ -167,9 +203,12 @@ export default function SearchScreen(): React.ReactElement {
 
   const onRefresh = async () => {
     setRefreshing(true);
+    setIsPageEnd(false);
+    setIsChPageEnd(false);
     setPageNum(1);
-    await getCharacter();
-    await getPost(1, true);
+    if (searchInput !== '') setChPageNum(1);
+    await getCharacter(1, true, searchInput !== '' ? searchInput : undefined);
+    await getPost(1, true, searchInput !== '' ? searchInput : undefined);
     setRefreshing(false);
   };
 
@@ -211,6 +250,17 @@ export default function SearchScreen(): React.ReactElement {
     <SearchCharacterView
       searchInput={searchInput}
       characterArray={characterArray}
+      onEndReached={async () => {
+        if (!isChPageEnd && searchInput !== '') {
+          const newPageNum = chPageNum + 1;
+          setChPageNum(newPageNum);
+          await getCharacter(
+            newPageNum,
+            undefined,
+            searchInput !== '' ? searchInput : undefined,
+          );
+        }
+      }}
     />,
     <SearchPostView
       searchInput={searchInput}
@@ -219,7 +269,11 @@ export default function SearchScreen(): React.ReactElement {
         if (!isPageEnd) {
           const newPageNum = pageNum + 1;
           setPageNum(newPageNum);
-          await getPost(newPageNum);
+          await getPost(
+            newPageNum,
+            undefined,
+            searchInput !== '' ? searchInput : undefined,
+          );
         }
       }}
     />,
