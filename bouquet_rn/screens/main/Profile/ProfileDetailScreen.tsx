@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { StyleSheet, Animated } from 'react-native';
-import { useRoute, RouteProp } from '@react-navigation/native';
+import { useRoute, RouteProp, useFocusEffect } from '@react-navigation/native';
 
 // styles
 import colors from '../../../styles/colors';
@@ -56,6 +56,17 @@ export default function ProfileDetailScreen(): React.ReactElement {
       setRoutePrefix(route.params.routePrefix);
     }
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      let characterName;
+      if (route.params !== undefined) {
+        characterName = route.params.characterName;
+        if (characterName) setViewCharacter(characterName);
+        setRoutePrefix(route.params.routePrefix);
+      }
+    }, []),
+  );
 
   const [postPageNum, setPostPageNum] = useState(1);
   const [isPostPageEnd, setIsPostPageEnd] = useState(false);

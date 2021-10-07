@@ -60,7 +60,7 @@ export default function ProfileButton({
       await setViewCharacter(name);
       navigation.push(`${routePrefix}ProfileDetailStack`, {
         screen: 'ProfileDetail',
-        params: { routePrefix },
+        params: { routePrefix, characterName: name },
       });
     }
   }

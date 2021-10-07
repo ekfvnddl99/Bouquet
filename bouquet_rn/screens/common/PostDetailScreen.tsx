@@ -16,7 +16,12 @@ import {
   Platform,
 } from 'react-native';
 import styled from 'styled-components/native';
-import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
+import {
+  useRoute,
+  RouteProp,
+  useNavigation,
+  useFocusEffect,
+} from '@react-navigation/native';
 
 // styles
 import colors from '../../styles/colors';
@@ -38,6 +43,7 @@ import {
   noComment,
   PostComment,
   PostCommentRequest,
+  noPost,
 } from '../../utils/types/PostTypes';
 
 // components
@@ -74,15 +80,27 @@ export default function PostDetailScreen(): React.ReactElement {
 
   const route = useRoute<RouteProp<ParamList, 'PostDetail'>>();
   const [routePrefix, setRoutePrefix] = useState('');
-  useEffect(() => {
-    if (route.params !== undefined) {
-      const { postId } = route.params;
-      if (postId) {
-        setViewPost(postId);
+  // useEffect(() => {
+  //   if (route.params !== undefined) {
+  //     let postId;
+  //     if (route.params.postId) postId = route.params.postId;
+  //     if (postId) {
+  //       setViewPost(postId);
+  //     }
+  //     setRoutePrefix(route.params.routePrefix);
+  //   }
+  // }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (route.params !== undefined) {
+        let postId;
+        if (route.params.postId) postId = route.params.postId;
+        if (postId) setViewPost(postId);
+        setRoutePrefix(route.params.routePrefix);
       }
-      setRoutePrefix(route.params.routePrefix);
-    }
-  }, [route]);
+    }, []),
+  );
 
   // 내가 고른 댓글의 아이디
   const [selectComment, setSelectComment] = useState(noComment);

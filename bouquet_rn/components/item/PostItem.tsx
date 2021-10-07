@@ -55,7 +55,7 @@ export default function PostItem({
     await setViewPost(postInfo.id);
     navigation.push(`${routePrefix}PostStack`, {
       screen: 'PostDetail',
-      params: { routePrefix },
+      params: { routePrefix, postId: postInfo.id },
     });
   }
 

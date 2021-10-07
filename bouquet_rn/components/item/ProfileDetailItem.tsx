@@ -55,7 +55,7 @@ export default function ProfileDetailItem({
     await setViewCharacter(realCharacter.name);
     navigation.push(`${routePrefix}ProfileDetailStack`, {
       screen: 'ProfileDetail',
-      params: { routePrefix },
+      params: { routePrefix, characterName: realCharacter.name },
     });
   }
   /**

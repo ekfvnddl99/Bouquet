@@ -51,7 +51,7 @@ export default function GridCharacterItem({
     await setViewCharacter(characterInfo.name);
     navigation.push(`${routePrefix}ProfileDetailStack`, {
       screen: 'ProfileDetail',
-      params: { routePrefix },
+      params: { routePrefix, characterName: characterInfo.name },
     });
   }
 

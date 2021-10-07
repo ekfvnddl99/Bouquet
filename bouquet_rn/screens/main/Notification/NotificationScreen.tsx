@@ -134,13 +134,13 @@ export default function NotificationScreen(): React.ReactElement {
       await setViewPost(param);
       navigation.push(`NotiTabPostStack`, {
         screen: 'PostDetail',
-        params: { routePrefix: 'NotiTab' },
+        params: { routePrefix: 'NotiTab', postId: param },
       });
     } else {
       await setViewCharacter(param);
       navigation.push(`NotiTabProfileDetailStack`, {
         screen: 'ProfileDetail',
-        params: { routePrefix: 'NotiTab' },
+        params: { routePrefix: 'NotiTab', postId: param },
       });
     }
   };
