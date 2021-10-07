@@ -44,7 +44,7 @@ export default function SearchPostView({
             style={{ marginTop: 12 }}
             data={postArray}
             keyboardShouldPersistTaps="handled"
-            keyExtractor={(item) => `${item.id}N${item.num_sunshines}`}
+            keyExtractor={(item) => `${item.id}`}
             showsVerticalScrollIndicator={false}
             renderItem={renderItem}
             onEndReached={onEndReached}

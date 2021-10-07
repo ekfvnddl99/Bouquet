@@ -4,6 +4,7 @@ import i18n from 'i18n-js';
 import styled from 'styled-components/native';
 import { useRecoilState } from 'recoil';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // assets
@@ -43,7 +44,7 @@ const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 export default function NotificationScreen(): React.ReactElement {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<any>>();
   const [, setViewPost] = useViewPost();
   const [, setViewCharacter] = useViewCharacter();
   const [isNew, setIsNew] = useRecoilState(isNewNotification);
@@ -131,13 +132,13 @@ export default function NotificationScreen(): React.ReactElement {
   const goNavigate = async (param: string | number) => {
     if (typeof param === 'number') {
       await setViewPost(param);
-      navigation.navigate(`NotiTabPostStack`, {
+      navigation.push(`NotiTabPostStack`, {
         screen: 'PostDetail',
         params: { routePrefix: 'NotiTab' },
       });
     } else {
       await setViewCharacter(param);
-      navigation.navigate(`NotiTabProfileDetailStack`, {
+      navigation.push(`NotiTabProfileDetailStack`, {
         screen: 'ProfileDetail',
         params: { routePrefix: 'NotiTab' },
       });

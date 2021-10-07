@@ -38,7 +38,7 @@ export default function SearchRecentView({
             style={{ marginTop: 12, marginRight: 4 }}
             data={recentList}
             keyboardShouldPersistTaps="handled"
-            keyExtractor={(item, idx) => idx.toString()}
+            keyExtractor={(item, idx) => item}
             horizontal
             showsHorizontalScrollIndicator={false}
             renderItem={(obj) => (

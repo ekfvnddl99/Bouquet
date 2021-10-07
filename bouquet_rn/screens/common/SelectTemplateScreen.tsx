@@ -178,6 +178,7 @@ export default function SelectTemplateScreen(): React.ReactElement {
         <FlatList
           data={templates}
           showsVerticalScrollIndicator={false}
+          keyExtractor={(item) => item.name}
           renderItem={(obj) => (
             <SelectTemplateItem
               templateName={obj.item.name}
