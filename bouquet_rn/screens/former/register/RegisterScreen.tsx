@@ -41,6 +41,7 @@ export default function RegisterScreen(): React.ReactElement {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [authNumber, setAuthNumber] = useState('');
+  const [realAuthNumber, setRealAuthNumber] = useState('');
   const [profileImg, setProfileImg] = useState('');
 
   async function registerUser() {
@@ -110,6 +111,8 @@ export default function RegisterScreen(): React.ReactElement {
           email={email}
           setAuthNumber={setAuthNumber}
           authNumber={authNumber}
+          realAuthNumber={realAuthNumber}
+          setRealAuthNumber={setRealAuthNumber}
         />
       );
     if (stepNumber === 2)

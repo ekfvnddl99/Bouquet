@@ -12,7 +12,10 @@ import * as text from '../../../styles/styled-components/text';
 
 // logics
 import { checkEmailAsync } from '../../../logics/server/EmailLogin';
-import { checkAuthNumberAsync } from '../../../logics/server/Auth';
+import {
+  checkExistingEmailAsync,
+  checkNewEmailAsync,
+} from '../../../logics/server/Auth';
 
 // components
 import ConditionButton from '../../../components/button/ConditionButton';
@@ -27,6 +30,8 @@ type RegisterScreenProps = {
   setEmail: (param: string) => void;
   authNumber: string;
   setAuthNumber: (param: string) => void;
+  realAuthNumber: string;
+  setRealAuthNumber: (param: string) => void;
   isFindPassword?: boolean;
 };
 /**
@@ -47,6 +52,8 @@ export default function RegisterScreen1({
   setEmail,
   authNumber,
   setAuthNumber,
+  realAuthNumber,
+  setRealAuthNumber,
   isFindPassword,
 }: RegisterScreenProps): React.ReactElement {
   const navigation = useNavigation<StackNavigationProp<WelcomeStackParam>>();
@@ -92,6 +99,8 @@ export default function RegisterScreen1({
    */
   useEffect(() => {
     async function checkEmail(arr: boolean[]) {
+      // 메일 입력했다가 다 지우면 '메일 입력하라'는 에러 메세지가 떠야하는데 안 떠서 여기 넣음
+      if (!tmpArray[0]) setEmailErr(errTextArray[0]);
       const serverResult = await checkEmailAsync(email);
       if (serverResult.isSuccess) {
         const value = !serverResult.result && email.length > 0;
@@ -125,31 +134,28 @@ export default function RegisterScreen1({
    * 이메일 인증을 확인하는 함수
    */
   async function checkEmailAuthentication() {
-    const serverResult = await checkEmailAsync(email);
-    if (emailConditionArray[0] && emailConditionArray[1]) {
-      if (serverResult.isSuccess) setIsNext(true);
-      else alert(serverResult.result.errorMsg);
-    }
+    let getVerificationCodeAsync;
+    if (isFindPassword) getVerificationCodeAsync = checkExistingEmailAsync;
+    else getVerificationCodeAsync = checkNewEmailAsync;
+    console.log(getVerificationCodeAsync);
+    const serverResult = await getVerificationCodeAsync(email);
+    if (serverResult.isSuccess) {
+      setIsNext(true);
+      setRealAuthNumber(serverResult.result);
+      console.log(serverResult.result);
+    } else alert(serverResult.result.errorMsg);
   }
 
   /**
    * 인증번호를 확인하는 함수
    */
   useEffect(() => {
-    async function checkAuthNumber() {
-      const serverResult = await checkAuthNumberAsync(email);
-      if (serverResult.isSuccess) {
-        const code = serverResult.result;
-        setAuthNumber(code);
-        if (!tmpArray[0]) setAuthNumberErr(errTextArray[4]);
-        else if (authNumber !== code) setAuthNumberErr(errTextArray[5]);
-        else setAuthNumberErr('');
-        setAuthNumberConditionArray(tmpArray);
-      }
-    }
     const tmpArray = [...authNumberConditionArray];
     tmpArray[0] = authNumber.length > 0;
-    checkAuthNumber();
+    tmpArray[1] = authNumber === realAuthNumber || isOK;
+    if (!tmpArray[0]) setAuthNumberErr(errTextArray[4]);
+    else if (!tmpArray[1]) setAuthNumberErr(errTextArray[5]);
+    else setAuthNumberErr('');
     setAuthNumberConditionArray(tmpArray);
   }, [authNumber]);
 
@@ -202,7 +208,7 @@ export default function RegisterScreen1({
         <WarningText content={emailErr} marginTop={8} />
       ) : null}
 
-      {authNumber.length > 0 || isNext ? (
+      {isNext ? (
         <View style={{ marginTop: 16 }}>
           <ConditionTextInput
             height={44}

@@ -35,6 +35,7 @@ export default function FindPasswordScreen(): React.ReactElement {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [authNumber, setAuthNumber] = useState('');
+  const [realAuthNumber, setRealAuthNumber] = useState('');
 
   async function setNewPassword() {
     const serverResult = await editPasswordAsync(email, password);
@@ -79,6 +80,8 @@ export default function FindPasswordScreen(): React.ReactElement {
           email={email}
           setAuthNumber={setAuthNumber}
           authNumber={authNumber}
+          realAuthNumber={realAuthNumber}
+          setRealAuthNumber={setRealAuthNumber}
           isFindPassword
         />
       );
