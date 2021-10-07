@@ -231,7 +231,7 @@ export default function PostDetailScreen(): React.ReactElement {
               showsVerticalScrollIndicator={false}
               data={viewPost?.comments}
               keyboardShouldPersistTaps="always"
-              keyExtractor={(item, idx) => idx.toString()}
+              keyExtractor={(item) => `${item.id}`}
               renderItem={(obj) => (
                 <View>
                   <TouchableOpacity
@@ -255,7 +255,7 @@ export default function PostDetailScreen(): React.ReactElement {
                       style={{ marginLeft: 16 }}
                       data={obj.item.children}
                       keyboardShouldPersistTaps="always"
-                      keyExtractor={(item, idx) => idx.toString()}
+                      keyExtractor={(item) => `${item.id}`}
                       renderItem={(childObj) => (
                         <TouchableOpacity
                           activeOpacity={1}

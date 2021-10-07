@@ -1,6 +1,9 @@
-import React from 'react';
-import { View } from 'react-native';
+import React, { useState } from 'react';
+import { View, TouchableOpacity } from 'react-native';
 import i18n from 'i18n-js';
+
+// assets
+import Svg from '../../assets/Icon';
 
 // styles
 import colors from '../../styles/colors';
@@ -10,10 +13,14 @@ import * as text from '../../styles/styled-components/text';
 // utils
 import { Post, AllTemplates } from '../../utils/types/PostTypes';
 
+//  logics
+import useUser from '../../logics/hooks/useUser';
+
 // components
 import ProfileButton from '../../components/button/ProfileButton';
 import SunButton from '../../components/button/SunButton';
 import LineButton from '../../components/button/LineButton';
+import HalfModal from '../../components/view/HalfModal';
 
 // templates
 import TextTemplate from '../template/TextTemplate';
@@ -37,8 +44,17 @@ export default function PostDetailTopView({
   template,
   onDelete,
 }: PostDetailTopViewProps): React.ReactElement {
+  const user = useUser();
+  const [modalVisible, setModalVisible] = useState(false);
   return (
     <View>
+      <HalfModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        onReport={() => undefined}
+        onDelete={() => onDelete()}
+        isCanDelete={postOwner}
+      />
       <View style={{ paddingTop: 20 }} />
 
       <area.RowArea>
@@ -53,22 +69,13 @@ export default function PostDetailTopView({
             routePrefix={routePrefix}
           />
         </View>
-        {postOwner ? (
-          <area.RowArea style={{ paddingRight: 1 }}>
-            <LineButton
-              onPress={() => {
-                /**/
-              }}
-              content={i18n.t('수정')}
-              borderColor={colors.black}
-            />
-            <View style={{ marginRight: 4 }} />
-            <LineButton
-              onPress={() => onDelete()}
-              content={i18n.t('삭제')}
-              borderColor={colors.warning_red}
-            />
-          </area.RowArea>
+        {user.name !== '' ? (
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={() => setModalVisible(true)}
+          >
+            <Svg icon="moreOption" size={25} />
+          </TouchableOpacity>
         ) : null}
       </area.RowArea>
       <View style={{ marginBottom: 12 }} />

@@ -49,7 +49,7 @@ export default function Carousel({
         decelerationRate="fast"
         horizontal
         pagingEnabled
-        keyExtractor={(item, idx) => idx.toString()}
+        keyExtractor={(item, idx) => `${item.id}`}
         snapToInterval={pageWidth + gap}
         showsHorizontalScrollIndicator={false}
         renderItem={(obj) => (

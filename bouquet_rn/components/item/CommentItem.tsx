@@ -2,24 +2,26 @@ import React, { useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import i18n from 'i18n-js';
 
+// assets
+import Svg from '../../assets/Icon';
+
 // styles
 import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
 
-// assets
-import Icon from '../../assets/Icon';
-
 // logics
 import useCharacter from '../../logics/hooks/useCharacter';
 import * as cal from '../../logics/non-server/Calculation';
 import { likeCommentAsync } from '../../logics/server/Post';
+import useUser from '../../logics/hooks/useUser';
 
 // utils
 import { PostComment } from '../../utils/types/PostTypes';
 
 // components
 import ProfileButton from '../button/ProfileButton';
+import HalfModal from '../view/HalfModal';
 
 type CommentItemProps = {
   commentInfo: PostComment;
@@ -57,9 +59,11 @@ export default function CommentItem({
   openingCommentArray,
   setOpeningCommentArray,
 }: CommentItemProps): React.ReactElement {
+  const user = useUser();
   const [myCharacter] = useCharacter();
   const [isActive, setIsActive] = useState(commentInfo.liked);
   const [sunshineNum, setSunshineNum] = useState(commentInfo.num_sunshines);
+  const [modalVisible, setModalVisible] = useState(false);
 
   async function likeComment() {
     if (myCharacter.name === '') {
@@ -87,14 +91,15 @@ export default function CommentItem({
       marBottom={8}
       paddingH={16}
       paddingV={12}
-      style={{
-        backgroundColor:
-          selectComment.id === commentInfo.id &&
-          myCharacter.name === commentInfo.character_info.name
-            ? colors.alpha10_primary
-            : colors.white,
-      }}
+      style={{ backgroundColor: colors.white }}
     >
+      <HalfModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        onReport={() => undefined}
+        onDelete={onDelete}
+        isCanDelete={myCharacter.name === commentInfo.character_info.name}
+      />
       <area.RowArea style={{ alignItems: 'flex-start', marginBottom: 8 }}>
         <View style={{ flex: 2 }}>
           <text.Body2R textColor={colors.black}>
@@ -126,10 +131,12 @@ export default function CommentItem({
         />
         <View style={{ flex: 1 }} />
         <area.RowArea>
-          {selectComment.id === commentInfo.id &&
-          myCharacter.name === commentInfo.character_info.name ? (
-            <TouchableOpacity onPress={() => onDelete()}>
-              <Icon icon="bin" size={18} />
+          {user.name !== '' ? (
+            <TouchableOpacity
+              activeOpacity={1}
+              onPress={() => setModalVisible(true)}
+            >
+              <Svg icon="moreOption" size={25} />
             </TouchableOpacity>
           ) : null}
 
@@ -148,7 +155,7 @@ export default function CommentItem({
                     )
                   }
                 >
-                  <Icon icon="commentDownArrow" size={18} />
+                  <Svg icon="commentDownArrow" size={18} />
                 </TouchableOpacity>
               ) : (
                 <TouchableOpacity
@@ -159,7 +166,7 @@ export default function CommentItem({
                     ])
                   }
                 >
-                  <Icon icon="commentUpArrow" size={18} />
+                  <Svg icon="commentUpArrow" size={18} />
                 </TouchableOpacity>
               )}
             </View>
@@ -174,15 +181,15 @@ export default function CommentItem({
             ]}
             style={{ marginLeft: 8 }}
           >
-            <Icon icon="comment" size={18} />
+            <Svg icon="comment" size={18} />
           </TouchableOpacity>
 
           <area.RowArea style={{ marginLeft: 8 }}>
             <TouchableOpacity onPress={() => likeComment()}>
               {isActive ? (
-                <Icon icon="sunFocusPrimary" size={18} />
+                <Svg icon="sunFocusPrimary" size={18} />
               ) : (
-                <Icon icon="sun" size={18} />
+                <Svg icon="sun" size={18} />
               )}
             </TouchableOpacity>
             <text.Body3 textColor={colors.primary} style={{ marginLeft: 4 }}>
