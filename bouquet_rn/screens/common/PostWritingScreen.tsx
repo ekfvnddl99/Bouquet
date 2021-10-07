@@ -61,6 +61,7 @@ export default function PostWritingScreen(): React.ReactElement {
     if (route !== undefined) {
       setRoutePrefix(route.params.routePrefix);
     }
+    setSelect(-1);
   }, []);
 
   // 내가 선택한 템플릿 번호(enum 순서대로 0부터 시작)
@@ -103,7 +104,6 @@ export default function PostWritingScreen(): React.ReactElement {
    * @returns
    */
   function backAction() {
-    setSelect(-1);
     navigation.goBack();
     return true;
   }

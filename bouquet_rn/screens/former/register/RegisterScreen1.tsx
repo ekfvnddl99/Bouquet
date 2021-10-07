@@ -145,7 +145,7 @@ export default function RegisterScreen1({
         else if (authNumber !== code) setAuthNumberErr(errTextArray[5]);
         else setAuthNumberErr('');
         setAuthNumberConditionArray(tmpArray);
-      } else alert(serverResult.result.errorMsg);
+      }
     }
     const tmpArray = [...authNumberConditionArray];
     tmpArray[0] = authNumber.length > 0;
