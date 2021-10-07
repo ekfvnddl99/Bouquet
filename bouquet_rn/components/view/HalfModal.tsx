@@ -39,20 +39,18 @@ export default function HalfModal({
         onPress={() => setModalVisible(false)}
       />
       <ModalArea activeOpacity={1} onPress={() => setModalVisible(false)}>
-        <TouchableOpacity onPress={() => onReport()}>
-          <ModalItem>
-            <text.Subtitle2R textColor={colors.black}>신고</text.Subtitle2R>
-          </ModalItem>
-        </TouchableOpacity>
+        <ModalItem
+          onPress={() => [alert('신고했습니다.'), setModalVisible(false)]}
+        >
+          <text.Subtitle2R textColor={colors.black}>신고</text.Subtitle2R>
+        </ModalItem>
         <MiddleLine />
 
         {isCanDelete && onDelete ? (
           <>
-            <TouchableOpacity onPress={() => onDelete()}>
-              <ModalItem>
-                <text.Subtitle2R textColor={colors.black}>삭제</text.Subtitle2R>
-              </ModalItem>
-            </TouchableOpacity>
+            <ModalItem onPress={() => [onDelete(), setModalVisible(false)]}>
+              <text.Subtitle2R textColor={colors.black}>삭제</text.Subtitle2R>
+            </ModalItem>
             <MiddleLine />
           </>
         ) : null}
@@ -71,9 +69,10 @@ const ModalArea = styled.TouchableOpacity`
   border-top-right-radius: 30;
 `;
 
-const ModalItem = styled.View`
+const ModalItem = styled.TouchableOpacity`
+  width: 100%;
   align-items: center;
-  margin-vertical: 15;
+  padding-vertical: 15;
 `;
 
 const MiddleLine = styled.View`
