@@ -17,19 +17,20 @@ type SearchPostViewProps = {
   searchInput: string;
   postArray: Post<AllTemplates>[];
   onEndReached: () => Promise<void>;
-  refreshSunshine: (
-    newLiked: boolean,
-    newNumSunshines: number,
-    idx: number,
-  ) => void;
+  renderItem: ({
+    item,
+    index,
+  }: {
+    item: Post<AllTemplates>;
+    index: number;
+  }) => JSX.Element;
 };
 export default function SearchPostView({
   searchInput,
   postArray,
   onEndReached,
-  refreshSunshine,
+  renderItem,
 }: SearchPostViewProps): React.ReactElement {
-  const [shouldReRender, setShouldReRender] = useState(false);
   return (
     <>
       {postArray.length > 0 ? (
@@ -45,22 +46,9 @@ export default function SearchPostView({
             keyboardShouldPersistTaps="handled"
             keyExtractor={(item) => `${item.id}N${item.num_sunshines}`}
             showsVerticalScrollIndicator={false}
-            renderItem={(obj) => (
-              <PostItem
-                postInfo={obj.item}
-                routePrefix="SearchTab"
-                refreshSunshine={(
-                  newLiked: boolean,
-                  newNumSunshines: number,
-                ) => {
-                  refreshSunshine(newLiked, newNumSunshines, obj.index);
-                  setShouldReRender(!shouldReRender);
-                }}
-              />
-            )}
+            renderItem={renderItem}
             onEndReached={onEndReached}
             onEndReachedThreshold={0.8}
-            extraData={shouldReRender}
           />
         </area.ContainerBlank30>
       ) : null}

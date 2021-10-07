@@ -31,7 +31,8 @@ import ListTemplate from '../../screens/template/ListTemplate';
 type PostItemProps = {
   postInfo: Post<AllTemplates>;
   routePrefix: string;
-  refreshSunshine?: (newLiked: boolean, newNumSunshines: number) => void;
+  /** Press Sun button */
+  onPressSun: (postInfo: Post<AllTemplates>) => void;
 };
 /**
  * 피드에 보이는 게시글 컴포넌트
@@ -43,7 +44,7 @@ type PostItemProps = {
 export default function PostItem({
   postInfo,
   routePrefix,
-  refreshSunshine,
+  onPressSun,
 }: PostItemProps): React.ReactElement {
   const navigation = useNavigation<StackNavigationProp<any>>();
   const [, setViewPost] = useViewPost();
@@ -113,9 +114,8 @@ export default function PostItem({
       <View style={{ alignItems: 'flex-start' }}>
         <SunButton
           active={postInfo.liked}
-          sunNum={postInfo.num_sunshines}
-          postId={postInfo.id}
-          refreshSunshine={refreshSunshine}
+          sunNumber={postInfo.num_sunshines}
+          onPress={() => onPressSun(postInfo)}
         />
       </View>
     </button.BigListButton>

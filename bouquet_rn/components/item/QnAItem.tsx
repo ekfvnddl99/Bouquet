@@ -29,6 +29,7 @@ type QnAItemProps = {
   characterInfo: Character | MyCharacter;
   routePrefix: string;
   refresh?: () => Promise<void>;
+  onPressSun: (postInfo: Qna) => Promise<void>;
 };
 /**
  * 질답 게시물 컴포넌트
@@ -47,6 +48,7 @@ export default function QnAItem({
   characterInfo,
   routePrefix,
   refresh,
+  onPressSun,
 }: QnAItemProps): React.ReactElement {
   const navigation = useNavigation();
 
@@ -103,10 +105,9 @@ export default function QnAItem({
           }}
         >
           <SunButton
-            sunNum={qna.num_sunshines}
+            sunNumber={qna.num_sunshines}
             active={qna.liked}
-            postId={qna.id}
-            isQna
+            onPress={() => onPressSun(qna)}
           />
           <TouchableOpacity onPress={() => deleteQna()}>
             <Icon icon="bin" size={20} />

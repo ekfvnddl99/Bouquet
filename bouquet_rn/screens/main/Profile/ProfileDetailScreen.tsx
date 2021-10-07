@@ -14,7 +14,7 @@ import ProfileDetailTopView from './ProfileDetailTopView';
 // logics
 import { StatusBarHeight } from '../../../logics/non-server/StatusbarHeight';
 import useCharacter from '../../../logics/hooks/useCharacter';
-import { getPostListAsync } from '../../../logics/server/Post';
+import { getPostListAsync, likePostAsync } from '../../../logics/server/Post';
 import useViewCharacter from '../../../logics/hooks/useViewCharacter';
 import { getQnaListAsync } from '../../../logics/server/QnAs';
 
@@ -23,6 +23,8 @@ import { Post, AllTemplates, Qna } from '../../../utils/types/PostTypes';
 
 // components
 import HeaderItem from '../../../components/item/HeaderItem';
+import PostItem from '../../../components/item/PostItem';
+import QnAItem from '../../../components/item/QnAItem';
 
 const HEADER_MAX_HEIGHT = 80;
 const HEADER_MIN_HEIGHT = 60;
@@ -118,11 +120,75 @@ export default function ProfileDetailScreen(): React.ReactElement {
     );
   }
 
+  const renderPost = ({
+    item,
+    index,
+  }: {
+    item: Post<AllTemplates>;
+    index: number;
+  }) => {
+    const onPressItem = async (postInfo: Post<AllTemplates>) => {
+      const serverResult = await likePostAsync(postInfo.id);
+      if (serverResult.isSuccess) {
+        const isLiked = serverResult.result;
+
+        const tmpArray = [...postArray];
+        if (tmpArray?.[index]) {
+          tmpArray[index].liked = isLiked;
+          tmpArray[index].num_sunshines = isLiked
+            ? tmpArray[index].num_sunshines + 1
+            : tmpArray[index].num_sunshines - 1;
+        }
+
+        setPostArray(tmpArray);
+      }
+    };
+
+    return (
+      <PostItem
+        postInfo={item}
+        routePrefix={routePrefix}
+        onPressSun={onPressItem}
+      />
+    );
+  };
+
+  const renderQna = ({ item, index }: { item: Qna; index: number }) => {
+    const onPressItem = async (postInfo: Qna) => {
+      const serverResult = await likePostAsync(postInfo.id);
+      if (serverResult.isSuccess) {
+        const isLiked = serverResult.result;
+
+        const tmpArray = [...qnaArray];
+        if (tmpArray?.[index]) {
+          tmpArray[index].liked = isLiked;
+          tmpArray[index].num_sunshines = isLiked
+            ? tmpArray[index].num_sunshines + 1
+            : tmpArray[index].num_sunshines - 1;
+        }
+
+        setQnaArray(tmpArray);
+      }
+    };
+
+    return (
+      <QnAItem
+        qna={item}
+        characterInfo={viewCharacter}
+        routePrefix={routePrefix}
+        onPressSun={onPressItem}
+        refresh={async () => {
+          setQnaPageNum(1);
+          await getQnas(1, true);
+        }}
+      />
+    );
+  };
+
   const tabIndexArray = [
     {
       returnView: (
         <ProfileFeedView
-          routePrefix={routePrefix}
           postArray={postArray}
           onEndReached={async () => {
             if (!isPostPageEnd) {
@@ -131,13 +197,13 @@ export default function ProfileDetailScreen(): React.ReactElement {
               await getPosts(newPageNum);
             }
           }}
+          renderItem={renderPost}
         />
       ),
     },
     {
       returnView: (
         <ProfileQnAView
-          routePrefix={routePrefix}
           qnaArray={qnaArray}
           onEndReached={async () => {
             if (!isQnaPageEnd) {
@@ -146,11 +212,7 @@ export default function ProfileDetailScreen(): React.ReactElement {
               await getQnas(newPageNum);
             }
           }}
-          characterInfo={viewCharacter}
-          refresh={async () => {
-            setQnaPageNum(1);
-            await getQnas(1, true);
-          }}
+          renderItem={renderQna}
         />
       ),
     },

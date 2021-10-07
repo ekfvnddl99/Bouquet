@@ -31,6 +31,7 @@ type PostDetailTopViewProps = {
   postOwner: boolean;
   template: true | JSX.Element | null;
   onDelete: () => void;
+  onPressSun: () => void;
 };
 /**
  * TODO 댓글 삭제
@@ -43,6 +44,7 @@ export default function PostDetailTopView({
   postOwner,
   template,
   onDelete,
+  onPressSun,
 }: PostDetailTopViewProps): React.ReactElement {
   const user = useUser();
   const [modalVisible, setModalVisible] = useState(false);
@@ -85,9 +87,9 @@ export default function PostDetailTopView({
       ) : null}
       <View style={{ alignItems: 'flex-start' }}>
         <SunButton
-          sunNum={viewPost?.num_sunshines}
+          sunNumber={viewPost?.num_sunshines}
           active={viewPost?.liked}
-          postId={viewPost.id}
+          onPress={() => onPressSun}
         />
       </View>
       <text.Subtitle3 textColor={colors.black} style={{ marginTop: 36 }}>

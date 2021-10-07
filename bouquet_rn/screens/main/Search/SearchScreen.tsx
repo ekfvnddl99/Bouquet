@@ -27,13 +27,15 @@ import {
   searchCharacterAsync,
 } from '../../../logics/server/Search';
 import useCharacter from '../../../logics/hooks/useCharacter';
+import { likePostAsync } from '../../../logics/server/Post';
 
 // components
 import FloatingButton from '../../../components/button/FloatingButton';
+import PostItem from '../../../components/item/PostItem';
 
 // utils
-import { AllTemplates, noPost, Post } from '../../../utils/types/PostTypes';
-import { CharacterMini, noCharacter } from '../../../utils/types/UserTypes';
+import { AllTemplates, Post } from '../../../utils/types/PostTypes';
+import { CharacterMini } from '../../../utils/types/UserTypes';
 
 // view
 import SearchRecentView from './SearchRecentView';
@@ -155,7 +157,7 @@ export default function SearchScreen(): React.ReactElement {
       } else if (characterArray === undefined || isRefreshing)
         setCharacterArray(serverResult.result);
       else {
-        const tmpArray = characterArray;
+        const tmpArray = [...characterArray];
         serverResult.result.forEach((obj) => tmpArray.push(obj));
         setCharacterArray(tmpArray);
       }
@@ -184,7 +186,7 @@ export default function SearchScreen(): React.ReactElement {
       } else if (postArray === undefined || isRefreshing)
         setPostArray(serverResult.result);
       else {
-        const tmpArray = postArray;
+        const tmpArray = [...postArray];
         serverResult.result.forEach((obj) => tmpArray.push(obj));
         setPostArray(tmpArray);
       }
@@ -240,6 +242,39 @@ export default function SearchScreen(): React.ReactElement {
     backgroundColor: ColorInput,
   };
 
+  const renderItem = ({
+    item,
+    index,
+  }: {
+    item: Post<AllTemplates>;
+    index: number;
+  }) => {
+    const onPressItem = async (postInfo: Post<AllTemplates>) => {
+      const serverResult = await likePostAsync(postInfo.id);
+      if (serverResult.isSuccess) {
+        const isLiked = serverResult.result;
+
+        const tmpArray = [...postArray];
+        if (tmpArray?.[index]) {
+          tmpArray[index].liked = isLiked;
+          tmpArray[index].num_sunshines = isLiked
+            ? tmpArray[index].num_sunshines + 1
+            : tmpArray[index].num_sunshines - 1;
+        }
+
+        setPostArray(tmpArray);
+      }
+    };
+
+    return (
+      <PostItem
+        postInfo={item}
+        routePrefix="SearchTab"
+        onPressSun={onPressItem}
+      />
+    );
+  };
+
   const viewArray = [
     <SearchRecentView
       searchInput={searchInput}
@@ -276,18 +311,7 @@ export default function SearchScreen(): React.ReactElement {
           );
         }
       }}
-      refreshSunshine={(
-        newLiked: boolean,
-        newNumSunshines: number,
-        idx: number,
-      ) => {
-        const tmpArray = postArray;
-        if (tmpArray) {
-          tmpArray[idx].liked = newLiked;
-          tmpArray[idx].num_sunshines = newNumSunshines;
-        }
-        setPostArray(tmpArray);
-      }}
+      renderItem={renderItem}
     />,
   ];
 
@@ -338,8 +362,8 @@ export default function SearchScreen(): React.ReactElement {
             [{ nativeEvent: { contentOffset: { y: scroll } } }],
             { useNativeDriver: false },
           )}
-          keyExtractor={(item, idx) => idx.toString()}
           data={viewArray}
+          keyExtractor={(item, index) => index.toString()}
           renderItem={(obj) => obj.item}
           refreshing={refreshing}
           onRefresh={onRefresh}

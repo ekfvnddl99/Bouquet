@@ -15,11 +15,9 @@ import { likeQnaAsync } from '../../logics/server/QnAs';
 import useCharacter from '../../logics/hooks/useCharacter';
 
 type SunButtonProps = {
-  sunNum: number;
+  sunNumber: number;
   active: boolean;
-  postId: number;
-  isQna?: boolean;
-  refreshSunshine?: (newLiked: boolean, newNumSunshines: number) => void;
+  onPress: () => void;
 };
 /**
  * 햇님 버튼
@@ -28,53 +26,17 @@ type SunButtonProps = {
  * @param sunNum 햇살 개수
  * @param setSunNum 햇살의 set 함수
  * @param active 버튼이 눌러졌는지
- * @param postId 해당 포스트의 아이디
  */
 export default function SunButton({
-  sunNum,
+  sunNumber,
   active,
-  postId,
-  isQna,
-  refreshSunshine,
+  onPress,
 }: SunButtonProps): React.ReactElement {
-  const [myCharacter] = useCharacter();
-
-  const [backgroundColor, setBackgroundColor] = useState('transparent');
-
-  async function likePost() {
-    if (myCharacter.name === '') {
-      alert('캐릭터를 설정해주세요!');
-      return;
-    }
-    const newLiked = !active;
-    let newNumSunshines = sunNum;
-    if (newLiked) newNumSunshines += 1;
-    else newNumSunshines -= 1;
-    if (refreshSunshine) refreshSunshine(newLiked, newNumSunshines);
-
-    const functionToExecute = isQna ? likeQnaAsync : likePostAsync;
-
-    const serverResult = await functionToExecute(postId);
-    if (serverResult.isSuccess) {
-      const realState = serverResult.result;
-      if (realState !== newLiked && refreshSunshine) {
-        if (realState) refreshSunshine(realState, newNumSunshines + 2);
-        else refreshSunshine(realState, newNumSunshines - 2);
-      }
-    } else {
-      alert(serverResult.result.errorMsg);
-      if (refreshSunshine) {
-        if (newLiked) refreshSunshine(!newLiked, newNumSunshines - 1);
-        else refreshSunshine(!newLiked, newNumSunshines + 1);
-      }
-    }
-  }
-
   return (
     <button.SunButton
       activeOpacity={1}
-      onPress={() => likePost()}
-      backgroundColor={active ? colors.primary : backgroundColor}
+      onPress={onPress}
+      backgroundColor={active ? colors.primary : 'transparent'}
     >
       {active ? (
         <Svg icon="sunFocus" size={20} />
@@ -85,7 +47,7 @@ export default function SunButton({
         textColor={active ? colors.white : colors.primary}
         style={{ marginLeft: 4 }}
       >
-        {cal.numName(sunNum)}
+        {cal.numName(sunNumber)}
       </text.Body3>
     </button.SunButton>
   );
