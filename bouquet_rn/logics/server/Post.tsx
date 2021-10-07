@@ -53,7 +53,7 @@ export async function uploadPostAsync(
       result: {
         statusCode: 422,
         errorMsg:
-          '입력한 정보가 잘못되었어요. 수정해서 다시 시도해 보거나, 문의해 주세요.',
+          '입력한 정보가 잘못되었어요. 필수 정보를 다 입력했는지 확인해 주세요.',
         info: result.detail,
       },
       isSuccess: false,

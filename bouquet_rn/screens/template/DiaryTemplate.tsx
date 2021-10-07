@@ -42,24 +42,28 @@ function Diary({
 }: DiaryProps) {
   const [contentHeight, setContentHeight] = useState(20);
   const [dateInfo, setDateInfo] = useState({
-    year: Math.floor(diary.date / 10000),
-    month: Math.floor((diary.date % 10000) / 100),
-    day: diary.date % 100,
+    year: diary.date.slice(
+      diary.date.indexOf('Y') + 1,
+      diary.date.indexOf('M'),
+    ),
+    month: diary.date.slice(
+      diary.date.indexOf('M') + 1,
+      diary.date.indexOf('D'),
+    ),
+    day: diary.date.slice(diary.date.indexOf('D') + 1),
   });
 
   const setDate = (year?: string, month?: string, day?: string) => {
     const newDateInfo = {
-      year: year && !Number.isNaN(year) ? parseInt(year, 10) : dateInfo.year,
-      month:
-        month && !Number.isNaN(month) ? parseInt(month, 10) : dateInfo.month,
-      day: day && !Number.isNaN(day) ? parseInt(day, 10) : dateInfo.day,
+      year: year || dateInfo.year,
+      month: month || dateInfo.month,
+      day: day || dateInfo.day,
     };
     setDateInfo(newDateInfo);
     if (setPost)
       setPost({
         ...diary,
-        date:
-          newDateInfo.year * 10000 + newDateInfo.month * 100 + newDateInfo.day,
+        date: `Y${newDateInfo.year}M${newDateInfo.month}D${newDateInfo.day}`,
       });
   };
 
@@ -258,13 +262,6 @@ function Diary({
               {diary.content}
             </text.DiaryBody2R>
           )}
-          <LineBackground>
-            {[...Array(Math.round(contentHeight / LINE_HEIGHT))].map(
-              (n, idx) => (
-                <Line />
-              ),
-            )}
-          </LineBackground>
         </ContentTextWrap>
       </ContentWrap>
     </area.NoHeightArea>
@@ -353,7 +350,7 @@ export default function DiaryTemplateComp({
   const diaryDataEx: DiaryTemplate = {
     type: 'Diary',
     title: '떡볶이를 실컷 먹은 날',
-    date: 20210801,
+    date: 'Y2021M08D01',
     weather: '맑음☀️',
     img: 'https://bouquet-storage.s3.ap-northeast-2.amazonaws.com/e11de704-2746-11ec-8d2f-0242ac110002.jpg',
     content:

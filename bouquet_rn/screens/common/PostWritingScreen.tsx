@@ -124,6 +124,7 @@ export default function PostWritingScreen(): React.ReactElement {
    * 게시글 업로드하는 함수
    */
   async function goUpload() {
+    const pastSelect = select;
     setSelect(5);
 
     const realImages = await Promise.all(
@@ -147,7 +148,7 @@ export default function PostWritingScreen(): React.ReactElement {
       navigation.reset({ index: 0, routes: [{ name: 'PostStack' }] });
     } else {
       alert(serverResult.result.errorMsg);
-      setSelect(-1);
+      setSelect(pastSelect);
     }
   }
 
