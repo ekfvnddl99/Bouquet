@@ -175,7 +175,7 @@ export type DiaryTemplate = {
   title: string;
   weather: string;
   img: string;
-  date: number;
+  date: string;
   content: string;
 };
 
@@ -188,7 +188,7 @@ export type AlbumTemplate = {
   title: string;
   img: string;
   artist: string;
-  release_date: number;
+  release_date: string;
   tracks: Array<{
     title: string;
     lyric: string;
@@ -248,7 +248,7 @@ export function noTemplate<T extends AllTemplates>(
     title: '',
     weather: '',
     img: '',
-    date: 0,
+    date: '',
     content: '',
   };
   if (isTemplate<T>(result)) return result;
@@ -260,7 +260,7 @@ export function noTemplate<T extends AllTemplates>(
     title: '',
     img: '',
     artist: '',
-    release_date: 0,
+    release_date: '',
     tracks: [{ title: '', lyric: '' }],
   };
   if (isTemplate<T>(result)) return result;
