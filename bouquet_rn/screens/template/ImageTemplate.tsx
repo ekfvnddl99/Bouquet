@@ -133,7 +133,13 @@ export default function ImageTemplateComp({
     case 'detail':
       return <Img img={post.img} isMini={false} isEditMode={false} />;
     case 'ex':
-      return <Img img="" isMini isEditMode={false} />;
+      return (
+        <Img
+          img="https://bouquet-storage.s3.ap-northeast-2.amazonaws.com/e11de704-2746-11ec-8d2f-0242ac110002.jpg"
+          isMini
+          isEditMode={false}
+        />
+      );
     default:
       return <Img img={post.img} isMini isEditMode={false} />;
   }

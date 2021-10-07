@@ -411,21 +411,21 @@ export default function ListTemplateComp({
         title: '아침 : 궁중떡볶이',
         content:
           '아침에는 대접받는 기분으로 궁중떡볶이를 먹는다. 다이어트는 기분이 중요하다. 이 생각에 반대하고 싶다면 우선 나보다 약한 자가 아니어야 할 거다.',
-        img: '',
+        img: 'https://bouquet-storage.s3.ap-northeast-2.amazonaws.com/e11de704-2746-11ec-8d2f-0242ac110002.jpg',
       },
       {
         title: '점심 : 분식떡볶이',
         content: '역시 떡볶이는 분식이 근본이다. 점심에는 근본을 영접한다.',
-        img: '',
+        img: 'https://bouquet-storage.s3.ap-northeast-2.amazonaws.com/e11de704-2746-11ec-8d2f-0242ac110002.jpg',
       },
       {
         title: '저녁 : 국물떡볶이',
         content:
           '저녁에는 국물떡볶이에 밥을 비벼먹는다. 다이어트는 조금 먹어야 하는 게 아니다.',
-        img: '',
+        img: 'https://bouquet-storage.s3.ap-northeast-2.amazonaws.com/e11de704-2746-11ec-8d2f-0242ac110002.jpg',
       },
     ],
-    img: '',
+    img: 'https://bouquet-storage.s3.ap-northeast-2.amazonaws.com/e11de704-2746-11ec-8d2f-0242ac110002.jpg',
   };
   switch (mode) {
     case 'ex':

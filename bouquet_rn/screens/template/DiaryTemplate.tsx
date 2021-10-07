@@ -355,7 +355,7 @@ export default function DiaryTemplateComp({
     title: '떡볶이를 실컷 먹은 날',
     date: 20210801,
     weather: '맑음☀️',
-    img: '',
+    img: 'https://bouquet-storage.s3.ap-northeast-2.amazonaws.com/e11de704-2746-11ec-8d2f-0242ac110002.jpg',
     content:
       '오늘은 떡볶이를 실컷 먹었다. 너무 맛있었다. 다음에 또 먹어야지. 맛있는 떡볶이 집을 찾아야겠다. 하지만 이 주변엔 그런 게 없는걸... 너무 슬프다.',
   };

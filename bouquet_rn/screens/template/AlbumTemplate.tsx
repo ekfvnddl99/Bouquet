@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
   View,
   TextInput,
@@ -15,6 +15,9 @@ import colors from '../../styles/colors';
 import * as text from '../../styles/styled-components/text';
 import * as area from '../../styles/styled-components/area';
 import * as elses from '../../styles/styled-components/elses';
+
+// logics
+import useCharacter from '../../logics/hooks/useCharacter';
 
 // components
 import LineButton from '../../components/button/LineButton';
@@ -51,11 +54,28 @@ function Album({
     [isMini, postInfo],
   );
 
+  const [myCharacter] = useCharacter();
+
   const navigation = useNavigation();
-  async function goNavigation(lyric: string) {
+  async function goNavigation(
+    song: { title: string; lyric: string },
+    artist: string,
+    idx?: number,
+  ) {
     navigation.navigate('WritingStack', {
       screen: 'AlbumLyric',
-      params: { lyric, setPost },
+      params: {
+        song,
+        artist,
+        setPost:
+          idx !== undefined
+            ? (t: string) => {
+                const tmpPost = { ...postInfo };
+                tmpPost.tracks[idx].lyric = t;
+                if (setPost) setPost(tmpPost);
+              }
+            : undefined,
+      },
     });
   }
 
@@ -93,6 +113,11 @@ function Album({
       }
     }
   };
+
+  useEffect(() => {
+    if (isEditMode && setPost)
+      setPost({ ...postInfo, artist: myCharacter.name });
+  }, []);
 
   return (
     <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
@@ -244,7 +269,9 @@ function Album({
                       height: 17,
                     }}
                   >
-                    <TouchableOpacity onPress={() => goNavigation(song.lyric)}>
+                    <TouchableOpacity
+                      onPress={() => goNavigation(song, postInfo.artist, idx)}
+                    >
                       <Icon icon="write" size={15} />
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -298,7 +325,13 @@ function Album({
                 >
                   {song.title}
                 </text.Body2R>
-                {isMini ? null : <Icon icon="play" size={15} />}
+                {isMini ? null : (
+                  <TouchableOpacity
+                    onPress={() => goNavigation(song, postInfo.artist)}
+                  >
+                    <Icon icon="play" size={15} />
+                  </TouchableOpacity>
+                )}
               </SongWrap>
             ))}
           </SongsWrap>
@@ -368,7 +401,7 @@ export default function AlbumTemplateComp({
     release_date: 20210814,
     description:
       "‘봄을 피우기 위한 기다림' 봄을 기다리며 달오떡이 심혈을 기울인 앨범. 전체적으로 수록곡 모두 부드러운 선율과 싱그러운 멜로디가 마음을 간질이지만, 그 속에 들어 있는 기다림의 애처로움이 역설적으로 드러난다.",
-    img: '',
+    img: 'https://bouquet-storage.s3.ap-northeast-2.amazonaws.com/e11de704-2746-11ec-8d2f-0242ac110002.jpg',
     tracks: [
       {
         title: '안녕, 나의 봄',

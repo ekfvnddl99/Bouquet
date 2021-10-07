@@ -145,7 +145,10 @@ export default function PostWritingScreen(): React.ReactElement {
       setViewPost(serverResult.result);
       setSelect(-1);
       navigation.reset({ index: 0, routes: [{ name: 'PostStack' }] });
-    } else alert(serverResult.result.errorMsg);
+    } else {
+      alert(serverResult.result.errorMsg);
+      setSelect(-1);
+    }
   }
 
   /**
@@ -253,7 +256,7 @@ export default function PostWritingScreen(): React.ReactElement {
                   routePrefix={routePrefix}
                 />
               </View>
-              {select !== -1 ? (
+              {select !== -1 && select !== 5 ? (
                 <LineButton
                   onPress={() => goSelect()}
                   content={I18n.t('템플릿 변경')}
