@@ -4,6 +4,7 @@ import {
   Animated,
   TouchableWithoutFeedback,
   Keyboard,
+  ListRenderItem,
 } from 'react-native';
 import i18n from 'i18n-js';
 import styled from 'styled-components/native';
@@ -28,6 +29,7 @@ import NotLoginPrimaryButton from '../../../components/button/NotLoginPrimaryBut
 import FloatingButton from '../../../components/button/FloatingButton';
 import QnATextInput from '../../../components/input/QnATextInput';
 import ProfileButton from '../../../components/button/ProfileButton';
+import { likePostAsync } from '../../../logics/server/Post';
 
 const HEADER_MAX_HEIGHT = 94;
 const HEADER_MIN_HEIGHT = 60;
@@ -112,12 +114,14 @@ export default function HomeScreen(): React.ReactElement {
     outputRange: [0, -14 - 16],
     extrapolate: 'clamp',
   });
+
   const OpacityTitle = scroll.interpolate({
     inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
     // 투명도 속도 맞춰서 설정함!
     outputRange: [1, 0, -3],
     extrapolate: 'clamp',
   });
+
   const OpacityHeader = scroll.interpolate({
     inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
     outputRange: [0, 0, 1],
@@ -138,6 +142,39 @@ export default function HomeScreen(): React.ReactElement {
     () => <MemoizedQnaElement logined={isLogined} />,
     [isLogined],
   );
+
+  const renderItem = ({
+    item,
+    index,
+  }: {
+    item: Post<AllTemplates>;
+    index: number;
+  }) => {
+    const onPressItem = async (postInfo: Post<AllTemplates>) => {
+      const serverResult = await likePostAsync(postInfo.id);
+      if (serverResult.isSuccess) {
+        const isLiked = serverResult.result;
+
+        const tmpArray = [...postArray];
+        if (tmpArray?.[index]) {
+          tmpArray[index].liked = isLiked;
+          tmpArray[index].num_sunshines = isLiked
+            ? tmpArray[index].num_sunshines + 1
+            : tmpArray[index].num_sunshines - 1;
+        }
+
+        setPostArray(tmpArray);
+      }
+    };
+
+    return (
+      <PostItem
+        postInfo={item}
+        routePrefix="HomeTab"
+        onPressSun={onPressItem}
+      />
+    );
+  };
 
   return (
     <area.Container>
@@ -220,26 +257,7 @@ export default function HomeScreen(): React.ReactElement {
           onEndReachedThreshold={0.8}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item) => `${item.id}`}
-          renderItem={(obj) => {
-            if (obj.item.id === 10) {
-              // console.log('=====obj', obj);
-            }
-            return (
-              <PostItem
-                postInfo={obj.item}
-                routePrefix="HomeTab"
-                refreshSunshine={(newLiked, newNumSunshines) => {
-                  const tmpArray = postArray;
-                  if (tmpArray) {
-                    tmpArray[obj.index].liked = newLiked;
-                    tmpArray[obj.index].num_sunshines = newNumSunshines;
-                  }
-                  setPostArray(tmpArray);
-                  setShouldReRender(!shouldReRender);
-                }}
-              />
-            );
-          }}
+          renderItem={renderItem}
           refreshing={refreshing}
           onRefresh={onRefresh}
           extraData={shouldReRender}

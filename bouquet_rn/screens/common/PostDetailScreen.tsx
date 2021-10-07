@@ -15,23 +15,20 @@ import {
   Keyboard,
   Platform,
 } from 'react-native';
-import i18n from 'i18n-js';
 import styled from 'styled-components/native';
-import { useRecoilValue } from 'recoil';
 import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 
 // styles
 import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
-import * as text from '../../styles/styled-components/text';
 
 // logics
 import { StatusBarHeight } from '../../logics/non-server/StatusbarHeight';
-import { userState } from '../../logics/atoms';
 import {
   deleteCommentAsync,
   uploadCommentAsync,
   deletePostAsync,
+  likePostAsync,
 } from '../../logics/server/Post';
 import useViewPost from '../../logics/hooks/useViewPost';
 import useCharacter from '../../logics/hooks/useCharacter';
@@ -44,16 +41,12 @@ import {
 } from '../../utils/types/PostTypes';
 
 // components
-import ProfileButton from '../../components/button/ProfileButton';
 import HeaderItem from '../../components/item/HeaderItem';
-import SunButton from '../../components/button/SunButton';
 import CommentItem from '../../components/item/CommentItem';
 import CommentTextInput from '../../components/input/CommentTextInput';
-import LineButton from '../../components/button/LineButton';
 import PostDetailTopView from './PostDetailTopView';
 
 // templates
-import TextTemplate from '../template/TextTemplate';
 import ImageTemplate from '../template/ImageTemplate';
 import AlbumTemplate from '../template/AlbumTemplate';
 import DiaryTemplate from '../template/DiaryTemplate';
@@ -75,7 +68,6 @@ type ParamList = {
  * @returns
  */
 export default function PostDetailScreen(): React.ReactElement {
-  const user = useRecoilValue(userState);
   const [myCharacter] = useCharacter();
   const [viewPost, setViewPost] = useViewPost();
   const navigation = useNavigation();
@@ -189,6 +181,13 @@ export default function PostDetailScreen(): React.ReactElement {
     }
   }
 
+  async function onPressSun() {
+    const serverResult = await likePostAsync(viewPost.id);
+    if (serverResult.isSuccess) {
+      setViewPost(viewPost.id);
+    } else alert(serverResult.result.errorMsg);
+  }
+
   return (
     <area.Container>
       <AnimationHeader
@@ -226,6 +225,7 @@ export default function PostDetailScreen(): React.ReactElement {
                   postOwner={postOwner}
                   template={template}
                   onDelete={() => deletePost()}
+                  onPressSun={() => onPressSun}
                 />
               }
               showsVerticalScrollIndicator={false}
