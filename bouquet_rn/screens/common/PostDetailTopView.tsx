@@ -15,6 +15,7 @@ import { Post, AllTemplates } from '../../utils/types/PostTypes';
 
 //  logics
 import useUser from '../../logics/hooks/useUser';
+import { reportPostAsync } from '../../logics/server/Post';
 
 // components
 import ProfileButton from '../../components/button/ProfileButton';
@@ -48,12 +49,20 @@ export default function PostDetailTopView({
 }: PostDetailTopViewProps): React.ReactElement {
   const user = useUser();
   const [modalVisible, setModalVisible] = useState(false);
+
+  async function reportPost() {
+    const serverResult = await reportPostAsync(viewPost.id);
+    if (serverResult.isSuccess) {
+      alert('신고 완료됐습니다!');
+    } else alert(serverResult.result.errorMsg);
+  }
+
   return (
     <View>
       <HalfModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        onReport={() => undefined}
+        onReport={() => reportPost()}
         onDelete={() => onDelete()}
         isCanDelete={postOwner}
       />

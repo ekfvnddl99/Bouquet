@@ -13,7 +13,7 @@ import * as text from '../../styles/styled-components/text';
 // logics
 import useCharacter from '../../logics/hooks/useCharacter';
 import * as cal from '../../logics/non-server/Calculation';
-import { likeCommentAsync } from '../../logics/server/Post';
+import { likeCommentAsync, reportCommentAsync } from '../../logics/server/Post';
 import useUser from '../../logics/hooks/useUser';
 
 // utils
@@ -86,6 +86,13 @@ export default function CommentItem({
     }
   }
 
+  async function reportComment() {
+    const serverResult = await reportCommentAsync(commentInfo.id);
+    if (serverResult.isSuccess) {
+      alert('신고 완료됐습니다!');
+    } else alert(serverResult.result.errorMsg);
+  }
+
   return (
     <area.NoHeightArea
       marBottom={8}
@@ -96,8 +103,8 @@ export default function CommentItem({
       <HalfModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        onReport={() => undefined}
-        onDelete={onDelete}
+        onReport={() => reportComment()}
+        onDelete={() => onDelete()}
         isCanDelete={myCharacter.name === commentInfo.character_info.name}
       />
       <area.RowArea style={{ alignItems: 'flex-start', marginBottom: 8 }}>

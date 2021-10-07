@@ -487,3 +487,131 @@ export async function likeCommentAsync(
     isSuccess: false,
   };
 }
+
+/**
+ * 게시글을 신고하는 함수
+ * @param postId 신고하려는 게시글 대상
+ * @returns
+ */
+export async function reportPostAsync(postId: number): APIs.ServerResult<null> {
+  // 서버 응답 타입 정의
+  type ReportPostAsyncOutput = null;
+
+  const tmpResult = await APIs.postAsync<ReportPostAsyncOutput>(
+    `/post/report/${postId}`,
+    { 'Content-Type': 'application/json' },
+    '',
+    true,
+  );
+
+  // 사전 처리된 에러는 바로 반환
+  if (APIs.isServerErrorOutput(tmpResult)) {
+    return { result: tmpResult, isSuccess: false };
+  }
+
+  const [result, response] = tmpResult;
+
+  // 요청 성공 : 좋아요 여부 반환
+  if (APIs.isSuccess<ReportPostAsyncOutput>(result, response)) {
+    return { result: null, isSuccess: true };
+  }
+
+  // 404 : No such comment
+  if (APIs.isError<APIs.ServerError>(result, response, 404)) {
+    return {
+      result: {
+        statusCode: 404,
+        errorMsg: '해당 게시글이 지금은 없어요.',
+        info: result.msg,
+      },
+      isSuccess: false,
+    };
+  }
+
+  // 422 : Validation Error
+  if (APIs.isError<APIs.ServerError422>(result, response, 422)) {
+    return {
+      result: {
+        statusCode: 422,
+        errorMsg:
+          '댓글 정보가 잘못되었어요. 다시 시도해 보거나, 문의해 주세요.',
+        info: result.detail,
+      },
+      isSuccess: false,
+    };
+  }
+  // 나머지 에러
+  return {
+    result: {
+      statusCode: response.status,
+      errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
+      info: response,
+    },
+    isSuccess: false,
+  };
+}
+
+/**
+ * 댓글을 신고하는 함수
+ * @param commentId 신고하려는 댓글 대상
+ * @returns
+ */
+export async function reportCommentAsync(
+  commentId: number,
+): APIs.ServerResult<null> {
+  // 서버 응답 타입 정의
+  type ReportCommentAsyncOutput = null;
+
+  const tmpResult = await APIs.postAsync<ReportCommentAsyncOutput>(
+    `/post/report/comment/${commentId}`,
+    { 'Content-Type': 'application/json' },
+    '',
+    true,
+  );
+
+  // 사전 처리된 에러는 바로 반환
+  if (APIs.isServerErrorOutput(tmpResult)) {
+    return { result: tmpResult, isSuccess: false };
+  }
+
+  const [result, response] = tmpResult;
+
+  // 요청 성공 : 좋아요 여부 반환
+  if (APIs.isSuccess<ReportCommentAsyncOutput>(result, response)) {
+    return { result: null, isSuccess: true };
+  }
+
+  // 404 : No such comment
+  if (APIs.isError<APIs.ServerError>(result, response, 404)) {
+    return {
+      result: {
+        statusCode: 404,
+        errorMsg: '해당 댓글이 지금은 없어요.',
+        info: result.msg,
+      },
+      isSuccess: false,
+    };
+  }
+
+  // 422 : Validation Error
+  if (APIs.isError<APIs.ServerError422>(result, response, 422)) {
+    return {
+      result: {
+        statusCode: 422,
+        errorMsg:
+          '댓글 정보가 잘못되었어요. 다시 시도해 보거나, 문의해 주세요.',
+        info: result.detail,
+      },
+      isSuccess: false,
+    };
+  }
+  // 나머지 에러
+  return {
+    result: {
+      statusCode: response.status,
+      errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
+      info: response,
+    },
+    isSuccess: false,
+  };
+}
