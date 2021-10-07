@@ -122,6 +122,7 @@ export default function RegisterScreen1({
     if (isOK) {
       setIsNext(false);
       setAuthNumber('');
+      setRealAuthNumber('');
     }
     tmpArray[0] = email.length > 0;
     tmpArray[1] = emailRegex.test(email);
@@ -152,7 +153,7 @@ export default function RegisterScreen1({
   useEffect(() => {
     const tmpArray = [...authNumberConditionArray];
     tmpArray[0] = authNumber.length > 0;
-    tmpArray[1] = authNumber === realAuthNumber || isOK;
+    tmpArray[1] = authNumber === realAuthNumber;
     if (!tmpArray[0]) setAuthNumberErr(errTextArray[4]);
     else if (!tmpArray[1]) setAuthNumberErr(errTextArray[5]);
     else setAuthNumberErr('');

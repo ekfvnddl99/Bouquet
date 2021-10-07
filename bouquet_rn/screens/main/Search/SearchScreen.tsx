@@ -69,9 +69,8 @@ export default function SearchScreen(): React.ReactElement {
   useEffect(() => {
     const getRecentList = async () => {
       const jsonValue = await AsyncStorage.getItem('recentList');
-      const result = jsonValue != null ? JSON.parse(jsonValue) : null;
+      const result = jsonValue !== null ? JSON.parse(jsonValue) : [];
       setRecentList(result);
-      return result;
     };
     getRecentList();
   }, []);
@@ -100,8 +99,14 @@ export default function SearchScreen(): React.ReactElement {
     let tmpArray = value;
     if (tmpArray.length > 10) tmpArray = tmpArray.slice(0, 10);
     setRecentList(tmpArray);
-    const jsonValue = JSON.stringify(value);
+    const jsonValue = JSON.stringify(tmpArray);
     await AsyncStorage.setItem('recentList', jsonValue);
+  };
+  const getRecentList = async () => {
+    const jsonValue = await AsyncStorage.getItem('recentList');
+    const result = jsonValue !== null ? JSON.parse(jsonValue) : [];
+    setRecentList(result);
+    return result;
   };
   /**
    * debounce
@@ -111,13 +116,11 @@ export default function SearchScreen(): React.ReactElement {
     [],
   );
   const debounceRecentSearchHandler = useCallback(
-    debounce((input) => {
+    debounce(async (input) => {
       if (input.length !== 0) {
-        let tmpArray = recentList;
+        let tmpArray = await getRecentList();
         tmpArray.unshift(input);
-        tmpArray = tmpArray.filter(
-          (item, index) => tmpArray.indexOf(item) === index,
-        );
+        tmpArray = [...new Set(tmpArray)];
         storeRecentList(tmpArray);
       }
     }, 2000),

@@ -56,7 +56,7 @@ export type Character = {
   id?: number;
   name: string;
   profile_img: string;
-  birth: number;
+  birth: string;
   job: string;
   nationality: string;
   intro: string;
@@ -78,7 +78,7 @@ export type Character = {
 export const noCharacter: Character = {
   name: '',
   profile_img: '',
-  birth: 0,
+  birth: '',
   job: '',
   nationality: '',
   intro: '',
@@ -110,7 +110,7 @@ export type MyCharacter = {
   id: number;
   name: string;
   profile_img: string;
-  birth: number;
+  birth: string;
   job: string;
   nationality: string;
   intro: string;
@@ -126,7 +126,7 @@ export const noMyCharacter: MyCharacter = {
   id: -1,
   name: '',
   profile_img: '',
-  birth: 0,
+  birth: '',
   job: '',
   nationality: '',
   intro: '',
@@ -142,7 +142,7 @@ export type OptionalCharacter = {
   id: number;
   name?: string;
   profile_img?: string;
-  birth?: number;
+  birth?: string;
   job?: string;
   nationality?: string;
   intro?: string;

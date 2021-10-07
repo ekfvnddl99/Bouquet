@@ -94,7 +94,7 @@ export default function CharacterGenerationScreen2({
    * 생일 조건 체크 함수
    */
   useEffect(() => {
-    setBirthCondition(newCharacter.birth.toString.length > 0);
+    setBirthCondition(newCharacter.birth.length > 0);
   }, [newCharacter.birth]);
 
   /**
@@ -158,15 +158,11 @@ export default function CharacterGenerationScreen2({
             height={44}
             placeholder={i18n.t('생년월일 (YYYYMMDD)')}
             onChangeText={(textInput: string) => {
-              setNewCharacter({ ...newCharacter, birth: Number(textInput) });
+              setNewCharacter({ ...newCharacter, birth: textInput });
             }}
             keyboardType="numeric"
             isWarning={!birthCondition}
-            textValue={
-              newCharacter.birth === 0
-                ? undefined
-                : newCharacter.birth.toString()
-            }
+            textValue={newCharacter.birth}
             warnText={errTextArray[0]}
             maxLength={8}
           />

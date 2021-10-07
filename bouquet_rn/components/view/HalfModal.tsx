@@ -39,16 +39,14 @@ export default function HalfModal({
         onPress={() => setModalVisible(false)}
       />
       <ModalArea activeOpacity={1} onPress={() => setModalVisible(false)}>
-        <ModalItem
-          onPress={() => [alert('신고했습니다.'), setModalVisible(false)]}
-        >
+        <ModalItem onPress={() => onReport()}>
           <text.Subtitle2R textColor={colors.black}>신고</text.Subtitle2R>
         </ModalItem>
         <MiddleLine />
 
         {isCanDelete && onDelete ? (
           <>
-            <ModalItem onPress={() => [onDelete(), setModalVisible(false)]}>
+            <ModalItem onPress={() => onDelete()}>
               <text.Subtitle2R textColor={colors.black}>삭제</text.Subtitle2R>
             </ModalItem>
             <MiddleLine />

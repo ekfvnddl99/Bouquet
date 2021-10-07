@@ -65,8 +65,8 @@ export default function CharacterGenerationScreen(): React.ReactElement {
 
   // 백핸들러 처리
   const backAction = () => {
-    if (step !== 1) setStep(step - 1);
-    else navigation.goBack();
+    if (step !== 1 && step !== 4) setStep(step - 1);
+    else if (step === 1) navigation.goBack();
     return true;
   };
   useEffect(() => {
@@ -93,7 +93,7 @@ export default function CharacterGenerationScreen(): React.ReactElement {
       if (serverResult.isSuccess) {
         newCharacter.profile_img = serverResult.result;
       } else {
-        alert(serverResult.result.errorMsg);
+        alert('aaaaaaaaa');
         // 못 가져왔으면 기본 이미지 대체
         newCharacter.profile_img =
           'https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg';
@@ -118,7 +118,7 @@ export default function CharacterGenerationScreen(): React.ReactElement {
       await loadCharacterList();
       setStep(step + 1);
     } else {
-      alert(serverResult.result.errorMsg);
+      alert('bbbbbbb');
     }
   }
 

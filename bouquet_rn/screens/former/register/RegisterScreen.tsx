@@ -76,8 +76,8 @@ export default function RegisterScreen(): React.ReactElement {
   }
 
   function backAction() {
-    if (step !== 1) setStep(step - 1);
-    else navigation.goBack();
+    if (step !== 1 && step !== 4) setStep(step - 1);
+    else if (step === 1) navigation.goBack();
     return true;
   }
   useEffect(() => {
