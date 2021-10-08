@@ -101,7 +101,7 @@ export default function AlbumLyric(): React.ReactElement {
       const { song, artist, setPost } = route.params;
       setSongState(song);
       setArtistState(artist);
-      setSetPostState(setPost);
+      setSetPostState(() => setPost);
     }
   }, []);
 
@@ -154,9 +154,7 @@ export default function AlbumLyric(): React.ReactElement {
               }}
             />
           ) : (
-            <LyricText textColor={colors.white}>
-              {setPostState === undefined ? 'true' : 'false'}
-            </LyricText>
+            <LyricText textColor={colors.white}>{songState.lyric}</LyricText>
           )}
         </Animated.ScrollView>
       </TouchableWithoutFeedback>
