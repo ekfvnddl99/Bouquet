@@ -44,7 +44,6 @@ export const noPost: Post<PlainTemplate> = {
  * @description T는 템플릿 Type을 나타냄
  */
 export type PostRequest<T extends AllTemplates> = {
-  character_id: number;
   text: string;
   template: T;
 };
@@ -95,7 +94,6 @@ export const noComment: PostComment = {
  */
 export type PostCommentRequest = {
   post_id: number;
-  character_id: number;
   comment: string;
   parent: number;
 };

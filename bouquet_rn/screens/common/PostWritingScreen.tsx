@@ -70,7 +70,6 @@ export default function PostWritingScreen(): React.ReactElement {
 
   // 새 게시글 객체
   const [newPost, setNewPost] = useState<Post.PostRequest<Post.AllTemplates>>({
-    character_id: myCharacter.id,
     text: '',
     template: Post.noTemplate<Post.PlainTemplate>('None'),
   });
@@ -141,6 +140,7 @@ export default function PostWritingScreen(): React.ReactElement {
     const realNewPost = newPost;
     if (setImage) realNewPost.template = setImage(realImages);
 
+    console.log(realNewPost);
     const serverResult = await uploadPostAsync(realNewPost);
     if (serverResult.isSuccess) {
       setViewPost(serverResult.result);

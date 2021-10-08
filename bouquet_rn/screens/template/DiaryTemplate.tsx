@@ -251,6 +251,12 @@ function Diary({
               }}
               multiline
               onLayout={onLayout}
+              value={diary.content}
+              onChangeText={
+                setPost
+                  ? (t: string) => setPost({ ...diary, content: t })
+                  : undefined
+              }
             />
           ) : (
             <text.DiaryBody2R
