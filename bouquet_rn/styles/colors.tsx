@@ -18,6 +18,7 @@ const colors = {
   alpha20_primary: '#FA726830',
   warning_red: '#F42111',
   diary: '#D3BD98',
+  alpha50_black: '#000000B3',
 };
 
 export default colors;

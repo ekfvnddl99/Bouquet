@@ -1,16 +1,10 @@
 import React from 'react';
-import {
-  Modal,
-  TouchableOpacity,
-  View,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import { Modal, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 
 // styles
 import colors from '../../styles/colors';
-import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
 
 type HalfModalProps = {
@@ -34,11 +28,10 @@ export default function HalfModal({
       visible={modalVisible}
       transparent
       onRequestClose={() => setModalVisible(false)}
-      style={{ backgroundColor: colors.black }}
     >
       <TouchableOpacity
         activeOpacity={1}
-        style={{ flexGrow: 1 }}
+        style={{ flexGrow: 1, backgroundColor: colors.alpha50_black }}
         onPress={() => setModalVisible(false)}
       />
       <ModalArea activeOpacity={1} onPress={() => setModalVisible(false)}>
