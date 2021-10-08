@@ -14,7 +14,7 @@ import * as elses from '../../styles/styled-components/elses';
 
 import Icon from '../../assets/Icon';
 
-import { ImageTemplate, AllTemplates } from '../../utils/types/PostTypes';
+import { ImageTemplate } from '../../utils/types/PostTypes';
 
 const windowWidth = Dimensions.get('window').width;
 function Img({
@@ -22,17 +22,13 @@ function Img({
   isMini,
   isEditMode,
   setPost,
-  setImageInfo,
+  setImages,
 }: {
   img?: string;
   isMini: boolean;
   isEditMode?: boolean;
   setPost?: (template: ImageTemplate) => void;
-  setImageInfo?: React.Dispatch<
-    React.SetStateAction<
-      [string[], ((images: string[]) => AllTemplates) | undefined]
-    >
-  >;
+  setImages?: React.Dispatch<React.SetStateAction<string[]>>;
 }) {
   const onPress = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -53,15 +49,9 @@ function Img({
         { resize: { width: 1024, height: 1024 } },
       ]);
       const realUri = manipResult.uri;
-      if (setImageInfo && setPost) {
+      if (setImages && setPost) {
         setPost({ type: 'Image', img: realUri });
-        setImageInfo([
-          [realUri],
-          (images: string[]) => {
-            setPost({ type: 'Image', img: images[0] });
-            return { type: 'Image', img: images[0] };
-          },
-        ]);
+        setImages([realUri]);
       }
     }
   };
@@ -106,18 +96,14 @@ type TemplateProps = {
   mode: string;
   post: ImageTemplate;
   setPost?: (template: ImageTemplate) => void;
-  setImageInfo?: React.Dispatch<
-    React.SetStateAction<
-      [string[], ((images: string[]) => AllTemplates) | undefined]
-    >
-  >;
+  setImages?: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
 export default function ImageTemplateComp({
   mode,
   post,
   setPost,
-  setImageInfo,
+  setImages,
 }: TemplateProps): React.ReactElement {
   switch (mode) {
     case 'edit':
@@ -127,7 +113,7 @@ export default function ImageTemplateComp({
           isEditMode
           img={post.img}
           setPost={setPost}
-          setImageInfo={setImageInfo}
+          setImages={setImages}
         />
       );
     case 'detail':

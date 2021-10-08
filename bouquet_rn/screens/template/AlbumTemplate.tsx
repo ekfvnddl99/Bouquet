@@ -35,11 +35,7 @@ type AlbumProps = {
   isEditMode?: boolean;
   postInfo: AlbumTemplate;
   setPost?: (template: AlbumTemplate) => void;
-  setImageInfo?: React.Dispatch<
-    React.SetStateAction<
-      [string[], ((images: string[]) => AllTemplates) | undefined]
-    >
-  >;
+  setImages?: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
 function Album({
@@ -47,7 +43,7 @@ function Album({
   isEditMode,
   postInfo,
   setPost,
-  setImageInfo,
+  setImages,
 }: AlbumProps) {
   const realTracks = useMemo(
     () => (isMini ? postInfo.tracks.slice(0, 3) : postInfo.tracks),
@@ -98,18 +94,9 @@ function Album({
         { resize: { width: 1024, height: 1024 } },
       ]);
       const realUri = manipResult.uri;
-      if (setImageInfo && setPost) {
+      if (setImages && setPost) {
         setPost({ ...postInfo, img: realUri });
-        setImageInfo([
-          [realUri],
-          (images: string[]) => {
-            const tmpPost = postInfo;
-            /* eslint-disable-next-line prefer-destructuring */
-            tmpPost.img = images[0];
-            setPost(tmpPost);
-            return tmpPost;
-          },
-        ]);
+        setImages([realUri]);
       }
     }
   };
@@ -178,7 +165,7 @@ function Album({
             </AlbumTitleWrap>
             {isEditMode ? (
               <TextInput
-                placeholder="앨범 발매일 (필수)"
+                placeholder="앨범 발매일 (필수, 5글자 이상)"
                 style={{
                   fontWeight: 'normal',
                   fontSize: 12,
@@ -188,9 +175,13 @@ function Album({
                   paddingBottom: 0,
                 }}
                 value={postInfo.release_date}
+                maxLength={8}
                 onChangeText={
                   setPost
-                    ? (t: string) => setPost({ ...postInfo, release_date: t })
+                    ? (t: string) => {
+                        if (!Number.isNaN(t))
+                          setPost({ ...postInfo, release_date: t });
+                      }
                     : undefined
                 }
               />
@@ -380,18 +371,14 @@ type TemplateProps = {
   mode: string;
   post: AlbumTemplate;
   setPost?: (template: AlbumTemplate) => void;
-  setImageInfo?: React.Dispatch<
-    React.SetStateAction<
-      [string[], ((images: string[]) => AllTemplates) | undefined]
-    >
-  >;
+  setImages?: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
 export default function AlbumTemplateComp({
   mode,
   post,
   setPost,
-  setImageInfo,
+  setImages,
 }: TemplateProps): React.ReactElement {
   const exampleTemplate: AlbumTemplate = {
     type: 'Album',
@@ -438,7 +425,7 @@ export default function AlbumTemplateComp({
             isEditMode
             postInfo={post}
             setPost={setPost}
-            setImageInfo={setImageInfo}
+            setImages={setImages}
           />
         </area.NoHeightArea>
       );

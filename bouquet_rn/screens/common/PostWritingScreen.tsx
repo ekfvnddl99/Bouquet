@@ -77,9 +77,7 @@ export default function PostWritingScreen(): React.ReactElement {
   // 각 템플릿에 필요한 이미지 정보
   // setImage는 각 템플릿으로부터 전달받는 함수
   // 각 템플릿으로부터 전달받은 이미지들(images)을 서버에 업로드한 뒤 그 주소를 이 함수에 넣어서 실행하면 됨
-  const [[images, setImage], setImageInfo] = useState<
-    [Array<string>, ((images: Array<string>) => Post.AllTemplates) | undefined]
-  >([[], undefined]);
+  const [images, setImages] = useState<Array<string>>([]);
 
   /**
    * 템플릿이 있는 경우 템플릿 설정
@@ -137,8 +135,26 @@ export default function PostWritingScreen(): React.ReactElement {
       }),
     );
 
-    const realNewPost = newPost;
-    if (setImage) realNewPost.template = setImage(realImages);
+    const tmpPost: Post.PostRequest<Post.AllTemplates> = { ...newPost };
+
+    if (tmpPost.template.type === 'List') {
+      const tmpTemplate = { ...tmpPost.template };
+      /* eslint-disable-next-line prefer-destructuring */
+      tmpTemplate.img = realImages[0];
+      realImages.forEach((value, index) => {
+        if (index !== 0) {
+          tmpTemplate.components[index - 1].img = value;
+        }
+      });
+      tmpPost.template = tmpTemplate;
+    } else if (tmpPost.template.type !== 'None') {
+      const tmpTemplate = { ...tmpPost.template };
+      /* eslint-disable-next-line prefer-destructuring */
+      tmpTemplate.img = realImages[0];
+      tmpPost.template = tmpTemplate;
+    }
+
+    const realNewPost = tmpPost;
 
     console.log(realNewPost);
     const serverResult = await uploadPostAsync(realNewPost);
@@ -169,7 +185,7 @@ export default function PostWritingScreen(): React.ReactElement {
                 : Post.noTemplate<Post.ImageTemplate>('Image')
             }
             setPost={setTemplate}
-            setImageInfo={setImageInfo}
+            setImages={setImages}
           />
         );
       case 2:
@@ -182,7 +198,7 @@ export default function PostWritingScreen(): React.ReactElement {
                 : Post.noTemplate<Post.AlbumTemplate>('Album')
             }
             setPost={setTemplate}
-            setImageInfo={setImageInfo}
+            setImages={setImages}
           />
         );
       case 3:
@@ -195,7 +211,7 @@ export default function PostWritingScreen(): React.ReactElement {
                 : Post.noTemplate<Post.DiaryTemplate>('Diary')
             }
             setPost={setTemplate}
-            setImageInfo={setImageInfo}
+            setImages={setImages}
           />
         );
       case 4:
@@ -208,7 +224,7 @@ export default function PostWritingScreen(): React.ReactElement {
                 : Post.noTemplate<Post.ListTemplate>('List')
             }
             setPost={setTemplate}
-            setImageInfo={setImageInfo}
+            setImages={setImages}
           />
         );
       case 5:

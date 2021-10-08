@@ -26,45 +26,45 @@ type DiaryProps = {
   isEditMode?: boolean;
   diary: DiaryTemplate;
   setPost?: (template: DiaryTemplate) => void;
-  setImageInfo?: React.Dispatch<
-    React.SetStateAction<
-      [string[], ((images: string[]) => AllTemplates) | undefined]
-    >
-  >;
+  setImages?: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
-function Diary({
-  isMini,
-  isEditMode,
-  diary,
-  setPost,
-  setImageInfo,
-}: DiaryProps) {
+function Diary({ isMini, isEditMode, diary, setPost, setImages }: DiaryProps) {
   const [contentHeight, setContentHeight] = useState(20);
   const [dateInfo, setDateInfo] = useState({
-    year: diary.date.slice(
-      diary.date.indexOf('Y') + 1,
-      diary.date.indexOf('M'),
-    ),
-    month: diary.date.slice(
-      diary.date.indexOf('M') + 1,
-      diary.date.indexOf('D'),
-    ),
-    day: diary.date.slice(diary.date.indexOf('D') + 1),
+    year: isEditMode ? '' : String(Math.floor(Number(diary.date) / 10000)),
+    month: isEditMode
+      ? ''
+      : String(Math.floor((Number(diary.date) % 10000) / 100)),
+    day: isEditMode ? '' : String(Number(diary.date) % 100),
   });
 
   const setDate = (year?: string, month?: string, day?: string) => {
-    const newDateInfo = {
-      year: year || dateInfo.year,
-      month: month || dateInfo.month,
-      day: day || dateInfo.day,
-    };
-    setDateInfo(newDateInfo);
-    if (setPost)
-      setPost({
-        ...diary,
-        date: `Y${newDateInfo.year}M${newDateInfo.month}D${newDateInfo.day}`,
-      });
+    if (
+      (year !== undefined && !Number.isNaN(year)) ||
+      (month !== undefined && !Number.isNaN(month)) ||
+      (day !== undefined && !Number.isNaN(day))
+    ) {
+      const newDateInfo = {
+        year: year === undefined ? dateInfo.year : year,
+        month: month === undefined ? dateInfo.month : month,
+        day: day === undefined ? dateInfo.day : day,
+      };
+      setDateInfo(newDateInfo);
+      if (setPost)
+        setPost({
+          ...diary,
+          date: `${newDateInfo.year}${
+            Number(newDateInfo.month) < 10
+              ? `0${newDateInfo.month === '' ? '0' : newDateInfo.month}`
+              : newDateInfo.month
+          }${
+            Number(newDateInfo.day) < 10
+              ? `0${newDateInfo.day === '' ? '0' : newDateInfo.day}`
+              : newDateInfo.day
+          }`,
+        });
+    }
   };
 
   const onLayout = (event: LayoutChangeEvent) => {
@@ -91,18 +91,9 @@ function Diary({
         { resize: { width: 1024, height: 1024 } },
       ]);
       const realUri = manipResult.uri;
-      if (setImageInfo && setPost) {
+      if (setImages && setPost) {
         setPost({ ...diary, img: realUri });
-        setImageInfo([
-          [realUri],
-          (images: string[]) => {
-            const tmpPost = diary;
-            /* eslint-disable-next-line prefer-destructuring */
-            tmpPost.img = images[0];
-            setPost(tmpPost);
-            return tmpPost;
-          },
-        ]);
+        setImages([realUri]);
       }
     }
   };
@@ -115,9 +106,10 @@ function Diary({
             <SmallInput
               placeholder="연도"
               placeholderTextColor={colors.gray5}
-              value={String(dateInfo.year)}
+              value={dateInfo.year}
               onChangeText={(t: string) => setDate(t)}
               keyboardType="number-pad"
+              maxLength={4}
             />
           ) : (
             <text.DiaryBody2R textColor={colors.diary}>
@@ -136,7 +128,7 @@ function Diary({
               placeholderTextColor={colors.gray5}
               maxLength={2}
               onChangeText={(t: string) => setDate(undefined, t)}
-              value={String(dateInfo.month)}
+              value={dateInfo.month}
               keyboardType="number-pad"
             />
           ) : (
@@ -156,7 +148,7 @@ function Diary({
               placeholderTextColor={colors.gray5}
               maxLength={2}
               onChangeText={(t: string) => setDate(undefined, undefined, t)}
-              value={String(dateInfo.day)}
+              value={dateInfo.day}
               keyboardType="number-pad"
             />
           ) : (
@@ -340,18 +332,14 @@ type TemplateProps = {
   mode: string;
   setPost?: (template: DiaryTemplate) => void;
   post: DiaryTemplate;
-  setImageInfo?: React.Dispatch<
-    React.SetStateAction<
-      [string[], ((images: string[]) => AllTemplates) | undefined]
-    >
-  >;
+  setImages?: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
 export default function DiaryTemplateComp({
   mode,
   setPost,
   post,
-  setImageInfo,
+  setImages,
 }: TemplateProps): React.ReactElement {
   const diaryDataEx: DiaryTemplate = {
     type: 'Diary',
@@ -382,7 +370,7 @@ export default function DiaryTemplateComp({
             isEditMode
             diary={post}
             setPost={setPost}
-            setImageInfo={setImageInfo}
+            setImages={setImages}
           />
         </area.NoHeightArea>
       );

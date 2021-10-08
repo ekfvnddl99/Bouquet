@@ -27,20 +27,10 @@ type ListProps = {
   isEditMode?: boolean;
   postInfo: ListTemplate;
   setPost?: (template: ListTemplate) => void;
-  setImageInfo?: React.Dispatch<
-    React.SetStateAction<
-      [string[], ((images: string[]) => AllTemplates) | undefined]
-    >
-  >;
+  setImages?: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
-function List({
-  isMini,
-  isEditMode,
-  postInfo,
-  setPost,
-  setImageInfo,
-}: ListProps) {
+function List({ isMini, isEditMode, postInfo, setPost, setImages }: ListProps) {
   const realList = useMemo(
     () => (isMini ? postInfo.components.slice(0, 3) : postInfo.components),
     [isMini, postInfo],
@@ -67,28 +57,14 @@ function List({
         { resize: { width: 1024, height: 1024 } },
       ]);
       const realUri = manipResult.uri;
-      if (setImageInfo && setPost) {
+      if (setImages && setPost) {
         if (idx === -1) {
           setPost({ ...postInfo, img: realUri });
 
           const tmpListImages = listImages;
           tmpListImages[0] = realUri;
           setListImages(tmpListImages);
-          setImageInfo([
-            tmpListImages,
-            (images: string[]) => {
-              const tmpPost = postInfo;
-              /* eslint-disable-next-line prefer-destructuring */
-              tmpPost.img = images[0];
-              images.forEach((value, index) => {
-                if (index !== 0) {
-                  tmpPost.components[index - 1].img = images[index];
-                }
-              });
-              setPost(tmpPost);
-              return tmpPost;
-            },
-          ]);
+          setImages(tmpListImages);
         } else {
           const tmpPost1 = postInfo;
           tmpPost1.components[idx].img = realUri;
@@ -97,21 +73,7 @@ function List({
           const tmpListImages = listImages;
           tmpListImages[idx + 1] = realUri;
           setListImages(tmpListImages);
-          setImageInfo([
-            tmpListImages,
-            (images: string[]) => {
-              const tmpPost = postInfo;
-              /* eslint-disable-next-line prefer-destructuring */
-              tmpPost.img = images[0];
-              images.forEach((value, index) => {
-                if (index !== 0) {
-                  tmpPost.components[index - 1].img = images[index];
-                }
-              });
-              setPost(tmpPost);
-              return tmpPost;
-            },
-          ]);
+          setImages(tmpListImages);
         }
       }
     }
@@ -388,18 +350,14 @@ type TemplateProps = {
   mode: string;
   post: ListTemplate;
   setPost?: (template: ListTemplate) => void;
-  setImageInfo?: React.Dispatch<
-    React.SetStateAction<
-      [string[], ((images: string[]) => AllTemplates) | undefined]
-    >
-  >;
+  setImages?: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
 export default function ListTemplateComp({
   mode,
   post,
   setPost,
-  setImageInfo,
+  setImages,
 }: TemplateProps): React.ReactElement {
   const exampleTemplate: ListTemplate = {
     type: 'List',
@@ -448,7 +406,7 @@ export default function ListTemplateComp({
             isEditMode
             postInfo={post}
             setPost={setPost}
-            setImageInfo={setImageInfo}
+            setImages={setImages}
           />
         </area.NoHeightArea>
       );
