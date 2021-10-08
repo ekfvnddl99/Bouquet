@@ -97,7 +97,7 @@ export default function NotificationScreen(): React.ReactElement {
     const serverResult = await deleteNotificationAsync(id);
 
     if (serverResult.isSuccess) await onRefresh();
-    else console.log(serverResult.result.info);
+    else alert(serverResult.result.errorMsg);
   };
 
   async function getNotification(newPageNum?: number, isRefreshing?: boolean) {
@@ -111,9 +111,7 @@ export default function NotificationScreen(): React.ReactElement {
         serverResult.result.forEach((obj) => tmpArray.push(obj));
         setNotificationArray(tmpArray);
       }
-    } else {
-      console.log(serverResult.result.info);
-    }
+    } else alert(serverResult.result.errorMsg);
     setRefreshing(false);
   }
 

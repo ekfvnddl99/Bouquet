@@ -58,10 +58,7 @@ export default function AppStack(): React.ReactElement {
     if (myCharacter.name === '') return;
     await getNotificationCount().then((before) => {
       getNowNotificationCount().then((now) => {
-        if (now !== -1) {
-          console.log(`before ${before} now ${now}`);
-          if (before < now) setIsNew(true);
-        }
+        if (now !== -1) if (before < now) setIsNew(true);
       });
     });
   };
@@ -115,8 +112,6 @@ export default function AppStack(): React.ReactElement {
     },
     async getInitialURL(): Promise<string> {
       const init = await Linking.getInitialURL();
-
-      console.log(`init ${init}`);
 
       if (init !== null) {
         return init;

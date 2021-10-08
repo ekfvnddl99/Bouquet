@@ -86,6 +86,7 @@ export default function CharacterGenerationScreen(): React.ReactElement {
    * 캐릭터 생성 or 수정 함수
    * * 단계3일 때 이용됨.
    */
+  const [loading, setLoading] = useState(false);
   async function createNewCharacter() {
     // 입력한 이미지가 있는 경우
     if (newCharacter.profile_img) {
@@ -93,7 +94,6 @@ export default function CharacterGenerationScreen(): React.ReactElement {
       if (serverResult.isSuccess) {
         newCharacter.profile_img = serverResult.result;
       } else {
-        alert('aaaaaaaaa');
         // 못 가져왔으면 기본 이미지 대체
         newCharacter.profile_img =
           'https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg';
@@ -104,6 +104,8 @@ export default function CharacterGenerationScreen(): React.ReactElement {
         'https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg';
     }
 
+    if (loading) return;
+    setLoading(true);
     let serverResult;
     if (isModifying) {
       serverResult = await editCharacterAsync(newCharacter);
@@ -118,8 +120,10 @@ export default function CharacterGenerationScreen(): React.ReactElement {
       await loadCharacterList();
       setStep(step + 1);
     } else {
-      alert('bbbbbbb');
+      alert(serverResult.result.errorMsg);
+      console.log(serverResult.result.info);
     }
+    setLoading(false);
   }
 
   /**

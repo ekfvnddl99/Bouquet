@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
@@ -26,7 +26,11 @@ export default function AccountDeletionScreenOne(): React.ReactElement {
   const resetAllLocalStorage = async () => {
     await AsyncStorage.clear();
   };
+
+  const [loading, setLoading] = useState(false);
   const deleteNgoScreenTwo = useCallback(async () => {
+    if (loading) return;
+    setLoading(true);
     const serverResult = await deleteUserAsync();
     if (serverResult.isSuccess) {
       await resetAllLocalStorage();
@@ -35,6 +39,7 @@ export default function AccountDeletionScreenOne(): React.ReactElement {
         routes: [{ name: 'SettingAccountDeletion2' }],
       });
     } else alert(serverResult.result.errorMsg);
+    setLoading(false);
   }, [deleteUserAsync]);
 
   return (

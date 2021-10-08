@@ -156,7 +156,6 @@ export default function PostWritingScreen(): React.ReactElement {
 
     const realNewPost = tmpPost;
 
-    console.log(realNewPost);
     const serverResult = await uploadPostAsync(realNewPost);
     if (serverResult.isSuccess) {
       setViewPost(serverResult.result);

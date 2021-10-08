@@ -5,6 +5,7 @@ import {
   View,
   TouchableWithoutFeedback,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 
 // styles
@@ -26,12 +27,14 @@ export default function HalfModal({
   onDelete,
   isCanDelete,
 }: HalfModalProps): React.ReactElement {
+  const insets = useSafeAreaInsets();
   return (
     <Modal
       animationType="slide"
       visible={modalVisible}
       transparent
       onRequestClose={() => setModalVisible(false)}
+      style={{ backgroundColor: colors.black }}
     >
       <TouchableOpacity
         activeOpacity={1}
@@ -49,9 +52,9 @@ export default function HalfModal({
             <ModalItem onPress={() => onDelete()}>
               <text.Subtitle2R textColor={colors.black}>삭제</text.Subtitle2R>
             </ModalItem>
-            <MiddleLine />
           </>
         ) : null}
+        <View style={{ paddingBottom: insets.bottom }} />
       </ModalArea>
     </Modal>
   );

@@ -44,6 +44,7 @@ export default function RegisterScreen(): React.ReactElement {
   const [realAuthNumber, setRealAuthNumber] = useState('');
   const [profileImg, setProfileImg] = useState('');
 
+  const [loading, setLoading] = useState(false);
   async function registerUser() {
     let realProfileImg = profileImg;
     const imgServerResult = await uploadImageAsync(profileImg);
@@ -54,6 +55,8 @@ export default function RegisterScreen(): React.ReactElement {
         'https://bouquet-storage.s3.ap-northeast-2.amazonaws.com/5b6ee222-2415-11ec-ab3a-0242ac110002.png';
     }
 
+    if (loading) return;
+    setLoading(true);
     const serverResult = await registerEmailAsync(
       email,
       password,
@@ -73,6 +76,7 @@ export default function RegisterScreen(): React.ReactElement {
         } else alert(postToken.result.errorMsg);
       } else alert('다시 시도해주세요.');
     } else alert(serverResult.result.errorMsg);
+    setLoading(false);
   }
 
   function backAction() {

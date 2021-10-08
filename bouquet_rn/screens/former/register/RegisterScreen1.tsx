@@ -138,12 +138,10 @@ export default function RegisterScreen1({
     let getVerificationCodeAsync;
     if (isFindPassword) getVerificationCodeAsync = checkExistingEmailAsync;
     else getVerificationCodeAsync = checkNewEmailAsync;
-    console.log(getVerificationCodeAsync);
     const serverResult = await getVerificationCodeAsync(email);
     if (serverResult.isSuccess) {
       setIsNext(true);
       setRealAuthNumber(serverResult.result);
-      console.log(serverResult.result);
     } else alert(serverResult.result.errorMsg);
   }
 

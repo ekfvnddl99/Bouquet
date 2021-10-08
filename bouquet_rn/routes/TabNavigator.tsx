@@ -11,6 +11,7 @@ import { isNewNotification } from '../logics/atoms';
 
 // styles
 import { TabBarArea } from '../styles/styled-components/area';
+import colors from '../styles/colors';
 
 // assets
 import Svg from '../assets/Icon';
@@ -55,7 +56,11 @@ function customTabBar({
   isNew: boolean;
 }) {
   return (
-    <TabBarArea style={{ height: Platform.OS === 'ios' ? 60 + 18 : 60 }}>
+    <TabBarArea
+      style={{
+        height: Platform.OS === 'ios' ? 60 + 18 : 60,
+      }}
+    >
       {state.routes.map((route: any, index: number) => {
         const isFocused = state.index === index;
 

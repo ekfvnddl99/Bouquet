@@ -37,12 +37,16 @@ export default function FindPasswordScreen(): React.ReactElement {
   const [authNumber, setAuthNumber] = useState('');
   const [realAuthNumber, setRealAuthNumber] = useState('');
 
+  const [loading, setLoading] = useState(false);
   async function setNewPassword() {
+    if (loading) return;
+    setLoading(true);
     const serverResult = await editPasswordAsync(email, password);
     if (serverResult.isSuccess) {
       await login();
       setStep(step + 1);
     } else alert(serverResult.result.errorMsg);
+    setLoading(false);
   }
 
   function backAction() {

@@ -44,13 +44,17 @@ export default function CharacterDeletionScreen(): React.ReactElement {
     await AsyncStorage.removeItem(key);
   };
   // 캐릭터 삭제 함수
+  const [loading, setLoading] = useState(false);
   async function deleteCharacter() {
+    if (loading) return;
+    setLoading(true);
     const serverResult = await deleteCharacterAsync(targetCharacter.name);
     if (serverResult.isSuccess) {
       await deleteNotificationCount(`N${targetCharacter.name}`);
       setStep(step + 1);
       loadCharacterList();
     } else alert(serverResult.result.errorMsg);
+    setLoading(false);
   }
 
   /**
