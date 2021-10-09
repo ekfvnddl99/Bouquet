@@ -1,10 +1,4 @@
-import React, {
-  useRef,
-  useState,
-  useMemo,
-  useCallback,
-  useEffect,
-} from 'react';
+import React, { useRef, useState, useMemo, useCallback } from 'react';
 import {
   KeyboardAvoidingView,
   FlatList,
@@ -31,7 +25,6 @@ import * as area from '../../styles/styled-components/area';
 // logics
 import { StatusBarHeight } from '../../logics/non-server/StatusbarHeight';
 import {
-  deleteCommentAsync,
   uploadCommentAsync,
   deletePostAsync,
   likePostAsync,
@@ -40,12 +33,7 @@ import useViewPost from '../../logics/hooks/useViewPost';
 import useCharacter from '../../logics/hooks/useCharacter';
 
 // utils
-import {
-  noComment,
-  PostComment,
-  PostCommentRequest,
-  noPost,
-} from '../../utils/types/PostTypes';
+import { PostCommentRequest } from '../../utils/types/PostTypes';
 
 // components
 import HeaderItem from '../../components/item/HeaderItem';
@@ -81,16 +69,6 @@ export default function PostDetailScreen(): React.ReactElement {
 
   const route = useRoute<RouteProp<ParamList, 'PostDetail'>>();
   const [routePrefix, setRoutePrefix] = useState('');
-  // useEffect(() => {
-  //   if (route.params !== undefined) {
-  //     let postId;
-  //     if (route.params.postId) postId = route.params.postId;
-  //     if (postId) {
-  //       setViewPost(postId);
-  //     }
-  //     setRoutePrefix(route.params.routePrefix);
-  //   }
-  // }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -103,8 +81,6 @@ export default function PostDetailScreen(): React.ReactElement {
     }, []),
   );
 
-  // 내가 고른 댓글의 아이디
-  const [selectComment, setSelectComment] = useState(noComment);
   // 대댓글이 보이는 댓글의 아이디가 들어가는 배열
   const [openingCommentArray, setOpeningCommentArray] = useState<number[]>([]);
   // 내가 쓴 댓글 값 state
@@ -134,20 +110,10 @@ export default function PostDetailScreen(): React.ReactElement {
     const serverResult = await uploadCommentAsync(newComment);
     if (serverResult.isSuccess) {
       setComment('');
-      setSelectComment(noComment);
       setParentComment(undefined);
       setParentCommentById(0);
       // 새로고침을 위하여
       await setViewPost(viewPost.id);
-    } else alert(serverResult.result.errorMsg);
-  }
-
-  async function deleteComment() {
-    if (selectComment.character_info.name !== myCharacter.name) return;
-    const serverResult = await deleteCommentAsync(selectComment.id);
-    if (serverResult.isSuccess) {
-      // 새로고침을 위하여
-      setViewPost(viewPost.id);
     } else alert(serverResult.result.errorMsg);
   }
 
@@ -193,14 +159,6 @@ export default function PostDetailScreen(): React.ReactElement {
     return true;
   }, [viewPost]);
   const template = useMemo(() => getTemplate(), [getTemplate]);
-
-  function clickComment(commentInfo: PostComment) {
-    if (selectComment.id === commentInfo.id) {
-      setSelectComment(noComment);
-    } else {
-      setSelectComment(commentInfo);
-    }
-  }
 
   async function onPressSun() {
     const serverResult = await likePostAsync(viewPost.id);
@@ -258,17 +216,12 @@ export default function PostDetailScreen(): React.ReactElement {
                   <View>
                     <TouchableOpacity
                       activeOpacity={1}
-                      onPress={() => [
-                        clickComment(obj.item),
-                        Keyboard.dismiss(),
-                      ]}
+                      onPress={() => Keyboard.dismiss()}
                     >
                       <CommentItem
                         commentInfo={obj.item}
-                        selectComment={selectComment}
                         setTargetComment={setParentComment}
                         setTargetCommentId={setParentCommentById}
-                        onDelete={() => deleteComment()}
                         routePrefix={routePrefix}
                         openingCommentArray={openingCommentArray}
                         setOpeningCommentArray={setOpeningCommentArray}
@@ -284,17 +237,12 @@ export default function PostDetailScreen(): React.ReactElement {
                         renderItem={(childObj) => (
                           <TouchableOpacity
                             activeOpacity={1}
-                            onPress={() => [
-                              clickComment(childObj.item),
-                              Keyboard.dismiss(),
-                            ]}
+                            onPress={() => Keyboard.dismiss()}
                           >
                             <CommentItem
                               commentInfo={childObj.item}
-                              selectComment={selectComment}
                               setTargetComment={setParentComment}
                               setTargetCommentId={setParentCommentById}
-                              onDelete={() => deleteComment()}
                               routePrefix={routePrefix}
                             />
                           </TouchableOpacity>

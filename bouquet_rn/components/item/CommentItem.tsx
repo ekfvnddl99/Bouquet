@@ -12,8 +12,13 @@ import * as text from '../../styles/styled-components/text';
 
 // logics
 import useCharacter from '../../logics/hooks/useCharacter';
+import useViewPost from '../../logics/hooks/useViewPost';
 import * as cal from '../../logics/non-server/Calculation';
-import { likeCommentAsync, reportCommentAsync } from '../../logics/server/Post';
+import {
+  likeCommentAsync,
+  reportCommentAsync,
+  deleteCommentAsync,
+} from '../../logics/server/Post';
 import useUser from '../../logics/hooks/useUser';
 
 // utils
@@ -25,10 +30,8 @@ import HalfModal from '../view/HalfModal';
 
 type CommentItemProps = {
   commentInfo: PostComment;
-  selectComment: PostComment;
   setTargetComment: (param: string) => void;
   setTargetCommentId: (param: number) => void;
-  onDelete: () => void;
   routePrefix: string;
   openingCommentArray?: number[];
   setOpeningCommentArray?: (param: number[]) => void;
@@ -39,7 +42,6 @@ type CommentItemProps = {
  * TODO 햇살 set 함수
  *
  * @param commentInfo 댓글 객체. 서버에서 불러온다.
- * @param selectComment 사용자가 클릭한 댓글.
  * @param setTargetComment 대댓글 대상이 되는 댓글의 set 함수
  * @param setTargetCommentId 대댓글 대상이 되는 댓글의 아이디 set 함수
  * * 대댓글에 대댓글을 달 경우, 대상이 되는 대댓글을 담은 댓글의 아이디가 들어간다.
@@ -51,16 +53,15 @@ type CommentItemProps = {
  */
 export default function CommentItem({
   commentInfo,
-  selectComment,
   setTargetComment,
   setTargetCommentId,
-  onDelete,
   routePrefix,
   openingCommentArray,
   setOpeningCommentArray,
 }: CommentItemProps): React.ReactElement {
   const user = useUser();
   const [myCharacter] = useCharacter();
+  const [viewPost, setViewPost] = useViewPost();
   const [isActive, setIsActive] = useState(commentInfo.liked);
   const [sunshineNum, setSunshineNum] = useState(commentInfo.num_sunshines);
   const [modalVisible, setModalVisible] = useState(false);
@@ -93,6 +94,14 @@ export default function CommentItem({
     } else alert(serverResult.result.errorMsg);
   }
 
+  async function deleteComment() {
+    const serverResult = await deleteCommentAsync(commentInfo.id);
+    if (serverResult.isSuccess) {
+      // 새로고침을 위하여
+      setViewPost(viewPost.id);
+    } else alert(serverResult.result.errorMsg);
+  }
+
   return (
     <area.NoHeightArea
       marBottom={8}
@@ -104,7 +113,7 @@ export default function CommentItem({
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         onReport={() => reportComment()}
-        onDelete={() => onDelete()}
+        onDelete={() => deleteComment()}
         isCanDelete={myCharacter.name === commentInfo.character_info.name}
       />
       <area.RowArea style={{ alignItems: 'flex-start', marginBottom: 8 }}>
@@ -162,7 +171,7 @@ export default function CommentItem({
                     )
                   }
                 >
-                  <Svg icon="commentDownArrow" size={18} />
+                  <Svg icon="commentUpArrow" size={18} />
                 </TouchableOpacity>
               ) : (
                 <TouchableOpacity
@@ -173,7 +182,7 @@ export default function CommentItem({
                     ])
                   }
                 >
-                  <Svg icon="commentUpArrow" size={18} />
+                  <Svg icon="commentDownArrow" size={18} />
                 </TouchableOpacity>
               )}
             </View>
