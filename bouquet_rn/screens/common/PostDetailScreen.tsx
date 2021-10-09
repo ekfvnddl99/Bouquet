@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
+  Alert,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
@@ -114,15 +115,15 @@ export default function PostDetailScreen(): React.ReactElement {
       setParentCommentById(0);
       // 새로고침을 위하여
       await setViewPost(viewPost.id);
-    } else alert(serverResult.result.errorMsg);
+    } else Alert.alert(serverResult.result.errorMsg);
   }
 
   async function deletePost() {
     navigation.goBack();
     const serverResult = await deletePostAsync(viewPost.id);
     if (serverResult.isSuccess) {
-      alert('삭제 되었습니다.');
-    } else alert(serverResult.result.errorMsg);
+      Alert.alert('삭제 되었습니다.');
+    } else Alert.alert(serverResult.result.errorMsg);
   }
 
   // 이 게시글이 나의 게시글인지
@@ -164,7 +165,7 @@ export default function PostDetailScreen(): React.ReactElement {
     const serverResult = await likePostAsync(viewPost.id);
     if (serverResult.isSuccess) {
       setViewPost(viewPost.id);
-    } else alert(serverResult.result.errorMsg);
+    } else Alert.alert(serverResult.result.errorMsg);
   }
 
   return (

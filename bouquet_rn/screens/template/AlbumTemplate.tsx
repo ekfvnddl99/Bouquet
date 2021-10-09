@@ -4,6 +4,7 @@ import {
   TextInput,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
@@ -78,7 +79,7 @@ function Album({
   const setImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      alert('이미지를 업로드하려면 권한이 필요해요.');
+      Alert.alert('이미지를 업로드하려면 권한이 필요해요.');
       return;
     }
 

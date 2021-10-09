@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { StyleSheet, Animated } from 'react-native';
+import { StyleSheet, Animated, Alert } from 'react-native';
 import { useRoute, RouteProp, useFocusEffect } from '@react-navigation/native';
 
 // styles
@@ -86,7 +86,7 @@ export default function ProfileDetailScreen(): React.ReactElement {
         serverResult.result[0].forEach((obj) => tmpArray.push(obj));
         setPostArray(tmpArray);
       }
-    } else alert(serverResult.result.errorMsg);
+    } else Alert.alert(serverResult.result.errorMsg);
   }
 
   async function getQnas(newPageNum?: number, isRefreshing?: boolean) {
@@ -103,7 +103,7 @@ export default function ProfileDetailScreen(): React.ReactElement {
         serverResult.result.forEach((obj) => tmpArray.push(obj));
         setQnaArray(tmpArray);
       }
-    } else alert(serverResult.result.errorMsg);
+    } else Alert.alert(serverResult.result.errorMsg);
   }
 
   // 해당 캐릭터의 게시글을 가져오는 api

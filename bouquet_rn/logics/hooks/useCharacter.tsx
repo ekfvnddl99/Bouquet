@@ -1,3 +1,4 @@
+import { Alert } from 'react-native';
 import { useRecoilState } from 'recoil';
 import * as SecureStore from 'expo-secure-store';
 
@@ -24,7 +25,7 @@ export default function useCharacter(): [
     if (changeResult.isSuccess) {
       await SecureStore.setItemAsync('auth', changeResult.result);
     } else {
-      alert(changeResult.result.errorMsg);
+      Alert.alert(changeResult.result.errorMsg);
       return;
     }
 

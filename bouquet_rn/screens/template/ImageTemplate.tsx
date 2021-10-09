@@ -5,6 +5,7 @@ import {
   Image,
   Dimensions,
   StyleSheet,
+  Alert,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
@@ -33,7 +34,7 @@ function Img({
   const onPress = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      alert('이미지를 업로드하려면 권한이 필요해요.');
+      Alert.alert('이미지를 업로드하려면 권한이 필요해요.');
       return;
     }
 

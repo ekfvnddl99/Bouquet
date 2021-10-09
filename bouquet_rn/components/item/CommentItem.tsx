@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, Alert } from 'react-native';
 import i18n from 'i18n-js';
 
 // assets
@@ -68,7 +68,7 @@ export default function CommentItem({
 
   async function likeComment() {
     if (myCharacter.name === '') {
-      alert('캐릭터를 설정해주세요!');
+      Alert.alert('캐릭터를 설정해주세요!');
       return;
     }
     const prevSunNum = sunshineNum;
@@ -83,15 +83,15 @@ export default function CommentItem({
       setIsActive(realState);
     } else {
       setIsActive(!newState);
-      alert(serverResult.result.errorMsg);
+      Alert.alert(serverResult.result.errorMsg);
     }
   }
 
   async function reportComment() {
     const serverResult = await reportCommentAsync(commentInfo.id);
     if (serverResult.isSuccess) {
-      alert('신고 완료됐습니다!');
-    } else alert(serverResult.result.errorMsg);
+      Alert.alert('신고 완료됐습니다!');
+    } else Alert.alert(serverResult.result.errorMsg);
   }
 
   async function deleteComment() {
@@ -99,7 +99,7 @@ export default function CommentItem({
     if (serverResult.isSuccess) {
       // 새로고침을 위하여
       setViewPost(viewPost.id);
-    } else alert(serverResult.result.errorMsg);
+    } else Alert.alert(serverResult.result.errorMsg);
   }
 
   return (

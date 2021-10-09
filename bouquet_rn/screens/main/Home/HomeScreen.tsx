@@ -4,7 +4,7 @@ import {
   Animated,
   TouchableWithoutFeedback,
   Keyboard,
-  ListRenderItem,
+  Alert,
 } from 'react-native';
 import i18n from 'i18n-js';
 import styled from 'styled-components/native';
@@ -70,7 +70,7 @@ export default function HomeScreen(): React.ReactElement {
         // setPostArray(serverResult.result)
       }
     } else {
-      alert(serverResult.result.errorMsg);
+      Alert.alert(serverResult.result.errorMsg);
     }
     setRefreshing(false);
   }

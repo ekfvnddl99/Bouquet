@@ -4,6 +4,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   BackHandler,
+  Alert,
 } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -121,7 +122,7 @@ export default function CharacterGenerationScreen(): React.ReactElement {
         setStep(step + 1);
       }
     } else {
-      alert(serverResult.result.errorMsg);
+      Alert.alert(serverResult.result.errorMsg);
       console.log(serverResult.result.info);
     }
     setLoading(false);

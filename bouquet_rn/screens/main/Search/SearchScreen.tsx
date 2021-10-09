@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from 'react-native';
 import i18n from 'i18n-js';
 import styled from 'styled-components/native';
@@ -165,7 +166,7 @@ export default function SearchScreen(): React.ReactElement {
         setCharacterArray(tmpArray);
       }
     } else {
-      alert(serverResult.result.errorMsg);
+      Alert.alert(serverResult.result.errorMsg);
     }
   }
   /**

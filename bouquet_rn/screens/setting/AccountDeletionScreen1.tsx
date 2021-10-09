@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { View } from 'react-native';
+import { Alert, View } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -38,7 +38,7 @@ export default function AccountDeletionScreenOne(): React.ReactElement {
         index: 0,
         routes: [{ name: 'SettingAccountDeletion2' }],
       });
-    } else alert(serverResult.result.errorMsg);
+    } else Alert.alert(serverResult.result.errorMsg);
     setLoading(false);
   }, [deleteUserAsync]);
 

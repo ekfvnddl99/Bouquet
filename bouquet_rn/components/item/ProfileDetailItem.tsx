@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View } from 'react-native';
+import { View, Alert } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -98,7 +98,7 @@ export default function ProfileDetailItem({
       setIsFollowed(serverResult.result);
       await setViewCharacter(realCharacter.name);
     } else {
-      alert(serverResult.result.errorMsg);
+      Alert.alert(serverResult.result.errorMsg);
       setIsFollowed(!newState);
     }
   }

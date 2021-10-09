@@ -51,7 +51,6 @@ export default function AppStack(): React.ReactElement {
   const getNowNotificationCount = async () => {
     const serverResult = await getNotificationCountAsync();
     if (serverResult.isSuccess) return serverResult.result;
-    alert(serverResult.result.errorMsg);
     return -1;
   };
   const checkIsNewNotification = async () => {

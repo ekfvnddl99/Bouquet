@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import i18n from 'i18n-js';
+import { Alert } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -53,7 +54,7 @@ export default function CharacterDeletionScreen(): React.ReactElement {
       await deleteNotificationCount(`N${targetCharacter.name}`);
       setStep(step + 1);
       loadCharacterList();
-    } else alert(serverResult.result.errorMsg);
+    } else Alert.alert(serverResult.result.errorMsg);
     setLoading(false);
   }
 

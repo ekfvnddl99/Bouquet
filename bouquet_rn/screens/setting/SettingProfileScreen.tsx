@@ -6,6 +6,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   ScrollView,
+  Alert,
 } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
@@ -99,7 +100,7 @@ export default function SettingProfileScreen(): React.ReactElement {
       const { status } =
         await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== 'granted') {
-        alert('이미지를 업로드하려면 권한이 필요해요.');
+        Alert.alert('이미지를 업로드하려면 권한이 필요해요.');
       }
     })();
   }, []);
@@ -116,7 +117,7 @@ export default function SettingProfileScreen(): React.ReactElement {
     if (!result.cancelled) {
       const serverResult = await uploadImageAsync(result.uri);
       if (serverResult.isSuccess) setProfileImg(serverResult.result);
-      else alert(serverResult.result.errorMsg);
+      else Alert.alert(serverResult.result.errorMsg);
     }
     setIsSelectImg(false);
   }
@@ -126,7 +127,7 @@ export default function SettingProfileScreen(): React.ReactElement {
     if (result.isSuccess) {
       setNewAccount({ ...user, name, profile_img: profileImg });
       navigation.reset({ index: 0, routes: [{ name: 'Profile' }] });
-    } else alert(result.result.errorMsg);
+    } else Alert.alert(result.result.errorMsg);
   };
 
   const goDeletion = () => {

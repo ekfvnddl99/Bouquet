@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Linking } from 'react-native';
+import { View, Linking, Alert } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
 
@@ -35,7 +35,8 @@ export default function SettingScreen(): React.ReactElement {
   async function openURL(url: string) {
     const isPossible = await Linking.canOpenURL(url);
     if (isPossible) await Linking.openURL(url);
-    else alert('연결할 수 없는 링크예요. 다시 시도해 보거나, 문의해 주세요');
+    else
+      Alert.alert('연결할 수 없는 링크예요. 다시 시도해 보거나, 문의해 주세요');
   }
 
   return (

@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
+  Alert,
 } from 'react-native';
 import I18n from 'i18n-js';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -162,7 +163,7 @@ export default function PostWritingScreen(): React.ReactElement {
       setSelect(-1);
       navigation.reset({ index: 0, routes: [{ name: 'PostStack' }] });
     } else {
-      alert(serverResult.result.errorMsg);
+      Alert.alert(serverResult.result.errorMsg);
       setSelect(pastSelect);
     }
   }

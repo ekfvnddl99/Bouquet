@@ -1,5 +1,10 @@
 import React from 'react';
-import { View, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
+import {
+  View,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import styled from 'styled-components/native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
@@ -66,7 +71,7 @@ export default function QnAItem({
   async function deleteQna() {
     const serverResult = await deleteQnaAsync(qna.id);
     if (serverResult.isSuccess) {
-      alert('Q&A가 삭제되었어요.');
+      Alert.alert('Q&A가 삭제되었어요.');
       if (refresh) await refresh();
     }
   }

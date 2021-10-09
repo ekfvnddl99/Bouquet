@@ -1,3 +1,4 @@
+import { Alert } from 'react-native';
 import { useRecoilState } from 'recoil';
 
 // logics
@@ -23,7 +24,7 @@ export default function useViewPost(): [
     const result = await getPostAsync(postId);
     if (result.isSuccess) {
       setViewPost(result.result);
-    } else alert(result.result.statusCode);
+    } else Alert.alert(result.result.errorMsg);
   }
 
   return [viewPost, setViewPostById];

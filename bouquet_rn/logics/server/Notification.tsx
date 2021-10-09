@@ -1,4 +1,4 @@
-import { Platform } from 'react-native';
+import { Platform, Alert } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import * as SecureStore from 'expo-secure-store';
@@ -24,14 +24,14 @@ export async function getPushNotificationsPermission(): Promise<void> {
     }
     // 사용자가 허락 안 하면 불가
     if (finalStatus !== 'granted') {
-      alert('권한이 없어서 알림을 받을 수 없어요. 권한 설정을 해주세요.');
+      Alert.alert('권한이 없어서 알림을 받을 수 없어요. 권한 설정을 해주세요.');
       return;
     }
 
     // token 얻어서 저장함
     const token = (await Notifications.getExpoPushTokenAsync()).data;
     await SecureStore.setItemAsync('pushToken', token);
-  } else alert('실기기에서 이용해주세요.');
+  } else Alert.alert('실기기에서 이용해주세요.');
   if (Platform.OS === 'android') {
     Notifications.setNotificationChannelAsync('default', {
       name: 'default',

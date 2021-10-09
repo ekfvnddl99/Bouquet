@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput } from 'react-native';
+import { View, TextInput, Alert } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -142,7 +142,7 @@ export default function RegisterScreen1({
     if (serverResult.isSuccess) {
       setIsNext(true);
       setRealAuthNumber(serverResult.result);
-    } else alert(serverResult.result.errorMsg);
+    } else Alert.alert(serverResult.result.errorMsg);
   }
 
   /**
