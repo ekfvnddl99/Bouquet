@@ -12,6 +12,7 @@ import * as text from '../../styles/styled-components/text';
 // logics
 import * as cal from '../../logics/non-server/Calculation';
 import { deleteQnaAsync } from '../../logics/server/QnAs';
+import useCharacter from '../../logics/hooks/useCharacter';
 
 // utils
 import { Character, MyCharacter } from '../../utils/types/UserTypes';
@@ -51,6 +52,7 @@ export default function QnAItem({
   onPressSun,
 }: QnAItemProps): React.ReactElement {
   const navigation = useNavigation();
+  const [myCharacter] = useCharacter();
 
   /**
    * '상세 게시물' 화면으로 가는 함수
@@ -109,9 +111,11 @@ export default function QnAItem({
             active={qna.liked}
             onPress={() => onPressSun(qna)}
           />
-          <TouchableOpacity onPress={() => deleteQna()}>
-            <Icon icon="bin" size={20} />
-          </TouchableOpacity>
+          {myCharacter.id === characterInfo.id ? (
+            <TouchableOpacity onPress={() => deleteQna()}>
+              <Icon icon="bin" size={20} />
+            </TouchableOpacity>
+          ) : null}
         </View>
       </WholeArea>
     </TouchableWithoutFeedback>

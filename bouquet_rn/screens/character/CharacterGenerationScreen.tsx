@@ -111,14 +111,15 @@ export default function CharacterGenerationScreen(): React.ReactElement {
       serverResult = await editCharacterAsync(newCharacter);
     } else serverResult = await createCharacterAsync(newCharacter);
     if (serverResult.isSuccess) {
-      if (serverResult.result !== null)
+      if (serverResult.result !== null) {
         await storeNotificationCount(`N${newCharacter.name}`, 0);
-      setCharacter({
-        ...newCharacter,
-        id: serverResult.result,
-      });
-      await loadCharacterList();
-      setStep(step + 1);
+        setCharacter({
+          ...newCharacter,
+          id: serverResult.result,
+        });
+        await loadCharacterList();
+        setStep(step + 1);
+      }
     } else {
       alert(serverResult.result.errorMsg);
       console.log(serverResult.result.info);
