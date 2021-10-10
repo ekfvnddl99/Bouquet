@@ -31,7 +31,7 @@ export default function HalfModal({
     >
       <TouchableOpacity
         activeOpacity={1}
-        style={{ flexGrow: 1, backgroundColor: colors.alpha50_black }}
+        style={{ flexGrow: 1 }}
         onPress={() => setModalVisible(false)}
       />
       <ModalArea activeOpacity={1} onPress={() => setModalVisible(false)}>

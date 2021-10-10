@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { StyleSheet, Animated, Alert } from 'react-native';
+import { StyleSheet, Animated, Alert, View } from 'react-native';
 import { useRoute, RouteProp, useFocusEffect } from '@react-navigation/native';
 
 // styles
 import colors from '../../../styles/colors';
 import * as area from '../../../styles/styled-components/area';
+import * as text from '../../../styles/styled-components/text';
 
 // view
 import ProfileFeedView from './ProfileFeedView';
@@ -25,6 +26,7 @@ import { Post, AllTemplates, Qna } from '../../../utils/types/PostTypes';
 import HeaderItem from '../../../components/item/HeaderItem';
 import PostItem from '../../../components/item/PostItem';
 import QnAItem from '../../../components/item/QnAItem';
+import ConditionButton from '../../../components/button/ConditionButton';
 
 const HEADER_MAX_HEIGHT = 80;
 const HEADER_MIN_HEIGHT = 60;
@@ -49,13 +51,6 @@ export default function ProfileDetailScreen(): React.ReactElement {
   const [routePrefix, setRoutePrefix] = useState('');
 
   const route = useRoute<RouteProp<ParamList, 'ProfileDetail'>>();
-  useEffect(() => {
-    if (route.params !== undefined) {
-      const { characterName } = route.params;
-      if (characterName) setViewCharacter(characterName);
-      setRoutePrefix(route.params.routePrefix);
-    }
-  }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -73,13 +68,14 @@ export default function ProfileDetailScreen(): React.ReactElement {
   const [qnaPageNum, setQnaPageNum] = useState(1);
   const [isQnaPageEnd, setIsQnaPageEnd] = useState(false);
 
-  async function getPosts(newPageNum?: number) {
+  async function getPosts(newPageNum?: number, isRefreshing?: boolean) {
     const serverResult = await getPostListAsync(
       newPageNum || postPageNum,
       viewCharacter.name,
     );
     if (serverResult.isSuccess) {
-      if (postArray === undefined) setPostArray(serverResult.result[0]);
+      if (postArray === undefined || isRefreshing)
+        setPostArray(serverResult.result[0]);
       else if (serverResult.result[0].length === 0) setIsPostPageEnd(true);
       else {
         const tmpArray = postArray;
@@ -109,8 +105,8 @@ export default function ProfileDetailScreen(): React.ReactElement {
   // 해당 캐릭터의 게시글을 가져오는 api
   useEffect(() => {
     if (viewCharacter.name !== '') {
-      getPosts();
-      getQnas();
+      getPosts(1, true);
+      getQnas(1, true);
     }
   }, [viewCharacter]);
 
@@ -143,15 +139,17 @@ export default function ProfileDetailScreen(): React.ReactElement {
       if (serverResult.isSuccess) {
         const isLiked = serverResult.result;
 
-        const tmpArray = [...postArray];
-        if (tmpArray?.[index]) {
-          tmpArray[index].liked = isLiked;
-          tmpArray[index].num_sunshines = isLiked
-            ? tmpArray[index].num_sunshines + 1
-            : tmpArray[index].num_sunshines - 1;
-        }
+        if (postArray !== undefined) {
+          const tmpArray = [...postArray];
+          if (tmpArray?.[index]) {
+            tmpArray[index].liked = isLiked;
+            tmpArray[index].num_sunshines = isLiked
+              ? tmpArray[index].num_sunshines + 1
+              : tmpArray[index].num_sunshines - 1;
+          }
 
-        setPostArray(tmpArray);
+          setPostArray(tmpArray);
+        }
       }
     };
 
@@ -170,15 +168,17 @@ export default function ProfileDetailScreen(): React.ReactElement {
       if (serverResult.isSuccess) {
         const isLiked = serverResult.result;
 
-        const tmpArray = [...qnaArray];
-        if (tmpArray?.[index]) {
-          tmpArray[index].liked = isLiked;
-          tmpArray[index].num_sunshines = isLiked
-            ? tmpArray[index].num_sunshines + 1
-            : tmpArray[index].num_sunshines - 1;
-        }
+        if (qnaArray !== undefined) {
+          const tmpArray = [...qnaArray];
+          if (tmpArray?.[index]) {
+            tmpArray[index].liked = isLiked;
+            tmpArray[index].num_sunshines = isLiked
+              ? tmpArray[index].num_sunshines + 1
+              : tmpArray[index].num_sunshines - 1;
+          }
 
-        setQnaArray(tmpArray);
+          setQnaArray(tmpArray);
+        }
       }
     };
 
@@ -196,19 +196,47 @@ export default function ProfileDetailScreen(): React.ReactElement {
     );
   };
 
+  async function viewMorePost() {
+    if (!isPostPageEnd) {
+      const newPageNum = postPageNum + 1;
+      setPostPageNum(newPageNum);
+      await getPosts(newPageNum);
+    }
+  }
+  async function viewMoreQna() {
+    if (!isQnaPageEnd) {
+      const newPageNum = qnaPageNum + 1;
+      setQnaPageNum(newPageNum);
+      await getQnas(newPageNum);
+    }
+  }
+
   const tabIndexArray = [
     {
       returnView: (
         <ProfileFeedView
           postArray={postArray}
-          onEndReached={async () => {
-            if (!isPostPageEnd) {
-              const newPageNum = postPageNum + 1;
-              setPostPageNum(newPageNum);
-              await getPosts(newPageNum);
-            }
-          }}
           renderItem={renderPost}
+          listFooterComponent={
+            isPostPageEnd ? (
+              <View style={{ flex: 1, marginBottom: 20, alignItems: 'center' }}>
+                <text.Caption textColor={colors.gray6}>
+                  여기가 끝이에요!
+                </text.Caption>
+              </View>
+            ) : (
+              <View style={{ marginBottom: 20 }}>
+                <ConditionButton
+                  onPress={() => viewMorePost()}
+                  content="더보기"
+                  isActive
+                  paddingH={0}
+                  paddingV={0}
+                  height={32}
+                />
+              </View>
+            )
+          }
         />
       ),
     },
@@ -216,14 +244,27 @@ export default function ProfileDetailScreen(): React.ReactElement {
       returnView: (
         <ProfileQnAView
           qnaArray={qnaArray}
-          onEndReached={async () => {
-            if (!isQnaPageEnd) {
-              const newPageNum = qnaPageNum + 1;
-              setQnaPageNum(newPageNum);
-              await getQnas(newPageNum);
-            }
-          }}
           renderItem={renderQna}
+          listFooterComponent={
+            isQnaPageEnd ? (
+              <View style={{ flex: 1, marginBottom: 20, alignItems: 'center' }}>
+                <text.Caption textColor={colors.gray6}>
+                  여기가 끝이에요!
+                </text.Caption>
+              </View>
+            ) : (
+              <View style={{ marginBottom: 20 }}>
+                <ConditionButton
+                  onPress={() => viewMoreQna()}
+                  content="더보기"
+                  isActive
+                  paddingH={0}
+                  paddingV={0}
+                  height={32}
+                />
+              </View>
+            )
+          }
         />
       ),
     },

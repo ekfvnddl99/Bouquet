@@ -47,7 +47,7 @@ export default function NotificationScreen(): React.ReactElement {
   const navigation = useNavigation<StackNavigationProp<any>>();
   const [, setViewPost] = useViewPost();
   const [, setViewCharacter] = useViewCharacter();
-  const [isNew, setIsNew] = useRecoilState(isNewNotification);
+  const [, setIsNew] = useRecoilState(isNewNotification);
 
   const [myCharacter] = useCharacter();
   // 로그인한 상태인지 아닌지
@@ -124,8 +124,8 @@ export default function NotificationScreen(): React.ReactElement {
 
   // 가장 처음에 인기 게시물 가져옴
   useEffect(() => {
-    getNotification();
-  }, []);
+    if (isLogined) getNotification();
+  }, [isLogined]);
 
   const goNavigate = async (param: string | number) => {
     if (typeof param === 'number') {

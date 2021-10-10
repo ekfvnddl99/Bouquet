@@ -6,7 +6,6 @@ import { Post, AllTemplates } from '../../../utils/types/PostTypes';
 
 type ProfileFeedViewProps = {
   postArray: Post<AllTemplates>[] | undefined;
-  onEndReached: () => Promise<void>;
   renderItem: ({
     item,
     index,
@@ -14,20 +13,20 @@ type ProfileFeedViewProps = {
     item: Post<AllTemplates>;
     index: number;
   }) => JSX.Element;
+  listFooterComponent: JSX.Element;
 };
 export default function ProfileFeedView({
   postArray,
-  onEndReached,
   renderItem,
+  listFooterComponent,
 }: ProfileFeedViewProps): React.ReactElement {
   return (
     <FlatList
+      keyExtractor={(item) => `${item.id}`}
       showsVerticalScrollIndicator={false}
-      onEndReached={onEndReached}
-      onEndReachedThreshold={0.5}
-      keyExtractor={(item, idx) => `${item.id}`}
       data={postArray}
       renderItem={renderItem}
+      ListFooterComponent={listFooterComponent}
     />
   );
 }

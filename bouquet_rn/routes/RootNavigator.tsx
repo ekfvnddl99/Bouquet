@@ -33,7 +33,7 @@ export default function AppStack(): React.ReactElement {
       await login();
       await checkIsNewNotification();
       await Notifications.addNotificationReceivedListener(async () => {
-        setIsNew(true);
+        await checkIsNewNotification();
       });
       setTimeout(() => {
         setIsSplash(false);
@@ -112,15 +112,16 @@ export default function AppStack(): React.ReactElement {
     async getInitialURL(): Promise<string> {
       const init = await Linking.getInitialURL();
 
+      alert(`init ${init}`);
       if (init !== null) {
-        return `${prefix}Tab/Notification`;
+        return init;
       }
 
       /**
        * TODO Add Noti - killed
        */
       // 어차피 꺼진 상태에서 바로 가기 때문에 setIsNew 필요없음
-      return null;
+      return `${prefix}Tab/Notification`;
     },
     subscribe(listener: (deeplink: string) => void) {
       const onReceiveURL = ({ url }: { url: string }) => listener(url);
