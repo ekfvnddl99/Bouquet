@@ -24,7 +24,9 @@
       "bundleIdentifier": "com.dot.bouquet",
       "infoPlist": {
         "UIBackgroundModes": ["remote-notification"]
-      }
+      },
+      "buildNumber": "2",
+      "icon": "./assets/png/icon.png"
     },
     "android": {
       "adaptiveIcon": {
