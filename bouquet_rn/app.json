@@ -3,7 +3,7 @@
     "name": "bouquet",
     "scheme": "bouquet",
     "slug": "bouquet",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/png/icon.png",
     "splash": {
@@ -19,14 +19,9 @@
       "icon": "./assets/png/icon.png"
     },
     "ios": {
-      "supportsTablet": true,
-      "usesAppleSignIn": true,
-      "bundleIdentifier": "com.bouquet.bouquet",
-      "config": {
-        "googleSignIn": {
-          "reservedClientId": "com.googleusercontent.apps.828159899837-kcksemp2itup93uk6bdic66cubug5go8"
-        }
-      },
+      "supportsTablet": false,
+      "usesAppleSignIn": false,
+      "bundleIdentifier": "com.dot.bouquet",
       "infoPlist": {
         "UIBackgroundModes": ["remote-notification"]
       }
@@ -37,7 +32,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "softwareKeyboardLayoutMode": "pan",
-      "package": "com.bouquet.bouquet"
+      "package": "com.dot.bouquet"
     },
     "web": {
       "favicon": "./assets/png/favicon.png"
