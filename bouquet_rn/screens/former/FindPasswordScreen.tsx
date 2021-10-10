@@ -4,7 +4,6 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   BackHandler,
-  Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -44,7 +43,7 @@ export default function FindPasswordScreen(): React.ReactElement {
     if (serverResult.isSuccess) {
       await login();
       setStep(step + 1);
-    } else Alert.alert(serverResult.result.errorMsg);
+    } else alert(serverResult.result.errorMsg);
     setLoading(false);
   }
 

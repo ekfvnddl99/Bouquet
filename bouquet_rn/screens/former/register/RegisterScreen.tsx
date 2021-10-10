@@ -4,7 +4,6 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   BackHandler,
-  Alert,
 } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import i18n from 'i18n-js';
@@ -51,7 +50,7 @@ export default function RegisterScreen(): React.ReactElement {
     const imgServerResult = await uploadImageAsync(profileImg);
     if (imgServerResult.isSuccess) realProfileImg = imgServerResult.result;
     else {
-      Alert.alert('이미지 업로드에 실패했어요. 대신 기본 이미지를 사용할게요.');
+      alert('이미지 업로드에 실패했어요. 대신 기본 이미지를 사용할게요.');
       realProfileImg =
         'https://bouquet-storage.s3.ap-northeast-2.amazonaws.com/5b6ee222-2415-11ec-ab3a-0242ac110002.png';
     }
@@ -74,9 +73,9 @@ export default function RegisterScreen(): React.ReactElement {
         const postToken = await registerNotificationTokenAsync(getToken);
         if (postToken.isSuccess) {
           setStep(step + 1);
-        } else Alert.alert(postToken.result.errorMsg);
-      } else Alert.alert('다시 시도해주세요.');
-    } else Alert.alert(serverResult.result.errorMsg);
+        } else alert(postToken.result.errorMsg);
+      } else alert('다시 시도해주세요.');
+    } else alert(serverResult.result.errorMsg);
     setLoading(false);
   }
 

@@ -35,8 +35,7 @@ export default function SettingScreen(): React.ReactElement {
   async function openURL(url: string) {
     const isPossible = await Linking.canOpenURL(url);
     if (isPossible) await Linking.openURL(url);
-    else
-      Alert.alert('연결할 수 없는 링크예요. 다시 시도해 보거나, 문의해 주세요');
+    else alert('연결할 수 없는 링크예요. 다시 시도해 보거나, 문의해 주세요');
   }
 
   return (

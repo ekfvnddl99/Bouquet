@@ -82,7 +82,7 @@ export default function ProfileDetailScreen(): React.ReactElement {
         serverResult.result[0].forEach((obj) => tmpArray.push(obj));
         setPostArray(tmpArray);
       }
-    } else Alert.alert(serverResult.result.errorMsg);
+    } else alert(serverResult.result.errorMsg);
   }
 
   async function getQnas(newPageNum?: number, isRefreshing?: boolean) {
@@ -99,7 +99,7 @@ export default function ProfileDetailScreen(): React.ReactElement {
         serverResult.result.forEach((obj) => tmpArray.push(obj));
         setQnaArray(tmpArray);
       }
-    } else Alert.alert(serverResult.result.errorMsg);
+    } else alert(serverResult.result.errorMsg);
   }
 
   // 해당 캐릭터의 게시글을 가져오는 api

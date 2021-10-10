@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Alert } from 'react-native';
+import { View } from 'react-native';
 import styled from 'styled-components/native';
 
 // styles
@@ -39,17 +39,17 @@ export default function QnATextInput({
   async function createQuestion(qna: QnaRequest) {
     const serverResult = await createQnaAsync(qna);
     if (serverResult.isSuccess) {
-      Alert.alert('Q&A를 업로드했어요!');
+      alert('Q&A를 업로드했어요!');
       setAnswer('');
       await getQuestion();
-    } else Alert.alert(serverResult.result.errorMsg);
+    } else alert(serverResult.result.errorMsg);
   }
 
   async function getQuestion() {
     const serverResult = await getQuestionAsync();
     if (serverResult.isSuccess) {
       setQuestion(serverResult.result);
-    } else Alert.alert(serverResult.result.errorMsg);
+    } else alert(serverResult.result.errorMsg);
   }
 
   useEffect(() => {

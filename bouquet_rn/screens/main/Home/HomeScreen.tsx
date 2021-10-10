@@ -4,7 +4,6 @@ import {
   Animated,
   TouchableWithoutFeedback,
   Keyboard,
-  Alert,
 } from 'react-native';
 import i18n from 'i18n-js';
 import styled from 'styled-components/native';
@@ -70,7 +69,7 @@ export default function HomeScreen(): React.ReactElement {
         // setPostArray(serverResult.result)
       }
     } else {
-      Alert.alert(serverResult.result.errorMsg);
+      alert(serverResult.result.errorMsg);
     }
     setRefreshing(false);
   }
@@ -155,15 +154,17 @@ export default function HomeScreen(): React.ReactElement {
       if (serverResult.isSuccess) {
         const isLiked = serverResult.result;
 
-        const tmpArray = [...postArray];
-        if (tmpArray?.[index]) {
-          tmpArray[index].liked = isLiked;
-          tmpArray[index].num_sunshines = isLiked
-            ? tmpArray[index].num_sunshines + 1
-            : tmpArray[index].num_sunshines - 1;
-        }
+        if (postArray !== undefined) {
+          const tmpArray = [...postArray];
+          if (tmpArray?.[index]) {
+            tmpArray[index].liked = isLiked;
+            tmpArray[index].num_sunshines = isLiked
+              ? tmpArray[index].num_sunshines + 1
+              : tmpArray[index].num_sunshines - 1;
+          }
 
-        setPostArray(tmpArray);
+          setPostArray(tmpArray);
+        }
       }
     };
 

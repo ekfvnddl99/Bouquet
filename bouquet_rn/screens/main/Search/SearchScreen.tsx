@@ -169,7 +169,7 @@ export default function SearchScreen(): React.ReactElement {
         setCharacterArray(tmpArray);
       }
     } else {
-      Alert.alert(serverResult.result.errorMsg);
+      alert(serverResult.result.errorMsg);
     }
   }
   /**

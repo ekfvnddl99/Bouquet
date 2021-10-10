@@ -100,7 +100,7 @@ export default function SettingProfileScreen(): React.ReactElement {
       const { status } =
         await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== 'granted') {
-        Alert.alert('이미지를 업로드하려면 권한이 필요해요.');
+        alert('이미지를 업로드하려면 권한이 필요해요.');
       }
     })();
   }, []);
@@ -117,7 +117,7 @@ export default function SettingProfileScreen(): React.ReactElement {
     if (!result.cancelled) {
       const serverResult = await uploadImageAsync(result.uri);
       if (serverResult.isSuccess) setProfileImg(serverResult.result);
-      else Alert.alert(serverResult.result.errorMsg);
+      else alert(serverResult.result.errorMsg);
     }
     setIsSelectImg(false);
   }
@@ -127,7 +127,7 @@ export default function SettingProfileScreen(): React.ReactElement {
     if (result.isSuccess) {
       setNewAccount({ ...user, name, profile_img: profileImg });
       navigation.reset({ index: 0, routes: [{ name: 'Profile' }] });
-    } else Alert.alert(result.result.errorMsg);
+    } else alert(result.result.errorMsg);
   };
 
   const goDeletion = () => {

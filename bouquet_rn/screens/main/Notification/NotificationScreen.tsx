@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { View, Animated, FlatList, Alert } from 'react-native';
+import { View, Animated, FlatList } from 'react-native';
 import i18n from 'i18n-js';
 import styled from 'styled-components/native';
 import { useRecoilState } from 'recoil';
@@ -67,7 +67,7 @@ export default function NotificationScreen(): React.ReactElement {
   const getNowNotificationCount = async () => {
     const serverResult = await getNotificationCountAsync();
     if (serverResult.isSuccess) return serverResult.result;
-    Alert.alert(serverResult.result.errorMsg);
+    alert(serverResult.result.errorMsg);
     return -1;
   };
   useFocusEffect(
@@ -97,7 +97,7 @@ export default function NotificationScreen(): React.ReactElement {
     const serverResult = await deleteNotificationAsync(id);
 
     if (serverResult.isSuccess) await onRefresh();
-    else Alert.alert(serverResult.result.errorMsg);
+    else alert(serverResult.result.errorMsg);
   };
 
   async function getNotification(newPageNum?: number, isRefreshing?: boolean) {
@@ -111,7 +111,7 @@ export default function NotificationScreen(): React.ReactElement {
         serverResult.result.forEach((obj) => tmpArray.push(obj));
         setNotificationArray(tmpArray);
       }
-    } else Alert.alert(serverResult.result.errorMsg);
+    } else alert(serverResult.result.errorMsg);
     setRefreshing(false);
   }
 

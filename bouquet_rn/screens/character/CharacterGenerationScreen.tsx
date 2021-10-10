@@ -4,7 +4,6 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   BackHandler,
-  Alert,
 } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -107,7 +106,6 @@ export default function CharacterGenerationScreen(): React.ReactElement {
       newCharacter.profile_img =
         'https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg';
     }
-    console.log('a');
 
     let serverResult;
     if (isModifying) {
@@ -124,7 +122,7 @@ export default function CharacterGenerationScreen(): React.ReactElement {
       await loadCharacterList();
       setStep(step + 1);
     } else {
-      Alert.alert(serverResult.result.errorMsg);
+      alert(serverResult.result.errorMsg);
       console.log(serverResult.result.info);
     }
     setLoading(false);

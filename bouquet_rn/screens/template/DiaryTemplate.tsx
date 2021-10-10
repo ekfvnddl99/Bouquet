@@ -76,7 +76,7 @@ function Diary({ isMini, isEditMode, diary, setPost, setImages }: DiaryProps) {
   const setImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('이미지를 업로드하려면 권한이 필요해요.');
+      alert('이미지를 업로드하려면 권한이 필요해요.');
       return;
     }
 

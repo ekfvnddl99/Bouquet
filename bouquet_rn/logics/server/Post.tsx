@@ -1,4 +1,3 @@
-import { Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as SecureStore from 'expo-secure-store';
 
@@ -420,7 +419,7 @@ export async function getImagePickerPermission(): Promise<void> {
   }
   // 사용자가 허락 안 하면 불가
   if (finalStatus !== 'granted') {
-    Alert.alert('이미지를 업로드하려면 권한이 필요해요.');
+    alert('이미지를 업로드하려면 권한이 필요해요.');
   }
 }
 

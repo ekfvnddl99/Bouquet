@@ -38,7 +38,7 @@ export default function AccountDeletionScreenOne(): React.ReactElement {
         index: 0,
         routes: [{ name: 'SettingAccountDeletion2' }],
       });
-    } else Alert.alert(serverResult.result.errorMsg);
+    } else alert(serverResult.result.errorMsg);
     setLoading(false);
   }, [deleteUserAsync]);
 
