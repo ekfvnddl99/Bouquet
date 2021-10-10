@@ -16,7 +16,6 @@ import { Post, AllTemplates } from '../../../utils/types/PostTypes';
 type SearchPostViewProps = {
   searchInput: string;
   postArray: Post<AllTemplates>[];
-  onEndReached: () => Promise<void>;
   renderItem: ({
     item,
     index,
@@ -24,12 +23,13 @@ type SearchPostViewProps = {
     item: Post<AllTemplates>;
     index: number;
   }) => JSX.Element;
+  ListFooterComponent: JSX.Element;
 };
 export default function SearchPostView({
   searchInput,
   postArray,
-  onEndReached,
   renderItem,
+  ListFooterComponent,
 }: SearchPostViewProps): React.ReactElement {
   return (
     <>
@@ -47,8 +47,7 @@ export default function SearchPostView({
             keyExtractor={(item) => `${item.id}`}
             showsVerticalScrollIndicator={false}
             renderItem={renderItem}
-            onEndReached={onEndReached}
-            onEndReachedThreshold={0.8}
+            ListFooterComponent={ListFooterComponent}
           />
         </area.ContainerBlank30>
       ) : null}

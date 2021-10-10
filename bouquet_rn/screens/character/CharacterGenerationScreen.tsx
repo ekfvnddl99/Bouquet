@@ -89,6 +89,9 @@ export default function CharacterGenerationScreen(): React.ReactElement {
    */
   const [loading, setLoading] = useState(false);
   async function createNewCharacter() {
+    if (loading) return;
+    setLoading(true);
+
     // 입력한 이미지가 있는 경우
     if (newCharacter.profile_img) {
       const serverResult = await UploadImageAsync(newCharacter.profile_img);
@@ -104,9 +107,8 @@ export default function CharacterGenerationScreen(): React.ReactElement {
       newCharacter.profile_img =
         'https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg';
     }
+    console.log('a');
 
-    if (loading) return;
-    setLoading(true);
     let serverResult;
     if (isModifying) {
       serverResult = await editCharacterAsync(newCharacter);
@@ -118,9 +120,9 @@ export default function CharacterGenerationScreen(): React.ReactElement {
           ...newCharacter,
           id: serverResult.result,
         });
-        await loadCharacterList();
-        setStep(step + 1);
       }
+      await loadCharacterList();
+      setStep(step + 1);
     } else {
       Alert.alert(serverResult.result.errorMsg);
       console.log(serverResult.result.info);

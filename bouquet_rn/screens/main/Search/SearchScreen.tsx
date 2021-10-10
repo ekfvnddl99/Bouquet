@@ -4,6 +4,7 @@ import {
   Animated,
   TextInput,
   TouchableWithoutFeedback,
+  TouchableOpacity,
   Keyboard,
   Alert,
 } from 'react-native';
@@ -15,6 +16,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // styles
 import colors from '../../../styles/colors';
 import * as area from '../../../styles/styled-components/area';
+import * as text from '../../../styles/styled-components/text';
 
 // assets
 import Svg from '../../../assets/Icon';
@@ -279,6 +281,17 @@ export default function SearchScreen(): React.ReactElement {
     );
   };
 
+  async function viewMorePost() {
+    console.log('a');
+    const newPageNum = pageNum + 1;
+    setPageNum(newPageNum);
+    await getPost(
+      newPageNum,
+      undefined,
+      searchInput === '' ? undefined : searchInput,
+    );
+  }
+
   const viewArray = [
     <SearchRecentView
       searchInput={searchInput}
@@ -304,18 +317,12 @@ export default function SearchScreen(): React.ReactElement {
     <SearchPostView
       searchInput={searchInput}
       postArray={postArray}
-      onEndReached={async () => {
-        if (!isPageEnd) {
-          const newPageNum = pageNum + 1;
-          setPageNum(newPageNum);
-          await getPost(
-            newPageNum,
-            undefined,
-            searchInput !== '' ? searchInput : undefined,
-          );
-        }
-      }}
       renderItem={renderItem}
+      ListFooterComponent={
+        <TouchableOpacity onPress={() => viewMorePost()}>
+          <text.Body2R textColor={colors.black}>더보기</text.Body2R>
+        </TouchableOpacity>
+      }
     />,
   ];
 
