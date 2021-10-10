@@ -38,15 +38,10 @@ export default function RegisterScreen4({
   navigation,
   setNewPasswordString,
 }: RegisterScreen4Props): React.ReactElement {
-  async function getPermissions() {
-    await getPushNotificationsPermission();
-    await getImagePickerPermission();
-  }
   /**
    * '메인 탭'으로 이동하는 함수
    */
   async function goTabs() {
-    await getPermissions();
     navigation.reset({ index: 0, routes: [{ name: 'Tab' }] });
   }
 

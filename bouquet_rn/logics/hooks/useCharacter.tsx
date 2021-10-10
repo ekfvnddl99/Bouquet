@@ -24,7 +24,7 @@ export default function useCharacter(): [
     if (changeResult.isSuccess) {
       await SecureStore.setItemAsync('auth', changeResult.result);
     } else {
-      alert(`useCharacter ${changeResult.result.statusCode}`);
+      alert(changeResult.result.errorMsg);
       return;
     }
 

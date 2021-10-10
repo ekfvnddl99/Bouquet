@@ -32,7 +32,7 @@ export default function AppStack(): React.ReactElement {
     async function callLogin() {
       await login();
       await checkIsNewNotification();
-      await Notifications.addNotificationReceivedListener(async () => {
+      Notifications.addNotificationReceivedListener(async () => {
         await checkIsNewNotification();
       });
       setTimeout(() => {
@@ -116,10 +116,6 @@ export default function AppStack(): React.ReactElement {
         return `${prefix}Tab/Notification`;
       }
 
-      /**
-       * TODO Add Noti - killed
-       */
-      // 어차피 꺼진 상태에서 바로 가기 때문에 setIsNew 필요없음
       return null;
     },
     subscribe(listener: (deeplink: string) => void) {

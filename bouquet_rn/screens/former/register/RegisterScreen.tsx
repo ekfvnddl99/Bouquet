@@ -65,18 +65,16 @@ export default function RegisterScreen(): React.ReactElement {
     );
     if (serverResult.isSuccess) {
       await SecureStore.setItemAsync('auth', serverResult.result);
-      alert('register1');
       await getPushNotificationsPermission();
-      alert('register2');
       const getToken = await SecureStore.getItemAsync('pushToken');
       if (typeof getToken === 'string') {
         const postToken = await registerNotificationTokenAsync(getToken);
         if (postToken.isSuccess) {
           await login();
           setStep(step + 1);
-        } else alert(postToken.result.statusCode);
-      } else alert(getToken);
-    } else alert(serverResult.result.statusCode);
+        } else alert(postToken.result.errorMsg);
+      } else alert('오류가 발생했어요. 문의를 꼭 남겨주세요.');
+    } else alert(serverResult.result.errorMsg);
     setLoading(false);
   }
 
