@@ -13,6 +13,7 @@ import * as text from '../../styles/styled-components/text';
 import { deleteCharacterAsync } from '../../logics/server/Character';
 import useLoadCharacter from '../../logics/hooks/useLoadCharacter';
 import useUser from '../../logics/hooks/useUser';
+import useCharacter from '../../logics/hooks/useCharacter';
 
 // utils
 import { MyCharacter } from '../../utils/types/UserTypes';
@@ -36,6 +37,7 @@ export default function CharacterDeletionScreen(): React.ReactElement {
   const targetCharacter = route.params?.characterInfo;
 
   const [, loadCharacterList] = useLoadCharacter();
+  const [, setCharacter] = useCharacter();
   // 첫 번째 화면에서 삭제하고, 두 번째 화면에서 삭제한 캐릭터의 이미지와 이름을 보여줘야 하는데 음 제대로 될지 모르겠네
 
   // 화면 몇 단계인지 나타내는 state
@@ -53,7 +55,8 @@ export default function CharacterDeletionScreen(): React.ReactElement {
     if (serverResult.isSuccess) {
       await deleteNotificationCount(`N${targetCharacter.name}`);
       setStep(step + 1);
-      loadCharacterList();
+      const chList = await loadCharacterList();
+      if (chList && chList.length > 0) await setCharacter(chList[0]);
     } else Alert.alert(serverResult.result.errorMsg);
     setLoading(false);
   }
