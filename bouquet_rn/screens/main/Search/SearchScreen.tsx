@@ -35,6 +35,7 @@ import { likePostAsync } from '../../../logics/server/Post';
 // components
 import FloatingButton from '../../../components/button/FloatingButton';
 import PostItem from '../../../components/item/PostItem';
+import ConditionButton from '../../../components/button/ConditionButton';
 
 // utils
 import { AllTemplates, Post } from '../../../utils/types/PostTypes';
@@ -282,14 +283,15 @@ export default function SearchScreen(): React.ReactElement {
   };
 
   async function viewMorePost() {
-    console.log('a');
-    const newPageNum = pageNum + 1;
-    setPageNum(newPageNum);
-    await getPost(
-      newPageNum,
-      undefined,
-      searchInput === '' ? undefined : searchInput,
-    );
+    if (!isPageEnd) {
+      const newPageNum = pageNum + 1;
+      setPageNum(newPageNum);
+      await getPost(
+        newPageNum,
+        undefined,
+        searchInput === '' ? undefined : searchInput,
+      );
+    }
   }
 
   const viewArray = [
@@ -319,9 +321,24 @@ export default function SearchScreen(): React.ReactElement {
       postArray={postArray}
       renderItem={renderItem}
       ListFooterComponent={
-        <TouchableOpacity onPress={() => viewMorePost()}>
-          <text.Body2R textColor={colors.black}>더보기</text.Body2R>
-        </TouchableOpacity>
+        isPageEnd ? (
+          <View style={{ flex: 1, marginBottom: 20, alignItems: 'center' }}>
+            <text.Caption textColor={colors.gray6}>
+              여기가 끝이에요!
+            </text.Caption>
+          </View>
+        ) : (
+          <View style={{ marginBottom: 20 }}>
+            <ConditionButton
+              onPress={() => viewMorePost()}
+              content="더보기"
+              isActive
+              paddingH={0}
+              paddingV={0}
+              height={32}
+            />
+          </View>
+        )
       }
     />,
   ];
