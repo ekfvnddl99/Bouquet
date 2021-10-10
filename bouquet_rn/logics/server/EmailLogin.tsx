@@ -257,7 +257,7 @@ export async function editPasswordAsync(
   const tmpResult = await APIs.patchAsync<EditPasswordAsyncOutput>(
     '/auth/user/change-pw',
     JSON.stringify({ email, pw }),
-    true,
+    false,
   );
 
   // 사전 처리된 에러는 바로 반환

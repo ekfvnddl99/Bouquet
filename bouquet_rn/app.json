@@ -29,8 +29,9 @@
       "icon": "./assets/png/icon.png"
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/png/adaptive-icon.png",
+        "foregroundImage": "./assets/png/icon.png",
         "backgroundColor": "#FFFFFF"
       },
       "softwareKeyboardLayoutMode": "pan",

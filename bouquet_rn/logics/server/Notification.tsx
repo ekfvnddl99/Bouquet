@@ -28,9 +28,15 @@ export async function getPushNotificationsPermission(): Promise<void> {
       return;
     }
 
-    // token 얻어서 저장함
-    const token = (await Notifications.getExpoPushTokenAsync()).data;
-    await SecureStore.setItemAsync('pushToken', token);
+    try {
+      // token 얻어서 저장함
+      const token = (await Notifications.getExpoPushTokenAsync()).data;
+      alert(token);
+      await SecureStore.setItemAsync('pushToken', token);
+      alert('f');
+    } catch (e) {
+      alert(e);
+    }
   } else alert('실기기에서 이용해주세요.');
   if (Platform.OS === 'android') {
     Notifications.setNotificationChannelAsync('default', {

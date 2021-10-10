@@ -46,6 +46,8 @@ export default function RegisterScreen(): React.ReactElement {
 
   const [loading, setLoading] = useState(false);
   async function registerUser() {
+    if (loading) return;
+    setLoading(true);
     let realProfileImg = profileImg;
     const imgServerResult = await uploadImageAsync(profileImg);
     if (imgServerResult.isSuccess) realProfileImg = imgServerResult.result;
@@ -55,8 +57,6 @@ export default function RegisterScreen(): React.ReactElement {
         'https://bouquet-storage.s3.ap-northeast-2.amazonaws.com/5b6ee222-2415-11ec-ab3a-0242ac110002.png';
     }
 
-    if (loading) return;
-    setLoading(true);
     const serverResult = await registerEmailAsync(
       email,
       password,
@@ -65,17 +65,18 @@ export default function RegisterScreen(): React.ReactElement {
     );
     if (serverResult.isSuccess) {
       await SecureStore.setItemAsync('auth', serverResult.result);
-      await login();
-
+      alert('register1');
       await getPushNotificationsPermission();
+      alert('register2');
       const getToken = await SecureStore.getItemAsync('pushToken');
       if (typeof getToken === 'string') {
         const postToken = await registerNotificationTokenAsync(getToken);
         if (postToken.isSuccess) {
+          await login();
           setStep(step + 1);
-        } else alert(postToken.result.errorMsg);
-      } else alert('다시 시도해주세요.');
-    } else alert(serverResult.result.errorMsg);
+        } else alert(postToken.result.statusCode);
+      } else alert(getToken);
+    } else alert(serverResult.result.statusCode);
     setLoading(false);
   }
 

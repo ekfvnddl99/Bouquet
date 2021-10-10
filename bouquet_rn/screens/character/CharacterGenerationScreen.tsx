@@ -114,7 +114,7 @@ export default function CharacterGenerationScreen(): React.ReactElement {
     if (serverResult.isSuccess) {
       if (serverResult.result !== null) {
         await storeNotificationCount(`N${newCharacter.name}`, 0);
-        setCharacter({
+        await setCharacter({
           ...newCharacter,
           id: serverResult.result,
         });
@@ -123,7 +123,6 @@ export default function CharacterGenerationScreen(): React.ReactElement {
       setStep(step + 1);
     } else {
       alert(serverResult.result.errorMsg);
-      console.log(serverResult.result.info);
     }
     setLoading(false);
   }

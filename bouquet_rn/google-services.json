@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "280244196332",
+    "project_id": "bouquet-c71f6",
+    "storage_bucket": "bouquet-c71f6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:280244196332:android:2bc25a146ae8da2c0d66c9",
+        "android_client_info": {
+          "package_name": "com.dot.bouquet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "280244196332-hd090o0k4rg69ni9mkphhu28c6tj4obu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxyQ71sfi8ukuyM4EQjCxQcXUaJqA2Atk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "280244196332-hd090o0k4rg69ni9mkphhu28c6tj4obu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
