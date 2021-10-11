@@ -41,8 +41,13 @@ export default function RegisterScreen4({
   /**
    * '메인 탭'으로 이동하는 함수
    */
-  async function goTabs() {
-    navigation.reset({ index: 0, routes: [{ name: 'Tab' }] });
+  async function goNext() {
+    if (setNewPasswordString !== undefined)
+      navigation.reset({
+        index: 1,
+        routes: [{ name: 'Welcome' }, { name: 'Login' }],
+      });
+    else navigation.reset({ index: 0, routes: [{ name: 'Tab' }] });
   }
 
   return (
@@ -54,12 +59,16 @@ export default function RegisterScreen4({
           justifyContent: 'center',
         }}
       >
-        <elses.CircleImg
-          diameter={120}
-          source={{ uri: profileImg }}
-          style={{ marginBottom: 16 }}
-        />
-        <NameNText name={name} sub="님," />
+        {setNewPasswordString !== undefined ? null : (
+          <>
+            <elses.CircleImg
+              diameter={120}
+              source={{ uri: profileImg }}
+              style={{ marginBottom: 16 }}
+            />
+            <NameNText name={name} sub="님," />
+          </>
+        )}
         <text.Subtitle2R textColor={colors.black}>
           {setNewPasswordString !== undefined
             ? setNewPasswordString
@@ -71,7 +80,7 @@ export default function RegisterScreen4({
         <area.BottomArea style={{ marginBottom: 16 }}>
           <ConditionButton
             isActive
-            onPress={() => goTabs()}
+            onPress={() => goNext()}
             content={i18n.t('시작')}
             paddingH={0}
             paddingV={14}
