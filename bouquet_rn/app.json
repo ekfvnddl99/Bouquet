@@ -31,8 +31,8 @@
     "android": {
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/png/icon.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./assets/png/adaptive-icon.png",
+        "backgroundImage": "./assets/png/adaptive-background.png"
       },
       "softwareKeyboardLayoutMode": "pan",
       "package": "com.dot.bouquet"
