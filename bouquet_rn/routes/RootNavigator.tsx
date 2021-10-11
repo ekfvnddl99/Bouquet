@@ -32,9 +32,7 @@ export default function AppStack(): React.ReactElement {
     async function callLogin() {
       await login();
       await checkIsNewNotification();
-      Notifications.addNotificationReceivedListener(async () => {
-        await checkIsNewNotification();
-      });
+      await getPushNotificationsPermission();
       setTimeout(() => {
         setIsSplash(false);
       }, 2000);
@@ -57,7 +55,10 @@ export default function AppStack(): React.ReactElement {
     if (myCharacter.name === '') return;
     await getNotificationCount().then((before) => {
       getNowNotificationCount().then((now) => {
-        if (now !== -1) if (before < now) setIsNew(true);
+        if (now !== -1 && before !== null) {
+          if (before < now) setIsNew(true);
+          else setIsNew(false);
+        }
       });
     });
   };

@@ -50,8 +50,6 @@ export default function NotificationScreen(): React.ReactElement {
   const [, setIsNew] = useRecoilState(isNewNotification);
 
   const [myCharacter] = useCharacter();
-  // 로그인한 상태인지 아닌지
-  const [isLogined, setIsLogined] = useState(false);
 
   // 인기 게시글 담을 state
   const [notificationArray, setNotificationArray] = useState<Notification[]>();
@@ -81,17 +79,11 @@ export default function NotificationScreen(): React.ReactElement {
           }
         });
       }
-      if (isLogined) {
+      if (myCharacter.id !== -1) {
         setNotificationCount();
       }
-    }, [isLogined]),
+    }, []),
   );
-
-  // 로그인한 상태인지 아닌지 확인
-  useEffect(() => {
-    if (myCharacter.id === -1) setIsLogined(false);
-    else setIsLogined(true);
-  }, [myCharacter.id]);
 
   const deleteNotification = async (id: number) => {
     const serverResult = await deleteNotificationAsync(id);
@@ -124,8 +116,8 @@ export default function NotificationScreen(): React.ReactElement {
 
   // 가장 처음에 인기 게시물 가져옴
   useEffect(() => {
-    if (isLogined) getNotification();
-  }, [isLogined]);
+    if (myCharacter.id !== -1) getNotification();
+  }, []);
 
   const goNavigate = async (param: string | number) => {
     if (typeof param === 'number') {
@@ -184,7 +176,7 @@ export default function NotificationScreen(): React.ReactElement {
    * 알람 개수가 0이냐 아니냐에 따라 달라지는 구성
    */
   function setNotification() {
-    if (!isLogined) {
+    if (myCharacter.id === -1) {
       return (
         <DefaultNotification activeOpacity={1}>
           <Svg icon="logo" size={20} />
@@ -218,6 +210,7 @@ export default function NotificationScreen(): React.ReactElement {
             }
           }}
           scrollEventThrottle={1}
+          keyboardShouldPersistTaps="always"
           onEndReachedThreshold={0.8}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item, idx) => item.id.toString()}
@@ -254,10 +247,10 @@ export default function NotificationScreen(): React.ReactElement {
           ]}
         >
           <NameNText
-            name={isLogined ? myCharacter.name : ''}
-            sub={isLogined ? i18n.t('의') : '당신의'}
+            name={myCharacter.id !== -1 ? myCharacter.name : ''}
+            sub={myCharacter.id !== -1 ? i18n.t('의') : '당신의'}
           />
-          {isLogined ? (
+          {myCharacter.id !== -1 ? (
             <text.Subtitle2R textColor={colors.black}>
               {i18n.t('알림')}
             </text.Subtitle2R>
@@ -267,7 +260,7 @@ export default function NotificationScreen(): React.ReactElement {
             </text.Subtitle2B>
           )}
         </AnimationText>
-        {isLogined ? (
+        {myCharacter.id !== -1 ? (
           <AnimationImg
             style={[
               {},
@@ -305,10 +298,10 @@ export default function NotificationScreen(): React.ReactElement {
         )}
         data={[1]}
         renderItem={() => setNotification()}
-        refreshing={isLogined ? refreshing : false}
-        onRefresh={isLogined ? onRefresh : undefined}
+        refreshing={myCharacter.id !== -1 ? refreshing : false}
+        onRefresh={myCharacter.id !== -1 ? onRefresh : undefined}
       />
-      {isLogined ? (
+      {myCharacter.id !== -1 ? (
         <FloatingButton routePrefix="NotiTab" />
       ) : (
         <>
