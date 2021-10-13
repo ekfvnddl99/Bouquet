@@ -205,7 +205,7 @@ export default function PostDetailScreen(): React.ReactElement {
                     postOwner={postOwner}
                     template={template}
                     onDelete={() => deletePost()}
-                    onPressSun={() => onPressSun}
+                    onPressSun={() => onPressSun()}
                   />
                 }
                 showsVerticalScrollIndicator={false}

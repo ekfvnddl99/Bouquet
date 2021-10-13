@@ -98,7 +98,7 @@ export default function PostDetailTopView({
         <SunButton
           sunNumber={viewPost?.num_sunshines}
           active={viewPost?.liked}
-          onPress={() => onPressSun}
+          onPress={() => onPressSun()}
         />
       </View>
       <text.Subtitle3 textColor={colors.black} style={{ marginTop: 36 }}>
