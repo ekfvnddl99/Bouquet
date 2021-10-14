@@ -1,4 +1,10 @@
-import React, { useRef, useState, useMemo, useCallback } from 'react';
+import React, {
+  useRef,
+  useState,
+  useMemo,
+  useCallback,
+  useEffect,
+} from 'react';
 import {
   KeyboardAvoidingView,
   FlatList,
@@ -70,16 +76,14 @@ export default function PostDetailScreen(): React.ReactElement {
   const route = useRoute<RouteProp<ParamList, 'PostDetail'>>();
   const [routePrefix, setRoutePrefix] = useState('');
 
-  useFocusEffect(
-    useCallback(() => {
-      if (route.params !== undefined) {
-        let postId;
-        if (route.params.postId) postId = route.params.postId;
-        if (postId) setViewPost(postId);
-        setRoutePrefix(route.params.routePrefix);
-      }
-    }, []),
-  );
+  useEffect(() => {
+    if (route.params !== undefined) {
+      let postId;
+      if (route.params.postId) postId = route.params.postId;
+      if (postId) setViewPost(postId);
+      setRoutePrefix(route.params.routePrefix);
+    }
+  }, []);
 
   // 대댓글이 보이는 댓글의 아이디가 들어가는 배열
   const [openingCommentArray, setOpeningCommentArray] = useState<number[]>([]);
