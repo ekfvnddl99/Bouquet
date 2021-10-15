@@ -11,6 +11,7 @@ type HalfModalProps = {
   modalVisible: boolean;
   setModalVisible: (input: boolean) => void;
   onReport: () => void;
+  onStop: (input: string) => void;
   onDelete?: () => void;
   isCanDelete?: boolean;
 };
@@ -18,6 +19,7 @@ export default function HalfModal({
   modalVisible,
   setModalVisible,
   onReport,
+  onStop,
   onDelete,
   isCanDelete,
 }: HalfModalProps): React.ReactElement {
@@ -37,6 +39,16 @@ export default function HalfModal({
       <ModalArea activeOpacity={1} onPress={() => setModalVisible(false)}>
         <ModalItem onPress={() => onReport()}>
           <text.Subtitle2R textColor={colors.black}>신고</text.Subtitle2R>
+        </ModalItem>
+        <MiddleLine />
+        <ModalItem onPress={() => onStop('user')}>
+          <text.Subtitle2R textColor={colors.black}>계정 차단</text.Subtitle2R>
+        </ModalItem>
+        <MiddleLine />
+        <ModalItem onPress={() => onStop('character')}>
+          <text.Subtitle2R textColor={colors.black}>
+            캐릭터 차단
+          </text.Subtitle2R>
         </ModalItem>
         <MiddleLine />
 

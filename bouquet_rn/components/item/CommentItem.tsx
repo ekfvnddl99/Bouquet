@@ -113,6 +113,7 @@ export default function CommentItem({
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         onReport={() => reportComment()}
+        onStop={() => undefined}
         onDelete={() => deleteComment()}
         isCanDelete={myCharacter.name === commentInfo.character_info.name}
       />

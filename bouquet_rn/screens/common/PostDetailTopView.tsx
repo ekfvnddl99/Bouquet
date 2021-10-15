@@ -63,6 +63,7 @@ export default function PostDetailTopView({
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         onReport={() => reportPost()}
+        onStop={() => undefined}
         onDelete={() => onDelete()}
         isCanDelete={postOwner}
       />
