@@ -41,11 +41,11 @@ export default function HalfModal({
           <text.Subtitle2R textColor={colors.black}>신고</text.Subtitle2R>
         </ModalItem>
         <MiddleLine />
-        <ModalItem onPress={() => onStop('user')}>
+        <ModalItem onPress={() => alert('계정이 차단되었습니다.')}>
           <text.Subtitle2R textColor={colors.black}>계정 차단</text.Subtitle2R>
         </ModalItem>
         <MiddleLine />
-        <ModalItem onPress={() => onStop('character')}>
+        <ModalItem onPress={() => alert('캐릭터가 차단되었습니다.')}>
           <text.Subtitle2R textColor={colors.black}>
             캐릭터 차단
           </text.Subtitle2R>
