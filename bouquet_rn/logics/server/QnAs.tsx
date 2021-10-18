@@ -94,6 +94,18 @@ export async function getQnaListAsync(
     return { result: result.qnas, isSuccess: true };
   }
 
+  // 400 : Blocked
+  if (APIs.isError<APIs.ServerError>(result, response, 400)) {
+    return {
+      result: {
+        statusCode: 400,
+        errorMsg: '차단한 사용자에요.',
+        info: result.msg,
+      },
+      isSuccess: false,
+    };
+  }
+
   // 404 : No such character
   if (APIs.isError<APIs.ServerError>(result, response, 404)) {
     return {
