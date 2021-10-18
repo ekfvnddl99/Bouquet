@@ -258,6 +258,18 @@ export async function getCharacterListAsync(
     return { result, isSuccess: true };
   }
 
+  // 400 : Blocked
+  if (APIs.isError<APIs.ServerError>(result, response, 400)) {
+    return {
+      result: {
+        statusCode: 400,
+        errorMsg: '차단한 사용자에요.',
+        info: result.msg,
+      },
+      isSuccess: false,
+    };
+  }
+
   // 404 : No such user
   if (APIs.isError<APIs.ServerError>(result, response, 404)) {
     return {
@@ -372,6 +384,18 @@ export async function getCharacterAsync(
   // 요청 성공 : Character 객체 반환
   if (APIs.isSuccess<GetCharacterAsyncOutput>(result, response)) {
     return { result, isSuccess: true };
+  }
+
+  // 400 : Blocked
+  if (APIs.isError<APIs.ServerError>(result, response, 400)) {
+    return {
+      result: {
+        statusCode: 400,
+        errorMsg: '차단한 사용자에요.',
+        info: result.msg,
+      },
+      isSuccess: false,
+    };
   }
 
   // 404 : No such character

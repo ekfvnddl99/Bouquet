@@ -303,9 +303,12 @@ export async function getPostListAsync(
     total_post_num: number;
   };
 
+  const auth = await SecureStore.getItemAsync('auth');
+
   const tmpResult = await APIs.getAsync<GetPostListAsyncOutput>(
     `/post/character/${characterName}/${pageNum}`,
     false,
+    auth ? { token: auth } : undefined,
   );
 
   // 사전 처리된 에러는 바로 반환
@@ -318,6 +321,18 @@ export async function getPostListAsync(
   // 요청 성공 : Post List 반환
   if (APIs.isSuccess<GetPostListAsyncOutput>(result, response)) {
     return { result: [result.posts, result.total_post_num], isSuccess: true };
+  }
+
+  // 400 : Blocked
+  if (APIs.isError<APIs.ServerError>(result, response, 400)) {
+    return {
+      result: {
+        statusCode: 400,
+        errorMsg: '차단한 사용자에요.',
+        info: result.msg,
+      },
+      isSuccess: false,
+    };
   }
 
   // 422 : Validation Error
