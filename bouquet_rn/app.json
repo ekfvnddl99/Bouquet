@@ -26,8 +26,9 @@
         "UIBackgroundModes": ["remote-notification"],
         "NSPhotoLibraryUsageDescription": "계정 및 캐릭터 프로필 사진에 사용하기 위해 갤러리 접근을 허용하시겠습니까?"
       },
-      "buildNumber": "3",
-      "icon": "./assets/png/icon.png"
+      "buildNumber": "4",
+      "icon": "./assets/png/icon.png",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "googleServicesFile": "./google-services.json",
