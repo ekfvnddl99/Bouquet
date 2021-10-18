@@ -15,7 +15,10 @@ import { Post, AllTemplates } from '../../utils/types/PostTypes';
 
 //  logics
 import useUser from '../../logics/hooks/useUser';
+import useCharacter from '../../logics/hooks/useCharacter';
 import { reportPostAsync } from '../../logics/server/Post';
+import { blockCharacterAsync } from '../../logics/server/Character';
+import { blockUserAsync } from '../../logics/server/User';
 
 // components
 import ProfileButton from '../../components/button/ProfileButton';
@@ -48,14 +51,24 @@ export default function PostDetailTopView({
   onPressSun,
 }: PostDetailTopViewProps): React.ReactElement {
   const user = useUser();
+  const [myCharacter] = useCharacter();
   const [modalVisible, setModalVisible] = useState(false);
 
   async function reportPost() {
     const serverResult = await reportPostAsync(viewPost.id);
     if (serverResult.isSuccess) {
-      alert('신고 완료됐습니다!');
+      alert('신고가 접수되었습니다.');
     } else alert(serverResult.result.errorMsg);
   }
+
+  const blockSomeone = async (what: string) => {
+    let serverResult;
+    if (what === 'user') serverResult = await blockUserAsync(user.id);
+    else serverResult = await blockCharacterAsync(myCharacter.id);
+    if (serverResult.isSuccess) {
+      alert('차단되었습니다.');
+    } else alert(serverResult.result.errorMsg);
+  };
 
   return (
     <View>
@@ -63,7 +76,7 @@ export default function PostDetailTopView({
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         onReport={() => reportPost()}
-        onStop={() => undefined}
+        onStop={blockSomeone}
         onDelete={() => onDelete()}
         isCanDelete={postOwner}
       />

@@ -20,6 +20,8 @@ import {
   deleteCommentAsync,
 } from '../../logics/server/Post';
 import useUser from '../../logics/hooks/useUser';
+import { blockCharacterAsync } from '../../logics/server/Character';
+import { blockUserAsync } from '../../logics/server/User';
 
 // utils
 import { PostComment } from '../../utils/types/PostTypes';
@@ -90,7 +92,7 @@ export default function CommentItem({
   async function reportComment() {
     const serverResult = await reportCommentAsync(commentInfo.id);
     if (serverResult.isSuccess) {
-      alert('신고 완료됐습니다!');
+      alert('신고가 접수되었습니다.');
     } else alert(serverResult.result.errorMsg);
   }
 
@@ -101,6 +103,17 @@ export default function CommentItem({
       setViewPost(viewPost.id);
     } else alert(serverResult.result.errorMsg);
   }
+
+  const blockSomeone = async (what: string) => {
+    let serverResult;
+    if (what === 'user') serverResult = await blockUserAsync(user.id);
+    else serverResult = await blockCharacterAsync(myCharacter.id);
+    if (serverResult.isSuccess) {
+      alert('차단되었습니다.');
+      // 새로고침을 위하여
+      setViewPost(viewPost.id);
+    } else alert(serverResult.result.errorMsg);
+  };
 
   return (
     <area.NoHeightArea
@@ -113,7 +126,7 @@ export default function CommentItem({
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         onReport={() => reportComment()}
-        onStop={() => undefined}
+        onStop={blockSomeone}
         onDelete={() => deleteComment()}
         isCanDelete={myCharacter.name === commentInfo.character_info.name}
       />

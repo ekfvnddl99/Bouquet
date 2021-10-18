@@ -566,3 +566,68 @@ export async function followCharacterAsync(
     isSuccess: false,
   };
 }
+
+/**
+ * 다른 캐릭터를 차단하도록 요청하는 함수
+ * @param characterId 차단하려는 캐릭터의 id
+ * @returns null
+ */
+export async function blockCharacterAsync(
+  characterId: number,
+): APIs.ServerResult<null> {
+  // 서버 응답 타입 정의
+  type BlockCharacterAsyncOutput = null;
+
+  const tmpResult = await APIs.postAsync<BlockCharacterAsyncOutput>(
+    `/character/block`,
+    { 'Content-Type': 'application/json' },
+    JSON.stringify({ id: characterId }),
+    true,
+  );
+
+  // 사전 처리된 에러는 바로 반환
+  if (APIs.isServerErrorOutput(tmpResult)) {
+    return { result: tmpResult, isSuccess: false };
+  }
+
+  const [result, response] = tmpResult;
+
+  // 요청 성공 : auth 반환
+  if (APIs.isSuccess<BlockCharacterAsyncOutput>(result, response)) {
+    return { result, isSuccess: true };
+  }
+
+  // 400 : You can't block yourself
+  if (APIs.isError<APIs.ServerError>(result, response, 400)) {
+    return {
+      result: {
+        statusCode: 400,
+        errorMsg: '내 캐릭터를 차단할 수 없어요.',
+        info: result.msg,
+      },
+      isSuccess: false,
+    };
+  }
+
+  // 422 : Validation Error
+  if (APIs.isError<APIs.ServerError422>(result, response, 422)) {
+    return {
+      result: {
+        statusCode: 422,
+        errorMsg:
+          '요청한 캐릭터 정보가 잘못되었어요. 다시 시도해 보거나, 문의해 주세요.',
+        info: result.detail,
+      },
+      isSuccess: false,
+    };
+  }
+  // 나머지 에러
+  return {
+    result: {
+      statusCode: response.status,
+      errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
+      info: response,
+    },
+    isSuccess: false,
+  };
+}
