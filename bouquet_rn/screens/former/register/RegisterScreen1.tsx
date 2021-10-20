@@ -140,6 +140,7 @@ export default function RegisterScreen1({
    * 이메일 인증을 확인하는 함수
    */
   async function checkEmailAuthentication() {
+    if (mailButtonColor === colors.gray2) return;
     let getVerificationCodeAsync;
     if (isFindPassword) getVerificationCodeAsync = checkExistingEmailAsync;
     else getVerificationCodeAsync = checkNewEmailAsync;
