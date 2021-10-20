@@ -95,35 +95,38 @@ export default function RegisterScreen1({
     '없는 메일이에요.',
   ];
   // 이메일 정규표현식
-  const emailRegex =
-    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+  const emailRegex = /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/i;
   /**
    * 이메일 조건을 확인하는 함수
    * @description email 값이 바뀔 때마다 실행된다.
    */
   useEffect(() => {
     async function checkEmail(arr: boolean[]) {
+      let value = isFindPassword !== undefined;
       // 메일 입력했다가 다 지우면 '메일 입력하라'는 에러 메세지가 떠야하는데 안 떠서 여기 넣음
-      if (!tmpArray[0]) setEmailErr(errTextArray[0]);
+      // +++ 흠냐링 일단 중복체크보다 우선적으로 체크해야 할 것들을 체크
+      if (!arr[0]) setEmailErr(errTextArray[0]);
+      else if (!arr[1]) setEmailErr(errTextArray[1]);
+      // 중복 체크
+      // 메일 형식이 안 갖춰지면 validation err 떠서 isSuccess일 때로 안 들어간다...
       const serverResult = await checkEmailAsync(email);
       if (serverResult.isSuccess) {
-        const value = !serverResult.result && email.length > 0;
-        if (!tmpArray[0]) setEmailErr(errTextArray[0]);
-        else if (!tmpArray[1]) setEmailErr(errTextArray[1]);
-        else if (isFindPassword && value) setEmailErr(errTextArray[6]);
-        else if (isFindPassword === undefined && !value)
-          setEmailErr(errTextArray[2]);
-        else if (!tmpArray[3]) setEmailErr(errTextArray[3]);
+        // 이메일 중복 체크부터 우선순위대로 체크하고, 에러가 없으면 EmailErr를 공백으로 처리
+        value = !serverResult.result && email.length > 0;
+        if (isFindPassword && value) setEmailErr(errTextArray[6]);
+        else if (!isFindPassword && !value) setEmailErr(errTextArray[2]);
+        else if (!arr[3]) setEmailErr(errTextArray[3]);
         else setEmailErr('');
-        if (isFindPassword)
-          setEmailConditionArray([arr[0], arr[1], !value, arr[3]]);
-        else setEmailConditionArray([arr[0], arr[1], value, arr[3]]);
       }
+      // 이메일 중복을 하든 안 하든 무조건 거쳐야 할 과정(체크 배열 굳히기)
+      if (isFindPassword)
+        setEmailConditionArray([arr[0], arr[1], !value, arr[3]]);
+      else setEmailConditionArray([arr[0], arr[1], value, arr[3]]);
     }
     const tmpArray = [...emailConditionArray];
     // 조건 다 통과했는데, 다시 이메일을 입력하는 경우.
-    // step 2에서 다시 돌아온 경우.
-    if (isOK) {
+    // step 2에서 다시 돌아온 경우 + step 1에서 메일 인증 버튼 누른 후 다른 이메일로 변경하는 경우
+    if (isOK || !emailConditionArray.includes(false)) {
       setIsNext(false);
       setAuthNumber('');
       setRealAuthNumber('');
@@ -133,7 +136,6 @@ export default function RegisterScreen1({
     tmpArray[1] = emailRegex.test(email);
     tmpArray[3] = isNext;
     checkEmail(tmpArray);
-    setEmailConditionArray(tmpArray);
   }, [email, isNext]);
 
   /**
