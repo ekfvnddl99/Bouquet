@@ -63,6 +63,10 @@ export default function RegisterScreen1({
   const [isFocus, setIsFocus] = useState(false);
   // 인증번호 입력창이 뜰 조건을 만족했는지 아닌지
   const [isNext, setIsNext] = useState<boolean>(email.length > 0);
+  // 메일 인증 버튼 누른 후 버튼 색
+  const [mailButtonColor, setMailButtonColor] = useState(
+    authNumber.length !== 0 ? colors.gray2 : colors.black,
+  );
 
   // 이메일 입력 조건을 체크하는 배열
   const [emailConditionArray, setEmailConditionArray] = useState([
@@ -123,6 +127,7 @@ export default function RegisterScreen1({
       setIsNext(false);
       setAuthNumber('');
       setRealAuthNumber('');
+      setMailButtonColor(colors.black);
     }
     tmpArray[0] = email.length > 0;
     tmpArray[1] = emailRegex.test(email);
@@ -140,6 +145,7 @@ export default function RegisterScreen1({
     else getVerificationCodeAsync = checkNewEmailAsync;
     const serverResult = await getVerificationCodeAsync(email);
     if (serverResult.isSuccess) {
+      setMailButtonColor(colors.gray2);
       setIsNext(true);
       setRealAuthNumber(serverResult.result);
     } else alert(serverResult.result.errorMsg);
@@ -200,7 +206,7 @@ export default function RegisterScreen1({
         <LineButton
           content={i18n.t('메일 인증')}
           onPress={() => checkEmailAuthentication()}
-          borderColor={colors.black}
+          borderColor={mailButtonColor}
         />
       </area.FormArea>
       {isFocus && emailConditionArray.includes(false) ? (
