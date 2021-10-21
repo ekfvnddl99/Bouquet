@@ -173,6 +173,7 @@ export default function ProfileDetailItem({
               regularContent={i18n.t('팔로워')}
               textColor={colors.primary}
               isCenter
+              isMultiline={false}
             />
             <View style={{ marginRight: 32 }} />
             <BoldNRegularText
@@ -186,6 +187,7 @@ export default function ProfileDetailItem({
               regularContent={i18n.t('팔로우')}
               textColor={colors.primary}
               isCenter
+              isMultiline={false}
             />
           </area.RowArea>
           <area.RowArea style={{ marginBottom: 24 }}>
@@ -222,6 +224,7 @@ export default function ProfileDetailItem({
             regularContent={realCharacter.job}
             textColor={colors.black}
             isCenter
+            isMultiline={false}
           />
         </View>
         <View style={{ flex: isMini ? 1.5 : 1 }}>
@@ -230,6 +233,7 @@ export default function ProfileDetailItem({
             regularContent={realCharacter.birth.toString()}
             textColor={colors.black}
             isCenter
+            isMultiline={false}
           />
         </View>
         <View style={{ flex: 1 }}>
@@ -238,6 +242,7 @@ export default function ProfileDetailItem({
             regularContent={realCharacter.nationality}
             textColor={colors.black}
             isCenter
+            isMultiline={false}
           />
         </View>
       </area.RowArea>
@@ -259,6 +264,7 @@ export default function ProfileDetailItem({
         regularContent={realCharacter.tmi}
         textColor={colors.black}
         isCenter={false}
+        isMultiline={!isMini}
       />
     </button.ProfileDetailButton>
   );

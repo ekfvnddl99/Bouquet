@@ -123,6 +123,7 @@ export default function AccountScreen(): React.ReactElement {
               regularContent={i18n.t('팔로워')}
               textColor={colors.primary}
               isCenter
+              isMultiline={false}
             />
             <View style={{ marginRight: 32 }} />
             <BoldNRegularText
@@ -132,6 +133,7 @@ export default function AccountScreen(): React.ReactElement {
               }
               textColor={colors.primary}
               isCenter
+              isMultiline={false}
             />
           </area.RowArea>
         </area.NoHeightArea>
