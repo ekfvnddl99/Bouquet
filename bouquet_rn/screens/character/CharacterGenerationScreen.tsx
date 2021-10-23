@@ -62,6 +62,10 @@ export default function CharacterGenerationScreen(): React.ReactElement {
   const [newCharacter, setNewCharacter] = useState(
     isModifying ? characterInfo : noMyCharacter,
   );
+  // 생년월일 각각의 state
+  const [birthYear, setBirthYear] = useState('');
+  const [birthMonth, setBirthMonth] = useState('');
+  const [birthDay, setBirthDay] = useState('');
 
   // 백핸들러 처리
   const backAction = () => {
@@ -107,6 +111,10 @@ export default function CharacterGenerationScreen(): React.ReactElement {
         'https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg';
     }
 
+    setNewCharacter({
+      ...newCharacter,
+      birth: `${birthYear}년 ${birthMonth}월 ${birthDay}일`,
+    });
     let serverResult;
     if (isModifying) {
       serverResult = await editCharacterAsync(newCharacter);
@@ -173,6 +181,12 @@ export default function CharacterGenerationScreen(): React.ReactElement {
           onPress={() => setStep(step + 1)}
           newCharacter={newCharacter}
           setNewCharacter={setNewCharacter}
+          birthYear={birthYear}
+          setBirthYear={setBirthYear}
+          birthMonth={birthMonth}
+          setBirthMonth={setBirthMonth}
+          birthDay={birthDay}
+          setBirthDay={setBirthDay}
           originCharacter={characterInfo}
         />
       );

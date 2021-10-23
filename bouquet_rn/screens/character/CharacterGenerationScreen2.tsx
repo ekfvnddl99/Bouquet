@@ -20,6 +20,12 @@ type CharacterGenerationScreen2Props = {
   onPress: () => void;
   newCharacter: MyCharacter;
   setNewCharacter: (param: MyCharacter) => void;
+  birthYear: string;
+  setBirthYear: (param: string) => void;
+  birthMonth: string;
+  setBirthMonth: (param: string) => void;
+  birthDay: string;
+  setBirthDay: (param: string) => void;
   originCharacter?: MyCharacter;
 };
 /**
@@ -36,6 +42,12 @@ export default function CharacterGenerationScreen2({
   onPress,
   newCharacter,
   setNewCharacter,
+  birthYear,
+  setBirthYear,
+  birthMonth,
+  setBirthMonth,
+  birthDay,
+  setBirthDay,
   originCharacter,
 }: CharacterGenerationScreen2Props): React.ReactElement {
   // 다음 단계 넘어가도 되는지 확인하는 state
@@ -47,7 +59,11 @@ export default function CharacterGenerationScreen2({
     isModifying,
   ]);
   // 생일 조건 체크하는 state
-  const [birthCondition, setBirthCondition] = useState(false);
+  const [birthConditionArray, setBirthConditionArray] = useState([
+    false,
+    false,
+    false,
+  ]);
   // 직업 조건 체크하는 state
   const [jobCondition, setJobCondition] = useState(false);
   // 국적 조건 체크하는 state
@@ -94,8 +110,12 @@ export default function CharacterGenerationScreen2({
    * 생일 조건 체크 함수
    */
   useEffect(() => {
-    setBirthCondition(newCharacter.birth.length > 0);
-  }, [newCharacter.birth]);
+    const tmpArray = [...birthConditionArray];
+    tmpArray[0] = birthYear.length > 0;
+    tmpArray[1] = birthMonth.length > 0;
+    tmpArray[2] = birthDay.length > 0;
+    setBirthConditionArray(tmpArray);
+  }, [birthYear, birthMonth, birthDay]);
 
   /**
    * 직업 조건 체크 함수
@@ -114,7 +134,7 @@ export default function CharacterGenerationScreen2({
   useEffect(() => {
     if (
       nameConditionArray.includes(false) ||
-      !birthCondition ||
+      birthConditionArray.includes(false) ||
       !jobCondition ||
       !nationalityCondition
     )
@@ -154,18 +174,46 @@ export default function CharacterGenerationScreen2({
             }
             byteNum={18}
           />
-          <ConditionTextInput
-            height={44}
-            placeholder={i18n.t('생년월일 (YYYYMMDD)')}
-            onChangeText={(textInput: string) => {
-              setNewCharacter({ ...newCharacter, birth: textInput });
-            }}
-            keyboardType="numeric"
-            isWarning={!birthCondition}
-            textValue={newCharacter.birth}
-            warnText={errTextArray[0]}
-            maxLength={8}
-          />
+          <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+            <ConditionTextInput
+              height={44}
+              placeholder="년"
+              onChangeText={(textInput: string) => {
+                setBirthYear(textInput);
+              }}
+              keyboardType="numeric"
+              isWarning={!birthConditionArray[0]}
+              textValue={birthYear}
+              warnText={errTextArray[0]}
+              maxLength={4}
+            />
+            <View style={{ marginLeft: 6 }} />
+            <ConditionTextInput
+              height={44}
+              placeholder="월"
+              onChangeText={(textInput: string) => {
+                setBirthMonth(textInput);
+              }}
+              keyboardType="numeric"
+              isWarning={!birthConditionArray[1]}
+              textValue={birthMonth}
+              warnText={errTextArray[0]}
+              maxLength={2}
+            />
+            <View style={{ marginLeft: 6 }} />
+            <ConditionTextInput
+              height={44}
+              placeholder="일"
+              onChangeText={(textInput: string) => {
+                setBirthDay(textInput);
+              }}
+              keyboardType="numeric"
+              isWarning={!birthConditionArray[2]}
+              textValue={birthDay}
+              warnText={errTextArray[0]}
+              maxLength={2}
+            />
+          </View>
           <ConditionTextInput
             height={44}
             placeholder={i18n.t('직업')}
