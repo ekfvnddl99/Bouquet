@@ -103,9 +103,7 @@ export default function SettingScreen(): React.ReactElement {
                 : `${i18n.t('달달한 오렌지 떡볶이')} ${i18n.t('소개')}`
             }
             onPress={() =>
-              openURL(
-                'https://bouquet-dot.notion.site/eb5c313a52884914b62d000bd96fa0db',
-              )
+              openURL('https://blog.naver.com/sw_maestro/222543974765')
             }
           />
           <SettingItem
