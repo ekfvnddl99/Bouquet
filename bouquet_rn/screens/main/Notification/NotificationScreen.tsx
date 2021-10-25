@@ -85,11 +85,16 @@ export default function NotificationScreen(): React.ReactElement {
     }, []),
   );
 
+  const [loading, setLoading] = useState(false);
   const deleteNotification = async (id: number) => {
-    const serverResult = await deleteNotificationAsync(id);
+    if (loading) return;
+    setLoading(true);
 
+    const serverResult = await deleteNotificationAsync(id);
     if (serverResult.isSuccess) await onRefresh();
     else alert(serverResult.result.errorMsg);
+
+    setLoading(false);
   };
 
   async function getNotification(newPageNum?: number, isRefreshing?: boolean) {

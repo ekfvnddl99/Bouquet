@@ -120,7 +120,11 @@ export default function PostWritingScreen(): React.ReactElement {
   /**
    * 게시글 업로드하는 함수
    */
+  const [loading, setLoading] = useState(false);
   async function goUpload() {
+    if (loading) return;
+    setLoading(true);
+
     const pastSelect = select;
     setSelect(5);
 
@@ -179,6 +183,7 @@ export default function PostWritingScreen(): React.ReactElement {
       alert(serverResult.result.errorMsg);
       setSelect(pastSelect);
     }
+    setLoading(false);
   }
 
   /**

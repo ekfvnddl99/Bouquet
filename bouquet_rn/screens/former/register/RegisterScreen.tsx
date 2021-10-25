@@ -48,6 +48,7 @@ export default function RegisterScreen(): React.ReactElement {
   async function registerUser() {
     if (loading) return;
     setLoading(true);
+
     let realProfileImg = profileImg;
     const imgServerResult = await uploadImageAsync(profileImg);
     if (imgServerResult.isSuccess) realProfileImg = imgServerResult.result;

@@ -68,11 +68,16 @@ export default function CommentItem({
   const [sunshineNum, setSunshineNum] = useState(commentInfo.num_sunshines);
   const [modalVisible, setModalVisible] = useState(false);
 
+  const [loading, setLoading] = useState(false);
   async function likeComment() {
     if (myCharacter.name === '') {
       alert('캐릭터를 설정해주세요!');
       return;
     }
+
+    if (loading) return;
+    setLoading(true);
+
     const prevSunNum = sunshineNum;
     const newState = !isActive;
     setIsActive(newState);
@@ -87,6 +92,7 @@ export default function CommentItem({
       setIsActive(!newState);
       alert(serverResult.result.errorMsg);
     }
+    setLoading(false);
   }
 
   async function reportComment() {
@@ -97,11 +103,15 @@ export default function CommentItem({
   }
 
   async function deleteComment() {
+    if (loading) return;
+    setLoading(true);
+
     const serverResult = await deleteCommentAsync(commentInfo.id);
     if (serverResult.isSuccess) {
       // 새로고침을 위하여
       setViewPost(viewPost.id);
     } else alert(serverResult.result.errorMsg);
+    setLoading(false);
   }
 
   const blockSomeone = async (what: string) => {

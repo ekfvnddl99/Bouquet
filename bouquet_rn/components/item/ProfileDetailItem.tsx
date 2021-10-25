@@ -89,7 +89,11 @@ export default function ProfileDetailItem({
    * 내가 다른 캐릭터를 follow하는 함수
    * @returns followCharacterAsync 함수 결과
    */
+  const [loading, setLoading] = useState(false);
   async function followOrUnfollow() {
+    if (loading) return;
+    setLoading(true);
+
     const newState = !isFollowed;
     setIsFollowed(newState);
     const realCharacterId = realCharacter.id ? realCharacter.id : -1;
@@ -101,6 +105,7 @@ export default function ProfileDetailItem({
       alert(serverResult.result.errorMsg);
       setIsFollowed(!newState);
     }
+    setLoading(false);
   }
 
   function isMyCharacter(

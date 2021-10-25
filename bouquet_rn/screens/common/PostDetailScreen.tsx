@@ -104,7 +104,10 @@ export default function PostDetailScreen(): React.ReactElement {
    * 내가 쓴 댓글 업로드하는 함수
    * @param comment 내가 쓴 댓글
    */
+  const [loading, setLoading] = useState(false);
   async function onUpload() {
+    if (loading) return;
+    setLoading(true);
     const newComment: PostCommentRequest = {
       post_id: viewPost?.id,
       character_id: myCharacter.id,
@@ -119,14 +122,18 @@ export default function PostDetailScreen(): React.ReactElement {
       // 새로고침을 위하여
       await setViewPost(viewPost.id);
     } else alert(serverResult.result.errorMsg);
+    setLoading(false);
   }
 
   async function deletePost() {
+    if (loading) return;
+    setLoading(true);
     navigation.goBack();
     const serverResult = await deletePostAsync(viewPost.id);
     if (serverResult.isSuccess) {
       alert('삭제 되었습니다.');
     } else alert(serverResult.result.errorMsg);
+    setLoading(false);
   }
 
   // 이 게시글이 나의 게시글인지
@@ -165,10 +172,13 @@ export default function PostDetailScreen(): React.ReactElement {
   const template = useMemo(() => getTemplate(), [getTemplate]);
 
   async function onPressSun() {
+    if (loading) return;
+    setLoading(true);
     const serverResult = await likePostAsync(viewPost.id);
     if (serverResult.isSuccess) {
       setViewPost(viewPost.id);
     } else alert(serverResult.result.errorMsg);
+    setLoading(false);
   }
 
   return (
