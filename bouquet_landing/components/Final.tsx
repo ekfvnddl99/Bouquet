@@ -87,13 +87,13 @@ export default function Final({ finalRef }: { finalRef: React.MutableRefObject<a
       <ContentWrap>
         <TitleLight>지금 부캐를 만들어 보세요.</TitleLight>
         <StoreWrap>
-          <a href="https://naver.com" target="_blank" rel="noopener noreferrer">
+          <a href="https://apps.apple.com/kr/app/bouquet-%EB%B6%80%EC%BA%90%EB%93%A4%EC%9D%98-%EC%9D%B4%EC%95%BC%EA%B8%B0-%EA%B3%B5%EA%B0%84/id1589432470" target="_blank" rel="noopener noreferrer">
             <StoreFrame>
               <AppleLogo />
               <StoreText>App Store 다운로드</StoreText>
             </StoreFrame>
           </a>
-          <a href="https://google.co.kr" target="_blank" rel="noopener noreferrer">
+          <a href="https://play.google.com/store/apps/details?id=com.dot.bouquet" target="_blank" rel="noopener noreferrer">
             <StoreFrame style={{ marginTop: "10px", marginBottom: "10px" }}>
               <GoogleLogo />
               <StoreText>Play Store 다운로드</StoreText>
@@ -101,10 +101,6 @@ export default function Final({ finalRef }: { finalRef: React.MutableRefObject<a
           </a>
           <Caption>곧 웹에서도 이용할 수 있어요.</Caption>
         </StoreWrap>
-      </ContentWrap>
-      <ContentWrap style={{ marginTop: "100px" }}>
-        <TitleLight>지금은 오픈 베타 중이에요.</TitleLight>
-        <CaptionBig>정식 버전을 열심히 준비하고 있으니, 그동안 많은 피드백과 사랑을 부탁드려요!</CaptionBig>
       </ContentWrap>
     </Wrap>
   )
