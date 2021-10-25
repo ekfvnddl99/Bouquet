@@ -53,10 +53,10 @@ export default function CharacterGenerationScreen(): React.ReactElement {
   const characterInfo = route.params?.characterInfo;
   useEffect(() => {
     if (route.params !== undefined) {
-      const birth = characterInfo.birth.split(' ');
-      setBirthYear(birth[0].slice(0, birth[0].length - 1));
-      setBirthMonth(birth[1]);
-      // setBirthDay(birth[2]);
+      const { birth } = characterInfo;
+      setBirthYear(birth.slice(0, 4));
+      setBirthMonth(birth.slice(4, 6));
+      setBirthDay(birth.slice(6, 8));
     }
   }, []);
 
