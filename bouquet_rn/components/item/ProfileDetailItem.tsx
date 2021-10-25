@@ -217,23 +217,35 @@ export default function ProfileDetailItem({
         </View>
       )}
 
-      <area.RowArea style={{ justifyContent: 'center' }}>
+      <area.RowArea
+        style={{ justifyContent: 'center', alignItems: 'flex-start' }}
+      >
         <View style={{ flex: 1 }}>
           <BoldNRegularText
             boldContent={i18n.t('직업')}
             regularContent={realCharacter.job}
             textColor={colors.black}
             isCenter
-            isMultiline={false}
+            isMultiline={!isMini}
           />
         </View>
-        <View style={{ flex: isMini ? 1.5 : 1 }}>
+        <View
+          style={{
+            flex: isMini ? 1.5 : 1,
+          }}
+        >
           <BoldNRegularText
             boldContent={i18n.t('생년월일')}
-            regularContent={realCharacter.birth.toString()}
+            regularContent={`${realCharacter.birth.slice(
+              0,
+              4,
+            )}년\n${realCharacter.birth.slice(
+              4,
+              6,
+            )}월 ${realCharacter.birth.slice(6)}일`}
             textColor={colors.black}
             isCenter
-            isMultiline={false}
+            isMultiline={!isMini}
           />
         </View>
         <View style={{ flex: 1 }}>
@@ -242,7 +254,7 @@ export default function ProfileDetailItem({
             regularContent={realCharacter.nationality}
             textColor={colors.black}
             isCenter
-            isMultiline={false}
+            isMultiline={!isMini}
           />
         </View>
       </area.RowArea>

@@ -81,6 +81,8 @@ export default function CharacterGenerationScreen2({
     '필수 입력 항목이에요.',
     '이름 규칙을 지켜야 해요.',
     '중복된 이름이에요.',
+    '4개 숫자로 채워주세요.',
+    '2개 숫자로 채워주세요.',
   ];
 
   /**
@@ -117,9 +119,9 @@ export default function CharacterGenerationScreen2({
    */
   useEffect(() => {
     const tmpArray = [...birthConditionArray];
-    tmpArray[0] = birthYear.length > 0;
-    tmpArray[1] = birthMonth.length > 0;
-    tmpArray[2] = birthDay.length > 0;
+    tmpArray[0] = birthYear.length === 4;
+    tmpArray[1] = birthMonth.length === 2;
+    tmpArray[2] = birthDay.length === 2;
     setBirthConditionArray(tmpArray);
   }, [birthYear, birthMonth, birthDay]);
 
@@ -193,7 +195,7 @@ export default function CharacterGenerationScreen2({
               keyboardType="numeric"
               isWarning={!birthConditionArray[0]}
               textValue={birthYear}
-              warnText={errTextArray[0]}
+              warnText={errTextArray[3]}
               maxLength={4}
             />
             <View style={{ marginLeft: 6 }} />
@@ -206,7 +208,7 @@ export default function CharacterGenerationScreen2({
               keyboardType="numeric"
               isWarning={!birthConditionArray[1]}
               textValue={birthMonth}
-              warnText={errTextArray[0]}
+              warnText={errTextArray[4]}
               maxLength={2}
             />
             <View style={{ marginLeft: 6 }} />
@@ -219,7 +221,7 @@ export default function CharacterGenerationScreen2({
               keyboardType="numeric"
               isWarning={!birthConditionArray[2]}
               textValue={birthDay}
-              warnText={errTextArray[0]}
+              warnText={errTextArray[4]}
               maxLength={2}
             />
           </View>
