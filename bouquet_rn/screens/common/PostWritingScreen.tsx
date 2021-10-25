@@ -158,9 +158,23 @@ export default function PostWritingScreen(): React.ReactElement {
 
     const serverResult = await uploadPostAsync(realNewPost);
     if (serverResult.isSuccess) {
-      setViewPost(serverResult.result);
       setSelect(-1);
-      navigation.reset({ index: 0, routes: [{ name: 'PostStack' }] });
+      navigation.reset({
+        index: 0,
+        routes: [
+          {
+            name: `PostStack`,
+            state: {
+              routes: [
+                {
+                  name: `PostDetail`,
+                  params: { routePrefix, postId: serverResult.result },
+                },
+              ],
+            },
+          },
+        ],
+      });
     } else {
       alert(serverResult.result.errorMsg);
       setSelect(pastSelect);

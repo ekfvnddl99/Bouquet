@@ -5,6 +5,7 @@ import {
   Keyboard,
   TextInput,
   KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import i18n from 'i18n-js';
 
@@ -150,7 +151,10 @@ export default function CharacterGenerationScreen3({
   });
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior="height">
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
       <area.ContainerBlank20>
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -245,10 +249,7 @@ export default function CharacterGenerationScreen3({
 
           <input.FormInput
             height={148}
-            placeholder={
-              i18n.t('이외에도 캐릭터에 대해서 자유롭게 알려 주세요 (선택)') +
-              i18n.t('예시: 난 고민따위 하지 않는다')
-            }
+            placeholder={`이외에도 캐릭터에 대해서 자유롭게 알려 주세요'\n예시: 난 고민따위 하지 않는다.`}
             onChangeText={(textInput: string) =>
               setNewCharacter({ ...newCharacter, tmi: textInput })
             }
