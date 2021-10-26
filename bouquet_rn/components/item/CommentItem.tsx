@@ -125,10 +125,10 @@ export default function CommentItem({
         what === 'user' ? 'block_user' : 'block_character',
         what === 'user'
           ? {
-              blocked_user: user.name,
+              blocked_user: characterInfo.user_info.name,
             }
           : {
-              blocked_character: myCharacter.name,
+              blocked_character: characterInfo.name,
             },
       );
       alert('차단되었습니다.');
