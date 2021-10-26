@@ -11,6 +11,7 @@ import {
 import I18n from 'i18n-js';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+import * as Analytics from 'expo-firebase-analytics';
 
 // styles
 import colors from '../../styles/colors';
@@ -163,6 +164,9 @@ export default function PostWritingScreen(): React.ReactElement {
     const serverResult = await uploadPostAsync(realNewPost);
     if (serverResult.isSuccess) {
       setSelect(-1);
+      await Analytics.logEvent('write_post', {
+        template: realNewPost.template.type,
+      });
       navigation.reset({
         index: 0,
         routes: [
@@ -269,64 +273,62 @@ export default function PostWritingScreen(): React.ReactElement {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={{ flex: 1 }}
       >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView
-            contentContainerStyle={{
-              paddingHorizontal: 30,
-              paddingTop: 30,
-              flexGrow: 1,
-            }}
-            showsVerticalScrollIndicator={false}
-            keyboardShouldPersistTaps="handled"
-          >
-            <area.RowArea>
-              <View style={{ flex: 1 }}>
-                <ProfileButton
-                  diameter={30}
-                  isAccount={false}
-                  isJustImg={false}
-                  isPress={false}
-                  name={myCharacter.name}
-                  profileImg={myCharacter.profile_img}
-                  routePrefix={routePrefix}
-                />
-              </View>
-              {select !== -1 && select !== 5 ? (
-                <LineButton
-                  onPress={() => goSelect()}
-                  content={I18n.t('템플릿 변경')}
-                  borderColor={colors.black}
-                />
-              ) : null}
-            </area.RowArea>
-
-            {select === -1 ? (
-              <button.AddTemplate onPress={goSelect}>
-                <text.Button2B textColor={colors.black}>
-                  {I18n.t('템플릿 선택')}
-                </text.Button2B>
-              </button.AddTemplate>
-            ) : (
-              <View style={{ marginTop: 12 }}>{getTemplate(select)}</View>
-            )}
-
-            {select !== 5 ? (
-              <TextTemplate mode="edit" post={newPost.text} setPost={setText} />
-            ) : null}
-            <View style={{ marginTop: 40 }} />
-            {select !== 5 ? (
-              <ConditionButton
-                isActive
-                onPress={() => goUpload()}
-                content={I18n.t('게시글 올리기')}
-                paddingH={0}
-                paddingV={14}
-                height={45}
+        <ScrollView
+          contentContainerStyle={{
+            paddingHorizontal: 30,
+            paddingTop: 30,
+            flexGrow: 1,
+          }}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          <area.RowArea>
+            <View style={{ flex: 1 }}>
+              <ProfileButton
+                diameter={30}
+                isAccount={false}
+                isJustImg={false}
+                isPress={false}
+                name={myCharacter.name}
+                profileImg={myCharacter.profile_img}
+                routePrefix={routePrefix}
+              />
+            </View>
+            {select !== -1 && select !== 5 ? (
+              <LineButton
+                onPress={() => goSelect()}
+                content={I18n.t('템플릿 변경')}
+                borderColor={colors.black}
               />
             ) : null}
-            <View style={{ marginTop: 40 }} />
-          </ScrollView>
-        </TouchableWithoutFeedback>
+          </area.RowArea>
+
+          {select === -1 ? (
+            <button.AddTemplate onPress={goSelect}>
+              <text.Button2B textColor={colors.black}>
+                {I18n.t('템플릿 선택')}
+              </text.Button2B>
+            </button.AddTemplate>
+          ) : (
+            <View style={{ marginTop: 12 }}>{getTemplate(select)}</View>
+          )}
+
+          {select !== 5 ? (
+            <TextTemplate mode="edit" post={newPost.text} setPost={setText} />
+          ) : null}
+          <View style={{ marginTop: 40 }} />
+          {select !== 5 ? (
+            <ConditionButton
+              isActive
+              onPress={() => goUpload()}
+              content={I18n.t('게시글 올리기')}
+              paddingH={0}
+              paddingV={14}
+              height={45}
+            />
+          ) : null}
+          <View style={{ marginTop: 40 }} />
+        </ScrollView>
       </KeyboardAvoidingView>
     </area.Container>
   );

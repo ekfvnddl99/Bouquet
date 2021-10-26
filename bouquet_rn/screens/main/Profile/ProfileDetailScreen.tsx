@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { StyleSheet, Animated, Alert, View } from 'react-native';
 import { useRoute, RouteProp, useFocusEffect } from '@react-navigation/native';
+import * as Analytics from 'expo-firebase-analytics';
 
 // styles
 import colors from '../../../styles/colors';
@@ -138,6 +139,7 @@ export default function ProfileDetailScreen(): React.ReactElement {
       const serverResult = await likePostAsync(postInfo.id);
       if (serverResult.isSuccess) {
         const isLiked = serverResult.result;
+        await Analytics.logEvent(isLiked ? 'like_post' : 'cancel_like_post');
 
         if (postArray !== undefined) {
           const tmpArray = [...postArray];
@@ -167,6 +169,7 @@ export default function ProfileDetailScreen(): React.ReactElement {
       const serverResult = await likePostAsync(postInfo.id);
       if (serverResult.isSuccess) {
         const isLiked = serverResult.result;
+        await Analytics.logEvent(isLiked ? 'like_qna' : 'cancel_like_qna');
 
         if (qnaArray !== undefined) {
           const tmpArray = [...qnaArray];

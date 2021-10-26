@@ -1,5 +1,6 @@
 import { useRecoilState } from 'recoil';
 import * as SecureStore from 'expo-secure-store';
+import * as Analytics from 'expo-firebase-analytics';
 
 // logics
 import { userState, characterState, characterListState } from '../atoms';
@@ -24,6 +25,7 @@ export default function useLogin(): [() => Promise<void>, () => Promise<void>] {
     const result = await getUserAsync();
     if (result.isSuccess) {
       setUser(result.result);
+      await Analytics.setUserId(`${result.result.id}`);
       await loadCharacter();
     }
   }

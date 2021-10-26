@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import i18n from 'i18n-js';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Analytics from 'expo-firebase-analytics';
 
 // styles
 import colors from '../../styles/colors';
@@ -54,6 +55,7 @@ export default function CharacterDeletionScreen(): React.ReactElement {
     const serverResult = await deleteCharacterAsync(targetCharacter.name);
     if (serverResult.isSuccess) {
       await deleteNotificationCount(`N${targetCharacter.name}`);
+      await Analytics.logEvent('delete_character');
       setStep(step + 1);
       const chList = await loadCharacterList();
       if (chList && chList.length > 0) await setCharacter(chList[0]);
