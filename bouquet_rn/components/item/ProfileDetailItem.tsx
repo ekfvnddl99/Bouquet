@@ -133,7 +133,7 @@ export default function ProfileDetailItem({
           {realCharacter.name}
         </text.Subtitle2B>
         <View style={{ marginTop: 8 }} />
-        <text.Body2R textColor={colors.gray5} numberOfLines={1}>
+        <text.Body2R textColor={colors.gray5} numberOfLines={2}>
           {realCharacter.intro}
         </text.Body2R>
       </View>
