@@ -17,12 +17,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
-import {
-  useRoute,
-  RouteProp,
-  useNavigation,
-  useFocusEffect,
-} from '@react-navigation/native';
+import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 import * as Analytics from 'expo-firebase-analytics';
 
 // styles
@@ -35,6 +30,7 @@ import {
   uploadCommentAsync,
   deletePostAsync,
   likePostAsync,
+  deleteCommentAsync,
 } from '../../logics/server/Post';
 import useViewPost from '../../logics/hooks/useViewPost';
 import useCharacter from '../../logics/hooks/useCharacter';
@@ -128,6 +124,19 @@ export default function PostDetailScreen(): React.ReactElement {
     } else alert(serverResult.result.errorMsg);
     setLoading(false);
   }
+
+  const deleteComment = async (commentId: number) => {
+    if (loading) return;
+    setLoading(true);
+
+    const serverResult = await deleteCommentAsync(commentId);
+    if (serverResult.isSuccess) {
+      await Analytics.logEvent('delete_comment');
+      // 새로고침을 위하여
+      await setViewPost(viewPost.id);
+    } else alert(serverResult.result.errorMsg);
+    setLoading(false);
+  };
 
   async function deletePost() {
     if (loading) return;
@@ -245,6 +254,7 @@ export default function PostDetailScreen(): React.ReactElement {
                         setTargetComment={setParentComment}
                         setTargetCommentId={setParentCommentById}
                         routePrefix={routePrefix}
+                        deleteComment={deleteComment}
                         openingCommentArray={openingCommentArray}
                         setOpeningCommentArray={setOpeningCommentArray}
                       />
@@ -266,6 +276,7 @@ export default function PostDetailScreen(): React.ReactElement {
                               setTargetComment={setParentComment}
                               setTargetCommentId={setParentCommentById}
                               routePrefix={routePrefix}
+                              deleteComment={deleteComment}
                             />
                           </TouchableOpacity>
                         )}
