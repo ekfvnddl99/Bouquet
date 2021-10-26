@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState, useMemo } from 'react';
 import {
   Animated,
   StyleSheet,
@@ -7,6 +7,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native';
+import { useRoute, RouteProp } from '@react-navigation/native';
 
 import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
@@ -15,6 +16,7 @@ import * as text from '../../styles/styled-components/text';
 import { StatusBarHeight } from '../../logics/non-server/StatusbarHeight';
 
 import BackButton from '../../components/button/BackButton';
+import { AlbumTemplate } from '../../utils/types/PostTypes';
 
 const HEADER_MAX_HEIGHT = 90;
 const HEADER_MIN_HEIGHT = 60;
@@ -55,13 +57,15 @@ const LyricInput = styled.TextInput`
   color: ${colors.white};
 `;
 
-type AlbumLyricProps = {
-  isEdit: boolean;
+type ParamList = {
+  AlbumLyric: {
+    song: { title: string; lyric: string };
+    artist: string;
+    setPost?: ((t: string) => void) | undefined;
+  };
 };
 
-export default function AlbumLyric({
-  isEdit,
-}: AlbumLyricProps): React.ReactElement {
+export default function AlbumLyric(): React.ReactElement {
   const lyricExample = `서로를 닮아 기울어진 삶
 소원을 담아 차오르는 달
 하려다 만 괄호 속의 말
@@ -84,6 +88,22 @@ export default function AlbumLyric({
 끝없는 밤 남겨진 반
 넌 어떨까 나와 같을까
 알 수 없음에 아파지던 맘`;
+
+  const [songState, setSongState] = useState({ title: '', lyric: '' });
+  const [artistState, setArtistState] = useState('');
+  const [setPostState, setSetPostState] = useState<
+    ((t: string) => void) | undefined
+  >(undefined);
+
+  const route = useRoute<RouteProp<ParamList, 'AlbumLyric'>>();
+  useEffect(() => {
+    if (route.params !== undefined) {
+      const { song, artist, setPost } = route.params;
+      setSongState(song);
+      setArtistState(artist);
+      setSetPostState(() => setPost);
+    }
+  }, []);
 
   const scroll = useRef(new Animated.Value(0)).current;
   const OpacityHeader = scroll.interpolate({
@@ -109,8 +129,8 @@ export default function AlbumLyric({
       >
         <BackButton />
         <SongTitleWrap>
-          <text.Body2B textColor={colors.white}>시간의 바깥</text.Body2B>
-          <ArtistText textColor={colors.white}>아이유</ArtistText>
+          <text.Body2B textColor={colors.white}>{songState.title}</text.Body2B>
+          <ArtistText textColor={colors.white}>{artistState}</ArtistText>
         </SongTitleWrap>
         <View style={{ width: 24, height: 24 }} />
       </area.RowArea>
@@ -122,14 +142,19 @@ export default function AlbumLyric({
             { useNativeDriver: true },
           )}
         >
-          {isEdit ? (
+          {setPostState !== undefined ? (
             <LyricInput
               placeholder="가사를 입력해 보세요."
               multiline
               placeholderTextColor={colors.gray5}
+              value={songState.lyric}
+              onChangeText={(t: string) => {
+                setPostState(t);
+                setSongState({ ...songState, lyric: t });
+              }}
             />
           ) : (
-            <LyricText textColor={colors.white}>{lyricExample}</LyricText>
+            <LyricText textColor={colors.white}>{songState.lyric}</LyricText>
           )}
         </Animated.ScrollView>
       </TouchableWithoutFeedback>

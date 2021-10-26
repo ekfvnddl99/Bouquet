@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity, Platform } from 'react-native';
+import { View, TouchableOpacity, Platform, Animated } from 'react-native';
 import styled from 'styled-components/native';
 
 // styles
@@ -45,7 +45,7 @@ export default function CommentTextInput({
 }: CommInputProps): React.ReactElement {
   const [myCharcater] = useCharacter();
   return (
-    <View>
+    <Animated.View style={{ backgroundColor: colors.white }}>
       {isChild ? (
         <TargetCommentArea>
           <Svg icon="commentInput" size={18} />
@@ -88,7 +88,7 @@ export default function CommentTextInput({
           <Svg icon="send" size={30} />
         </TouchableOpacity>
       </CommentInputArea>
-    </View>
+    </Animated.View>
   );
 }
 
@@ -96,19 +96,19 @@ export default function CommentTextInput({
 const TargetCommentArea = styled.View`
   background-color: ${colors.gray1};
   height: 32;
-  justify-content: center;
   padding-horizontal: 15;
   padding-vertical: 7;
   align-items: center;
   flex-direction: row;
+  justify-content: center;
 `;
 const CommentInputArea = styled.View`
   align-items: flex-end;
-  background-color: ${colors.white};
   flex-direction: row;
   justify-content: center;
   padding-horizontal: 18;
   padding-vertical: 8;
+  background-color: ${colors.white};
 `;
 const CommentInput = styled.TextInput`
   background-color: ${colors.gray0};

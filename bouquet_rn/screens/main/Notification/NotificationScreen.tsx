@@ -1,17 +1,36 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { View, Animated, FlatList } from 'react-native';
 import i18n from 'i18n-js';
 import styled from 'styled-components/native';
-import { useNavigation } from '@react-navigation/native';
+import { useRecoilState } from 'recoil';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// assets
+import Svg from '../../../assets/Icon';
 
 // styles
 import colors from '../../../styles/colors';
 import * as area from '../../../styles/styled-components/area';
 import * as text from '../../../styles/styled-components/text';
+import * as button from '../../../styles/styled-components/button';
+import * as elses from '../../../styles/styled-components/elses';
 
 // logics
 import { StatusBarHeight } from '../../../logics/non-server/StatusbarHeight';
 import useCharacter from '../../../logics/hooks/useCharacter';
+import useViewPost from '../../../logics/hooks/useViewPost';
+import useViewCharacter from '../../../logics/hooks/useViewCharacter';
+import {
+  deleteNotificationAsync,
+  getNotificationListAsync,
+  getNotificationCountAsync,
+} from '../../../logics/server/Notification';
+import { isNewNotification } from '../../../logics/atoms';
+
+// utils
+import { Notification } from '../../../utils/types/PostTypes';
 
 // components
 import NotificationItem from '../../../components/item/NotificationItem';
@@ -25,31 +44,101 @@ const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 export default function NotificationScreen(): React.ReactElement {
-  // 더미데이터
-  const Data = [
-    { a: '오란지', b: '님이 당신을 팔로우해요.' },
-    { a: '폭스처돌이1호님', b: '이 당신의 게시글을 좋아해요.' },
-    { a: '비걸최고님', b: '이 당신의 게시글을 좋아해요.' },
-    { a: '폭스럽님', b: '이 당신의 게시글에 댓글을 남겼어요.' },
-    { a: '단호좌현지님', b: '님이 당신을 팔로우해요.' },
-    { a: '러블리폭스님', b: '이 당신의 게시글에 댓글을 남겼어요.' },
-    { a: '비스트걸스서포터', b: '님이 당신의 게시글에 댓글을 남겼어요.' },
-    { a: 'PO폭스WER님', b: '님이 당신의 게시글에 댓글을 남겼어요.' },
-    { a: 'PO폭스WER님', b: '이 당신의 게시글을 좋아해요.' },
-    { a: '비걸핑크해', b: '님이 당신의 게시글에 댓글을 남겼어요.' },
-    { a: '비걸핑크해', b: '님이 당신의 게시글을 좋아해요.' },
-  ];
+  const navigation = useNavigation<StackNavigationProp<any>>();
+  const [, setViewPost] = useViewPost();
+  const [, setViewCharacter] = useViewCharacter();
+  const [, setIsNew] = useRecoilState(isNewNotification);
 
-  const navigation = useNavigation();
   const [myCharacter] = useCharacter();
-  // 로그인한 상태인지 아닌지
-  const [isLogined, setIsLogined] = useState(false);
 
-  // 로그인한 상태인지 아닌지 확인
+  // 인기 게시글 담을 state
+  const [notificationArray, setNotificationArray] = useState<Notification[]>();
+
+  const [pageNum, setPageNum] = useState(1);
+  const [isPageEnd, setIsPageEnd] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const storeNotificationCount = async (value: number): Promise<void> => {
+    const jsonValue = JSON.stringify(value);
+    await AsyncStorage.setItem(`N${myCharacter.name}`, jsonValue);
+  };
+  const getNowNotificationCount = async () => {
+    const serverResult = await getNotificationCountAsync();
+    if (serverResult.isSuccess) return serverResult.result;
+    alert(serverResult.result.errorMsg);
+    return -1;
+  };
+  useFocusEffect(
+    useCallback(() => {
+      async function setNotificationCount() {
+        await onRefresh();
+        await getNowNotificationCount().then((now) => {
+          if (now !== -1) {
+            setIsNew(false);
+            storeNotificationCount(now);
+          }
+        });
+      }
+      if (myCharacter.id !== -1) {
+        setNotificationCount();
+      }
+    }, []),
+  );
+
+  const [loading, setLoading] = useState(false);
+  const deleteNotification = async (id: number) => {
+    if (loading) return;
+    setLoading(true);
+
+    const serverResult = await deleteNotificationAsync(id);
+    if (serverResult.isSuccess) await onRefresh();
+    else alert(serverResult.result.errorMsg);
+
+    setLoading(false);
+  };
+
+  async function getNotification(newPageNum?: number, isRefreshing?: boolean) {
+    const serverResult = await getNotificationListAsync(newPageNum || pageNum);
+    if (serverResult.isSuccess) {
+      if (serverResult.result.length === 0) setIsPageEnd(true);
+      if (notificationArray === undefined || isRefreshing)
+        setNotificationArray(serverResult.result);
+      else {
+        const tmpArray = notificationArray;
+        serverResult.result.forEach((obj) => tmpArray.push(obj));
+        setNotificationArray(tmpArray);
+      }
+    } else alert(serverResult.result.errorMsg);
+    setRefreshing(false);
+  }
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    setPageNum(1);
+    setIsPageEnd(false);
+    await getNotification(1, true);
+  };
+
+  // 가장 처음에 인기 게시물 가져옴
   useEffect(() => {
-    if (myCharacter.id === -1) setIsLogined(false);
-    else setIsLogined(true);
-  }, [myCharacter.id]);
+    if (myCharacter.id !== -1) getNotification();
+  }, []);
+
+  const goNavigate = async (param: string | number) => {
+    if (typeof param === 'number') {
+      await setViewPost(param);
+      navigation.push(`NotiTabPostStack`, {
+        screen: 'PostDetail',
+        params: { routePrefix: 'NotiTab', postId: param },
+      });
+    } else {
+      await setViewCharacter(param);
+      navigation.push(`NotiTabProfileDetailStack`, {
+        screen: 'ProfileDetail',
+        params: { routePrefix: 'NotiTab', postId: param },
+      });
+    }
+  };
 
   /**
    * animation 관련
@@ -90,16 +179,52 @@ export default function NotificationScreen(): React.ReactElement {
 
   /**
    * 알람 개수가 0이냐 아니냐에 따라 달라지는 구성
-   * @param notificationNumber 알람이 몇개 와있는가에 따라서 다르다.
    */
-  function setNotification(notificationNumber: number) {
-    if (notificationNumber) {
+  function setNotification() {
+    if (myCharacter.id === -1) {
+      return (
+        <DefaultNotification activeOpacity={1}>
+          <Svg icon="logo" size={20} />
+          <View
+            style={{
+              flex: 2,
+              marginLeft: 10,
+            }}
+          >
+            <area.RowArea>
+              <text.Body2B textColor={colors.black}>
+                Bouquet
+                <text.Body2R textColor={colors.black}>
+                  이 꿈꾸던 부캐를 만들어 보자고 제안해요.
+                </text.Body2R>
+              </text.Body2B>
+            </area.RowArea>
+          </View>
+        </DefaultNotification>
+      );
+    }
+    if (notificationArray?.length) {
       return (
         <FlatList
-          data={Data}
-          keyExtractor={(item, idx) => idx.toString()}
+          data={notificationArray}
+          onEndReached={async () => {
+            if (!isPageEnd) {
+              const nextPageNum = pageNum + 1;
+              setPageNum(nextPageNum);
+              await getNotification(nextPageNum);
+            }
+          }}
+          scrollEventThrottle={1}
+          keyboardShouldPersistTaps="always"
+          onEndReachedThreshold={0.8}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item, idx) => item.id.toString()}
           renderItem={(obj) => (
-            <NotificationItem name={obj.item.a} content={obj.item.b} />
+            <NotificationItem
+              notificationInfo={obj.item}
+              onPress={goNavigate}
+              onDelete={deleteNotification}
+            />
           )}
         />
       );
@@ -127,14 +252,20 @@ export default function NotificationScreen(): React.ReactElement {
           ]}
         >
           <NameNText
-            name={isLogined ? myCharacter.name : ''}
-            sub={isLogined ? i18n.t('의') : '당신의'}
+            name={myCharacter.id !== -1 ? myCharacter.name : ''}
+            sub={myCharacter.id !== -1 ? i18n.t('의') : '당신의'}
           />
-          <text.Subtitle2R textColor={colors.black}>
-            {i18n.t('알림')}
-          </text.Subtitle2R>
+          {myCharacter.id !== -1 ? (
+            <text.Subtitle2R textColor={colors.black}>
+              {i18n.t('알림')}
+            </text.Subtitle2R>
+          ) : (
+            <text.Subtitle2B textColor={colors.black}>
+              {i18n.t('알림')}
+            </text.Subtitle2B>
+          )}
         </AnimationText>
-        {isLogined ? (
+        {myCharacter.id !== -1 ? (
           <AnimationImg
             style={[
               {},
@@ -151,15 +282,18 @@ export default function NotificationScreen(): React.ReactElement {
               diameter={40}
               isAccount={false}
               isJustImg
+              isPress
               name={myCharacter.name}
               profileImg={myCharacter.profile_img}
+              routePrefix="NotiTab"
             />
           </AnimationImg>
         ) : null}
       </area.RowArea>
 
-      <Animated.ScrollView
+      <Animated.FlatList
         style={{ marginTop: HEADER_MIN_HEIGHT - 30 }}
+        contentContainerStyle={{ paddingTop: 30 + 14 }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="always"
         scrollEventThrottle={1}
@@ -167,19 +301,13 @@ export default function NotificationScreen(): React.ReactElement {
           [{ nativeEvent: { contentOffset: { y: scroll } } }],
           { useNativeDriver: true },
         )}
-      >
-        <View style={{ paddingTop: 30 + 14 }} />
-        {isLogined ? (
-          <>{setNotification(Data.length)}</>
-        ) : (
-          <NotificationItem
-            name="Bouquet"
-            content="이 꿈꾸던 부캐를 만들어 보자고 제안해요."
-          />
-        )}
-      </Animated.ScrollView>
-      {isLogined ? (
-        <FloatingButton />
+        data={[1]}
+        renderItem={() => setNotification()}
+        refreshing={myCharacter.id !== -1 ? refreshing : false}
+        onRefresh={myCharacter.id !== -1 ? onRefresh : undefined}
+      />
+      {myCharacter.id !== -1 ? (
+        <FloatingButton routePrefix="NotiTab" />
       ) : (
         <>
           <View style={{ flex: 1 }} />
@@ -221,4 +349,15 @@ const AnimationHeader = styled(Animated.View)`
   overflow: hidden;
   height: ${HEADER_MIN_HEIGHT + StatusBarHeight};
   border-radius: 15;
+`;
+
+const DefaultNotification = styled.TouchableOpacity`
+  flex-direction: row;
+  background-color: ${colors.white};
+  border-radius: 10;
+  align-items: center;
+  padding-horizontal: 18;
+  padding-vertical: 12;
+  margin-bottom: 10;
+  margin-horizontal: 30;
 `;

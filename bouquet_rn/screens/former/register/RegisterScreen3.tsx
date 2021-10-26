@@ -7,6 +7,8 @@ import {
 } from 'react-native';
 import i18n from 'i18n-js';
 import * as ImagePicker from 'expo-image-picker';
+import * as ImageManipulator from 'expo-image-manipulator';
+import { useNavigation } from '@react-navigation/native';
 
 // styles
 import colors from '../../../styles/colors';
@@ -21,6 +23,7 @@ import Svg from '../../../assets/Icon';
 import { getByte } from '../../../logics/non-server/Calculation';
 import { checkUserAsync } from '../../../logics/server/Auth';
 import uploadImageAsync from '../../../logics/server/UploadImage';
+import { getImagePickerPermission } from '../../../logics/server/Post';
 
 // components
 import ConditionText from '../../../components/text/ConditionText';
@@ -54,6 +57,7 @@ export default function RegisterScreen3({
   profileImg,
   setProfileImg,
 }: RegisterPropsThree): React.ReactElement {
+  const navigation = useNavigation();
   // 모든 조건이 만족됐는지 확인하기 위한 state
   const [IsOK, setIsOK] = useState(false);
   // 이미지 선택하려고 눌렀냐
@@ -80,21 +84,22 @@ export default function RegisterScreen3({
    */
   useEffect(() => {
     async function checkUserName(arr: boolean[]) {
+      let value = false;
+      if (!tmpArray[0]) setNameErr(errTextArray[0]);
+      else if (!tmpArray[1]) setNameErr(errTextArray[1]);
+
       const serverResult = await checkUserAsync(name);
       if (serverResult.isSuccess) {
-        const value = !serverResult.result && name.length > 0;
-        if (!tmpArray[0]) setNameErr(errTextArray[0]);
-        else if (!tmpArray[1]) setNameErr(errTextArray[1]);
-        else if (!value) setNameErr(errTextArray[2]);
+        value = !serverResult.result && name.length > 0;
+        if (!value) setNameErr(errTextArray[2]);
         else setNameErr('');
-        setNameConditionArray([arr[0], arr[1], value]);
       }
+      setNameConditionArray([arr[0], arr[1], value]);
     }
     const tmpArray = [...nameConditionArray];
     tmpArray[0] = name.length > 0;
     tmpArray[1] = getByte(name) <= 20 && getByte(name) > 0;
     checkUserName(tmpArray);
-    setNameConditionArray(tmpArray);
   }, [name]);
 
   /**
@@ -110,11 +115,7 @@ export default function RegisterScreen3({
    */
   useEffect(() => {
     (async () => {
-      const { status } =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== 'granted') {
-        alert('이미지를 업로드하려면 권한이 필요해요.');
-      }
+      await getImagePickerPermission();
     })();
   }, []);
 
@@ -131,11 +132,17 @@ export default function RegisterScreen3({
     });
 
     if (!result.cancelled) {
-      const serverResult = await uploadImageAsync(result.uri);
-      if (serverResult.isSuccess) setProfileImg(serverResult.result);
-      else alert(serverResult.result.errorMsg);
+      const manipResult = await ImageManipulator.manipulateAsync(result.uri, [
+        { resize: { width: 1024, height: 1024 } },
+      ]);
+      const realUri = manipResult.uri;
+      setProfileImg(realUri);
     }
     setIsSelectImg(false);
+  }
+
+  function goWebview(screen: string) {
+    navigation.navigate('DocumentScreen', { screen });
   }
 
   return (
@@ -192,21 +199,23 @@ export default function RegisterScreen3({
             <area.RowArea
               style={{ marginBottom: 16, justifyContent: 'center' }}
             >
-              <PrimaryTextButton
-                onPress={() => {
-                  /**/
-                }}
-                content={i18n.t('서비스 이용 약관')}
-                isBold={false}
-              />
+              <TouchableOpacity
+                onPress={() => goWebview('ServiceTerm')}
+                activeOpacity={1}
+              >
+                <text.Caption textColor={colors.primary}>
+                  서비스 이용 약관
+                </text.Caption>
+              </TouchableOpacity>
               <text.Caption textColor={colors.gray6}>, </text.Caption>
-              <PrimaryTextButton
-                onPress={() => {
-                  /**/
-                }}
-                content={i18n.t('개인정보 취급 방침')}
-                isBold={false}
-              />
+              <TouchableOpacity
+                onPress={() => goWebview('PersonalInfo')}
+                activeOpacity={1}
+              >
+                <text.Caption textColor={colors.primary}>
+                  개인정보 취급 방침
+                </text.Caption>
+              </TouchableOpacity>
               {i18n.locale === 'ko' ? (
                 <text.Caption textColor={colors.gray6}>
                   {i18n.t('에 모두 동의하시나요')}

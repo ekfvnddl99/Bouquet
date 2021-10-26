@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import i18n from 'i18n-js';
 import * as ImagePicker from 'expo-image-picker';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 // styles
 import * as area from '../../styles/styled-components/area';
@@ -12,6 +13,7 @@ import Svg from '../../assets/Icon';
 
 // logics
 import type { MyCharacter } from '../../utils/types/UserTypes';
+import { getImagePickerPermission } from '../../logics/server/Post';
 
 // components
 import ConditionButton from '../../components/button/ConditionButton';
@@ -46,11 +48,7 @@ export default function CharacterGenerationScreen1({
   // 이미지 업로드 할 때 권한이 없다면 일단 권한부터 받는다.
   useEffect(() => {
     (async () => {
-      const { status } =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== 'granted') {
-        alert('이미지를 업로드하려면 권한이 필요해요.');
-      }
+      await getImagePickerPermission();
     })();
   }, []);
   // 만약 이미지 사진이 있다면 통과???
@@ -71,9 +69,14 @@ export default function CharacterGenerationScreen1({
     });
 
     if (!imgResult.cancelled) {
+      const manipResult = await ImageManipulator.manipulateAsync(
+        imgResult.uri,
+        [{ resize: { width: 1024, height: 1024 } }],
+      );
+      const realUri = manipResult.uri;
       setNewCharacter({
         ...newCharacter,
-        profile_img: imgResult.uri,
+        profile_img: realUri,
       });
     }
     setIsSelectImg(false);

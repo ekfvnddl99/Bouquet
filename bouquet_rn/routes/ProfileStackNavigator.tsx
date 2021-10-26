@@ -9,8 +9,8 @@ import ProfileOverviewScreen from '../screens/main/Profile/ProfileOverviewScreen
 
 import {
   ProfileDetailStackNavigator,
+  PostStackNavigator,
   SettingStackNavigator,
-  WritingStackNavigator,
   AccountStackNavigator,
 } from './CommonNavigator';
 
@@ -25,8 +25,13 @@ export default function ProfileStackNavigator(): React.ReactElement {
         options={{ headerShown: false }}
       />
       <ProfileStack.Screen
-        name="ProfileDetailStack"
+        name="ProfileTabProfileDetailStack"
         component={ProfileDetailStackNavigator}
+        options={{ headerShown: false }}
+      />
+      <ProfileStack.Screen
+        name="ProfileTabPostStack"
+        component={PostStackNavigator}
         options={{ headerShown: false }}
       />
       <ProfileStack.Screen
@@ -35,12 +40,7 @@ export default function ProfileStackNavigator(): React.ReactElement {
         options={{ headerShown: false }}
       />
       <ProfileStack.Screen
-        name="WritingStack"
-        component={WritingStackNavigator}
-        options={{ headerShown: false }}
-      />
-      <ProfileStack.Screen
-        name="AccountStack"
+        name="ProfileTabAccountStack"
         component={AccountStackNavigator}
         options={{ headerShown: false }}
       />

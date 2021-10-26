@@ -1,7 +1,8 @@
-import React, { useCallback } from 'react';
-import { View } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { Alert, View } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // styles
 import colors from '../../styles/colors';
@@ -22,14 +23,24 @@ export default function AccountDeletionScreenOne(): React.ReactElement {
   const user = useUser();
 
   const navigation = useNavigation();
+  const resetAllLocalStorage = async () => {
+    await AsyncStorage.clear();
+  };
+
+  const [loading, setLoading] = useState(false);
   const deleteNgoScreenTwo = useCallback(async () => {
+    if (loading) return;
+    setLoading(true);
+
     const serverResult = await deleteUserAsync();
     if (serverResult.isSuccess) {
+      await resetAllLocalStorage();
       navigation.reset({
         index: 0,
         routes: [{ name: 'SettingAccountDeletion2' }],
       });
     } else alert(serverResult.result.errorMsg);
+    setLoading(false);
   }, [deleteUserAsync]);
 
   return (
@@ -39,6 +50,7 @@ export default function AccountDeletionScreenOne(): React.ReactElement {
         isBackButton
         name={user.name}
         profileImg={user.profile_img}
+        routePrefix="ProfileTab"
       />
 
       <area.ContainerBlank20>
@@ -60,12 +72,12 @@ export default function AccountDeletionScreenOne(): React.ReactElement {
         </View>
         <area.BottomArea style={{ marginBottom: 16 }}>
           <View style={{ alignItems: 'center' }}>
-            <text.Caption textColor={colors.gray6} style={{ marginBottom: 16 }}>
+            <text.Button3 textColor={colors.gray6} style={{ marginBottom: 16 }}>
               {i18n.t('아쉽지만 계정은 삭제하면 복구하지 못해요')}
-            </text.Caption>
+            </text.Button3>
           </View>
           <ConditionButton
-            height={44}
+            height={45}
             isActive
             onPress={deleteNgoScreenTwo}
             content={i18n.t('계정 삭제')}

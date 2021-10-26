@@ -20,7 +20,7 @@ export default function ProfileGridScreen({
   function onPress(name: string) {
     if (characterList.length > 0) {
       characterList.map((obj) => {
-        if (obj.name === name) return setCharacter(obj);
+        if (obj.name === name) setCharacter(obj);
         return undefined;
       });
     }
@@ -51,8 +51,9 @@ export default function ProfileGridScreen({
             ) : (
               <GridCharacterItem
                 characterInfo={obj.item}
-                onPress={() => onPress}
+                onPress={() => onPress(obj.item.name)}
                 isAccount={false}
+                routePrefix="ProfileTab"
               />
             )}
           </View>

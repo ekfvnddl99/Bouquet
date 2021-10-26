@@ -39,6 +39,7 @@ export default function SettingAlarmCustomScreen(): React.ReactElement {
         isBackButton
         name={user.name}
         profileImg={user.profile_img}
+        routePrefix="ProfileTab"
       />
 
       <View style={{ paddingHorizontal: 30 }}>
@@ -52,7 +53,10 @@ export default function SettingAlarmCustomScreen(): React.ReactElement {
                 data={characterList}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={(obj) => (
-                  <SettingToggleItem characterInfo={obj.item} />
+                  <SettingToggleItem
+                    characterInfo={obj.item}
+                    routePrefix="ProfileTab"
+                  />
                 )}
               />
             </ScrollView>

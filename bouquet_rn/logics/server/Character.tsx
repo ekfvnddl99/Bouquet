@@ -1,3 +1,5 @@
+import * as SecureStore from 'expo-secure-store';
+
 // logics
 import * as APIs from './APIUtils';
 
@@ -10,6 +12,85 @@ import {
 } from '../../utils/types/UserTypes';
 
 /* eslint-disable camelcase */
+
+/**
+ * 다른 캐릭터를 선택하도록 요청하는 함수
+ * @param characterId 선택하려는 캐릭터의 id
+ * @returns 새로운 auth
+ */
+export async function changeCharacterAsync(
+  characterId: number,
+): APIs.ServerResult<string> {
+  // 서버 응답 타입 정의
+  type ChangeCharacterAsyncOutput = { Authorization: string };
+
+  const tmpResult = await APIs.postAsync<ChangeCharacterAsyncOutput>(
+    `/character/change?character_id=${characterId}`,
+    { 'Content-Type': 'application/json' },
+    '',
+    true,
+  );
+
+  // 사전 처리된 에러는 바로 반환
+  if (APIs.isServerErrorOutput(tmpResult)) {
+    return { result: tmpResult, isSuccess: false };
+  }
+
+  const [result, response] = tmpResult;
+
+  // 요청 성공 : auth 반환
+  if (APIs.isSuccess<ChangeCharacterAsyncOutput>(result, response)) {
+    return { result: result.Authorization, isSuccess: true };
+  }
+
+  // 400 : Given character doesn't belong to you
+  if (APIs.isError<APIs.ServerError>(result, response, 400)) {
+    return {
+      result: {
+        statusCode: 400,
+        errorMsg:
+          '당신의 캐릭터가 아닌 것 같아요. 로그인 정보를 확인하고 다시 시도해 보거나, 문의해 주세요.',
+        info: result.msg,
+      },
+      isSuccess: false,
+    };
+  }
+
+  // 404 : Given character doesn't exist
+  if (APIs.isError<APIs.ServerError>(result, response, 404)) {
+    return {
+      result: {
+        statusCode: 404,
+        errorMsg:
+          '바꾸려는 캐릭터가 지금은 없어요. 로그인 정보를 확인하고 다시 시도해 보거나, 문의해 주세요.',
+        info: result.msg,
+      },
+      isSuccess: false,
+    };
+  }
+
+  // 422 : Validation Error
+  if (APIs.isError<APIs.ServerError422>(result, response, 422)) {
+    return {
+      result: {
+        statusCode: 422,
+        errorMsg:
+          '요청한 캐릭터 정보가 잘못되었어요. 다시 시도해 보거나, 문의해 주세요.',
+        info: result.detail,
+      },
+      isSuccess: false,
+    };
+  }
+  // 나머지 에러
+  return {
+    result: {
+      statusCode: response.status,
+      errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
+      info: response,
+    },
+    isSuccess: false,
+  };
+}
 
 /**
  * 서버에 캐릭터 생성 요청을 보내는 함수
@@ -177,6 +258,18 @@ export async function getCharacterListAsync(
     return { result, isSuccess: true };
   }
 
+  // 400 : Blocked
+  if (APIs.isError<APIs.ServerError>(result, response, 400)) {
+    return {
+      result: {
+        statusCode: 400,
+        errorMsg: '차단한 사용자에요.',
+        info: result.msg,
+      },
+      isSuccess: false,
+    };
+  }
+
   // 404 : No such user
   if (APIs.isError<APIs.ServerError>(result, response, 404)) {
     return {
@@ -212,6 +305,56 @@ export async function getCharacterListAsync(
 }
 
 /**
+ * token을 이용해서 현재 선택된 캐릭터의 정보를 서버에서 불러오는 함수
+ * @returns -{result: 선택된 캐릭터 id, isSuccess: true} 또는 {result: 에러 객체, isSuccess: false}
+ */
+export async function getCurrentCharacterAsync(): APIs.ServerResult<number> {
+  // 서버 응답 타입 정의
+  type GetCurrentCharacterAsyncOutput = { id: number };
+
+  const tmpResult = await APIs.postAsync(
+    '/character/me',
+    { 'Content-Type': 'application/json' },
+    '',
+    true,
+  );
+
+  // 사전 처리된 에러는 바로 반환
+  if (APIs.isServerErrorOutput(tmpResult)) {
+    return { result: tmpResult, isSuccess: false };
+  }
+
+  const [result, response] = tmpResult;
+
+  // 요청 성공 : 캐릭터 id 반환
+  if (APIs.isSuccess<GetCurrentCharacterAsyncOutput>(result, response)) {
+    return { result: result.id, isSuccess: true };
+  }
+
+  // 404 : No such Character
+  if (APIs.isError<APIs.ServerError>(result, response, 404)) {
+    return {
+      result: {
+        statusCode: 404,
+        errorMsg:
+          '선택된 캐릭터가 없어요. 로그아웃하고 다시 시도해 보거나, 문의해 주세요.',
+        info: result.msg,
+      },
+      isSuccess: false,
+    };
+  }
+  // 나머지 에러
+  return {
+    result: {
+      statusCode: response.status,
+      errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
+      info: response,
+    },
+    isSuccess: false,
+  };
+}
+
+/**
  * 서버에서 캐릭터 정보를 불러오는 함수
  * @param characterName 정보를 불러오려는 캐릭터의 이름
  *
@@ -223,9 +366,12 @@ export async function getCharacterAsync(
   // 서버 응답 타입 정의
   type GetCharacterAsyncOutput = Character;
 
+  const auth = await SecureStore.getItemAsync('auth');
+
   const tmpResult = await APIs.getAsync<GetCharacterAsyncOutput>(
     `/character/${characterName}`,
     false,
+    auth ? { token: auth } : undefined,
   );
 
   // 사전 처리된 에러는 바로 반환
@@ -238,6 +384,18 @@ export async function getCharacterAsync(
   // 요청 성공 : Character 객체 반환
   if (APIs.isSuccess<GetCharacterAsyncOutput>(result, response)) {
     return { result, isSuccess: true };
+  }
+
+  // 400 : Blocked
+  if (APIs.isError<APIs.ServerError>(result, response, 400)) {
+    return {
+      result: {
+        statusCode: 400,
+        errorMsg: '차단한 사용자에요.',
+        info: result.msg,
+      },
+      isSuccess: false,
+    };
   }
 
   // 404 : No such character
@@ -353,7 +511,6 @@ export async function deleteCharacterAsync(
 /**
  * 어떤 캐릭터가 다른 캐릭터를 팔로우하도록 서버에 요청하는 함수
  * @param characterId 팔로우를 받는 캐릭터의 id
- * @param followerId 팔로우 요청을 보내는 캐릭터(=>로그인된 유저의 캐릭터)의 id
  *
  * @returns -{result: 팔로우 여부, isSuccess: true} 또는 {result: 에러 객체, isSuccess: false}
  * @description 팔로우 여부가 true이면 '팔로우하지 않은 상태 -> 팔로우한 상태'로 바뀐 것 /
@@ -361,7 +518,6 @@ export async function deleteCharacterAsync(
  */
 export async function followCharacterAsync(
   characterId: number,
-  followerId: number,
 ): APIs.ServerResult<boolean> {
   // 서버 응답 타입 정의
   type FollowCharacterAsyncOutput = {
@@ -371,7 +527,7 @@ export async function followCharacterAsync(
   const tmpResult = await APIs.postAsync<FollowCharacterAsyncOutput>(
     '/character/follow',
     { 'Content-Type': 'application/json' },
-    JSON.stringify({ character_id: characterId, follower_id: followerId }),
+    JSON.stringify({ id: characterId }),
     true,
   );
 
@@ -405,7 +561,8 @@ export async function followCharacterAsync(
     return {
       result: {
         statusCode: 404,
-        errorMsg: '팔로우 상태를 바꾸려는 캐릭터가 지금은 없어요.',
+        errorMsg:
+          '캐릭터를 선택하지 않아서 팔로우를 할 수 없거나, 상대 캐릭터가 지금은 없어요.',
         info: result.msg,
       },
       isSuccess: false,
@@ -418,6 +575,71 @@ export async function followCharacterAsync(
       result: {
         statusCode: 422,
         errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
+        info: result.detail,
+      },
+      isSuccess: false,
+    };
+  }
+  // 나머지 에러
+  return {
+    result: {
+      statusCode: response.status,
+      errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
+      info: response,
+    },
+    isSuccess: false,
+  };
+}
+
+/**
+ * 다른 캐릭터를 차단하도록 요청하는 함수
+ * @param characterName 차단하려는 캐릭터의 이름
+ * @returns null
+ */
+export async function blockCharacterAsync(
+  characterName: string,
+): APIs.ServerResult<null> {
+  // 서버 응답 타입 정의
+  type BlockCharacterAsyncOutput = null;
+
+  const tmpResult = await APIs.postAsync<BlockCharacterAsyncOutput>(
+    `/character/block`,
+    { 'Content-Type': 'application/json' },
+    JSON.stringify({ character_name: characterName }),
+    true,
+  );
+
+  // 사전 처리된 에러는 바로 반환
+  if (APIs.isServerErrorOutput(tmpResult)) {
+    return { result: tmpResult, isSuccess: false };
+  }
+
+  const [result, response] = tmpResult;
+
+  // 요청 성공 : auth 반환
+  if (APIs.isSuccess<BlockCharacterAsyncOutput>(result, response)) {
+    return { result, isSuccess: true };
+  }
+
+  // 400 : You can't block yourself
+  if (APIs.isError<APIs.ServerError>(result, response, 400)) {
+    return {
+      result: {
+        statusCode: 400,
+        errorMsg: '내 캐릭터를 차단할 수 없어요.',
+        info: result.msg,
+      },
+      isSuccess: false,
+    };
+  }
+
+  // 422 : Validation Error
+  if (APIs.isError<APIs.ServerError422>(result, response, 422)) {
+    return {
+      result: {
+        statusCode: 422,
+        errorMsg:
+          '요청한 캐릭터 정보가 잘못되었어요. 다시 시도해 보거나, 문의해 주세요.',
         info: result.detail,
       },
       isSuccess: false,

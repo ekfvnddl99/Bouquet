@@ -2,6 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 // styles
 import colors from '../../styles/colors';
@@ -22,6 +23,7 @@ import { CharacterMini } from '../../utils/types/UserTypes';
 interface GridCharacterItemProps {
   characterInfo: CharacterMini;
   isAccount: boolean;
+  routePrefix: string;
   onPress?: (param: string) => void;
 }
 /**
@@ -29,14 +31,17 @@ interface GridCharacterItemProps {
  *
  * @param characterInfo 해당 캐릭터 객체
  * @param isAccount '계정' 화면의 grid view인지 아닌지
+ * @param routePrefix 라우트 접두사. 어느 탭에서 왔는가!
+ * ---------------------------
  * @param onPress 캐릭터 컴포넌트 눌렀을 때 실행되는 함수
  */
 export default function GridCharacterItem({
   characterInfo,
   onPress,
+  routePrefix,
   isAccount,
 }: GridCharacterItemProps): React.ReactElement {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<any>>();
   const [myCharacter] = useCharacter();
   const [, setViewCharacter] = useViewCharacter();
   /**
@@ -44,7 +49,10 @@ export default function GridCharacterItem({
    */
   async function goProfileDetail() {
     await setViewCharacter(characterInfo.name);
-    navigation.navigate('ProfileDetailStack');
+    navigation.push(`${routePrefix}ProfileDetailStack`, {
+      screen: 'ProfileDetail',
+      params: { routePrefix, characterName: characterInfo.name },
+    });
   }
 
   return (

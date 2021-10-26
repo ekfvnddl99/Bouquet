@@ -9,16 +9,26 @@ import colors from '../../styles/colors';
 // assets
 import Svg from '../../assets/Icon';
 
+type FloatingButtonProps = {
+  routePrefix: string;
+};
 /**
  * 글을 쓸 수 있는 플로팅 버튼
+ *
+ * @param routePrefix 라우트 접두사. 어느 탭에서 왔는가!
  */
-export default function FloatingButton(): React.ReactElement {
+export default function FloatingButton({
+  routePrefix,
+}: FloatingButtonProps): React.ReactElement {
   const navigation = useNavigation();
   /**
    * '글쓰기' 화면으로 이동하는 함수
    */
   function goWritingStack() {
-    navigation.navigate('WritingStack');
+    navigation.navigate('WritingStack', {
+      screen: 'PostWriting',
+      params: { routePrefix },
+    });
   }
 
   return (

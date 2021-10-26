@@ -56,6 +56,10 @@ export default function ProfileOverviewScreen(): React.ReactElement {
     navigation.navigate('SettingStack');
   }
 
+  function goLogin() {
+    navigation.navigate('Login');
+  }
+
   // animation에 필요한 변수들
   // animation 컨트롤 변수
   const scroll = useRef(new Animated.Value(0)).current;
@@ -79,13 +83,17 @@ export default function ProfileOverviewScreen(): React.ReactElement {
             diameter={24}
             isAccount
             isJustImg
+            isPress
             name={user.name}
             profileImg={user.profile_img}
+            routePrefix="ProfileTab"
           />
         </View>
         <TouchableOpacity
           style={{ marginRight: 16 }}
-          onPress={() => goCharacterGeneration()}
+          onPress={
+            user.name === '' ? () => goLogin() : () => goCharacterGeneration()
+          }
         >
           <Icon icon="plus" size={24} />
         </TouchableOpacity>
@@ -111,7 +119,9 @@ export default function ProfileOverviewScreen(): React.ReactElement {
       ) : (
         <ProfileGridView scroll={scroll} characterList={characterList} />
       )}
-      {myCharacter.id === -1 ? null : <FloatingButton />}
+      {myCharacter.id === -1 ? null : (
+        <FloatingButton routePrefix="ProfileTab" />
+      )}
     </area.Container>
   );
 }

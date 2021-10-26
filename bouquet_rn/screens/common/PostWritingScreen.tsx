@@ -6,24 +6,25 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
+  Platform,
 } from 'react-native';
 import I18n from 'i18n-js';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+import * as Analytics from 'expo-firebase-analytics';
 
 // styles
 import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as text from '../../styles/styled-components/text';
 import * as button from '../../styles/styled-components/button';
-import * as input from '../../styles/styled-components/input';
 
 // logics
 import { selectTemplate } from '../../logics/atoms';
 import { uploadPostAsync } from '../../logics/server/Post';
 import useCharacter from '../../logics/hooks/useCharacter';
 import useViewPost from '../../logics/hooks/useViewPost';
+import uploadImageAsync from '../../logics/server/UploadImage';
 
 // components
 import ConditionButton from '../../components/button/ConditionButton';
@@ -32,37 +33,68 @@ import HeaderItem from '../../components/item/HeaderItem';
 import LineButton from '../../components/button/LineButton';
 
 // templates
+import TextTemplate from '../template/TextTemplate';
 import ImageTemplate from '../template/ImageTemplate';
 import AlbumTemplate from '../template/AlbumTemplate';
 import DiaryTemplate from '../template/DiaryTemplate';
 import ListTemplate from '../template/ListTemplate';
 
 // utils
-import { WritingStackParam } from '../../utils/types/NavigationTypes';
-import { noPost } from '../../utils/types/PostTypes';
+import * as Post from '../../utils/types/PostTypes';
 
+type ParamList = {
+  PostWriting: {
+    routePrefix: string;
+  };
+};
 /**
  * 템플릿을 선택하고 게시글을 쓰는 화면
- * TODO template 내 setPost 함수 필요
  * @returns
  */
 export default function PostWritingScreen(): React.ReactElement {
-  const navigation = useNavigation<StackNavigationProp<WritingStackParam>>();
+  const navigation = useNavigation();
   const [myCharacter] = useCharacter();
   const [, setViewPost] = useViewPost();
+
+  const route = useRoute<RouteProp<ParamList, 'PostWriting'>>();
+  const [routePrefix, setRoutePrefix] = useState('');
+  useEffect(() => {
+    if (route !== undefined) {
+      setRoutePrefix(route.params.routePrefix);
+    }
+    setSelect(-1);
+  }, []);
 
   // 내가 선택한 템플릿 번호(enum 순서대로 0부터 시작)
   const select = useRecoilValue(selectTemplate);
   const setSelect = useSetRecoilState(selectTemplate);
 
-  // 기본적으로 들어가는 text 담는 state
-  const [defaultText, setDefaultText] = useState('');
   // 새 게시글 객체
-  const [newPost, setNewPost] = useState({
-    character_id: myCharacter.id,
-    text: defaultText,
-    template: noPost.template,
+  const [newPost, setNewPost] = useState<Post.PostRequest<Post.AllTemplates>>({
+    text: '',
+    template: Post.noTemplate<Post.PlainTemplate>('None'),
   });
+
+  // 각 템플릿에 필요한 이미지 정보
+  // setImage는 각 템플릿으로부터 전달받는 함수
+  // 각 템플릿으로부터 전달받은 이미지들(images)을 서버에 업로드한 뒤 그 주소를 이 함수에 넣어서 실행하면 됨
+  const [images, setImages] = useState<Array<string>>([]);
+
+  /**
+   * 템플릿이 있는 경우 템플릿 설정
+   * @param template 새로 설정할 템플릿 객체
+   */
+  const setTemplate = (template: Post.AllTemplates) => {
+    setNewPost({ ...newPost, template });
+  };
+
+  /**
+   * 텍스트 템플릿의 텍스트 설정
+   * @param newText 새로 설정할 텍스트
+   */
+  const setText = (newText: string) => {
+    setNewPost({ ...newPost, text: newText });
+  };
 
   /**
    * 백핸들러 처리
@@ -70,7 +102,6 @@ export default function PostWritingScreen(): React.ReactElement {
    * @returns
    */
   function backAction() {
-    setSelect(-1);
     navigation.goBack();
     return true;
   }
@@ -84,22 +115,79 @@ export default function PostWritingScreen(): React.ReactElement {
    * 템플릿 고르는 화면 이동
    */
   function goSelect() {
-    navigation.navigate('SelectTemplate');
+    navigation.navigate('SelectTemplate', { newPost, setNewPost });
   }
+
   /**
    * 게시글 업로드하는 함수
    */
+  const [loading, setLoading] = useState(false);
   async function goUpload() {
-    setSelect(-1);
-    const serverResult = await uploadPostAsync({
-      character_id: myCharacter.id,
-      template: newPost.template,
-      text: defaultText,
-    });
+    if (loading) return;
+    setLoading(true);
+
+    const pastSelect = select;
+    setSelect(5);
+
+    const realImages = await Promise.all(
+      images.map(async (img) => {
+        const imgResult = await uploadImageAsync(img);
+        if (imgResult.isSuccess) {
+          return imgResult.result;
+        }
+        // TODO: 빈 문자열 대신 기본 이미지 쓰기
+        return '';
+      }),
+    );
+
+    const tmpPost: Post.PostRequest<Post.AllTemplates> = { ...newPost };
+
+    if (tmpPost.template.type === 'List') {
+      const tmpTemplate = { ...tmpPost.template };
+      /* eslint-disable-next-line prefer-destructuring */
+      tmpTemplate.img = realImages[0];
+      realImages.forEach((value, index) => {
+        if (index !== 0) {
+          tmpTemplate.components[index - 1].img = value;
+        }
+      });
+      tmpPost.template = tmpTemplate;
+    } else if (tmpPost.template.type !== 'None') {
+      const tmpTemplate = { ...tmpPost.template };
+      /* eslint-disable-next-line prefer-destructuring */
+      tmpTemplate.img = realImages[0];
+      tmpPost.template = tmpTemplate;
+    }
+
+    const realNewPost = tmpPost;
+
+    const serverResult = await uploadPostAsync(realNewPost);
     if (serverResult.isSuccess) {
-      setViewPost(serverResult.result);
-      navigation.replace('PostStack');
-    } else alert(serverResult.result.errorMsg);
+      setSelect(-1);
+      await Analytics.logEvent('write_post', {
+        template: realNewPost.template.type,
+      });
+      navigation.reset({
+        index: 0,
+        routes: [
+          {
+            name: `PostStack`,
+            state: {
+              routes: [
+                {
+                  name: `PostDetail`,
+                  params: { routePrefix, postId: serverResult.result },
+                },
+              ],
+            },
+          },
+        ],
+      });
+    } else {
+      alert(serverResult.result.errorMsg);
+      setSelect(pastSelect);
+    }
+    setLoading(false);
   }
 
   /**
@@ -107,16 +195,65 @@ export default function PostWritingScreen(): React.ReactElement {
    * @param idx 템플릿의 인덱스
    * @returns
    */
-  function setTemplate(idx: number) {
+  function getTemplate(idx: number) {
     switch (idx) {
       case 1:
-        return <ImageTemplate mode="edit" setPost={() => setNewPost} />;
+        return (
+          <ImageTemplate
+            mode="edit"
+            post={
+              newPost.template.type === 'Image'
+                ? newPost.template
+                : Post.noTemplate<Post.ImageTemplate>('Image')
+            }
+            setPost={setTemplate}
+            setImages={setImages}
+          />
+        );
       case 2:
-        return <AlbumTemplate mode="edit" setPost={() => setNewPost} />;
+        return (
+          <AlbumTemplate
+            mode="edit"
+            post={
+              newPost.template.type === 'Album'
+                ? newPost.template
+                : Post.noTemplate<Post.AlbumTemplate>('Album')
+            }
+            setPost={setTemplate}
+            setImages={setImages}
+          />
+        );
       case 3:
-        return <DiaryTemplate mode="edit" setPost={() => setNewPost} />;
+        return (
+          <DiaryTemplate
+            mode="edit"
+            post={
+              newPost.template.type === 'Diary'
+                ? newPost.template
+                : Post.noTemplate<Post.DiaryTemplate>('Diary')
+            }
+            setPost={setTemplate}
+            setImages={setImages}
+          />
+        );
       case 4:
-        return <ListTemplate mode="edit" setPost={() => setNewPost} />;
+        return (
+          <ListTemplate
+            mode="edit"
+            post={
+              newPost.template.type === 'List'
+                ? newPost.template
+                : Post.noTemplate<Post.ListTemplate>('List')
+            }
+            setPost={setTemplate}
+            setImages={setImages}
+          />
+        );
+      case 5:
+        // 게시글 업로드중 fallback
+        return (
+          <TextTemplate mode="detail" post="게시글을 업로드하고 있어요..." />
+        );
       default:
         return null;
     }
@@ -129,64 +266,70 @@ export default function PostWritingScreen(): React.ReactElement {
         isBackButton
         name={myCharacter.name}
         profileImg={myCharacter.profile_img}
+        routePrefix={routePrefix}
       />
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <KeyboardAvoidingView style={{ flex: 1 }} behavior="height">
-          <area.ContainerBlank30>
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ flexGrow: 1 }}
-              keyboardShouldPersistTaps="handled"
-            >
-              <area.RowArea>
-                <View style={{ flex: 1 }}>
-                  <ProfileButton
-                    diameter={30}
-                    isAccount={false}
-                    isJustImg={false}
-                    name={myCharacter.name}
-                    profileImg={myCharacter.profile_img}
-                  />
-                </View>
-                {select !== -1 ? (
-                  <LineButton
-                    onPress={() => goSelect()}
-                    content={I18n.t('템플릿 변경')}
-                    borderColor={colors.black}
-                  />
-                ) : null}
-              </area.RowArea>
 
-              {select === -1 ? (
-                <button.AddTemplate onPress={goSelect}>
-                  <text.Button2B textColor={colors.black}>
-                    {I18n.t('템플릿 선택')}
-                  </text.Button2B>
-                </button.AddTemplate>
-              ) : (
-                <View style={{ marginTop: 12 }}>{setTemplate(select)}</View>
-              )}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={{ flex: 1 }}
+      >
+        <ScrollView
+          contentContainerStyle={{
+            paddingHorizontal: 30,
+            paddingTop: 30,
+            flexGrow: 1,
+          }}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          <area.RowArea>
+            <View style={{ flex: 1 }}>
+              <ProfileButton
+                diameter={30}
+                isAccount={false}
+                isJustImg={false}
+                isPress={false}
+                name={myCharacter.name}
+                profileImg={myCharacter.profile_img}
+                routePrefix={routePrefix}
+              />
+            </View>
+            {select !== -1 && select !== 5 ? (
+              <LineButton
+                onPress={() => goSelect()}
+                content={I18n.t('템플릿 변경')}
+                borderColor={colors.black}
+              />
+            ) : null}
+          </area.RowArea>
 
-              <input.TextTemplate
-                onChangeText={(textInput: string) => setDefaultText(textInput)}
-                placeholder={I18n.t('내용을 입력해 주세요')}
-                value={defaultText}
-                multiline
-              />
-              <View style={{ marginTop: 40 }} />
-              <ConditionButton
-                isActive
-                onPress={() => goUpload()}
-                content={I18n.t('게시글 올리기')}
-                paddingH={0}
-                paddingV={14}
-                height={45}
-              />
-              <View style={{ marginTop: 40 }} />
-            </ScrollView>
-          </area.ContainerBlank30>
-        </KeyboardAvoidingView>
-      </TouchableWithoutFeedback>
+          {select === -1 ? (
+            <button.AddTemplate onPress={goSelect}>
+              <text.Button2B textColor={colors.black}>
+                {I18n.t('템플릿 선택')}
+              </text.Button2B>
+            </button.AddTemplate>
+          ) : (
+            <View style={{ marginTop: 12 }}>{getTemplate(select)}</View>
+          )}
+
+          {select !== 5 ? (
+            <TextTemplate mode="edit" post={newPost.text} setPost={setText} />
+          ) : null}
+          <View style={{ marginTop: 40 }} />
+          {select !== 5 ? (
+            <ConditionButton
+              isActive
+              onPress={() => goUpload()}
+              content={I18n.t('게시글 올리기')}
+              paddingH={0}
+              paddingV={14}
+              height={45}
+            />
+          ) : null}
+          <View style={{ marginTop: 40 }} />
+        </ScrollView>
+      </KeyboardAvoidingView>
     </area.Container>
   );
 }

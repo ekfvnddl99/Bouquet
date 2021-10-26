@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 // styles
 import colors from '../../styles/colors';
@@ -16,17 +17,20 @@ import { CharacterMini } from '../../utils/types/UserTypes';
 
 type CharacterItemProps = {
   characterInfo: CharacterMini;
+  routePrefix: string;
 };
 /**
  * 캐릭터 리스트의 컴포넌트
  * @description 캐릭터 고를 때 보이는 컴포넌트
  *
  * @param characterInfo 해당 캐릭터 객체
+ * @param routePrefix 라우트 접두사. 어느 탭에서 왔는가!
  */
 export default function CharacterItem({
   characterInfo,
+  routePrefix,
 }: CharacterItemProps): React.ReactElement {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<any>>();
   const [, setViewCharacter] = useViewCharacter();
   /**
    * '상세 프로필' 화면으로 이동하는 함수
@@ -34,7 +38,10 @@ export default function CharacterItem({
    */
   async function goProfileDetail() {
     await setViewCharacter(characterInfo.name);
-    navigation.navigate('ProfileDetailStack');
+    navigation.push(`${routePrefix}ProfileDetailStack`, {
+      screen: 'ProfileDetail',
+      params: { routePrefix, characterName: characterInfo.name },
+    });
   }
 
   return (

@@ -1,9 +1,6 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, ImageBackground } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-
-// assets
-import Svg from '../../assets/Icon';
 
 /**
  * 스플래시 화면
@@ -13,13 +10,16 @@ export default function SplashScreen(): React.ReactElement {
   return (
     <View
       style={{
-        alignItems: 'center',
         flex: 1,
-        justifyContent: 'center',
       }}
     >
-      <StatusBar hidden />
-      <Svg icon="logo" size={150} />
+      <ImageBackground
+        source={require('../../assets/png/splash.png')}
+        resizeMode="contain"
+        style={{ flex: 1, justifyContent: 'center' }}
+      >
+        <StatusBar hidden />
+      </ImageBackground>
     </View>
   );
 }

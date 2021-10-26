@@ -9,7 +9,7 @@ import SearchScreen from '../screens/main/Search/SearchScreen';
 import {
   ProfileDetailStackNavigator,
   PostStackNavigator,
-  WritingStackNavigator,
+  AccountStackNavigator,
 } from './CommonNavigator';
 
 // search
@@ -23,18 +23,18 @@ export default function SearchStackNavigator(): React.ReactElement {
         options={{ headerShown: false }}
       />
       <SearchStack.Screen
-        name="ProfileDetailStack"
+        name="SearchTabProfileDetailStack"
         component={ProfileDetailStackNavigator}
         options={{ headerShown: false }}
       />
       <SearchStack.Screen
-        name="PostStack"
+        name="SearchTabPostStack"
         component={PostStackNavigator}
         options={{ headerShown: false }}
       />
       <SearchStack.Screen
-        name="WritingStack"
-        component={WritingStackNavigator}
+        name="SearchTabAccountStack"
+        component={AccountStackNavigator}
         options={{ headerShown: false }}
       />
     </SearchStack.Navigator>

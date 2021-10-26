@@ -1,7 +1,8 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 // styles
 import colors from '../../styles/colors';
@@ -29,30 +30,39 @@ import ListTemplate from '../../screens/template/ListTemplate';
 
 type PostItemProps = {
   postInfo: Post<AllTemplates>;
+  routePrefix: string;
+  /** Press Sun button */
+  onPressSun: (postInfo: Post<AllTemplates>) => void;
 };
 /**
  * 피드에 보이는 게시글 컴포넌트
  * TODO 햇살 set 함수
  *
  * @param postInfo 게시글 객체
+ * @param routePrefix 라우트 접두사. 어느 탭에서 왔는가!
  */
 export default function PostItem({
   postInfo,
+  routePrefix,
+  onPressSun,
 }: PostItemProps): React.ReactElement {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<any>>();
   const [, setViewPost] = useViewPost();
   /**
    * '상세 게시글' 화면으로 이동하는 함수
    */
   async function goPostStack() {
     await setViewPost(postInfo.id);
-    navigation.navigate('PostStack');
+    navigation.push(`${routePrefix}PostStack`, {
+      screen: 'PostDetail',
+      params: { routePrefix, postId: postInfo.id },
+    });
   }
 
   /**
    * 해당 게시글의 template과 그에 맞는 내용들을 가져오는 함수
    */
-  const getTemplate = useCallback(() => {
+  const getTemplate = () => {
     if (postInfo) {
       switch (postInfo.template.type) {
         case 'None':
@@ -69,9 +79,10 @@ export default function PostItem({
           return null;
       }
     } else return null;
-  }, [postInfo]);
+  };
   // 위의 함수 getTemplate에서 가져온 template 객체
-  const template = useMemo(() => getTemplate(), [getTemplate]);
+  // const template = useMemo(() => getTemplate(), [getTemplate]);
+  const template = getTemplate();
 
   return (
     <button.BigListButton
@@ -87,8 +98,10 @@ export default function PostItem({
             diameter={30}
             isAccount={false}
             isJustImg={false}
+            isPress
             name={postInfo ? postInfo.character_info.name : ''}
             profileImg={postInfo ? postInfo.character_info.profile_img : ''}
+            routePrefix={routePrefix}
           />
         </View>
         <View style={{ alignItems: 'flex-end', flex: 1 }}>
@@ -100,9 +113,9 @@ export default function PostItem({
       <View style={{ marginVertical: 10 }}>{template}</View>
       <View style={{ alignItems: 'flex-start' }}>
         <SunButton
-          active={postInfo ? postInfo.liked : false}
-          sunNum={postInfo ? postInfo.num_sunshines : 0}
-          setSunNum={() => undefined}
+          active={postInfo.liked}
+          sunNumber={postInfo.num_sunshines}
+          onPress={() => onPressSun(postInfo)}
         />
       </View>
     </button.BigListButton>

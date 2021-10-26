@@ -8,6 +8,8 @@ import {
 import i18n from 'i18n-js';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Analytics from 'expo-firebase-analytics';
 
 // styles
 import * as area from '../../styles/styled-components/area';
@@ -35,7 +37,7 @@ import { MyCharacter, noMyCharacter } from '../../utils/types/UserTypes';
 import { CharacterGenerationProps } from '../../utils/types/NavigationTypes';
 
 type ParamList = {
-  ProfileDetail: {
+  CharacterGeneration: {
     isModifying: boolean;
     characterInfo: MyCharacter;
   };
@@ -44,12 +46,20 @@ export default function CharacterGenerationScreen(): React.ReactElement {
   const navigation =
     useNavigation<StackNavigationProp<CharacterGenerationProps>>();
   // const navigation = useNavigation();
-  const route = useRoute<RouteProp<ParamList, 'ProfileDetail'>>();
+  const route = useRoute<RouteProp<ParamList, 'CharacterGeneration'>>();
   // navigation으로 받아온 param
   // 수정하는 거니?
   const isModifying = route.params?.isModifying;
   // 수정할 캐릭터 객체
   const characterInfo = route.params?.characterInfo;
+  useEffect(() => {
+    if (route.params !== undefined) {
+      const { birth } = characterInfo;
+      setBirthYear(birth.slice(0, 4));
+      setBirthMonth(birth.slice(4, 6));
+      setBirthDay(birth.slice(6, 8));
+    }
+  }, []);
 
   // hooks
   const [, setCharacter] = useCharacter();
@@ -61,11 +71,15 @@ export default function CharacterGenerationScreen(): React.ReactElement {
   const [newCharacter, setNewCharacter] = useState(
     isModifying ? characterInfo : noMyCharacter,
   );
+  // 생년월일 각각의 state
+  const [birthYear, setBirthYear] = useState('');
+  const [birthMonth, setBirthMonth] = useState('');
+  const [birthDay, setBirthDay] = useState('');
 
   // 백핸들러 처리
   const backAction = () => {
-    if (step !== 1) setStep(step - 1);
-    else navigation.goBack();
+    if (step !== 1 && step !== 4) setStep(step - 1);
+    else if (step === 1) navigation.goBack();
     return true;
   };
   useEffect(() => {
@@ -74,18 +88,28 @@ export default function CharacterGenerationScreen(): React.ReactElement {
       BackHandler.removeEventListener('hardwareBackPress', backAction);
   });
 
+  const storeNotificationCount = async (
+    key: string,
+    value: number,
+  ): Promise<void> => {
+    const jsonValue = JSON.stringify(value);
+    await AsyncStorage.setItem(key, jsonValue);
+  };
   /**
    * 캐릭터 생성 or 수정 함수
    * * 단계3일 때 이용됨.
    */
+  const [loading, setLoading] = useState(false);
   async function createNewCharacter() {
+    if (loading) return;
+    setLoading(true);
+
     // 입력한 이미지가 있는 경우
     if (newCharacter.profile_img) {
       const serverResult = await UploadImageAsync(newCharacter.profile_img);
       if (serverResult.isSuccess) {
         newCharacter.profile_img = serverResult.result;
       } else {
-        alert(serverResult.result.errorMsg);
         // 못 가져왔으면 기본 이미지 대체
         newCharacter.profile_img =
           'https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg';
@@ -96,21 +120,30 @@ export default function CharacterGenerationScreen(): React.ReactElement {
         'https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg';
     }
 
+    setNewCharacter({
+      ...newCharacter,
+      birth: `${birthYear}${birthMonth}${birthDay}`,
+    });
     let serverResult;
     if (isModifying) {
       serverResult = await editCharacterAsync(newCharacter);
     } else serverResult = await createCharacterAsync(newCharacter);
     if (serverResult.isSuccess) {
-      if (serverResult.result !== null)
-        setCharacter({
+      if (serverResult.result !== null) {
+        await storeNotificationCount(`N${newCharacter.name}`, 0);
+        await setCharacter({
           ...newCharacter,
           id: serverResult.result,
         });
+      }
       await loadCharacterList();
+      if (isModifying) await Analytics.logEvent('edit_character');
+      else await Analytics.logEvent('create_character');
       setStep(step + 1);
     } else {
       alert(serverResult.result.errorMsg);
     }
+    setLoading(false);
   }
 
   /**
@@ -122,7 +155,7 @@ export default function CharacterGenerationScreen(): React.ReactElement {
     if (stepNumber === 1) return i18n.t('어떤 모습인가요');
     if (stepNumber === 2) return i18n.t('이 캐릭터는 누구인가요');
     if (stepNumber === 3) return i18n.t('어떤 캐릭터인가요');
-    return `${i18n.t('캐릭터 생성 완료')}!`;
+    return isModifying ? '캐릭터 수정 완료!' : '캐릭터 생성 완료!';
   }
   /**
    * 단계에 따른 화면 제목
@@ -159,6 +192,12 @@ export default function CharacterGenerationScreen(): React.ReactElement {
           onPress={() => setStep(step + 1)}
           newCharacter={newCharacter}
           setNewCharacter={setNewCharacter}
+          birthYear={birthYear}
+          setBirthYear={setBirthYear}
+          birthMonth={birthMonth}
+          setBirthMonth={setBirthMonth}
+          birthDay={birthDay}
+          setBirthDay={setBirthDay}
           originCharacter={characterInfo}
         />
       );
@@ -188,6 +227,8 @@ export default function CharacterGenerationScreen(): React.ReactElement {
           <ProgressItem
             stepBack={() => setStep(step - 1)}
             step={step}
+            maxLength={100}
+            lastStep={4}
             title={setTitle(step)}
             subtitle={setSubtitle(step)}
             navigation={navigation}
