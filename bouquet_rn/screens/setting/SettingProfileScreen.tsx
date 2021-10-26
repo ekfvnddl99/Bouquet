@@ -105,7 +105,11 @@ export default function SettingProfileScreen(): React.ReactElement {
     })();
   }, []);
 
+  const [loading, setLoading] = useState(false);
   async function setImage() {
+    if (loading) return;
+    setLoading(true);
+
     setIsSelectImg(true);
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -120,6 +124,8 @@ export default function SettingProfileScreen(): React.ReactElement {
       else alert(serverResult.result.errorMsg);
     }
     setIsSelectImg(false);
+
+    setLoading(false);
   }
 
   const changeNgoProfile = async () => {

@@ -51,6 +51,14 @@ export default function CharacterGenerationScreen(): React.ReactElement {
   const isModifying = route.params?.isModifying;
   // 수정할 캐릭터 객체
   const characterInfo = route.params?.characterInfo;
+  useEffect(() => {
+    if (route.params !== undefined) {
+      const { birth } = characterInfo;
+      setBirthYear(birth.slice(0, 4));
+      setBirthMonth(birth.slice(4, 6));
+      setBirthDay(birth.slice(6, 8));
+    }
+  }, []);
 
   // hooks
   const [, setCharacter] = useCharacter();
@@ -113,7 +121,7 @@ export default function CharacterGenerationScreen(): React.ReactElement {
 
     setNewCharacter({
       ...newCharacter,
-      birth: `${birthYear}년 ${birthMonth}월 ${birthDay}일`,
+      birth: `${birthYear}${birthMonth}${birthDay}`,
     });
     let serverResult;
     if (isModifying) {
@@ -144,7 +152,7 @@ export default function CharacterGenerationScreen(): React.ReactElement {
     if (stepNumber === 1) return i18n.t('어떤 모습인가요');
     if (stepNumber === 2) return i18n.t('이 캐릭터는 누구인가요');
     if (stepNumber === 3) return i18n.t('어떤 캐릭터인가요');
-    return `${i18n.t('캐릭터 생성 완료')}!`;
+    return isModifying ? '캐릭터 수정 완료!' : '캐릭터 생성 완료!';
   }
   /**
    * 단계에 따른 화면 제목

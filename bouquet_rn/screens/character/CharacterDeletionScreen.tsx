@@ -50,6 +50,7 @@ export default function CharacterDeletionScreen(): React.ReactElement {
   async function deleteCharacter() {
     if (loading) return;
     setLoading(true);
+
     const serverResult = await deleteCharacterAsync(targetCharacter.name);
     if (serverResult.isSuccess) {
       await deleteNotificationCount(`N${targetCharacter.name}`);

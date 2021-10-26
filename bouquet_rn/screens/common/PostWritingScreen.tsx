@@ -120,7 +120,11 @@ export default function PostWritingScreen(): React.ReactElement {
   /**
    * 게시글 업로드하는 함수
    */
+  const [loading, setLoading] = useState(false);
   async function goUpload() {
+    if (loading) return;
+    setLoading(true);
+
     const pastSelect = select;
     setSelect(5);
 
@@ -158,13 +162,28 @@ export default function PostWritingScreen(): React.ReactElement {
 
     const serverResult = await uploadPostAsync(realNewPost);
     if (serverResult.isSuccess) {
-      setViewPost(serverResult.result);
       setSelect(-1);
-      navigation.reset({ index: 0, routes: [{ name: 'PostStack' }] });
+      navigation.reset({
+        index: 0,
+        routes: [
+          {
+            name: `PostStack`,
+            state: {
+              routes: [
+                {
+                  name: `PostDetail`,
+                  params: { routePrefix, postId: serverResult.result },
+                },
+              ],
+            },
+          },
+        ],
+      });
     } else {
       alert(serverResult.result.errorMsg);
       setSelect(pastSelect);
     }
+    setLoading(false);
   }
 
   /**

@@ -141,8 +141,13 @@ export default function RegisterScreen1({
   /**
    * 이메일 인증을 확인하는 함수
    */
+  const [loading, setLoading] = useState(false);
   async function checkEmailAuthentication() {
     if (mailButtonColor === colors.gray2) return;
+
+    if (loading) return;
+    setLoading(true);
+
     let getVerificationCodeAsync;
     if (isFindPassword) getVerificationCodeAsync = checkExistingEmailAsync;
     else getVerificationCodeAsync = checkNewEmailAsync;
@@ -152,6 +157,7 @@ export default function RegisterScreen1({
       setIsNext(true);
       setRealAuthNumber(serverResult.result);
     } else alert(serverResult.result.errorMsg);
+    setLoading(false);
   }
 
   /**

@@ -24,8 +24,9 @@ export async function getPushNotificationsPermission(): Promise<void> {
     }
     // 사용자가 허락 안 하면 불가
     if (finalStatus !== 'granted') {
-      alert('권한이 없어서 알림을 받을 수 없어요. 권한 설정을 해주세요.');
-      return;
+      alert(
+        '권한이 없어서 알림을 받을 수 없어요. 알림을 받으려면 권한 설정을 해주세요.',
+      );
     }
 
     try {

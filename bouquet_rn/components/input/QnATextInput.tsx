@@ -36,13 +36,17 @@ export default function QnATextInput({
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
 
+  const [loading, setLoading] = useState(false);
   async function createQuestion(qna: QnaRequest) {
+    if (loading) return;
+    setLoading(true);
     const serverResult = await createQnaAsync(qna);
     if (serverResult.isSuccess) {
       alert('Q&A를 업로드했어요!');
       setAnswer('');
       await getQuestion();
     } else alert(serverResult.result.errorMsg);
+    setLoading(false);
   }
 
   async function getQuestion() {

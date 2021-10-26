@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
 import i18n from 'i18n-js';
@@ -63,12 +63,17 @@ export default function QnAItem({
     navigation.navigate(`${routePrefix}PostStack`, { routePrefix });
   }
 
+  const [loading, setLoading] = useState(false);
   async function deleteQna() {
+    if (loading) return;
+    setLoading(true);
+
     const serverResult = await deleteQnaAsync(qna.id);
     if (serverResult.isSuccess) {
       alert('Q&A가 삭제되었어요.');
       if (refresh) await refresh();
     }
+    setLoading(false);
   }
 
   return (

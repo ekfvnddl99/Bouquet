@@ -79,7 +79,11 @@ export default function LoginScreen(): React.ReactElement {
   /**
    * 로그인하는 서버 함수
    */
+  const [loading, setLoading] = useState(false);
   async function emailLogin() {
+    if (loading) return;
+    setLoading(true);
+
     const serverResult = await loginEmailAsync(email, password);
     if (serverResult.isSuccess) {
       await SecureStore.setItemAsync('auth', serverResult.result);
@@ -88,6 +92,7 @@ export default function LoginScreen(): React.ReactElement {
     } else {
       setErr(serverResult.result.errorMsg);
     }
+    setLoading(false);
   }
 
   /**

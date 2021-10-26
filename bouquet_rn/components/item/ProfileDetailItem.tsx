@@ -89,7 +89,11 @@ export default function ProfileDetailItem({
    * 내가 다른 캐릭터를 follow하는 함수
    * @returns followCharacterAsync 함수 결과
    */
+  const [loading, setLoading] = useState(false);
   async function followOrUnfollow() {
+    if (loading) return;
+    setLoading(true);
+
     const newState = !isFollowed;
     setIsFollowed(newState);
     const realCharacterId = realCharacter.id ? realCharacter.id : -1;
@@ -101,6 +105,7 @@ export default function ProfileDetailItem({
       alert(serverResult.result.errorMsg);
       setIsFollowed(!newState);
     }
+    setLoading(false);
   }
 
   function isMyCharacter(
@@ -128,7 +133,7 @@ export default function ProfileDetailItem({
           {realCharacter.name}
         </text.Subtitle2B>
         <View style={{ marginTop: 8 }} />
-        <text.Body2R textColor={colors.gray5} numberOfLines={1}>
+        <text.Body2R textColor={colors.gray5} numberOfLines={2}>
           {realCharacter.intro}
         </text.Body2R>
       </View>
@@ -217,23 +222,35 @@ export default function ProfileDetailItem({
         </View>
       )}
 
-      <area.RowArea style={{ justifyContent: 'center' }}>
+      <area.RowArea
+        style={{ justifyContent: 'center', alignItems: 'flex-start' }}
+      >
         <View style={{ flex: 1 }}>
           <BoldNRegularText
             boldContent={i18n.t('직업')}
             regularContent={realCharacter.job}
             textColor={colors.black}
             isCenter
-            isMultiline={false}
+            isMultiline={!isMini}
           />
         </View>
-        <View style={{ flex: isMini ? 1.5 : 1 }}>
+        <View
+          style={{
+            flex: isMini ? 1.5 : 1,
+          }}
+        >
           <BoldNRegularText
             boldContent={i18n.t('생년월일')}
-            regularContent={realCharacter.birth.toString()}
+            regularContent={`${realCharacter.birth.slice(
+              0,
+              4,
+            )}년\n${realCharacter.birth.slice(
+              4,
+              6,
+            )}월 ${realCharacter.birth.slice(6)}일`}
             textColor={colors.black}
             isCenter
-            isMultiline={false}
+            isMultiline={!isMini}
           />
         </View>
         <View style={{ flex: 1 }}>
@@ -242,7 +259,7 @@ export default function ProfileDetailItem({
             regularContent={realCharacter.nationality}
             textColor={colors.black}
             isCenter
-            isMultiline={false}
+            isMultiline={!isMini}
           />
         </View>
       </area.RowArea>

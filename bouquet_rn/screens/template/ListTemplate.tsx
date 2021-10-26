@@ -19,8 +19,7 @@ import LineButton from '../../components/button/LineButton';
 
 import Icon from '../../assets/Icon';
 
-import { ListTemplate, AllTemplates } from '../../utils/types/PostTypes';
-import { Alert } from 'react-native';
+import { ListTemplate } from '../../utils/types/PostTypes';
 
 /* eslint-disable global-require */
 
@@ -40,7 +39,7 @@ function List({ isMini, isEditMode, postInfo, setPost, setImages }: ListProps) {
 
   const [listImages, setListImages] = useState<Array<string>>([]);
 
-  const setImage = async (idx: number) => {
+  const setImage = async (idx: number, isMain: boolean) => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
       alert('이미지를 업로드하려면 권한이 필요해요.');
@@ -50,13 +49,13 @@ function List({ isMini, isEditMode, postInfo, setPost, setImages }: ListProps) {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [1, 1],
+      aspect: isMain ? [4, 3] : [1, 1],
       quality: 1,
     });
 
     if (!result.cancelled) {
       const manipResult = await ImageManipulator.manipulateAsync(result.uri, [
-        { resize: { width: 1024, height: 1024 } },
+        { resize: { width: 1024, height: isMain ? 768 : 1024 } },
       ]);
       const realUri = manipResult.uri;
       if (setImages && setPost) {
@@ -166,7 +165,7 @@ function List({ isMini, isEditMode, postInfo, setPost, setImages }: ListProps) {
               {postInfo.components.map((content, idx) => (
                 <>
                   <ContentWrap>
-                    <TouchableOpacity onPress={() => setImage(idx)}>
+                    <TouchableOpacity onPress={() => setImage(idx, false)}>
                       {content.img === '' ? (
                         <ContentBlankPic>
                           <Icon icon="gallery" size={24} />
