@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import i18n from 'i18n-js';
+import * as Analytics from 'expo-firebase-analytics';
 
 // assets
 import Svg from '../../assets/Icon';
@@ -75,6 +76,16 @@ export default function PostDetailTopView({
       serverResult = await blockUserAsync(characterInfo.user_info.name);
     else serverResult = await blockCharacterAsync(characterInfo.name);
     if (serverResult.isSuccess) {
+      await Analytics.logEvent(
+        what === 'user' ? 'block_user' : 'block_character',
+        what === 'user'
+          ? {
+              blocked_user: characterInfo.user_info.name,
+            }
+          : {
+              blocked_character: characterInfo.name,
+            },
+      );
       alert('차단되었습니다.');
     } else alert(serverResult.result.errorMsg);
   };
