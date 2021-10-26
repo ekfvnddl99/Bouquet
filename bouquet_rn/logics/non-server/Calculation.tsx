@@ -29,7 +29,7 @@ export function timeName(time: string): string {
   const now = new Date().getTime();
   const diff = Math.floor((now - curr) / 1000);
 
-  if (diff > 0 && diff < 3) return '방금 전';
+  if (diff > 0 && diff < 3) return '방금';
   if (diff >= 3 && diff < 60) return `${Math.floor(diff)}${i18n.t('초')}`;
   if (diff / 60 < 60 && diff / 60 > 0)
     return `${Math.floor(diff / 60)}${i18n.t('분')}`;

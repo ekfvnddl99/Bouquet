@@ -15,11 +15,7 @@ import * as text from '../../styles/styled-components/text';
 import useCharacter from '../../logics/hooks/useCharacter';
 import useViewPost from '../../logics/hooks/useViewPost';
 import * as cal from '../../logics/non-server/Calculation';
-import {
-  likeCommentAsync,
-  reportCommentAsync,
-  deleteCommentAsync,
-} from '../../logics/server/Post';
+import { likeCommentAsync, reportCommentAsync } from '../../logics/server/Post';
 import useUser from '../../logics/hooks/useUser';
 import {
   blockCharacterAsync,
@@ -39,6 +35,7 @@ type CommentItemProps = {
   setTargetComment: (param: string) => void;
   setTargetCommentId: (param: number) => void;
   routePrefix: string;
+  deleteComment: (param: number) => void;
   openingCommentArray?: number[];
   setOpeningCommentArray?: (param: number[]) => void;
 };
@@ -62,6 +59,7 @@ export default function CommentItem({
   setTargetComment,
   setTargetCommentId,
   routePrefix,
+  deleteComment,
   openingCommentArray,
   setOpeningCommentArray,
 }: CommentItemProps): React.ReactElement {
@@ -109,19 +107,6 @@ export default function CommentItem({
     } else alert(serverResult.result.errorMsg);
   }
 
-  async function deleteComment() {
-    if (loading) return;
-    setLoading(true);
-
-    const serverResult = await deleteCommentAsync(commentInfo.id);
-    if (serverResult.isSuccess) {
-      await Analytics.logEvent('delete_comment');
-      // 새로고침을 위하여
-      setViewPost(viewPost.id);
-    } else alert(serverResult.result.errorMsg);
-    setLoading(false);
-  }
-
   const blockSomeone = async (what: string) => {
     const characterResult = await getCharacterAsync(
       commentInfo.character_info.name,
@@ -164,7 +149,7 @@ export default function CommentItem({
         setModalVisible={setModalVisible}
         onReport={() => reportComment()}
         onStop={blockSomeone}
-        onDelete={() => deleteComment()}
+        onDelete={() => deleteComment(commentInfo.id)}
         isCanDelete={myCharacter.name === commentInfo.character_info.name}
       />
       <area.RowArea style={{ alignItems: 'flex-start', marginBottom: 8 }}>
