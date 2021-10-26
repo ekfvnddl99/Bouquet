@@ -203,17 +203,19 @@ export async function getMyCharacterListAsync(): APIs.ServerResult<
 
 /**
  * 다른 계정을 차단하도록 요청하는 함수
- * @param userId 차단하려는 계정의 id
+ * @param userName 차단하려는 계정의 이름
  * @returns null
  */
-export async function blockUserAsync(userId: number): APIs.ServerResult<null> {
+export async function blockUserAsync(
+  userName: string,
+): APIs.ServerResult<null> {
   // 서버 응답 타입 정의
   type BlockUserAsyncOutput = null;
 
   const tmpResult = await APIs.postAsync<BlockUserAsyncOutput>(
     `/user/block`,
     { 'Content-Type': 'application/json' },
-    JSON.stringify({ id: userId }),
+    JSON.stringify({ user_name: userName }),
     true,
   );
 

@@ -593,11 +593,11 @@ export async function followCharacterAsync(
 
 /**
  * 다른 캐릭터를 차단하도록 요청하는 함수
- * @param characterId 차단하려는 캐릭터의 id
+ * @param characterName 차단하려는 캐릭터의 이름
  * @returns null
  */
 export async function blockCharacterAsync(
-  characterId: number,
+  characterName: string,
 ): APIs.ServerResult<null> {
   // 서버 응답 타입 정의
   type BlockCharacterAsyncOutput = null;
@@ -605,7 +605,7 @@ export async function blockCharacterAsync(
   const tmpResult = await APIs.postAsync<BlockCharacterAsyncOutput>(
     `/character/block`,
     { 'Content-Type': 'application/json' },
-    JSON.stringify({ id: characterId }),
+    JSON.stringify({ character_name: characterName }),
     true,
   );
 

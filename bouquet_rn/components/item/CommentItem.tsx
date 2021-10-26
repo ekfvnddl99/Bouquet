@@ -20,7 +20,10 @@ import {
   deleteCommentAsync,
 } from '../../logics/server/Post';
 import useUser from '../../logics/hooks/useUser';
-import { blockCharacterAsync } from '../../logics/server/Character';
+import {
+  blockCharacterAsync,
+  getCharacterAsync,
+} from '../../logics/server/Character';
 import { blockUserAsync } from '../../logics/server/User';
 
 // utils
@@ -115,9 +118,18 @@ export default function CommentItem({
   }
 
   const blockSomeone = async (what: string) => {
+    const characterResult = await getCharacterAsync(
+      commentInfo.character_info.name,
+    );
+    if (!characterResult.isSuccess) {
+      alert(characterResult.result.errorMsg);
+      return;
+    }
+    const characterInfo = characterResult.result;
     let serverResult;
-    if (what === 'user') serverResult = await blockUserAsync(user.id);
-    else serverResult = await blockCharacterAsync(myCharacter.id);
+    if (what === 'user') {
+      serverResult = await blockUserAsync(characterInfo.user_info.name);
+    } else serverResult = await blockCharacterAsync(characterInfo.name);
     if (serverResult.isSuccess) {
       alert('차단되었습니다.');
       // 새로고침을 위하여

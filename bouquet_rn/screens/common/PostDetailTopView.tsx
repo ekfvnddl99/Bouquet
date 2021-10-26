@@ -15,15 +15,16 @@ import { Post, AllTemplates } from '../../utils/types/PostTypes';
 
 //  logics
 import useUser from '../../logics/hooks/useUser';
-import useCharacter from '../../logics/hooks/useCharacter';
 import { reportPostAsync } from '../../logics/server/Post';
-import { blockCharacterAsync } from '../../logics/server/Character';
+import {
+  blockCharacterAsync,
+  getCharacterAsync,
+} from '../../logics/server/Character';
 import { blockUserAsync } from '../../logics/server/User';
 
 // components
 import ProfileButton from '../../components/button/ProfileButton';
 import SunButton from '../../components/button/SunButton';
-import LineButton from '../../components/button/LineButton';
 import HalfModal from '../../components/view/HalfModal';
 
 // templates
@@ -51,7 +52,6 @@ export default function PostDetailTopView({
   onPressSun,
 }: PostDetailTopViewProps): React.ReactElement {
   const user = useUser();
-  const [myCharacter] = useCharacter();
   const [modalVisible, setModalVisible] = useState(false);
 
   async function reportPost() {
@@ -62,9 +62,18 @@ export default function PostDetailTopView({
   }
 
   const blockSomeone = async (what: string) => {
+    const characterResult = await getCharacterAsync(
+      viewPost.character_info.name,
+    );
+    if (!characterResult.isSuccess) {
+      alert(characterResult.result.errorMsg);
+      return;
+    }
+    const characterInfo = characterResult.result;
     let serverResult;
-    if (what === 'user') serverResult = await blockUserAsync(user.id);
-    else serverResult = await blockCharacterAsync(myCharacter.id);
+    if (what === 'user')
+      serverResult = await blockUserAsync(characterInfo.user_info.name);
+    else serverResult = await blockCharacterAsync(characterInfo.name);
     if (serverResult.isSuccess) {
       alert('차단되었습니다.');
     } else alert(serverResult.result.errorMsg);
