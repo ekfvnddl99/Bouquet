@@ -21,8 +21,8 @@ import { MyCharacter } from '../../utils/types/UserTypes';
 import HeaderItem from '../../components/item/HeaderItem';
 
 // screens
-import ChaDeletionScreenOne from './CharacterDeletionScreen1';
-import ChaDeletionScreenTwo from './CharacterDeletionScreen2';
+import CharacterDeletionScreenOne from './CharacterDeletionScreen1';
+import CharacterDeletionScreenTwo from './CharacterDeletionScreen2';
 
 type ParamList = {
   ProfileDetail: {
@@ -85,13 +85,13 @@ export default function CharacterDeletionScreen(): React.ReactElement {
           {setTitle(step)}
         </text.Subtitle1>
         {step === 1 ? (
-          <ChaDeletionScreenOne
+          <CharacterDeletionScreenOne
             profileImg={targetCharacter.profile_img}
             name={targetCharacter.name}
             onPress={() => deleteCharacter()}
           />
         ) : (
-          <ChaDeletionScreenTwo
+          <CharacterDeletionScreenTwo
             profileImg={targetCharacter.profile_img}
             name={targetCharacter.name}
             navigation={navigation}

@@ -16,7 +16,6 @@ import * as area from '../../../styles/styled-components/area';
 import { registerEmailAsync } from '../../../logics/server/EmailLogin';
 import useLogin from '../../../logics/hooks/useLogin';
 import uploadImageAsync from '../../../logics/server/UploadImage';
-import { editUserAsync } from '../../../logics/server/User';
 
 // components
 import ProgressItem from '../../../components/item/ProgressItem';
@@ -39,6 +38,7 @@ export default function RegisterScreen(): React.ReactElement {
   // 회원가입에서 입력될 값들 저장하는 state
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordCheck, setPasswordCheck] = useState('');
   const [name, setName] = useState('');
   const [authNumber, setAuthNumber] = useState('');
   const [realAuthNumber, setRealAuthNumber] = useState('');
@@ -125,6 +125,8 @@ export default function RegisterScreen(): React.ReactElement {
           onPress={() => setStep(step + 1)}
           password={password}
           setPassword={setPassword}
+          passwordCheck={passwordCheck}
+          setPasswordCheck={setPasswordCheck}
         />
       );
     if (stepNumber === 3)

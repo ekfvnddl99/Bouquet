@@ -78,10 +78,10 @@ export default function PostDetailScreen(): React.ReactElement {
 
   useEffect(() => {
     if (route.params !== undefined) {
+      setRoutePrefix(route.params.routePrefix);
       let postId;
       if (route.params.postId) postId = route.params.postId;
       if (postId) setViewPost(postId);
-      setRoutePrefix(route.params.routePrefix);
     }
   }, []);
 
