@@ -1,0 +1,8 @@
+{
+  "eslint.lintTask.enable": true,
+  "eslint.options": {
+    "prettier.eslintIntegration": true
+  },
+  "eslint.run": "onType",
+  "editor.formatOnSave": true
+}

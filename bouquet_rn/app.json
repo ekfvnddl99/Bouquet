@@ -1,8 +1,9 @@
 {
   "expo": {
-    "name": "bouquet",
+    "name": "Bouquet",
+    "scheme": "bouquet",
     "slug": "bouquet",
-    "version": "1.0.0",
+    "version": "0.1.3",
     "orientation": "portrait",
     "icon": "./assets/png/icon.png",
     "splash": {
@@ -13,24 +14,30 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
+    "notification": {
+      "icon": "./assets/png/icon.png"
+    },
     "ios": {
-      "supportsTablet": true,
-      "usesAppleSignIn" : true,
-      "bundleIdentifier" : "com.bouquet.bouquet",
-      "config":{
-        "googleSignIn":{
-          "reservedClientId" : "com.googleusercontent.apps.828159899837-kcksemp2itup93uk6bdic66cubug5go8"
-        }
-      }
+      "supportsTablet": false,
+      "usesAppleSignIn": false,
+      "bundleIdentifier": "com.dot.bouquet",
+      "infoPlist": {
+        "UIBackgroundModes": ["remote-notification"],
+        "NSPhotoLibraryUsageDescription": "계정 및 캐릭터 프로필 사진에 사용하기 위해 갤러리 접근을 허용하시겠습니까?"
+      },
+      "buildNumber": "4",
+      "icon": "./assets/png/icon.png",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/png/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
+        "backgroundImage": "./assets/png/adaptive-background.png"
+      },
+      "softwareKeyboardLayoutMode": "pan",
+      "package": "com.dot.bouquet"
     },
     "web": {
       "favicon": "./assets/png/favicon.png"

@@ -5,19 +5,33 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx ./"
+  },
+  "rnpm": {
+    "assets": [
+      "./assets/fonts"
+    ]
   },
   "dependencies": {
-    "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/bottom-tabs": "^5.11.11",
-    "@react-navigation/material-top-tabs": "^5.3.15",
     "@react-navigation/native": "^5.9.4",
     "@react-navigation/stack": "^5.14.5",
+    "@types/i18n-js": "^3.8.2",
+    "@types/lodash.memoize": "^4.1.6",
     "@types/styled-components-react-native": "^5.1.1",
     "expo": "~42.0.1",
+    "expo-app-loading": "^1.1.2",
     "expo-apple-authentication": "~3.2.1",
+    "expo-constants": "~11.0.1",
+    "expo-font": "~9.2.1",
     "expo-google-app-auth": "^8.2.2",
+    "expo-image-picker": "~10.2.2",
+    "expo-localization": "~10.2.0",
+    "expo-notifications": "~0.12.3",
+    "expo-secure-store": "~10.2.0",
     "expo-status-bar": "~1.0.4",
+    "i18n-js": "^3.8.0",
     "lodash": "^4.17.21",
     "react": "16.13.1",
     "react-dom": "16.13.1",
@@ -27,17 +41,32 @@
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.4.0",
     "react-native-svg": "12.1.1",
-    "react-native-tab-view": "^2.16.0",
     "react-native-web": "~0.13.12",
     "recoil": "^0.3.1",
     "styled-components": "^5.3.0",
-    "react-native-pager-view": "5.0.12"
+    "expo-linking": "~2.3.1",
+    "expo-image-manipulator": "~9.2.2",
+    "@react-native-async-storage/async-storage": "~1.15.0",
+    "react-native-webview": "11.6.2",
+    "expo-firebase-analytics": "~4.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@types/react": "~16.9.35",
     "@types/react-native": "~0.63.2",
     "@types/styled-components": "^5.1.11",
+    "@typescript-eslint/eslint-plugin": "^4.29.3",
+    "@typescript-eslint/parser": "^4.29.3",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^3.4.1",
+    "eslint-plugin-react": "^7.25.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-react-native": "^3.11.0",
+    "prettier": "^2.3.2",
     "typescript": "~4.0.0"
   },
   "private": true

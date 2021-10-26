@@ -13,7 +13,9 @@ const Background = styled.div`
   height: 100%;
   background-color: ${colors.grayscale.white};
 
-  position: fixed;
+  @media (min-width: 320px) and (max-width: 979px) {
+    display: none;
+  }
 `;
 
 const Wrap = styled.div`

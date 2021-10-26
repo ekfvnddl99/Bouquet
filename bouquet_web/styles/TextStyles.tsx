@@ -1,82 +1,129 @@
-import styled from 'styled-components';
-import { colors } from './Colors';
+import styled, { css } from 'styled-components';
 
-export const Title = styled.span`
+export const Title_css = css`
   font-size: 32px;
   font-weight: 700;
 `;
+export const Title = styled.span`
+  ${Title_css}
+`;
 
-export const Subtitle1 = styled.span`
+export const Subtitle1_css = css`
   font-size: 22px;
   font-weight: 700;
 `;
+export const Subtitle1 = styled.span`
+  ${Subtitle1_css}
+`;
 
-export const Subtitle2B = styled.span`
+export const Subtitle2B_css = css`
   font-size: 18px;
   font-weight: 700;
 `;
+export const Subtitle2B = styled.span`
+  ${Subtitle2B_css}
+`;
 
-export const Subtitle2R = styled.span`
+export const Subtitle2R_css = css`
   font-size: 18px;
   font-weight: 400;
 `;
+export const Subtitle2R = styled.span`
+  ${Subtitle2R_css}
+`;
 
+export const Subtitle3_css = css`
+  font-size: 16px;
+  font-weight: 600;
+`;
 export const Subtitle3 = styled.span`
+  ${Subtitle3_css}
+`;
+
+export const Body1B_css = css`
   font-size: 16px;
   font-weight: 600;
 `;
-
 export const Body1B = styled.span`
-  font-size: 16px;
-  font-weight: 600;
+  ${Body1B_css}
 `;
 
+export const Body1R_css = css`
+  font-size: 16px;
+  font-weight: 400;
+`;
 export const Body1R = styled.span`
-  font-size: 16px;
-  font-weight: 400;
+  ${Body1R_css}
 `;
 
+export const Body2B_css = css`
+  font-size: 14px;
+  font-weight: 600;
+`;
 export const Body2B = styled.span`
-  font-size: 14px;
-  font-weight: 600;
+  ${Body2B_css}
 `;
 
+export const Body2R_css = css`
+  font-size: 14px;
+  font-weight: 400;
+`;
 export const Body2R = styled.span`
-  font-size: 14px;
-  font-weight: 400;
+  ${Body2R_css}
 `;
 
+export const Body3_css = css`
+  font-size: 12px;
+  font-weight: 400;
+`;
 export const Body3 = styled.span`
-  font-size: 12px;
-  font-weight: 400;
+  ${Body3_css}
 `;
 
+export const Button1B_css = css`
+  font-size: 16px;
+  font-weight: 600;
+`;
 export const Button1B = styled.span`
-  font-size: 16px;
-  font-weight: 600;
+  ${Button1B_css}
 `;
 
+export const Button1R_css = css`
+  font-size: 16px;
+  font-weight: 400;
+`;
 export const Button1R = styled.span`
-  font-size: 16px;
-  font-weight: 400;
+  ${Button1R_css}
 `;
 
-export const Button2B = styled.span`
+export const Button2B_css = css`
   font-size: 14px;
   font-weight: 600;
 `;
+export const Button2B = styled.span`
+  ${Button2B_css}
+`;
 
-export const Button2R = styled.span`
+export const Button2R_css = css`
   font-size: 14px;
   font-weight: 400;
 `;
+export const Button2R = styled.span`
+  ${Button2R_css}
+`;
 
-export const Button3 = styled.span`
+export const Button3_css = css`
   font-size: 12px;
   font-weight: 400;
 `;
+export const Button3 = styled.span`
+  ${Button3_css}
+`;
 
-export const Caption = styled.span`
+export const Caption_css = css`
   font-size: 12px;
   font-weight: 300;
+`;
+export const Caption = styled.span`
+  ${Caption_css}
 `;

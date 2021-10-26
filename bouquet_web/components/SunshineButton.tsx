@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 import Icon from './Icons';
@@ -29,11 +29,6 @@ type SunshineButtonProps = {
 
 export default function SunshineButton({ sunshine }: SunshineButtonProps) {
   const [active, setActive] = useState(false);
-  const getVarient = useCallback(() => {
-    return active ? "filled" : "outline";
-  }, [active]);
-
-  const varient = useMemo(() => getVarient(), [getVarient]);
 
   return (
     <Wrap onClick={() => setActive(!active)} active={active}>

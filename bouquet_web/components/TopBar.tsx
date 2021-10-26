@@ -7,10 +7,12 @@ import { colors } from '../styles/Colors';
 const TopWrap = styled.div<{scrolled: boolean}>`
   position: sticky;
   top: 0;
-  transition: 0.5s;
+  transition: 0.3s;
 
   display: flex;
   justify-content: center;
+
+  z-index: 50;
   
   @media (min-width: 320px) and (max-width: 519px) {
     border-radius: 0 0 15px 15px;
