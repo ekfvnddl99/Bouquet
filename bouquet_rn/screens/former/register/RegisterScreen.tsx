@@ -66,7 +66,7 @@ export default function RegisterScreen(): React.ReactElement {
     );
     if (serverResult.isSuccess) {
       await SecureStore.setItemAsync('auth', serverResult.result);
-      await getPushNotificationsPermission();
+      await getPushNotificationsPermission(true);
       const getToken = await SecureStore.getItemAsync('pushToken');
       if (typeof getToken === 'string') {
         const postToken = await registerNotificationTokenAsync(getToken);

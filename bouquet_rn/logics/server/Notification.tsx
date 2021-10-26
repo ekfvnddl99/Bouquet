@@ -11,22 +11,26 @@ import { Notification } from '../../utils/types/PostTypes';
  * 사용자의 고유 notification token을 expo로부터 받아오고 DB에 저장하는 함수
  * @returns
  */
-export async function getPushNotificationsPermission(): Promise<void> {
+export async function getPushNotificationsPermission(
+  isFirst: boolean,
+): Promise<void> {
   if (Constants.isDevice) {
-    // 알림 허락 받았는지 확인
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-    // 허락 안 받았으면 사용자에게 허락해달라고 요구
-    if (existingStatus !== 'granted') {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-    // 사용자가 허락 안 하면 불가
-    if (finalStatus !== 'granted') {
-      alert(
-        '권한이 없어서 알림을 받을 수 없어요. 알림을 받으려면 권한 설정을 해주세요.',
-      );
+    if (isFirst) {
+      // 알림 허락 받았는지 확인
+      const { status: existingStatus } =
+        await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      // 허락 안 받았으면 사용자에게 허락해달라고 요구
+      if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+      // 사용자가 허락 안 하면 불가
+      if (finalStatus !== 'granted') {
+        alert(
+          '권한이 없어서 알림을 받을 수 없어요. 알림을 받으려면 권한 설정을 해주세요.',
+        );
+      }
     }
 
     try {

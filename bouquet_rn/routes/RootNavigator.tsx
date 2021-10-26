@@ -32,7 +32,7 @@ export default function AppStack(): React.ReactElement {
     async function callLogin() {
       await login();
       await checkIsNewNotification();
-      await getPushNotificationsPermission();
+      await getPushNotificationsPermission(false);
       setTimeout(() => {
         setIsSplash(false);
       }, 2000);
@@ -67,7 +67,7 @@ export default function AppStack(): React.ReactElement {
       appState.current = nextAppState;
 
       if (appState.current === 'active' && myCharacter.name !== '') {
-        await getPushNotificationsPermission();
+        await getPushNotificationsPermission(false);
         await checkIsNewNotification();
       }
     });
