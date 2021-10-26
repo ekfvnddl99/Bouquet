@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
+  Text,
 } from 'react-native';
 import styled from 'styled-components/native';
 import * as ImagePicker from 'expo-image-picker';
@@ -88,7 +89,7 @@ function List({ isMini, isEditMode, postInfo, setPost, setImages }: ListProps) {
     >
       {isMini ? null : (
         <TouchableOpacity onPress={isEditMode ? () => setImage(-1) : undefined}>
-          {postInfo.img === '' ? (
+          {!postInfo.img ? (
             <MainBlankPic>
               <Icon icon="gallery" size={24} />
             </MainBlankPic>
@@ -98,15 +99,8 @@ function List({ isMini, isEditMode, postInfo, setPost, setImages }: ListProps) {
         </TouchableOpacity>
       )}
       <area.NoHeightArea marBottom={0} paddingH={15} paddingV={15}>
-        {isMini ? (
-          <MainPic
-            isMini={isMini}
-            source={
-              postInfo.img
-                ? { uri: postInfo.img }
-                : require('../../assets/img.jpg')
-            }
-          />
+        {isMini && postInfo.img ? (
+          <MainPic isMini={isMini} source={{ uri: postInfo.img }} />
         ) : null}
         {isMini ? (
           <text.Subtitle3 textColor={colors.black}>
@@ -262,14 +256,16 @@ function List({ isMini, isEditMode, postInfo, setPost, setImages }: ListProps) {
             <>
               {realList.map((content, idx) => (
                 <ContentWrap>
-                  <ContentPic
-                    isMini={isMini}
-                    source={
-                      content.img === ''
-                        ? require('../../assets/img.jpg')
-                        : { uri: content.img }
-                    }
-                  />
+                  {!content.img ? null : (
+                    <ContentPic
+                      isMini={isMini}
+                      source={
+                        content.img === ''
+                          ? require('../../assets/img.jpg')
+                          : { uri: content.img }
+                      }
+                    />
+                  )}
                   <ContentTextWrap>
                     {isMini ? (
                       <text.Body2R textColor={colors.black}>
