@@ -90,20 +90,22 @@ export default function CharacterGenerationScreen2({
    */
   useEffect(() => {
     async function checkCharacterName(arr: boolean[]) {
+      let value = false;
+      if (!tmpArray[0]) setNameErr(errTextArray[0]);
+      else if (!tmpArray[1]) setNameErr(errTextArray[1]);
+
       const serverResult = await checkCharacterAsync(newCharacter.name);
       if (serverResult.isSuccess) {
-        const value =
+        value =
           isModifying &&
           originCharacter?.name === newCharacter.name &&
           serverResult.result
             ? true
             : !serverResult.result && newCharacter.name.length > 0;
-        if (!tmpArray[0]) setNameErr(errTextArray[0]);
-        else if (!tmpArray[1]) setNameErr(errTextArray[1]);
-        else if (!value) setNameErr(errTextArray[2]);
+        if (!value) setNameErr(errTextArray[2]);
         else setNameErr('');
-        setNameConditionArray([arr[0], arr[1], value]);
       }
+      setNameConditionArray([arr[0], arr[1], value]);
     }
     const tmpArray = [...nameConditionArray];
     // 이름 입력됐냐
@@ -111,7 +113,6 @@ export default function CharacterGenerationScreen2({
     tmpArray[1] =
       getByte(newCharacter.name) <= 18 && getByte(newCharacter.name) > 0;
     checkCharacterName(tmpArray);
-    setNameConditionArray(tmpArray);
   }, [newCharacter.name]);
 
   /**
