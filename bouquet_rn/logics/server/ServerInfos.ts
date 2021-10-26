@@ -1,1 +1,1 @@
-export const serverAddress = 'https://bouquet.ooo';
+export const serverAddress = 'https://api.bouquet.ooo';

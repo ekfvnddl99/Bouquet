@@ -12,6 +12,10 @@ import * as text from '../../../styles/styled-components/text';
 
 // logics
 import { checkEmailAsync } from '../../../logics/server/EmailLogin';
+import {
+  checkExistingEmailAsync,
+  checkNewEmailAsync,
+} from '../../../logics/server/Auth';
 
 // components
 import ConditionButton from '../../../components/button/ConditionButton';
@@ -26,6 +30,9 @@ type RegisterScreenProps = {
   setEmail: (param: string) => void;
   authNumber: string;
   setAuthNumber: (param: string) => void;
+  realAuthNumber: string;
+  setRealAuthNumber: (param: string) => void;
+  isFindPassword?: boolean;
 };
 /**
  * 회원가입 첫 번째 화면.
@@ -36,6 +43,7 @@ type RegisterScreenProps = {
  * @param setEmail 이메일 set 함수
  * @param authNumber 인증번호 변수
  * @param setAuthNumber 인증번호 set 함수
+ * @param isFindPassword 비밀번호 재설정 상황인지
  * @returns
  */
 export default function RegisterScreen1({
@@ -44,6 +52,9 @@ export default function RegisterScreen1({
   setEmail,
   authNumber,
   setAuthNumber,
+  realAuthNumber,
+  setRealAuthNumber,
+  isFindPassword,
 }: RegisterScreenProps): React.ReactElement {
   const navigation = useNavigation<StackNavigationProp<WelcomeStackParam>>();
   // 모든 조건이 만족됐는지 확인하기 위한 state
@@ -52,6 +63,10 @@ export default function RegisterScreen1({
   const [isFocus, setIsFocus] = useState(false);
   // 인증번호 입력창이 뜰 조건을 만족했는지 아닌지
   const [isNext, setIsNext] = useState<boolean>(email.length > 0);
+  // 메일 인증 버튼 누른 후 버튼 색
+  const [mailButtonColor, setMailButtonColor] = useState(
+    authNumber.length !== 0 ? colors.gray2 : colors.black,
+  );
 
   // 이메일 입력 조건을 체크하는 배열
   const [emailConditionArray, setEmailConditionArray] = useState([
@@ -77,50 +92,72 @@ export default function RegisterScreen1({
     '메일을 인증해 주세요.',
     '인증 번호를 입력해 주세요.',
     '인증 번호가 틀렸나 봐요.',
+    '없는 메일이에요.',
   ];
   // 이메일 정규표현식
-  const emailRegex =
-    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+  const emailRegex = /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/i;
   /**
    * 이메일 조건을 확인하는 함수
    * @description email 값이 바뀔 때마다 실행된다.
    */
   useEffect(() => {
     async function checkEmail(arr: boolean[]) {
+      let value = isFindPassword !== undefined;
+      // 메일 입력했다가 다 지우면 '메일 입력하라'는 에러 메세지가 떠야하는데 안 떠서 여기 넣음
+      // +++ 흠냐링 일단 중복체크보다 우선적으로 체크해야 할 것들을 체크
+      if (!arr[0]) setEmailErr(errTextArray[0]);
+      else if (!arr[1]) setEmailErr(errTextArray[1]);
+      // 중복 체크
+      // 메일 형식이 안 갖춰지면 validation err 떠서 isSuccess일 때로 안 들어간다...
       const serverResult = await checkEmailAsync(email);
       if (serverResult.isSuccess) {
-        const value = !serverResult.result && email.length > 0;
-        if (!tmpArray[0]) setEmailErr(errTextArray[0]);
-        else if (!tmpArray[1]) setEmailErr(errTextArray[1]);
-        else if (!value) setEmailErr(errTextArray[2]);
-        else if (!tmpArray[3]) setEmailErr(errTextArray[3]);
+        // 이메일 중복 체크부터 우선순위대로 체크하고, 에러가 없으면 EmailErr를 공백으로 처리
+        value = !serverResult.result && email.length > 0;
+        if (isFindPassword && value) setEmailErr(errTextArray[6]);
+        else if (!isFindPassword && !value) setEmailErr(errTextArray[2]);
+        else if (!arr[3]) setEmailErr(errTextArray[3]);
         else setEmailErr('');
-        setEmailConditionArray([arr[0], arr[1], value, arr[3]]);
       }
+      // 이메일 중복을 하든 안 하든 무조건 거쳐야 할 과정(체크 배열 굳히기)
+      if (isFindPassword)
+        setEmailConditionArray([arr[0], arr[1], !value, arr[3]]);
+      else setEmailConditionArray([arr[0], arr[1], value, arr[3]]);
     }
     const tmpArray = [...emailConditionArray];
     // 조건 다 통과했는데, 다시 이메일을 입력하는 경우.
-    // step 2에서 다시 돌아온 경우.
-    if (isOK) {
+    // step 2에서 다시 돌아온 경우 + step 1에서 메일 인증 버튼 누른 후 다른 이메일로 변경하는 경우
+    if (isOK || !emailConditionArray.includes(false)) {
       setIsNext(false);
       setAuthNumber('');
+      setRealAuthNumber('');
+      setMailButtonColor(colors.black);
     }
     tmpArray[0] = email.length > 0;
     tmpArray[1] = emailRegex.test(email);
     tmpArray[3] = isNext;
     checkEmail(tmpArray);
-    setEmailConditionArray(tmpArray);
   }, [email, isNext]);
 
   /**
    * 이메일 인증을 확인하는 함수
    */
+  const [loading, setLoading] = useState(false);
   async function checkEmailAuthentication() {
-    const serverResult = await checkEmailAsync(email);
-    if (emailConditionArray[0] && emailConditionArray[1]) {
-      if (serverResult.isSuccess) setIsNext(true);
-      else alert(serverResult.result.errorMsg);
-    }
+    if (mailButtonColor === colors.gray2) return;
+
+    if (loading) return;
+    setLoading(true);
+
+    let getVerificationCodeAsync;
+    if (isFindPassword) getVerificationCodeAsync = checkExistingEmailAsync;
+    else getVerificationCodeAsync = checkNewEmailAsync;
+    const serverResult = await getVerificationCodeAsync(email);
+    if (serverResult.isSuccess) {
+      setMailButtonColor(colors.gray2);
+      setIsNext(true);
+      setRealAuthNumber(serverResult.result);
+    } else alert(serverResult.result.errorMsg);
+    setLoading(false);
   }
 
   /**
@@ -129,9 +166,9 @@ export default function RegisterScreen1({
   useEffect(() => {
     const tmpArray = [...authNumberConditionArray];
     tmpArray[0] = authNumber.length > 0;
-    tmpArray[1] = Number(authNumber) === 1234;
-    if (!tmpArray[0]) setAuthNumberErr(errTextArray[3]);
-    else if (!tmpArray[1]) setAuthNumberErr(errTextArray[4]);
+    tmpArray[1] = authNumber === realAuthNumber;
+    if (!tmpArray[0]) setAuthNumberErr(errTextArray[4]);
+    else if (!tmpArray[1]) setAuthNumberErr(errTextArray[5]);
     else setAuthNumberErr('');
     setAuthNumberConditionArray(tmpArray);
   }, [authNumber]);
@@ -178,14 +215,14 @@ export default function RegisterScreen1({
         <LineButton
           content={i18n.t('메일 인증')}
           onPress={() => checkEmailAuthentication()}
-          borderColor={colors.black}
+          borderColor={mailButtonColor}
         />
       </area.FormArea>
       {isFocus && emailConditionArray.includes(false) ? (
         <WarningText content={emailErr} marginTop={8} />
       ) : null}
 
-      {authNumber.length > 0 || isNext ? (
+      {isNext ? (
         <View style={{ marginTop: 16 }}>
           <ConditionTextInput
             height={44}
@@ -200,12 +237,6 @@ export default function RegisterScreen1({
       ) : null}
 
       <area.BottomArea>
-        <View style={{ alignItems: 'center' }}>
-          <text.Caption textColor={colors.gray6}>
-            {i18n.t('이전 페이지로 돌아가면 소셜 계정으로도 가입할 수 있어요')}
-          </text.Caption>
-        </View>
-
         <View style={{ marginVertical: 16 }}>
           <ConditionButton
             isActive={isOK}

@@ -24,8 +24,8 @@ type CharacterGenerationScreen4Props = {
 /**
  * 캐릭터 생성/수정 완료됐다는 확인 화면
  *
- * @param profileImg 삭제될 캐릭터의 프로필 이미지
- * @param name 삭제될 캐릭터의 이름
+ * @param profileImg 생성/수정될 캐릭터의 프로필 이미지
+ * @param name 생성/수정될 캐릭터의 이름
  * @param isModifying 수정하냐?
  * @param navigation 돌아가기 버튼 누를 때 필요한 네비게이션 변수
  * @returns

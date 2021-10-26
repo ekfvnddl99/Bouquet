@@ -1,11 +1,11 @@
 import React from 'react';
 import { useFonts } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
+import * as Notifications from 'expo-notifications';
 import i18n from 'i18n-js';
 import { RecoilRoot } from 'recoil';
 
 import AppStack from './routes/RootNavigator';
-import SplashScreen from './screens/former/SplashScreen';
 
 const translationGetters = {
   en: require('./utils/language/en.json'),
@@ -18,6 +18,15 @@ const setI18nConfig = () => {
   i18n.locale = 'ko';
   i18n.fallbacks = true;
 };
+
+// 앱 상태가 foreground 때 설정
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 export default function App(): React.ReactElement {
   const [loaded] = useFonts({
@@ -40,5 +49,4 @@ export default function App(): React.ReactElement {
       <AppStack />
     </RecoilRoot>
   );
-  return <SplashScreen />;
 }

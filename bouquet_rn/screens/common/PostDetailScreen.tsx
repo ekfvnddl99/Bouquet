@@ -1,4 +1,10 @@
-import React, { useRef, useState, useMemo, useCallback } from 'react';
+import React, {
+  useRef,
+  useState,
+  useMemo,
+  useCallback,
+  useEffect,
+} from 'react';
 import {
   KeyboardAvoidingView,
   FlatList,
@@ -7,43 +13,42 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
+  Platform,
 } from 'react-native';
-import i18n from 'i18n-js';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
-import { useRecoilValue } from 'recoil';
+import {
+  useRoute,
+  RouteProp,
+  useNavigation,
+  useFocusEffect,
+} from '@react-navigation/native';
+import * as Analytics from 'expo-firebase-analytics';
 
 // styles
 import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
-import * as text from '../../styles/styled-components/text';
 
 // logics
 import { StatusBarHeight } from '../../logics/non-server/StatusbarHeight';
-import { userState } from '../../logics/atoms';
 import {
-  deleteCommentAsync,
   uploadCommentAsync,
+  deletePostAsync,
+  likePostAsync,
 } from '../../logics/server/Post';
 import useViewPost from '../../logics/hooks/useViewPost';
 import useCharacter from '../../logics/hooks/useCharacter';
 
 // utils
-import {
-  noComment,
-  PostComment,
-  PostCommentRequest,
-} from '../../utils/types/PostTypes';
+import { PostCommentRequest } from '../../utils/types/PostTypes';
 
 // components
-import ProfileButton from '../../components/button/ProfileButton';
 import HeaderItem from '../../components/item/HeaderItem';
-import SunButton from '../../components/button/SunButton';
 import CommentItem from '../../components/item/CommentItem';
 import CommentTextInput from '../../components/input/CommentTextInput';
-import LineButton from '../../components/button/LineButton';
+import PostDetailTopView from './PostDetailTopView';
 
 // templates
-import TextTemplate from '../template/TextTemplate';
 import ImageTemplate from '../template/ImageTemplate';
 import AlbumTemplate from '../template/AlbumTemplate';
 import DiaryTemplate from '../template/DiaryTemplate';
@@ -53,18 +58,34 @@ const HEADER_MAX_HEIGHT = 90;
 const HEADER_MIN_HEIGHT = 60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
+type ParamList = {
+  PostDetail: {
+    routePrefix: string;
+    postId?: number;
+  };
+};
 /**
  * TODO 댓글 삭제
  * TODO 햇님 누르기
  * @returns
  */
 export default function PostDetailScreen(): React.ReactElement {
-  const user = useRecoilValue(userState);
   const [myCharacter] = useCharacter();
   const [viewPost, setViewPost] = useViewPost();
+  const navigation = useNavigation();
 
-  // 내가 고른 댓글의 아이디
-  const [selectComment, setSelectComment] = useState(noComment);
+  const route = useRoute<RouteProp<ParamList, 'PostDetail'>>();
+  const [routePrefix, setRoutePrefix] = useState('');
+
+  useEffect(() => {
+    if (route.params !== undefined) {
+      setRoutePrefix(route.params.routePrefix);
+      let postId;
+      if (route.params.postId) postId = route.params.postId;
+      if (postId) setViewPost(postId);
+    }
+  }, []);
+
   // 대댓글이 보이는 댓글의 아이디가 들어가는 배열
   const [openingCommentArray, setOpeningCommentArray] = useState<number[]>([]);
   // 내가 쓴 댓글 값 state
@@ -78,11 +99,16 @@ export default function PostDetailScreen(): React.ReactElement {
   // 댓글 혹은 대댓글에 댓글을 달 때, 서버에 입력할 parent id 값을 저장하는 변수
   const [parentCommentId, setParentCommentById] = useState(0);
 
+  const insets = useSafeAreaInsets();
+
   /**
    * 내가 쓴 댓글 업로드하는 함수
    * @param comment 내가 쓴 댓글
    */
+  const [loading, setLoading] = useState(false);
   async function onUpload() {
+    if (loading) return;
+    setLoading(true);
     const newComment: PostCommentRequest = {
       post_id: viewPost?.id,
       character_id: myCharacter.id,
@@ -91,22 +117,28 @@ export default function PostDetailScreen(): React.ReactElement {
     };
     const serverResult = await uploadCommentAsync(newComment);
     if (serverResult.isSuccess) {
+      await Analytics.logEvent('write_comment', {
+        is_child: parentCommentId !== 0,
+      });
       setComment('');
-      setSelectComment(noComment);
       setParentComment(undefined);
-      setParentCommentById(-1);
+      setParentCommentById(0);
       // 새로고침을 위하여
-      setViewPost(viewPost.id);
+      await setViewPost(viewPost.id);
     } else alert(serverResult.result.errorMsg);
+    setLoading(false);
   }
 
-  async function deleteComment() {
-    if (selectComment.character_info.name !== myCharacter.name) return;
-    const serverResult = await deleteCommentAsync(selectComment.id);
+  async function deletePost() {
+    if (loading) return;
+    setLoading(true);
+    navigation.goBack();
+    const serverResult = await deletePostAsync(viewPost.id);
     if (serverResult.isSuccess) {
-      // 새로고침을 위하여
-      setViewPost(viewPost.id);
+      await Analytics.logEvent('delete_post');
+      alert('삭제 되었습니다.');
     } else alert(serverResult.result.errorMsg);
+    setLoading(false);
   }
 
   // 이 게시글이 나의 게시글인지
@@ -144,156 +176,126 @@ export default function PostDetailScreen(): React.ReactElement {
   }, [viewPost]);
   const template = useMemo(() => getTemplate(), [getTemplate]);
 
-  function clickComment(commentInfo: PostComment) {
-    if (selectComment.id === commentInfo.id) {
-      setSelectComment(noComment);
-    } else {
-      setSelectComment(commentInfo);
-    }
+  async function onPressSun() {
+    if (loading) return;
+    setLoading(true);
+    const serverResult = await likePostAsync(viewPost.id);
+    if (serverResult.isSuccess) {
+      await Analytics.logEvent(
+        serverResult.result ? 'like_post' : 'cancel_like_post',
+      );
+      setViewPost(viewPost.id);
+    } else alert(serverResult.result.errorMsg);
+    setLoading(false);
   }
 
   return (
-    <area.Container>
-      <AnimationHeader
-        pointerEvents="none"
-        style={[{}, { opacity: OpacityHeader }]}
-      />
+    <>
+      <area.Container>
+        <AnimationHeader
+          pointerEvents="none"
+          style={[{}, { opacity: OpacityHeader }]}
+        />
 
-      <HeaderItem
-        isAccount={false}
-        isBackButton
-        name={myCharacter.name}
-        profileImg={myCharacter.profile_img}
-      />
-      <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <Animated.ScrollView
-            contentContainerStyle={{
-              marginHorizontal: 30,
-              flexGrow: 1,
-            }}
-            showsVerticalScrollIndicator={false}
-            keyboardShouldPersistTaps="handled"
-            onScroll={Animated.event(
-              [{ nativeEvent: { contentOffset: { y: scroll } } }],
-              { useNativeDriver: true },
-            )}
-          >
-            <View style={{ paddingTop: 20 }} />
-
-            <area.RowArea>
-              <View style={{ flex: 1 }}>
-                <ProfileButton
-                  diameter={30}
-                  isAccount={false}
-                  isJustImg={false}
-                  name={viewPost?.character_info.name}
-                  profileImg={viewPost?.character_info.profile_img}
-                />
-              </View>
-              {postOwner ? (
-                <area.RowArea style={{ paddingRight: 1 }}>
-                  <LineButton
-                    onPress={() => {
-                      /**/
-                    }}
-                    content={i18n.t('수정')}
-                    borderColor={colors.black}
-                  />
-                  <View style={{ marginRight: 4 }} />
-                  <LineButton
-                    onPress={() => {
-                      /**/
-                    }}
-                    content={i18n.t('삭제')}
-                    borderColor={colors.warning_red}
-                  />
-                </area.RowArea>
-              ) : null}
-            </area.RowArea>
-            <View style={{ marginBottom: 12 }} />
-            {template}
-            {viewPost?.template && viewPost.text ? (
-              <TextTemplate mode="detail" post={viewPost.text} />
-            ) : null}
-            <View style={{ alignItems: 'flex-start' }}>
-              <SunButton
-                sunNum={viewPost?.num_sunshines}
-                setSunNum={() => {
-                  /* */
-                }}
-                active={viewPost?.liked}
-              />
-            </View>
-            <text.Subtitle3 textColor={colors.black} style={{ marginTop: 36 }}>
-              {i18n.t('반응')}
-            </text.Subtitle3>
-
-            <View style={{ paddingTop: 12 }} />
-            <FlatList
-              data={viewPost?.comments}
-              keyboardShouldPersistTaps="always"
-              keyExtractor={(item, idx) => idx.toString()}
-              renderItem={(obj) => (
-                <View>
-                  <TouchableOpacity
-                    activeOpacity={1}
-                    onPress={() => [clickComment(obj.item), Keyboard.dismiss()]}
-                  >
-                    <CommentItem
-                      commentInfo={obj.item}
-                      selectComment={selectComment}
-                      setTargetComment={setParentComment}
-                      setTargetCommentId={setParentCommentById}
-                      onDelete={() => deleteComment()}
-                      openingCommentArray={openingCommentArray}
-                      setOpeningCommentArray={setOpeningCommentArray}
-                    />
-                  </TouchableOpacity>
-
-                  {openingCommentArray.includes(obj.item.id) ? (
-                    <FlatList
-                      style={{ marginLeft: 16 }}
-                      data={obj.item.children}
-                      keyboardShouldPersistTaps="always"
-                      keyExtractor={(item, idx) => idx.toString()}
-                      renderItem={(childObj) => (
-                        <TouchableOpacity
-                          activeOpacity={1}
-                          onPress={() => [
-                            clickComment(childObj.item),
-                            Keyboard.dismiss(),
-                          ]}
-                        >
-                          <CommentItem
-                            commentInfo={childObj.item}
-                            selectComment={selectComment}
-                            setTargetComment={setParentComment}
-                            setTargetCommentId={setParentCommentById}
-                            onDelete={() => deleteComment()}
-                          />
-                        </TouchableOpacity>
-                      )}
-                    />
-                  ) : null}
-                </View>
+        <HeaderItem
+          isAccount={false}
+          isBackButton
+          name={myCharacter.name}
+          profileImg={myCharacter.profile_img}
+          routePrefix={routePrefix}
+        />
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          style={{ flex: 1 }}
+        >
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <Animated.ScrollView
+              style={{ flexGrow: 1 }}
+              contentContainerStyle={{ paddingHorizontal: 30, flexGrow: 1 }}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+              onScroll={Animated.event(
+                [{ nativeEvent: { contentOffset: { y: scroll } } }],
+                { useNativeDriver: true },
               )}
+            >
+              <FlatList
+                ListHeaderComponent={
+                  <PostDetailTopView
+                    viewPost={viewPost}
+                    routePrefix={routePrefix}
+                    postOwner={postOwner}
+                    template={template}
+                    onDelete={() => deletePost()}
+                    onPressSun={() => onPressSun()}
+                  />
+                }
+                showsVerticalScrollIndicator={false}
+                data={viewPost?.comments}
+                keyboardShouldPersistTaps="always"
+                keyExtractor={(item) => `${item.id}`}
+                renderItem={(obj) => (
+                  <View>
+                    <TouchableOpacity
+                      activeOpacity={1}
+                      onPress={() => Keyboard.dismiss()}
+                    >
+                      <CommentItem
+                        commentInfo={obj.item}
+                        setTargetComment={setParentComment}
+                        setTargetCommentId={setParentCommentById}
+                        routePrefix={routePrefix}
+                        openingCommentArray={openingCommentArray}
+                        setOpeningCommentArray={setOpeningCommentArray}
+                      />
+                    </TouchableOpacity>
+
+                    {openingCommentArray.includes(obj.item.id) ? (
+                      <FlatList
+                        style={{ marginLeft: 16 }}
+                        data={obj.item.children}
+                        keyboardShouldPersistTaps="always"
+                        keyExtractor={(item) => `${item.id}`}
+                        renderItem={(childObj) => (
+                          <TouchableOpacity
+                            activeOpacity={1}
+                            onPress={() => Keyboard.dismiss()}
+                          >
+                            <CommentItem
+                              commentInfo={childObj.item}
+                              setTargetComment={setParentComment}
+                              setTargetCommentId={setParentCommentById}
+                              routePrefix={routePrefix}
+                            />
+                          </TouchableOpacity>
+                        )}
+                      />
+                    ) : null}
+                  </View>
+                )}
+              />
+            </Animated.ScrollView>
+          </TouchableWithoutFeedback>
+          {myCharacter.name !== '' ? (
+            <CommentTextInput
+              textValue={comment}
+              onChangeText={setComment}
+              onPress={() => onUpload()}
+              isChild={parentComment !== undefined}
+              targetComment={parentComment}
+              setTargetComment={setParentComment}
+              setTargetCommentId={setParentCommentById}
             />
-          </Animated.ScrollView>
-        </TouchableWithoutFeedback>
-        {user.name !== '' ? (
-          <CommentTextInput
-            textValue={comment}
-            onChangeText={setComment}
-            onPress={() => onUpload()}
-            isChild={parentComment !== undefined}
-            targetComment={parentComment}
-            setTargetComment={setParentComment}
-            setTargetCommentId={setParentCommentById}
-          />
-        ) : null}
-      </KeyboardAvoidingView>
-    </area.Container>
+          ) : null}
+        </KeyboardAvoidingView>
+      </area.Container>
+      <View
+        style={{
+          paddingBottom: insets.bottom,
+          backgroundColor: colors.white,
+        }}
+      />
+    </>
   );
 }
 

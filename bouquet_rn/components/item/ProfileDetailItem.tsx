@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import * as Analytics from 'expo-firebase-analytics';
 
 // styles
 import colors from '../../styles/colors';
@@ -14,7 +16,6 @@ import * as area from '../../styles/styled-components/area';
 import useViewCharacter from '../../logics/hooks/useViewCharacter';
 import { followCharacterAsync } from '../../logics/server/Character';
 import * as cal from '../../logics/non-server/Calculation';
-import useCharacter from '../../logics/hooks/useCharacter';
 
 // components
 import BoldNRegularText from '../text/BoldNRegularText';
@@ -22,25 +23,28 @@ import ProfileButton from '../button/ProfileButton';
 import ProfileInfoTagItem from './ProfileInfoTagItem';
 import LineButton from '../button/LineButton';
 import useCharacterList from '../../logics/hooks/useCharacterList';
-import { MyCharacter } from '../../utils/types/UserTypes';
+import { MyCharacter, Character } from '../../utils/types/UserTypes';
 
 type ProfileDetailItemProps = {
   isMini: boolean;
-  characterInfo?: MyCharacter;
+  routePrefix: string;
+  characterInfo?: MyCharacter | Character;
 };
 /**
  * Profile의 swipe view 캐릭터 컴포넌트 && '상세 프로필'의 캐릭터 정보
  * TODO 언팔로우
  * TODO 팔로우 여부
  * @param isMini swipe view에 사용되는지 아닌지
+ * @param routePrefix 라우트 접두사. 어느 탭에서 왔는가!
+ * @param characterInfo 보여줄 캐릭터 객체
  */
 export default function ProfileDetailItem({
   isMini,
+  routePrefix,
   characterInfo,
 }: ProfileDetailItemProps): React.ReactElement {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<any>>();
   const [viewCharacter, setViewCharacter] = useViewCharacter();
-  const [myCharacter] = useCharacter();
   const characterList = useCharacterList();
 
   const realCharacter = characterInfo || viewCharacter;
@@ -50,7 +54,10 @@ export default function ProfileDetailItem({
    */
   async function goProfileDetail() {
     await setViewCharacter(realCharacter.name);
-    navigation.navigate('ProfileDetailStack');
+    navigation.push(`${routePrefix}ProfileDetailStack`, {
+      screen: 'ProfileDetail',
+      params: { routePrefix, characterName: realCharacter.name },
+    });
   }
   /**
    * '캐릭터 프로필 수정' 화면으로 이동하는 함수
@@ -71,21 +78,6 @@ export default function ProfileDetailItem({
     });
   }
 
-  /**
-   * 내가 다른 캐릭터를 follow하는 함수
-   * @returns followCharacterAsync 함수 결과
-   */
-  async function followOrUnfollow() {
-    const realCharacterId = realCharacter.id ? realCharacter.id : -1;
-    const myCharacterId = myCharacter.id;
-    const serverResult = await followCharacterAsync(
-      realCharacterId,
-      myCharacterId,
-    );
-    if (serverResult.isSuccess) await setViewCharacter(realCharacter.name);
-    else alert(serverResult.result.errorMsg);
-  }
-
   function checkMyCharacter() {
     let result = false;
     characterList.forEach((obj) => {
@@ -93,6 +85,49 @@ export default function ProfileDetailItem({
     });
     return result;
   }
+
+  /**
+   * 내가 다른 캐릭터를 follow하는 함수
+   * @returns followCharacterAsync 함수 결과
+   */
+  const [loading, setLoading] = useState(false);
+  async function followOrUnfollow() {
+    if (loading) return;
+    setLoading(true);
+
+    const newState = !isFollowed;
+    setIsFollowed(newState);
+    const realCharacterId = realCharacter.id ? realCharacter.id : -1;
+    const serverResult = await followCharacterAsync(realCharacterId);
+    if (serverResult.isSuccess) {
+      setIsFollowed(serverResult.result);
+      await Analytics.logEvent(
+        serverResult.result ? 'follow_character' : 'unfollow_character',
+        serverResult.result
+          ? {
+              followed_character: realCharacter.name,
+            }
+          : {
+              unfollowed_character: realCharacter.name,
+            },
+      );
+      await setViewCharacter(realCharacter.name);
+    } else {
+      alert(serverResult.result.errorMsg);
+      setIsFollowed(!newState);
+    }
+    setLoading(false);
+  }
+
+  function isMyCharacter(
+    chInfo: MyCharacter | Character,
+  ): chInfo is MyCharacter {
+    return checkMyCharacter();
+  }
+
+  const [isFollowed, setIsFollowed] = useState(
+    !isMyCharacter(realCharacter) ? realCharacter.followed : false,
+  );
 
   return (
     <button.ProfileDetailButton
@@ -109,7 +144,7 @@ export default function ProfileDetailItem({
           {realCharacter.name}
         </text.Subtitle2B>
         <View style={{ marginTop: 8 }} />
-        <text.Body2R textColor={colors.gray5} numberOfLines={1}>
+        <text.Body2R textColor={colors.gray5} numberOfLines={2}>
           {realCharacter.intro}
         </text.Body2R>
       </View>
@@ -135,7 +170,7 @@ export default function ProfileDetailItem({
           ) : (
             <LineButton
               onPress={() => followOrUnfollow()}
-              content={i18n.t('팔로우')}
+              content={!isFollowed ? '팔로우' : '팔로우 취소'}
               borderColor={colors.primary}
             />
           )}
@@ -154,6 +189,7 @@ export default function ProfileDetailItem({
               regularContent={i18n.t('팔로워')}
               textColor={colors.primary}
               isCenter
+              isMultiline={false}
             />
             <View style={{ marginRight: 32 }} />
             <BoldNRegularText
@@ -167,6 +203,7 @@ export default function ProfileDetailItem({
               regularContent={i18n.t('팔로우')}
               textColor={colors.primary}
               isCenter
+              isMultiline={false}
             />
           </area.RowArea>
           <area.RowArea style={{ marginBottom: 24 }}>
@@ -174,6 +211,7 @@ export default function ProfileDetailItem({
               diameter={20}
               isAccount
               isJustImg={false}
+              isPress
               name={
                 // characterInfo가 있어도 이 경우는 유저 정보를 띄울 필요도 없고 띄울 수도 없음
                 // 어차피 profile detail로 이동하게 되면 알아서 setViewCharacter()가 실행될 때 이 정보를 불러올 것이므로 realCharacter가 아닌 viewCharacter로 처리
@@ -186,6 +224,7 @@ export default function ProfileDetailItem({
                   ? viewCharacter.user_info.profile_img
                   : ''
               }
+              routePrefix={routePrefix}
             />
             <text.Body2R textColor={colors.black}>
               {i18n.t('의')} {i18n.t('캐릭터')}
@@ -194,21 +233,35 @@ export default function ProfileDetailItem({
         </View>
       )}
 
-      <area.RowArea style={{ justifyContent: 'center' }}>
+      <area.RowArea
+        style={{ justifyContent: 'center', alignItems: 'flex-start' }}
+      >
         <View style={{ flex: 1 }}>
           <BoldNRegularText
             boldContent={i18n.t('직업')}
             regularContent={realCharacter.job}
             textColor={colors.black}
             isCenter
+            isMultiline={!isMini}
           />
         </View>
-        <View style={{ flex: isMini ? 1.5 : 1 }}>
+        <View
+          style={{
+            flex: isMini ? 1.5 : 1,
+          }}
+        >
           <BoldNRegularText
             boldContent={i18n.t('생년월일')}
-            regularContent={realCharacter.birth.toString()}
+            regularContent={`${realCharacter.birth.slice(
+              0,
+              4,
+            )}년\n${realCharacter.birth.slice(
+              4,
+              6,
+            )}월 ${realCharacter.birth.slice(6)}일`}
             textColor={colors.black}
             isCenter
+            isMultiline={!isMini}
           />
         </View>
         <View style={{ flex: 1 }}>
@@ -217,6 +270,7 @@ export default function ProfileDetailItem({
             regularContent={realCharacter.nationality}
             textColor={colors.black}
             isCenter
+            isMultiline={!isMini}
           />
         </View>
       </area.RowArea>
@@ -238,6 +292,7 @@ export default function ProfileDetailItem({
         regularContent={realCharacter.tmi}
         textColor={colors.black}
         isCenter={false}
+        isMultiline={!isMini}
       />
     </button.ProfileDetailButton>
   );

@@ -1,12 +1,17 @@
 import React from 'react';
 import { Platform, TouchableOpacity, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useRecoilValue } from 'recoil';
 
 // utils
 import * as Types from '../utils/types/NavigationTypes';
 
+// logics
+import { isNewNotification } from '../logics/atoms';
+
 // styles
 import { TabBarArea } from '../styles/styled-components/area';
+import colors from '../styles/colors';
 
 // assets
 import Svg from '../assets/Icon';
@@ -19,11 +24,14 @@ import ProfileStackNavigator from './ProfileStackNavigator';
 
 const Tab = createBottomTabNavigator<Types.TabParam>();
 export default function TabNavigator(): React.ReactElement {
+  const isNew = useRecoilValue(isNewNotification);
   return (
     <Tab.Navigator
       initialRouteName="Home"
       backBehavior="none"
-      tabBar={({ state, navigation }) => customTabBar({ state, navigation })}
+      tabBar={({ state, navigation }) =>
+        customTabBar({ state, navigation, isNew })
+      }
       lazy={false}
       tabBarOptions={{
         showLabel: false,
@@ -38,9 +46,21 @@ export default function TabNavigator(): React.ReactElement {
   );
 }
 
-function customTabBar({ state, navigation }: { state: any; navigation: any }) {
+function customTabBar({
+  state,
+  navigation,
+  isNew,
+}: {
+  state: any;
+  navigation: any;
+  isNew: boolean;
+}) {
   return (
-    <TabBarArea style={{ height: Platform.OS === 'ios' ? 60 + 18 : 60 }}>
+    <TabBarArea
+      style={{
+        height: Platform.OS === 'ios' ? 60 + 18 : 60,
+      }}
+    >
       {state.routes.map((route: any, index: number) => {
         const isFocused = state.index === index;
 
@@ -55,6 +75,7 @@ function customTabBar({ state, navigation }: { state: any; navigation: any }) {
             else icon = <Svg icon="search" size={len} />;
           } else if (route.name === 'Notification') {
             if (isFocused) icon = <Svg icon="notificationFocus" size={len} />;
+            else if (isNew) icon = <Svg icon="notificationNew" size={len} />;
             else icon = <Svg icon="notification" size={len} />;
           } else if (route.name === 'Profile') {
             if (isFocused) icon = <Svg icon="profileFocus" size={len} />;

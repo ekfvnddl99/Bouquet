@@ -113,8 +113,6 @@ export type ServerResult<T> = Promise<
  * ------------------------------------------------------------
  */
 
-// TODO: auth가 필수는 아니지만 auth를 넣으면 결과가 달라지는 경우 처리 필요
-
 /**
  * GET
  * @param route 연결할 API 주소 (ex: "/user/me")
@@ -125,7 +123,6 @@ export type ServerResult<T> = Promise<
  * ! 사용할 때 isServerErrorOutput으로 ServerErrorOutput인지 검사(Type Guard) 필요
  *
  * @description Result는 요청이 성공할 때의 Output Type
- * @description Errors는 요청이 실패할 때의 Output Type들의 Union Type
  */
 export async function getAsync<Result>(
   route: string,
@@ -193,11 +190,11 @@ export async function getAsync<Result>(
  * ! 사용할 때 isServerErrorOutput으로 ServerErrorOutput인지 검사(Type Guard) 필요
  *
  * @description Result는 요청이 성공할 때의 Output Type
- * @description Errors는 요청이 실패할 때의 Output Type들의 Union Type
  */
 export async function postAsync<Result>(
   route: string,
-  info: Record<string, string>,
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  info: Record<string, any>,
   body: string | FormData,
   isAuth: boolean,
 ): ServerOutput<Result> {
@@ -258,7 +255,6 @@ export async function postAsync<Result>(
  * ! 사용할 때 isServerErrorOutput으로 ServerErrorOutput인지 검사(Type Guard) 필요
  *
  * @description Result는 요청이 성공할 때의 Output Type
- * @description Errors는 요청이 실패할 때의 Output Type들의 Union Type
  */
 export async function putAsync<Result>(
   route: string,
@@ -322,7 +318,6 @@ export async function putAsync<Result>(
  * ! 사용할 때 isServerErrorOutput으로 ServerErrorOutput인지 검사(Type Guard) 필요
  *
  * @description Result는 요청이 성공할 때의 Output Type
- * @description Errors는 요청이 실패할 때의 Output Type들의 Union Type
  */
 export async function deleteAsync<Result>(
   route: string,
@@ -389,7 +384,6 @@ export async function deleteAsync<Result>(
  * ! 사용할 때 isServerErrorOutput으로 ServerErrorOutput인지 검사(Type Guard) 필요
  *
  * @description Result는 요청이 성공할 때의 Output Type
- * @description Errors는 요청이 실패할 때의 Output Type들의 Union Type
  */
 export async function patchAsync<Result>(
   route: string,

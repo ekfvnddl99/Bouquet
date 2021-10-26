@@ -14,6 +14,8 @@ type ProgressItemProps = {
   stepBack: () => void;
   step: number;
   title: string;
+  maxLength: number;
+  lastStep: number;
   subtitle?: string;
   navigation: any;
 };
@@ -24,6 +26,8 @@ type ProgressItemProps = {
  * @param stepBack step 뒤로가기 할 때 실행되는 함수
  * @param step step의 값
  * @param title 해당 step 화면의 제목
+ * @param maxLength progress bar 최대 길이
+ * @param lastStep 마지막 step이 어떤 숫자 (총 몇 step)
  * @param subtitle 해당 step 화면의 부제목
  * @param navigation navigation 값
  */
@@ -31,6 +35,8 @@ export default function ProgressItem({
   stepBack,
   step,
   title,
+  maxLength,
+  lastStep,
   subtitle,
   navigation,
 }: ProgressItemProps): React.ReactElement {
@@ -44,7 +50,7 @@ export default function ProgressItem({
   // const [progressValue, setProgressValue] = useState(step * 25);
   const progress = useRef(new Animated.Value(0)).current;
   const TranslateX = progress.interpolate({
-    inputRange: [0, 100],
+    inputRange: [0, maxLength],
     outputRange: ['0%', '100%'],
     extrapolate: 'clamp',
   });
@@ -53,7 +59,7 @@ export default function ProgressItem({
    * step 값이 바뀔 때마다 progress bar가 자동으로 움직여야 한다.
    */
   useEffect(() => {
-    const newValue = 25 * step;
+    const newValue = (maxLength / lastStep) * step;
     // setProgressValue(newValue);
 
     Animated.timing(progress, {
@@ -72,7 +78,7 @@ export default function ProgressItem({
 
   return (
     <View style={{ marginBottom: 12 }}>
-      {step === 4 ? (
+      {step === lastStep ? (
         <View style={{ marginBottom: 24 }} />
       ) : (
         <TouchableOpacity onPress={() => (step === 1 ? goBack() : stepBack())}>

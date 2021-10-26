@@ -19,7 +19,9 @@ export default function QuestionItem({
 }: QuestionItemProps): React.ReactElement {
   return (
     <View style={{ paddingHorizontal: 10, paddingVertical: 10 }}>
-      <text.Subtitle2B textColor={colors.primary}>Q.</text.Subtitle2B>
+      <text.Subtitle2B textColor={colors.primary} style={{ marginBottom: 4 }}>
+        Q.
+      </text.Subtitle2B>
       <text.Subtitle3 textColor={colors.black}>{question}</text.Subtitle3>
     </View>
   );

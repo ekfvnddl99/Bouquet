@@ -1,7 +1,13 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { View, FlatList, Animated } from 'react-native';
+import React, { useRef, useState, useEffect, useMemo } from 'react';
+import {
+  View,
+  Animated,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 import i18n from 'i18n-js';
 import styled from 'styled-components/native';
+import * as Analytics from 'expo-firebase-analytics';
 
 // styles
 import colors from '../../../styles/colors';
@@ -11,7 +17,7 @@ import * as text from '../../../styles/styled-components/text';
 // logics
 import { StatusBarHeight } from '../../../logics/non-server/StatusbarHeight';
 import useCharacter from '../../../logics/hooks/useCharacter';
-import { getTopPostListAsync } from '../../../logics/server/Search';
+import { getFeedPostListAsync } from '../../../logics/server/Home';
 
 // utils
 import { AllTemplates, Post } from '../../../utils/types/PostTypes';
@@ -23,6 +29,7 @@ import NotLoginPrimaryButton from '../../../components/button/NotLoginPrimaryBut
 import FloatingButton from '../../../components/button/FloatingButton';
 import QnATextInput from '../../../components/input/QnATextInput';
 import ProfileButton from '../../../components/button/ProfileButton';
+import { likePostAsync } from '../../../logics/server/Post';
 
 const HEADER_MAX_HEIGHT = 94;
 const HEADER_MIN_HEIGHT = 60;
@@ -35,22 +42,48 @@ export default function HomeScreen(): React.ReactElement {
   // 인기 게시글 담을 state
   const [postArray, setPostArray] = useState<Post<AllTemplates>[]>();
 
+  const [pageNum, setPageNum] = useState(1);
+  const [isPageEnd, setIsPageEnd] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const [shouldReRender, setShouldReRender] = useState(false);
+
   // 로그인한 상태인지 아닌지 확인
   useEffect(() => {
     if (myCharacter.id === -1) setIsLogined(false);
     else setIsLogined(true);
   }, [myCharacter.id]);
+
+  async function getPost(newPageNum?: number, isRefreshing?: boolean) {
+    const serverResult = await getFeedPostListAsync(newPageNum || pageNum);
+    if (serverResult.isSuccess) {
+      if (serverResult.result.length === 0) {
+        setIsPageEnd(true);
+        if (postArray === undefined || isRefreshing)
+          setPostArray(serverResult.result);
+      } else if (postArray === undefined || isRefreshing)
+        setPostArray(serverResult.result);
+      else {
+        const tmpArray = postArray;
+        serverResult.result.forEach((obj) => tmpArray.push(obj));
+        setPostArray(tmpArray);
+        // setPostArray(serverResult.result)
+      }
+    } else {
+      alert(serverResult.result.errorMsg);
+    }
+    setRefreshing(false);
+  }
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    setPageNum(1);
+    setIsPageEnd(false);
+    await getPost(1, true);
+  };
+
   // 가장 처음에 인기 게시물 가져옴
   useEffect(() => {
-    async function getPost() {
-      const id = myCharacter.id ? myCharacter.id : undefined;
-      const serverResult = await getTopPostListAsync(1, id);
-      if (serverResult.isSuccess) {
-        setPostArray(serverResult.result);
-      } else {
-        alert(serverResult.result.errorMsg);
-      }
-    }
     getPost();
   }, []);
 
@@ -81,17 +114,70 @@ export default function HomeScreen(): React.ReactElement {
     outputRange: [0, -14 - 16],
     extrapolate: 'clamp',
   });
+
   const OpacityTitle = scroll.interpolate({
     inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
     // 투명도 속도 맞춰서 설정함!
     outputRange: [1, 0, -3],
     extrapolate: 'clamp',
   });
+
   const OpacityHeader = scroll.interpolate({
     inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
     outputRange: [0, 0, 1],
     extrapolate: 'clamp',
   });
+
+  function QnaElement({ logined }: { logined: boolean }) {
+    return (
+      <View style={{ marginTop: 20 + 14 }}>
+        {logined ? <QnATextInput routePrefix="HomeTab" /> : null}
+      </View>
+    );
+  }
+
+  const MemoizedQnaElement = React.memo(QnaElement);
+
+  const realQnaElement = useMemo(
+    () => <MemoizedQnaElement logined={isLogined} />,
+    [isLogined],
+  );
+
+  const renderItem = ({
+    item,
+    index,
+  }: {
+    item: Post<AllTemplates>;
+    index: number;
+  }) => {
+    const onPressItem = async (postInfo: Post<AllTemplates>) => {
+      const serverResult = await likePostAsync(postInfo.id);
+      if (serverResult.isSuccess) {
+        const isLiked = serverResult.result;
+        await Analytics.logEvent(isLiked ? 'like_post' : 'cancel_like_post');
+
+        if (postArray !== undefined) {
+          const tmpArray = [...postArray];
+          if (tmpArray?.[index]) {
+            tmpArray[index].liked = isLiked;
+            tmpArray[index].num_sunshines = isLiked
+              ? tmpArray[index].num_sunshines + 1
+              : tmpArray[index].num_sunshines - 1;
+          }
+
+          setPostArray(tmpArray);
+        }
+      }
+    };
+
+    return (
+      <PostItem
+        postInfo={item}
+        routePrefix="HomeTab"
+        onPressSun={onPressItem}
+      />
+    );
+  };
 
   return (
     <area.Container>
@@ -143,33 +229,46 @@ export default function HomeScreen(): React.ReactElement {
               diameter={40}
               isAccount={false}
               isJustImg
+              isPress
               name={myCharacter.name}
               profileImg={myCharacter.profile_img}
+              routePrefix="HomeTab"
             />
           </AnimationImg>
         ) : null}
       </area.RowArea>
-
-      <Animated.ScrollView
-        style={{ marginTop: HEADER_MIN_HEIGHT - 30, marginHorizontal: 30 }}
-        showsVerticalScrollIndicator={false}
-        scrollEventThrottle={1}
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { y: scroll } } }],
-          { useNativeDriver: true },
-        )}
-      >
-        <View style={{ paddingTop: 20 + 14 }} />
-        {isLogined ? <QnATextInput /> : null}
-        <FlatList
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <Animated.FlatList
+          style={{
+            marginTop: HEADER_MIN_HEIGHT - 30,
+            marginHorizontal: 30,
+          }}
+          scrollEventThrottle={1}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { y: scroll } } }],
+            { useNativeDriver: true },
+          )}
           data={postArray}
+          ListHeaderComponent={realQnaElement}
+          onEndReached={async () => {
+            if (!isPageEnd) {
+              const nextPageNum = pageNum + 1;
+              setPageNum(nextPageNum);
+              await getPost(nextPageNum);
+            }
+          }}
+          onEndReachedThreshold={0.8}
           showsVerticalScrollIndicator={false}
-          keyExtractor={(item, idx) => idx.toString()}
-          renderItem={(obj) => <PostItem postInfo={obj.item} />}
+          keyExtractor={(item) => `${item.id}`}
+          renderItem={renderItem}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          extraData={shouldReRender}
         />
-      </Animated.ScrollView>
+      </TouchableWithoutFeedback>
+
       {isLogined ? (
-        <FloatingButton />
+        <FloatingButton routePrefix="HomeTab" />
       ) : (
         <>
           <View style={{ flex: 1 }} />

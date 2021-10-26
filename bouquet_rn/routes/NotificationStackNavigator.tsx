@@ -6,7 +6,11 @@ import * as Types from '../utils/types/NavigationTypes';
 
 // screens
 import NotificationScreen from '../screens/main/Notification/NotificationScreen';
-import { ProfileDetailStackNavigator } from './CommonNavigator';
+import {
+  ProfileDetailStackNavigator,
+  PostStackNavigator,
+  AccountStackNavigator,
+} from './CommonNavigator';
 
 // noti
 const NotificationStack = createStackNavigator<Types.NotificationStackParam>();
@@ -19,8 +23,18 @@ export default function NotificationStackNavigator(): React.ReactElement {
         options={{ headerShown: false }}
       />
       <NotificationStack.Screen
-        name="ProfileDetailStack"
+        name="NotiTabProfileDetailStack"
         component={ProfileDetailStackNavigator}
+        options={{ headerShown: false }}
+      />
+      <NotificationStack.Screen
+        name="NotiTabPostStack"
+        component={PostStackNavigator}
+        options={{ headerShown: false }}
+      />
+      <NotificationStack.Screen
+        name="NotiTabAccountStack"
+        component={AccountStackNavigator}
         options={{ headerShown: false }}
       />
     </NotificationStack.Navigator>

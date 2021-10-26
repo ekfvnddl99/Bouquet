@@ -59,7 +59,7 @@ export default function LoginScreen(): React.ReactElement {
    * @description 미리보기
    */
   function goTabs() {
-    navigation.reset({ index: 0, routes: [{ name: 'Tab' }] });
+    navigation.navigate('Tab');
   }
 
   /**
@@ -70,17 +70,29 @@ export default function LoginScreen(): React.ReactElement {
   }
 
   /**
+   * '비밀번호 재설정' 화면으로 이동
+   */
+  function goFindPassword() {
+    navigation.navigate('FindPassword');
+  }
+
+  /**
    * 로그인하는 서버 함수
    */
+  const [loading, setLoading] = useState(false);
   async function emailLogin() {
+    if (loading) return;
+    setLoading(true);
+
     const serverResult = await loginEmailAsync(email, password);
     if (serverResult.isSuccess) {
       await SecureStore.setItemAsync('auth', serverResult.result);
       await login();
-      goTabs();
+      navigation.reset({ index: 0, routes: [{ name: 'Tab' }] });
     } else {
       setErr(serverResult.result.errorMsg);
     }
+    setLoading(false);
   }
 
   /**
@@ -155,28 +167,18 @@ export default function LoginScreen(): React.ReactElement {
               <text.Caption textColor={colors.black}>
                 {i18n.t('비밀번호를 잊었나요')}{' '}
               </text.Caption>
-              <PrimaryTextButton
-                onPress={() => undefined}
-                content={i18n.t('비밀번호 찾기')}
-                isBold={false}
-              />
+              <TouchableOpacity
+                onPress={() => goFindPassword()}
+                activeOpacity={1}
+              >
+                <text.Caption textColor={colors.primary}>
+                  비밀번호 찾기
+                </text.Caption>
+              </TouchableOpacity>
             </area.RowArea>
           </ScrollView>
 
           <area.BottomArea style={{ overflow: 'hidden' }}>
-            <LoginButton
-              content={i18n.t('Google로 계속하기')}
-              icon="google"
-              onPress={GoogleSignInAsync}
-            />
-            {Platform.OS === 'ios' ? (
-              <LoginButton
-                content={i18n.t('Apple로 계속하기')}
-                icon="apple"
-                onPress={GoogleSignInAsync}
-              />
-            ) : null}
-
             <area.RowArea
               style={{
                 marginTop: 15,

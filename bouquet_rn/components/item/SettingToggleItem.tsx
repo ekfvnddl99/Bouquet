@@ -14,14 +14,17 @@ import { MyCharacter } from '../../utils/types/UserTypes';
 
 type SettingToggleItemProps = {
   characterInfo: MyCharacter;
+  routePrefix: string;
 };
 /**
  * 알람 설정을 위한 toggle 컴포넌트
  *
  * @param characterInfo 해당 캐릭터 객체
+ * @param routePrefix 라우트 접두사. 어느 탭에서 왔는가!
  */
 export default function SettingToggleItem({
   characterInfo,
+  routePrefix,
 }: SettingToggleItemProps): React.ReactElement {
   const [isOn, setIsOn] = useState(false);
 
@@ -80,8 +83,10 @@ export default function SettingToggleItem({
           diameter={20}
           isAccount={false}
           isJustImg={false}
+          isPress={false}
           name={characterInfo.name}
           profileImg={characterInfo.profile_img}
+          routePrefix={routePrefix}
         />
         <View style={{ flex: 1 }} />
         <Toggle />

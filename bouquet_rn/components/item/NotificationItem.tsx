@@ -16,9 +16,13 @@ import Icon from '../../assets/Icon';
 // logics
 import * as cal from '../../logics/non-server/Calculation';
 
+// utils
+import { Notification } from '../../utils/types/PostTypes';
+
 type NotificationItemProps = {
-  name: string;
-  content: string;
+  notificationInfo: Notification;
+  onPress: (param: string | number) => void;
+  onDelete: (input: number) => void;
 };
 /**
  * Notification 알람 컴포넌트
@@ -32,8 +36,9 @@ type NotificationItemProps = {
  * @param content 알람 내용
  */
 export default function NotificationItem({
-  name,
-  content,
+  notificationInfo,
+  onPress,
+  onDelete,
 }: NotificationItemProps): React.ReactElement {
   /**
    * swipe to delete의 animation 관련
@@ -52,7 +57,10 @@ export default function NotificationItem({
   });
   const panResponder = useRef(
     PanResponder.create({
-      onMoveShouldSetPanResponder: () => true,
+      onStartShouldSetPanResponder: (e, gestureState) =>
+        Math.abs(gestureState.dx) >= 1 || Math.abs(gestureState.dy) >= 1,
+      onMoveShouldSetPanResponder: (e, gestureState) =>
+        Math.abs(gestureState.dx) >= 1 || Math.abs(gestureState.dy) >= 1,
       onPanResponderGrant: () => {
         // @ts-ignore
         drag.setOffset(TranslateX.__getValue());
@@ -60,26 +68,50 @@ export default function NotificationItem({
       onPanResponderMove: Animated.event([null, { dx: drag }], {
         useNativeDriver: false,
       }),
-      onPanResponderRelease: (e, { dx }) => {
-        // @ts-ignore
-        drag.setValue(dx < SWIPE / 2 ? -SWIPE : +SWIPE);
-      },
     }),
   ).current;
 
+  function setContent() {
+    switch (notificationInfo.category) {
+      case 'Follow':
+        return '님이 당신을 팔로우해요.';
+      case 'LikeComment':
+        return '님이 당신의 댓글을 좋아해요.';
+      case 'LikePost':
+        return '님이 당신의 게시글을 좋아해요.';
+      case 'Comment':
+        return '님이 당신의 게시글에 댓글을 달았어요.';
+      default:
+        return '';
+    }
+  }
+
   return (
     <WholeArea>
-      <BinButton>
+      <BinButton onPress={() => onDelete(notificationInfo.id)}>
         <View style={{ alignItems: 'center' }}>
           <Icon icon="binWhite" size={24} />
         </View>
       </BinButton>
       <Animated.View
         {...panResponder.panHandlers}
-        style={[{ width: '100%' }, { transform: [{ translateX: TranslateX }] }]}
+        style={[{ flex: 1 }, { transform: [{ translateX: TranslateX }] }]}
       >
-        <button.NotificationButton activeOpacity={1}>
-          <elses.CircleImg diameter={20} source={{}} />
+        <button.NotificationButton
+          {...panResponder.panHandlers}
+          activeOpacity={1}
+          onPress={() =>
+            onPress(
+              notificationInfo.post_id
+                ? notificationInfo.post_id
+                : notificationInfo.sender_name,
+            )
+          }
+        >
+          <elses.CircleImg
+            diameter={20}
+            source={{ uri: notificationInfo.sender_profile_img }}
+          />
           <View
             style={{
               flex: 2,
@@ -88,8 +120,10 @@ export default function NotificationItem({
           >
             <area.RowArea>
               <text.Body2B textColor={colors.black}>
-                {name}
-                <text.Body2R textColor={colors.black}>{content}</text.Body2R>
+                {notificationInfo.sender_name}
+                <text.Body2R textColor={colors.black}>
+                  {setContent()}
+                </text.Body2R>
               </text.Body2B>
             </area.RowArea>
           </View>
@@ -100,7 +134,7 @@ export default function NotificationItem({
             }}
           >
             <text.Caption textColor={colors.gray5}>
-              {cal.timeName('')} {i18n.t('전')}
+              {cal.timeName(notificationInfo.created_at)} {i18n.t('전')}
             </text.Caption>
           </View>
         </button.NotificationButton>

@@ -3,13 +3,16 @@ import {
   View,
   Animated,
   TextInput,
-  FlatList,
   TouchableWithoutFeedback,
+  TouchableOpacity,
   Keyboard,
+  Alert,
 } from 'react-native';
 import i18n from 'i18n-js';
 import styled from 'styled-components/native';
 import { debounce } from 'lodash';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Analytics from 'expo-firebase-analytics';
 
 // styles
 import colors from '../../../styles/colors';
@@ -24,18 +27,25 @@ import { StatusBarHeight } from '../../../logics/non-server/StatusbarHeight';
 import {
   getTopCharacterListAsync,
   getTopPostListAsync,
+  searchPostAsync,
+  searchCharacterAsync,
 } from '../../../logics/server/Search';
 import useCharacter from '../../../logics/hooks/useCharacter';
+import { likePostAsync } from '../../../logics/server/Post';
 
 // components
-import TagModifyingItem from '../../../components/item/TagModifyingItem';
-import PostItem from '../../../components/item/PostItem';
-import CharacterItem from '../../../components/item/CharacterItem';
 import FloatingButton from '../../../components/button/FloatingButton';
+import PostItem from '../../../components/item/PostItem';
+import ConditionButton from '../../../components/button/ConditionButton';
 
 // utils
-import { AllTemplates, noPost, Post } from '../../../utils/types/PostTypes';
-import { CharacterMini, noCharacter } from '../../../utils/types/UserTypes';
+import { AllTemplates, Post } from '../../../utils/types/PostTypes';
+import { CharacterMini } from '../../../utils/types/UserTypes';
+
+// view
+import SearchRecentView from './SearchRecentView';
+import SearchCharacterView from './SearchCharacterView';
+import SearchPostView from './SearchPostView';
 
 const HEADER_MAX_HEIGHT = 95;
 const HEADER_MIN_HEIGHT = 60;
@@ -43,14 +53,7 @@ const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 export default function SearchScreen(): React.ReactElement {
   // 더미데이터
-  const [recentList, setRecentList] = useState([
-    '단호',
-    '귀여움',
-    '아이돌',
-    '파란색',
-    '먹방',
-    '유튜버',
-  ]);
+  const [recentList, setRecentList] = useState<string[]>([]);
 
   const [myCharacter] = useCharacter();
 
@@ -62,6 +65,20 @@ export default function SearchScreen(): React.ReactElement {
   const [postArray, setPostArray] = useState<Post<AllTemplates>[]>([]);
   // 인기 캐릭터 담을 state
   const [characterArray, setCharacterArray] = useState<CharacterMini[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [pageNum, setPageNum] = useState(1);
+  const [isPageEnd, setIsPageEnd] = useState(false);
+  const [chPageNum, setChPageNum] = useState(1);
+  const [isChPageEnd, setIsChPageEnd] = useState(false);
+
+  useEffect(() => {
+    const getRecentList = async () => {
+      const jsonValue = await AsyncStorage.getItem('recentList');
+      const result = jsonValue !== null ? JSON.parse(jsonValue) : [];
+      setRecentList(result);
+    };
+    getRecentList();
+  }, []);
 
   /**
    * 검색어에 따른 뷰 전환
@@ -69,13 +86,36 @@ export default function SearchScreen(): React.ReactElement {
    */
   async function getSearch(searchText: string) {
     if (searchText.length < 1) {
-      await getCharacter();
-      await getPost();
+      await onRefresh();
     } else {
-      setCharacterArray([noCharacter]);
-      setPostArray([noPost]);
+      setPageNum(1);
+      setChPageNum(1);
+      setIsPageEnd(false);
+      setIsChPageEnd(false);
+      await getCharacter(1, true, searchText);
+      await getPost(1, true, searchText);
+      await Analytics.logEvent('search', {
+        search_text: searchText,
+      });
     }
   }
+
+  /**
+   * async storage
+   */
+  const storeRecentList = async (value: string[]) => {
+    let tmpArray = value;
+    if (tmpArray.length > 10) tmpArray = tmpArray.slice(0, 10);
+    setRecentList(tmpArray);
+    const jsonValue = JSON.stringify(tmpArray);
+    await AsyncStorage.setItem('recentList', jsonValue);
+  };
+  const getRecentList = async () => {
+    const jsonValue = await AsyncStorage.getItem('recentList');
+    const result = jsonValue !== null ? JSON.parse(jsonValue) : [];
+    setRecentList(result);
+    return result;
+  };
   /**
    * debounce
    */
@@ -83,41 +123,107 @@ export default function SearchScreen(): React.ReactElement {
     debounce((input) => getSearch(input), 500),
     [],
   );
+  const debounceRecentSearchHandler = useCallback(
+    debounce(async (input) => {
+      if (input.length !== 0) {
+        let tmpArray = await getRecentList();
+        tmpArray.unshift(input);
+        tmpArray = [...new Set(tmpArray)];
+        storeRecentList(tmpArray);
+      }
+    }, 2000),
+    [],
+  );
   /**
    * 검색어가 입력될 때마다 onChangeText에 의해 실행될 함수
    * @param searchText 입력된 검색어
    */
-  function setSearchResult(searchText: string) {
+  const setSearchResult = (searchText: string) => {
     setSearchInput(searchText);
     debounceHandler(searchText);
-  }
+    debounceRecentSearchHandler(searchText);
+  };
 
   /**
    * 인기 캐릭터를 가져오는 함수
    */
-  async function getCharacter() {
-    const serverResult = await getTopCharacterListAsync();
+  async function getCharacter(
+    newPageNum?: number,
+    isRefreshing?: boolean,
+    searchText?: string,
+  ) {
+    let serverResult;
+    if (searchText) {
+      serverResult = await searchCharacterAsync(
+        searchText,
+        newPageNum || chPageNum,
+      );
+    } else serverResult = await getTopCharacterListAsync();
+
     if (serverResult.isSuccess) {
-      setCharacterArray(serverResult.result);
-    } else alert(serverResult.result.errorMsg);
+      if (serverResult.result.length === 0) {
+        setIsChPageEnd(true);
+        if (characterArray === undefined || isRefreshing)
+          setCharacterArray(serverResult.result);
+      } else if (characterArray === undefined || isRefreshing)
+        setCharacterArray(serverResult.result);
+      else {
+        const tmpArray = [...characterArray];
+        serverResult.result.forEach((obj) => tmpArray.push(obj));
+        setCharacterArray(tmpArray);
+      }
+    } else {
+      alert(serverResult.result.errorMsg);
+    }
   }
   /**
    * 인기 게시글을 가져오는 함수
    */
-  async function getPost() {
-    const serverResult = await getTopPostListAsync(
-      1,
-      myCharacter.id ? myCharacter.id : undefined,
-    );
+  async function getPost(
+    newPageNum?: number,
+    isRefreshing?: boolean,
+    searchText?: string,
+  ) {
+    let serverResult;
+    if (searchText) {
+      serverResult = await searchPostAsync(searchText, newPageNum || pageNum);
+    } else serverResult = await getTopPostListAsync(newPageNum || pageNum);
+
     if (serverResult.isSuccess) {
-      setPostArray(serverResult.result);
-    } else alert(serverResult.result.errorMsg);
+      if (serverResult.result.length === 0) {
+        setIsPageEnd(true);
+        if (postArray === undefined || isRefreshing)
+          setPostArray(serverResult.result);
+      } else if (postArray === undefined || isRefreshing)
+        setPostArray(serverResult.result);
+      else {
+        const tmpArray = [...postArray];
+        serverResult.result.forEach((obj) => tmpArray.push(obj));
+        setPostArray(tmpArray);
+      }
+    } else {
+      alert(serverResult.result.errorMsg);
+    }
   }
   // 가장 처음에 인기 캐릭터 및 게시물 가져옴
   useEffect(() => {
-    getCharacter();
-    getPost();
+    async function init() {
+      await getPost();
+      await getCharacter();
+    }
+    init();
   }, []);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    setIsPageEnd(false);
+    setIsChPageEnd(false);
+    setPageNum(1);
+    if (searchInput !== '') setChPageNum(1);
+    await getCharacter(1, true, searchInput !== '' ? searchInput : undefined);
+    await getPost(1, true, searchInput !== '' ? searchInput : undefined);
+    setRefreshing(false);
+  };
 
   /**
    * animation 관련 변수
@@ -146,6 +252,101 @@ export default function SearchScreen(): React.ReactElement {
   const searchColor = {
     backgroundColor: ColorInput,
   };
+
+  const renderItem = ({
+    item,
+    index,
+  }: {
+    item: Post<AllTemplates>;
+    index: number;
+  }) => {
+    const onPressItem = async (postInfo: Post<AllTemplates>) => {
+      const serverResult = await likePostAsync(postInfo.id);
+      if (serverResult.isSuccess) {
+        const isLiked = serverResult.result;
+        await Analytics.logEvent(isLiked ? 'like_post' : 'cancel_like_post');
+
+        const tmpArray = [...postArray];
+        if (tmpArray?.[index]) {
+          tmpArray[index].liked = isLiked;
+          tmpArray[index].num_sunshines = isLiked
+            ? tmpArray[index].num_sunshines + 1
+            : tmpArray[index].num_sunshines - 1;
+        }
+
+        setPostArray(tmpArray);
+      }
+    };
+
+    return (
+      <PostItem
+        postInfo={item}
+        routePrefix="SearchTab"
+        onPressSun={onPressItem}
+      />
+    );
+  };
+
+  async function viewMorePost() {
+    if (!isPageEnd) {
+      const newPageNum = pageNum + 1;
+      setPageNum(newPageNum);
+      await getPost(
+        newPageNum,
+        undefined,
+        searchInput === '' ? undefined : searchInput,
+      );
+    }
+  }
+
+  const viewArray = [
+    <SearchRecentView
+      searchInput={searchInput}
+      setSearchResult={setSearchResult}
+      recentList={recentList}
+      setRecentList={storeRecentList}
+    />,
+    <SearchCharacterView
+      searchInput={searchInput}
+      characterArray={characterArray}
+      onEndReached={async () => {
+        if (!isChPageEnd && searchInput !== '') {
+          const newPageNum = chPageNum + 1;
+          setChPageNum(newPageNum);
+          await getCharacter(
+            newPageNum,
+            undefined,
+            searchInput !== '' ? searchInput : undefined,
+          );
+        }
+      }}
+    />,
+    <SearchPostView
+      searchInput={searchInput}
+      postArray={postArray}
+      renderItem={renderItem}
+      ListFooterComponent={
+        isPageEnd ? (
+          <View style={{ flex: 1, marginBottom: 20, alignItems: 'center' }}>
+            <text.Caption textColor={colors.gray6}>
+              여기가 끝이에요!
+            </text.Caption>
+          </View>
+        ) : (
+          <View style={{ marginBottom: 20 }}>
+            <ConditionButton
+              onPress={() => viewMorePost()}
+              content="더보기"
+              isActive
+              paddingH={0}
+              paddingV={0}
+              height={32}
+            />
+          </View>
+        )
+      }
+    />,
+  ];
 
   return (
     <area.Container>
@@ -181,87 +382,30 @@ export default function SearchScreen(): React.ReactElement {
         </SearchArea>
       </View>
 
+      <View style={{ marginTop: HEADER_MIN_HEIGHT - 30 }} />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <Animated.ScrollView
-          style={{ marginTop: HEADER_MIN_HEIGHT - 30, flex: 1 }}
+        <Animated.FlatList
+          style={{
+            paddingBottom: HEADER_MIN_HEIGHT - 30,
+          }}
+          contentContainerStyle={{ paddingTop: 30 + 12 }}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
           onScroll={Animated.event(
             [{ nativeEvent: { contentOffset: { y: scroll } } }],
             { useNativeDriver: false },
           )}
-        >
-          <View style={{ paddingTop: 30 + 12 }} />
-          <Animated.View style={{ marginLeft: 30 }}>
-            {searchInput.length === 0 ? (
-              <Animated.View>
-                <text.Subtitle3 textColor={colors.black}>
-                  {i18n.t('최근 검색어')}
-                </text.Subtitle3>
-                <FlatList
-                  style={{ marginTop: 12 }}
-                  data={recentList}
-                  keyboardShouldPersistTaps="handled"
-                  keyExtractor={(item, idx) => idx.toString()}
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  renderItem={(obj) => (
-                    <TagModifyingItem
-                      content={obj.item}
-                      setSearch={(input) => setSearchResult(input)}
-                      tagIndex={obj.index}
-                      isSearching
-                      tagArray={recentList}
-                      setTagArray={setRecentList}
-                    />
-                  )}
-                />
-              </Animated.View>
-            ) : null}
-
-            {characterArray.length > 0 ? (
-              <Animated.View
-                style={{ marginTop: searchInput.length > 0 ? 0 : 40 }}
-              >
-                <text.Subtitle3 textColor={colors.black}>
-                  {searchInput.length > 0 ? '캐릭터' : i18n.t('인기 부캐')}
-                </text.Subtitle3>
-                <FlatList
-                  style={{ marginTop: 12 }}
-                  data={characterArray}
-                  keyboardShouldPersistTaps="handled"
-                  keyExtractor={(item, idx) => idx.toString()}
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  renderItem={(obj) => (
-                    <CharacterItem characterInfo={obj.item} />
-                  )}
-                />
-              </Animated.View>
-            ) : null}
-          </Animated.View>
-
-          {postArray.length > 0 ? (
-            <area.ContainerBlank30
-              style={{ marginTop: searchInput.length > 0 ? 0 : 10 }}
-            >
-              <text.Subtitle3 textColor={colors.black}>
-                {searchInput.length > 0 ? '게시물' : i18n.t('인기 게시물')}
-              </text.Subtitle3>
-              <FlatList
-                style={{ marginTop: 12 }}
-                data={postArray}
-                keyboardShouldPersistTaps="handled"
-                keyExtractor={(item, idx) => idx.toString()}
-                showsVerticalScrollIndicator={false}
-                renderItem={(obj) => <PostItem postInfo={obj.item} />}
-              />
-            </area.ContainerBlank30>
-          ) : null}
-        </Animated.ScrollView>
+          data={viewArray}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={(obj) => obj.item}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+        />
       </TouchableWithoutFeedback>
 
-      {myCharacter.id === -1 ? null : <FloatingButton />}
+      {myCharacter.id === -1 ? null : (
+        <FloatingButton routePrefix="SearchTab" />
+      )}
     </area.Container>
   );
 }

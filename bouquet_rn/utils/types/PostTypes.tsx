@@ -44,7 +44,6 @@ export const noPost: Post<PlainTemplate> = {
  * @description T는 템플릿 Type을 나타냄
  */
 export type PostRequest<T extends AllTemplates> = {
-  character_id: number;
   text: string;
   template: T;
 };
@@ -95,9 +94,36 @@ export const noComment: PostComment = {
  */
 export type PostCommentRequest = {
   post_id: number;
-  character_id: number;
   comment: string;
   parent: number;
+};
+
+/**
+ * Q&A Type
+ */
+export type Qna = {
+  id: number;
+  question: string;
+  answer: string;
+  num_sunshines: number;
+  liked: boolean;
+};
+
+/**
+ * (POST 요청용) Q&A Type
+ */
+export type QnaRequest = {
+  question: string;
+  answer: string;
+};
+
+export type Notification = {
+  id: number;
+  created_at: string;
+  sender_name: string;
+  sender_profile_img: string;
+  category: string;
+  post_id: number | null;
 };
 
 /**
@@ -147,7 +173,7 @@ export type DiaryTemplate = {
   title: string;
   weather: string;
   img: string;
-  date: number;
+  date: string;
   content: string;
 };
 
@@ -181,3 +207,71 @@ export type ListTemplate = {
     content: string;
   }>;
 };
+
+/**
+ * 빈 템플릿을 반환하는 함수
+ * * T에는 반환할 템플릿의 타입 기재
+ * @param type 반환할 템플릿의 타입 문자열
+ * ! T.type === type이어야 함
+ */
+export function noTemplate<T extends AllTemplates>(
+  type: keyof typeof templates,
+): T {
+  /**
+   * type 문자열로 템플릿 타입을 결정하는 Type Guard 함수
+   * @param template 타입을 결정할 객체
+   */
+  function isTemplate<D extends AllTemplates>(
+    template: AllTemplates,
+  ): template is D {
+    return template.type === type;
+  }
+
+  // PlainTemplate
+  let result: AllTemplates = {
+    type: 'None',
+  };
+  if (isTemplate<T>(result)) return result;
+
+  // ImageTemplate
+  result = {
+    type: 'Image',
+    img: '',
+  };
+  if (isTemplate<T>(result)) return result;
+
+  // DiaryTemplate
+  result = {
+    type: 'Diary',
+    title: '',
+    weather: '',
+    img: '',
+    date: '',
+    content: '',
+  };
+  if (isTemplate<T>(result)) return result;
+
+  // AlbumTemplate
+  result = {
+    type: 'Album',
+    description: '',
+    title: '',
+    img: '',
+    artist: '',
+    release_date: '',
+    tracks: [{ title: '', lyric: '' }],
+  };
+  if (isTemplate<T>(result)) return result;
+
+  // ListTemplate
+  result = {
+    type: 'List',
+    title: '',
+    content: '',
+    img: '',
+    components: [{ title: '', img: '', content: '' }],
+  };
+  if (isTemplate<T>(result)) return result;
+
+  throw new Error('noTemplate(): wrong type parameter');
+}

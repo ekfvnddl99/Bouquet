@@ -54,6 +54,7 @@ export default function ProfileSwipeScreen({
         offset={(screenWidth - 260 - 20 * 2) / 2}
         pageWidth={260}
         setPage={setPage}
+        routePrefix="ProfileTab"
       />
       {characterList.length === 0 ? null : (
         <View

@@ -9,7 +9,7 @@ import HomeScreen from '../screens/main/Home/HomeScreen';
 import {
   ProfileDetailStackNavigator,
   PostStackNavigator,
-  WritingStackNavigator,
+  AccountStackNavigator,
 } from './CommonNavigator';
 
 // home
@@ -23,18 +23,18 @@ export default function HomeStackNavigator(): React.ReactElement {
         options={{ headerShown: false }}
       />
       <HomeStack.Screen
-        name="ProfileDetailStack"
+        name="HomeTabProfileDetailStack"
         component={ProfileDetailStackNavigator}
         options={{ headerShown: false }}
       />
       <HomeStack.Screen
-        name="PostStack"
+        name="HomeTabPostStack"
         component={PostStackNavigator}
         options={{ headerShown: false }}
       />
       <HomeStack.Screen
-        name="WritingStack"
-        component={WritingStackNavigator}
+        name="HomeTabAccountStack"
+        component={AccountStackNavigator}
         options={{ headerShown: false }}
       />
     </HomeStack.Navigator>

@@ -69,7 +69,7 @@ export default async function uploadImageAsync(
     '/img/upload',
     { 'Content-Type': 'multipart/form-data' },
     formData,
-    true,
+    false,
   );
 
   // 사전 처리된 에러는 바로 반환

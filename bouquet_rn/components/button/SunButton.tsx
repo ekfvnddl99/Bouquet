@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // styles
 import colors from '../../styles/colors';
@@ -10,11 +10,14 @@ import Svg from '../../assets/Icon';
 
 // logics
 import * as cal from '../../logics/non-server/Calculation';
+import { likePostAsync } from '../../logics/server/Post';
+import { likeQnaAsync } from '../../logics/server/QnAs';
+import useCharacter from '../../logics/hooks/useCharacter';
 
 type SunButtonProps = {
-  sunNum: number;
-  setSunNum: (param: number) => void;
+  sunNumber: number;
   active: boolean;
+  onPress: () => void;
 };
 /**
  * 햇님 버튼
@@ -25,35 +28,26 @@ type SunButtonProps = {
  * @param active 버튼이 눌러졌는지
  */
 export default function SunButton({
-  sunNum,
-  setSunNum,
+  sunNumber,
   active,
+  onPress,
 }: SunButtonProps): React.ReactElement {
-  const [isActive, setIsActive] = useState(active);
-  const [backgroundColor, setBackgroundColor] = useState('transparent');
-
   return (
     <button.SunButton
       activeOpacity={1}
-      onPress={() => setIsActive(!isActive)}
-      backgroundColor={isActive ? colors.primary : backgroundColor}
-      onPressIn={() => setBackgroundColor(colors.alpha20_primary)}
-      onPressOut={() => [
-        setIsActive(!isActive),
-        setBackgroundColor('transparent'),
-        isActive ? setSunNum(sunNum - 1) : setSunNum(sunNum + 1),
-      ]}
+      onPress={onPress}
+      backgroundColor={active ? colors.primary : 'transparent'}
     >
-      {isActive ? (
+      {active ? (
         <Svg icon="sunFocus" size={20} />
       ) : (
         <Svg icon="sun" size={20} />
       )}
       <text.Body3
-        textColor={isActive ? colors.white : colors.primary}
+        textColor={active ? colors.white : colors.primary}
         style={{ marginLeft: 4 }}
       >
-        {cal.numName(sunNum)}
+        {cal.numName(sunNumber)}
       </text.Body3>
     </button.SunButton>
   );

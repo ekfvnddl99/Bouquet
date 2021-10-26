@@ -17,6 +17,7 @@ import SettingProfileScreen from '../screens/setting/SettingProfileScreen';
 import SettingAlarmScreen from '../screens/setting/SettingAlarmScreen';
 import SettingAlarmCustomScreen from '../screens/setting/SettingAlarmCustomScreen';
 import AccountDeletionScreen1 from '../screens/setting/AccountDeletionScreen1';
+import AlbumLyric from '../screens/template/AlbumLyric';
 
 // writing - fab
 const WritingStack = createStackNavigator<Types.WritingStackParam>();
@@ -36,6 +37,11 @@ export function WritingStackNavigator(): React.ReactElement {
       <WritingStack.Screen
         name="PostStack"
         component={PostStackNavigator}
+        options={{ headerShown: false }}
+      />
+      <WritingStack.Screen
+        name="AlbumLyric"
+        component={AlbumLyric}
         options={{ headerShown: false }}
       />
     </WritingStack.Navigator>
@@ -88,6 +94,7 @@ export function ProfileDetailStackNavigator(): React.ReactElement {
     </ProfileDetailStack.Navigator>
   );
 }
+
 // setting
 const SettingStack = createStackNavigator<Types.SettingStackParam>();
 export function SettingStackNavigator(): React.ReactElement {
