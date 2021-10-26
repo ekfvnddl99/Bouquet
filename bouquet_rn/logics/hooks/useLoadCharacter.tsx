@@ -1,5 +1,6 @@
 import { useRecoilState } from 'recoil';
 import * as SecureStore from 'expo-secure-store';
+import * as Analytics from 'expo-firebase-analytics';
 
 // logics
 import { characterListState } from '../atoms';
@@ -94,6 +95,10 @@ export default function useLoadCharacter(): [
     const result = await getMyCharacterListAsync();
     if (result.isSuccess) {
       setCharacterList(result.result);
+      await Analytics.setUserProperty(
+        'num_of_character',
+        `${result.result.length}`,
+      );
       // setState가 바로 적용되지 않는 경우를 방지하기 위해 최신값 반환
       return result.result;
     }

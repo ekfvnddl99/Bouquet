@@ -12,6 +12,7 @@ import i18n from 'i18n-js';
 import styled from 'styled-components/native';
 import { debounce } from 'lodash';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Analytics from 'expo-firebase-analytics';
 
 // styles
 import colors from '../../../styles/colors';
@@ -93,6 +94,9 @@ export default function SearchScreen(): React.ReactElement {
       setIsChPageEnd(false);
       await getCharacter(1, true, searchText);
       await getPost(1, true, searchText);
+      await Analytics.logEvent('search', {
+        search_text: searchText,
+      });
     }
   }
 
@@ -260,6 +264,7 @@ export default function SearchScreen(): React.ReactElement {
       const serverResult = await likePostAsync(postInfo.id);
       if (serverResult.isSuccess) {
         const isLiked = serverResult.result;
+        await Analytics.logEvent(isLiked ? 'like_post' : 'cancel_like_post');
 
         const tmpArray = [...postArray];
         if (tmpArray?.[index]) {

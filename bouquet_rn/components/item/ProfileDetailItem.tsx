@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import * as Analytics from 'expo-firebase-analytics';
 
 // styles
 import colors from '../../styles/colors';
@@ -100,6 +101,16 @@ export default function ProfileDetailItem({
     const serverResult = await followCharacterAsync(realCharacterId);
     if (serverResult.isSuccess) {
       setIsFollowed(serverResult.result);
+      await Analytics.logEvent(
+        serverResult.result ? 'follow_character' : 'unfollow_character',
+        serverResult.result
+          ? {
+              followed_character: realCharacter.name,
+            }
+          : {
+              unfollowed_character: realCharacter.name,
+            },
+      );
       await setViewCharacter(realCharacter.name);
     } else {
       alert(serverResult.result.errorMsg);

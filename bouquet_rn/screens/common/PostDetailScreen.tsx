@@ -23,6 +23,7 @@ import {
   useNavigation,
   useFocusEffect,
 } from '@react-navigation/native';
+import * as Analytics from 'expo-firebase-analytics';
 
 // styles
 import colors from '../../styles/colors';
@@ -116,6 +117,9 @@ export default function PostDetailScreen(): React.ReactElement {
     };
     const serverResult = await uploadCommentAsync(newComment);
     if (serverResult.isSuccess) {
+      await Analytics.logEvent('write_comment', {
+        is_child: parentCommentId !== 0,
+      });
       setComment('');
       setParentComment(undefined);
       setParentCommentById(0);
@@ -131,6 +135,7 @@ export default function PostDetailScreen(): React.ReactElement {
     navigation.goBack();
     const serverResult = await deletePostAsync(viewPost.id);
     if (serverResult.isSuccess) {
+      await Analytics.logEvent('delete_post');
       alert('삭제 되었습니다.');
     } else alert(serverResult.result.errorMsg);
     setLoading(false);
@@ -176,6 +181,9 @@ export default function PostDetailScreen(): React.ReactElement {
     setLoading(true);
     const serverResult = await likePostAsync(viewPost.id);
     if (serverResult.isSuccess) {
+      await Analytics.logEvent(
+        serverResult.result ? 'like_post' : 'cancel_like_post',
+      );
       setViewPost(viewPost.id);
     } else alert(serverResult.result.errorMsg);
     setLoading(false);

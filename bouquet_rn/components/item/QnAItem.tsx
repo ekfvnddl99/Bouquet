@@ -3,6 +3,7 @@ import { View, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
 import i18n from 'i18n-js';
 import { useNavigation } from '@react-navigation/native';
+import * as Analytics from 'expo-firebase-analytics';
 
 // styles
 import colors from '../../styles/colors';
@@ -70,6 +71,7 @@ export default function QnAItem({
 
     const serverResult = await deleteQnaAsync(qna.id);
     if (serverResult.isSuccess) {
+      await Analytics.logEvent('delete_qna');
       alert('Q&A가 삭제되었어요.');
       if (refresh) await refresh();
     }

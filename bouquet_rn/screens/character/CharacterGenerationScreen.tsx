@@ -9,6 +9,7 @@ import i18n from 'i18n-js';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Analytics from 'expo-firebase-analytics';
 
 // styles
 import * as area from '../../styles/styled-components/area';
@@ -136,6 +137,8 @@ export default function CharacterGenerationScreen(): React.ReactElement {
         });
       }
       await loadCharacterList();
+      if (isModifying) await Analytics.logEvent('edit_character');
+      else await Analytics.logEvent('create_character');
       setStep(step + 1);
     } else {
       alert(serverResult.result.errorMsg);

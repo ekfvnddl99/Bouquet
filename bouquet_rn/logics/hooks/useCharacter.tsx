@@ -1,5 +1,6 @@
 import { useRecoilState } from 'recoil';
 import * as SecureStore from 'expo-secure-store';
+import * as Analytics from 'expo-firebase-analytics';
 
 // logics
 import { characterState } from '../atoms';
@@ -29,6 +30,7 @@ export default function useCharacter(): [
     }
 
     setCharacter(ch);
+    await Analytics.logEvent('change_character');
     // 마지막으로 선택한 캐릭터 이름을 로컬에 저장
     await SecureStore.setItemAsync('lastCharacterId', String(ch.id));
   }

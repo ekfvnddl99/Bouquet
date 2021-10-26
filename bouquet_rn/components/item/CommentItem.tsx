@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import i18n from 'i18n-js';
+import * as Analytics from 'expo-firebase-analytics';
 
 // assets
 import Svg from '../../assets/Icon';
@@ -91,6 +92,9 @@ export default function CommentItem({
     if (serverResult.isSuccess) {
       const realState = serverResult.result;
       setIsActive(realState);
+      await Analytics.logEvent(
+        realState ? 'like_comment' : 'cancel_like_comment',
+      );
     } else {
       setIsActive(!newState);
       alert(serverResult.result.errorMsg);
@@ -111,6 +115,7 @@ export default function CommentItem({
 
     const serverResult = await deleteCommentAsync(commentInfo.id);
     if (serverResult.isSuccess) {
+      await Analytics.logEvent('delete_comment');
       // 새로고침을 위하여
       setViewPost(viewPost.id);
     } else alert(serverResult.result.errorMsg);
@@ -131,6 +136,16 @@ export default function CommentItem({
       serverResult = await blockUserAsync(characterInfo.user_info.name);
     } else serverResult = await blockCharacterAsync(characterInfo.name);
     if (serverResult.isSuccess) {
+      await Analytics.logEvent(
+        what === 'user' ? 'block_user' : 'block_character',
+        what === 'user'
+          ? {
+              blocked_user: user.name,
+            }
+          : {
+              blocked_character: myCharacter.name,
+            },
+      );
       alert('차단되었습니다.');
       // 새로고침을 위하여
       setViewPost(viewPost.id);

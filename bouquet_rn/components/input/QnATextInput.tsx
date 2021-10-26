@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components/native';
+import * as Analytics from 'expo-firebase-analytics';
 
 // styles
 import colors from '../../styles/colors';
@@ -42,6 +43,9 @@ export default function QnATextInput({
     setLoading(true);
     const serverResult = await createQnaAsync(qna);
     if (serverResult.isSuccess) {
+      await Analytics.logEvent('write_qna', {
+        question: qna.question,
+      });
       alert('Q&A를 업로드했어요!');
       setAnswer('');
       await getQuestion();
