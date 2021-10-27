@@ -40,7 +40,7 @@ export async function getPushNotificationsPermission(
       // token 얻어서 저장함
       const deviceToken = await Notifications.getDevicePushTokenAsync();
       const getTokenOptions = {
-        experienceId: '@ekfvnddl99/bouquet',
+        experienceId: '@aube/bouquet',
         devicePushToken: deviceToken,
       };
       const token = (await Notifications.getExpoPushTokenAsync(getTokenOptions))
