@@ -67,7 +67,6 @@ export default function AppStack(): React.ReactElement {
       appState.current = nextAppState;
 
       if (appState.current === 'active' && myCharacter.name !== '') {
-        await getPushNotificationsPermission(false);
         await checkIsNewNotification();
       }
     });

@@ -15,10 +15,12 @@ export async function getPushNotificationsPermission(
   isFirst: boolean,
 ): Promise<void> {
   if (Constants.isDevice) {
+    // 알림 허락 받았는지 확인
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+
+    // 회원가입 할 때 허락받기
     if (isFirst) {
-      // 알림 허락 받았는지 확인
-      const { status: existingStatus } =
-        await Notifications.getPermissionsAsync();
       let finalStatus = existingStatus;
       // 허락 안 받았으면 사용자에게 허락해달라고 요구
       if (existingStatus !== 'granted') {
@@ -34,13 +36,21 @@ export async function getPushNotificationsPermission(
     }
 
     try {
+      if (existingStatus !== 'granted') return;
       // token 얻어서 저장함
-      const token = (await Notifications.getExpoPushTokenAsync()).data;
+      const deviceToken = await Notifications.getDevicePushTokenAsync();
+      const getTokenOptions = {
+        experienceId: '@ekfvnddl99/bouquet',
+        devicePushToken: deviceToken,
+      };
+      const token = (await Notifications.getExpoPushTokenAsync(getTokenOptions))
+        .data;
       await SecureStore.setItemAsync('pushToken', token);
     } catch (e) {
       console.log(e);
     }
   } else alert('실기기에서 이용해주세요.');
+
   if (Platform.OS === 'android') {
     Notifications.setNotificationChannelAsync('default', {
       name: 'default',

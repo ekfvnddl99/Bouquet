@@ -74,7 +74,7 @@ export default function RegisterScreen(): React.ReactElement {
           await login();
           setStep(step + 1);
         } else alert(postToken.result.errorMsg);
-      } else alert('오류가 발생했어요. 문의를 꼭 남겨주세요.');
+      }
     } else alert(serverResult.result.errorMsg);
     setLoading(false);
   }
