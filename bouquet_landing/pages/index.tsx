@@ -32,15 +32,6 @@ export default function Home() {
         <meta name="twitter:title" content="Bouquet : 부캐들의 이야기 공간" />
         <meta name="twitter:description" content="Bouquet는 여러 부캐를 만들어 활동할 수 있는 SNS입니다. 자신의 여러 모습을 자유롭게 드러내 보세요." />
         <meta name="twitter:image" content="https://bouquet-storage.s3.ap-northeast-2.amazonaws.com/fd7075a0-37ba-11ec-b6f2-0242ac110002.png" />
-
-        <meta property="al:ios:url" content="https://apps.apple.com/kr/app/bouquet-%EB%B6%80%EC%BA%90%EB%93%A4%EC%9D%98-%EC%9D%B4%EC%95%BC%EA%B8%B0-%EA%B3%B5%EA%B0%84/id1589432470" />
-        <meta property="al:ios:app_store_id" content="1589432470" />
-        <meta property="al:ios:app_name" content="Bouquet : 부캐들의 이야기 공간" />
-
-        <meta property="al:android:url" content="https://play.google.com/store/apps/details?id=com.dot.bouquet" />
-        <meta property="al:android:app_name" content="Bouquet : 부캐들의 이야기 공간" />
-        <meta property="al:android:package" content="com.dot.bouquet" />
-        <meta property="al:web:url" content="https://play.google.com/store/apps/details?id=com.dot.bouquet" />
       </Head>
       <Main finalRef={finalRef} />
       <Content1 />
