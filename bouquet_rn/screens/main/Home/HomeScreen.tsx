@@ -257,6 +257,7 @@ export default function HomeScreen(): React.ReactElement {
               await getPost(nextPageNum);
             }
           }}
+          keyboardShouldPersistTaps="handled"
           onEndReachedThreshold={0.8}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item) => `${item.id}`}

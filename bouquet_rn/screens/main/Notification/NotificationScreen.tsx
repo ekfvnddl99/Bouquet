@@ -215,10 +215,10 @@ export default function NotificationScreen(): React.ReactElement {
             }
           }}
           scrollEventThrottle={1}
-          keyboardShouldPersistTaps="always"
+          keyboardShouldPersistTaps="handled"
           onEndReachedThreshold={0.8}
           showsVerticalScrollIndicator={false}
-          keyExtractor={(item, idx) => item.id.toString()}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={(obj) => (
             <NotificationItem
               notificationInfo={obj.item}
@@ -295,8 +295,7 @@ export default function NotificationScreen(): React.ReactElement {
         style={{ marginTop: HEADER_MIN_HEIGHT - 30 }}
         contentContainerStyle={{ paddingTop: 30 + 14 }}
         showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="always"
-        scrollEventThrottle={1}
+        keyboardShouldPersistTaps="handled"
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scroll } } }],
           { useNativeDriver: true },
