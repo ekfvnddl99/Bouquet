@@ -68,7 +68,7 @@ Bouquet에서 다음과 같은 것들을 지원해줘요!
     - 가수가 된 것처럼 Album 템플릿에 나만의 가사를 담아 적어보세요!
     - 오늘 하루 있었던 일을 Diary 템플릿에 그림과 함께 기록해보세요!
     - 내가 하고 있는 일들을 List 템플릿에 체계적으로 정리해보세요!
-
+   
 2. **Character Generation**
 
     다양한 모습을 갖춘 당신이, 당신의 부캐를 구체적으로 그려보도록 준비했어요!
@@ -76,7 +76,7 @@ Bouquet에서 다음과 같은 것들을 지원해줘요!
     - 당신의 부캐는 어떤 모습인지 그려보세요!
     - 부캐의 이름, 생년월일, 직업, 국적을 정해서 더 구체화시켜 보세요!
     - 내 부캐를 한 마디로 정의하자면? 좋아하는 것과 싫어하는 것은? 어떤 특색을 가진 부캐인지 그려보세요!
-
+   
 3. **More Q&A** 
 
     내 부캐에 대한 질문을 통해서 부캐를 좀 더 구체화 해볼까요?
@@ -92,7 +92,7 @@ Bouquet에서 다음과 같은 것들을 지원해줘요!
     Bouquet에 오신 걸 환영합니다~! 🎉.  
     바로 회원가입을 할 수 있고, 서비스에  대해 조금 더 알아보고 싶다면 '미리보기'를 눌러서 Bouquet의 기능들을 탐색해보세요!   
 
-    <img src="https://user-images.githubusercontent.com/48302738/129110052-87daccc7-452f-4208-8aeb-54d3cd71303f.png" width="20%" height="20%">
+    <img src="https://user-images.githubusercontent.com/48302738/139812399-6f24c419-badb-497b-ba2d-1930db4e2a55.jpeg" width="20%" height="20%">
 
 2. **Register**
 
@@ -105,7 +105,7 @@ Bouquet에서 다음과 같은 것들을 지원해줘요!
     계정이 있다면 로그인을 해보세요! 자동 로그인이 지원되서 한 번만 로그인 해두면 앱 사용하기 편하답니다!   
     만약 비밀번호를 잃어버렸다면, 비밀번호 찾기를 눌러주세요!   
 
-    <img src="https://user-images.githubusercontent.com/48302738/129110127-8e90ac71-1d0d-48f5-91d1-b7d1520f1623.png" width="20%" height="20%">
+    <img src="https://user-images.githubusercontent.com/48302738/139812408-21846eaf-d989-4fc7-9653-42441840e34b.jpeg" width="20%" height="20%">
 
 4. **Tab**
 
@@ -118,14 +118,14 @@ Bouquet에서 다음과 같은 것들을 지원해줘요!
         나와 가까운 부캐들의 새로운 소식을 피드에서 확인해보세요! 가장 상단에는 내 부캐를 위한 특별한 질문도 있으니, 답변도 해볼까요?   
         (왼쪽은 비로그인 화면, 오른쪽은 로그인 화면)    
 
-        <img src="https://user-images.githubusercontent.com/48302738/129111115-556e929a-2282-4e10-92c7-28b87e8f97b4.png" width="20%" height="20%">. <img src="https://user-images.githubusercontent.com/48302738/129111091-0f5659d7-a51b-465d-8f99-72e229258907.png" width="20%" height="20%">
+        <img src="https://user-images.githubusercontent.com/48302738/139812831-23447204-b783-4412-94b4-5b88c13de6cf.jpeg" width="20%" height="20%">. <img src="https://user-images.githubusercontent.com/48302738/139812837-c6fea9ca-d6e5-4158-8b16-1fae9672e87b.jpeg" width="20%" height="20%">
 
     2. **Search** 
 
         혹시 찾는 부캐가 있나요? 현재 인기있는 Post를 보고 싶나요? Search 탭에서 검색과 탐색 모두를 할 수 있답니다!   
         최근 검색어도 저장되니까 자주 찾는 걸 검색하기 편리하겠죠?   
 
-        <img src="https://user-images.githubusercontent.com/48302738/129111276-4f68e223-7c7e-49ee-a9e4-ded077cdc034.png" width="20%" height="20%">. <img src="https://user-images.githubusercontent.com/48302738/129111155-07e580dd-76f5-4736-b2c7-4943eb469a83.png" width="20%" height="20%"><img src="https://user-images.githubusercontent.com/48302738/129111150-b45be137-1575-4003-8554-286bb11e5290.png" width="20%" height="20%">
+        <img src="https://user-images.githubusercontent.com/48302738/139813225-76d2b6b9-6b8c-483d-b4f3-6609c352e118.jpeg" width="20%" height="20%">. <img src="https://user-images.githubusercontent.com/48302738/139813241-680a5124-350e-4210-80ea-b46e1d3611fb.jpeg" width="20%" height="20%"><img src="https://user-images.githubusercontent.com/48302738/139813248-8f2337e8-c37f-4d6d-836d-010590698a41.jpeg" width="20%" height="20%">
 
     3. **Notification**
 
@@ -133,16 +133,17 @@ Bouquet에서 다음과 같은 것들을 지원해줘요!
         나를 팔로우 한 소식, 내 댓글에 대댓글이 달린 소식 등등 Bouquet에서 일어난 모든 소식들을 Notification 탭에서 한 번에 만나보세요!   
         (왼쪽은 비로그인 화면, 오른쪽은 로그인 화면)   
 
-        <img src="https://user-images.githubusercontent.com/48302738/129111142-42319489-4ae7-41d2-b824-0c5b483f1599.png" width="20%" height="20%">. <img src="https://user-images.githubusercontent.com/48302738/129111134-299db859-c690-4785-9024-66f5b2212718.png" width="20%" height="20%">
+        <img src="https://user-images.githubusercontent.com/48302738/139813627-17e2fab8-9d9d-4a49-9af0-351e70ae381c.jpeg" width="20%" height="20%">. <img src="https://user-images.githubusercontent.com/48302738/139813639-d85d9431-1f7d-42cf-a349-b13f8a491d7c.jpeg" width="20%" height="20%">
+        <img src="https://user-images.githubusercontent.com/48302738/139813652-5a43c076-bb2b-4b29-9343-29e76e60fb68.jpeg" width="20%" height="20%">
 
     4. **Profile**
 
         나의 다양한 부캐들을 swipe로, grid로 한 번에 모아 볼 수 있어요! 조금 더 자세히 보고 싶다면 클릭해서 디테일한 정보를 알 수 있답니다.   
         해당 캐릭터의 Post와 질답들, 캐릭터가 속한 계정을 볼 수 있고 수정이나 삭제 같은 편집도 할 수 있어요!   
 
-        <img src="https://user-images.githubusercontent.com/48302738/129111852-a048c528-2b73-4f2b-9acc-0afa2a1ab4ab.png" width="20%" height="20%">. <img src="https://user-images.githubusercontent.com/48302738/129111829-460258f2-44c7-4643-9020-8aac9a86cc4f.png" width="20%" height="20%">   
-        <img src="https://user-images.githubusercontent.com/48302738/129111848-d5d32875-6cab-4f43-a0dc-1f2b0e37a213.png" width="20%" height="20%">. <img src="https://user-images.githubusercontent.com/48302738/129111841-791b1116-ab80-43ec-99ff-349dc8576c6a.png" width="20%" height="20%">   
-        <img src="https://user-images.githubusercontent.com/48302738/129111861-9bd1c4bf-d853-436a-9a15-8a01147a6b3c.png" width="20%" height="20%">
+        <img src="https://user-images.githubusercontent.com/48302738/139814479-5109e585-56c6-4d96-aa85-1420b4c53e98.jpeg" width="20%" height="20%">. <img src="https://user-images.githubusercontent.com/48302738/139814492-92d3edfa-ff5a-44b2-9730-e3c884c03082.jpeg" width="20%" height="20%">   
+        <img src="https://user-images.githubusercontent.com/48302738/139814497-31c14678-e1e4-412d-a2fd-f7eaa2a16d23.jpeg" width="20%" height="20%">. <img src="https://user-images.githubusercontent.com/48302738/139814514-b7b8217d-4480-4a26-b7d1-7ae41663e039.jpeg" width="20%" height="20%">   
+        <img src="https://user-images.githubusercontent.com/48302738/139814515-f387b901-d2e6-4512-b642-844e305f7f91.jpeg" width="20%" height="20%">
 
 5. **Character Generation**
 
@@ -156,7 +157,7 @@ Bouquet에서 다음과 같은 것들을 지원해줘요!
     내 부캐는 어떤 생각을 하고 어떤 행동을 하고 있는지 글로 남겨보세요! 마음에 드는 템플릿을 클릭하여 템플릿 형식에 맞게 부캐의 이야기를 담을 수 있답니다.   
     Album, Diary, List 3가지 템플릿의 매력을 마음껏 느껴보세요!   
 
-    <img src="https://user-images.githubusercontent.com/48302738/129112712-b1315b12-4b5f-4fca-abe0-e91090fc9bc6.png" width="20%" height="20%">  <img src="https://user-images.githubusercontent.com/48302738/129112720-f0fc6ff0-6ad0-4029-b8a9-f0d35fb35c17.png" width="20%" height="20%">  <img src="https://user-images.githubusercontent.com/48302738/129112725-f06301ea-ff81-499e-b252-93da486b9813.png" width="20%" height="20%">
+    <img src="https://user-images.githubusercontent.com/48302738/139815328-42eeb44c-5050-4100-88dc-78f4a1547458.jpeg" width="20%" height="20%">  <img src="https://user-images.githubusercontent.com/48302738/139815337-8adc2b05-c549-42f1-9532-54643e0bdfef.jpeg" width="20%" height="20%">  <img src="https://user-images.githubusercontent.com/48302738/139815350-5daa63d0-bbc2-4248-a06e-ac5ec8fcf59b.jpeg" width="20%" height="20%">
 
 7. **Post Detail**
 
@@ -164,14 +165,14 @@ Bouquet에서 다음과 같은 것들을 지원해줘요!
     댓글에도 햇살 버튼을 누를 수 있고, 댓글의 댓글도 달 수 있답니다! 다른 부캐들과 적극적으로 소통해보세요!   
     (왼쪽은 타 부캐 Post 화면, 오른쪽은 내 부캐 Post 화면)   
 
-    <img src="https://user-images.githubusercontent.com/48302738/129112743-3c51a3e0-92eb-40a7-b5ea-2dfda6f90a98.png" width="20%" height="20%">  <img src="https://user-images.githubusercontent.com/48302738/129112747-df9b4c0e-057c-425a-afbe-24bf7ea5c27c.png" width="20%" height="20%">
+    <img src="https://user-images.githubusercontent.com/48302738/139815429-9310dd28-fc08-4208-acc1-aace3252b25d.jpeg" width="20%" height="20%">  <img src="https://user-images.githubusercontent.com/48302738/139815442-42ab9aaa-9aaa-4e27-920f-0e8789395122.jpeg" width="20%" height="20%">
 
 8. **Setting**
 
     알림을 받고 싶지 않나요? 계정 정보를 편집하고 싶나요? 그렇다면 설정에서 해결해보세요!   
     원하는 설정을 할 수 있고, 서비스에 대한 깊은 이해까지 할 수 있답니다.   
     
-    <img src="https://user-images.githubusercontent.com/48302738/129112770-ef2c7fcb-c532-4214-abab-01bdae159136.png" width="20%" height="20%">  <img src="https://user-images.githubusercontent.com/48302738/129112753-57f6c370-ed3c-4eea-85a3-ceb87930bf72.png" width="20%" height="20%">  <img src="https://user-images.githubusercontent.com/48302738/129112757-cde29c95-f171-4b31-962d-9403e5e7431c.png" width="20%" height="20%">  <img src="https://user-images.githubusercontent.com/48302738/129112759-c578253d-b5f1-44f1-a5ce-eded29b4b837.png" width="20%" height="20%">  <img src="https://user-images.githubusercontent.com/48302738/129112765-87d5c8d5-6613-44e3-9a8b-af49ad24d1ed.png" width="20%" height="20%">  <img src="https://user-images.githubusercontent.com/48302738/129112767-7a138b09-b53e-4cb1-ae72-e15e1d1259a5.png" width="20%" height="20%">
+    <img src="https://user-images.githubusercontent.com/48302738/139815525-10b4c0a1-e304-4098-bd78-a6f92816fe2f.jpeg" width="20%" height="20%">  <img src="https://user-images.githubusercontent.com/48302738/139815534-518c3c27-8768-4359-977c-bc22b20360e9.jpeg" width="20%" height="20%">  <img src="https://user-images.githubusercontent.com/48302738/139815539-f41ea4ea-da38-4be5-ae33-4f4fbd46190e.jpeg" width="20%" height="20%">   
 
 ## 🌵 Environment
 
