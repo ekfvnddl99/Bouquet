@@ -20,7 +20,7 @@
 
 <div align="center">
 
-<img src="https://img.shields.io/badge/-reactnative-orange"><img src="https://img.shields.io/badge/-expo-yellow"><img src="https://img.shields.io/badge/-recoil-green"><img src="https://img.shields.io/badge/-typescript-blue">
+<img src="https://img.shields.io/badge/-reactnative-orange"> <img src="https://img.shields.io/badge/-expo-yellow"> <img src="https://img.shields.io/badge/-recoil-green"> <img src="https://img.shields.io/badge/-typescript-blue">
 </div>
 
 ---
@@ -33,6 +33,7 @@
 - [Environment](#-environment)
 - [Dependencies](#-dependencies)
 - [Team. 달오떡 && Mentors](#-team-%EB%8B%AC%EC%98%A4%EB%96%A1-aka-%EB%8B%AC%EB%8B%AC%ED%95%9C-%EC%98%A4%EB%A0%8C%EC%A7%80-%EB%96%A1%EB%B3%B6%EC%9D%B4)
+- [Project Link](#-project-link)
 - [Project Support](#-project-support)
 
 ---
@@ -67,6 +68,7 @@ Bouquet에서 다음과 같은 것들을 지원해줘요!
     - 가수가 된 것처럼 Album 템플릿에 나만의 가사를 담아 적어보세요!
     - 오늘 하루 있었던 일을 Diary 템플릿에 그림과 함께 기록해보세요!
     - 내가 하고 있는 일들을 List 템플릿에 체계적으로 정리해보세요!
+
 2. **Character Generation**
 
     다양한 모습을 갖춘 당신이, 당신의 부캐를 구체적으로 그려보도록 준비했어요!
@@ -74,6 +76,7 @@ Bouquet에서 다음과 같은 것들을 지원해줘요!
     - 당신의 부캐는 어떤 모습인지 그려보세요!
     - 부캐의 이름, 생년월일, 직업, 국적을 정해서 더 구체화시켜 보세요!
     - 내 부캐를 한 마디로 정의하자면? 좋아하는 것과 싫어하는 것은? 어떤 특색을 가진 부캐인지 그려보세요!
+
 3. **More Q&A** 
 
     내 부캐에 대한 질문을 통해서 부캐를 좀 더 구체화 해볼까요?
@@ -177,6 +180,8 @@ Bouquet에서 다음과 같은 것들을 지원해줘요!
 - **State Management Library** : Recoil
 - **Design Pattern** : Presentational and Container Component Pattern
 
+---
+
 ## ⚙️ Dependencies
 
 - **react** : 16.13.1
@@ -200,6 +205,15 @@ Bouquet에서 다음과 같은 것들을 지원해줘요!
 **강명구** - Front-end Mentor
 
 **최호열** - Deep-Learning Mentor
+
+---
+
+## ✨ Project Link
+**Website** - [**웹사이트 바로 가기**](https://bouquet.ooo/)   
+
+**AppStore** - [**AppStore 바로 가기**](https://apps.apple.com/kr/app/bouquet-%EB%B6%80%EC%BA%90%EB%93%A4%EC%9D%98-%EC%9D%B4%EC%95%BC%EA%B8%B0-%EA%B3%B5%EA%B0%84/id1589432470)   
+
+**PlayStore** - [**PlayStore 바로 가기**](https://play.google.com/store/apps/details?id=com.dot.bouquet)   
 
 ---
 
