@@ -91,7 +91,9 @@ export default function RegisterScreen3({
       const serverResult = await checkUserAsync(name);
       if (serverResult.isSuccess) {
         value = !serverResult.result && name.length > 0;
-        if (!value) setNameErr(errTextArray[2]);
+        if (!tmpArray[0]) setNameErr(errTextArray[0]);
+        else if (!tmpArray[1]) setNameErr(errTextArray[1]);
+        else if (!value) setNameErr(errTextArray[2]);
         else setNameErr('');
       }
       setNameConditionArray([arr[0], arr[1], value]);
