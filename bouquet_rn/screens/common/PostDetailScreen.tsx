@@ -188,6 +188,10 @@ export default function PostDetailScreen(): React.ReactElement {
   async function onPressSun() {
     if (loading) return;
     setLoading(true);
+    if (myCharacter.name === '') {
+      alert('부캐가 없으면 햇님을 줄 수 없어요. 부캐를 만들어주세요!');
+      return;
+    }
     const serverResult = await likePostAsync(viewPost.id);
     if (serverResult.isSuccess) {
       await Analytics.logEvent(
