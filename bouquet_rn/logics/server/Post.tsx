@@ -630,3 +630,146 @@ export async function reportCommentAsync(
     isSuccess: false,
   };
 }
+
+/**
+ * 문장의 언어를 인지하는 함수
+ * @param text 인지하려는 대상
+ * @returns
+ */
+export async function recognizeLanguageAsync(
+  text: string,
+): APIs.ServerResult<string> {
+  // 서버 응답 타입 정의
+  type recognizeLanguageAsyncOutput = {
+    langCode: string;
+  };
+
+  let tmpResult;
+
+  const header: Record<string, string> = {
+    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    'X-Naver-Client-Id': 'QUJ66vtuHtwmkF8Dvz7u',
+    'X-Naver-Client-Secret': 'qztf5Pb8BJ',
+  };
+
+  try {
+    const response = await fetch(
+      'https://openapi.naver.com/v1/papago/detectLangs',
+      {
+        method: 'POST',
+        headers: header,
+        body: `query=${text}`,
+      },
+    );
+
+    let result: any;
+    try {
+      result = await response.json();
+    } catch {
+      result = null;
+    }
+
+    tmpResult = [result, response];
+  } catch (err) {
+    // fetch가 실패한 경우(= 서버 연결에 실패한 경우) ServerErrorOutput 타입의 객체 반환
+    tmpResult = {
+      statusCode: -1,
+      errorMsg: '서버와 연결할 수 없어요. 다시 시도해 보거나, 문의해 주세요.',
+      info: err,
+    };
+  }
+
+  // 사전 처리된 에러는 바로 반환
+  if (APIs.isServerErrorOutput(tmpResult)) {
+    return { result: tmpResult, isSuccess: false };
+  }
+
+  const [result, response] = tmpResult;
+
+  // 요청 성공 : 좋아요 여부 반환
+  if (APIs.isSuccess<recognizeLanguageAsyncOutput>(result, response)) {
+    return { result: result.langCode, isSuccess: true };
+  }
+
+  // 나머지 에러
+  return {
+    result: {
+      statusCode: response.status,
+      errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
+      info: response,
+    },
+    isSuccess: false,
+  };
+}
+
+/**
+ * 문장을 번역하는 함수
+ * @param text 번역하려는 대상
+ * @returns
+ */
+export async function translateSentenceAsync(
+  languageCode: string,
+  text: string,
+): APIs.ServerResult<string> {
+  // 서버 응답 타입 정의
+  type translateSentenceAsyncOutput = {
+    srcLangType: string;
+    tarLangType: string;
+    translatedText: string;
+  };
+
+  let tmpResult;
+
+  const header: Record<string, string> = {
+    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    'X-Naver-Client-Id': 'QUJ66vtuHtwmkF8Dvz7u',
+    'X-Naver-Client-Secret': 'qztf5Pb8BJ',
+  };
+
+  try {
+    const response = await fetch('https://openapi.naver.com/v1/papago/n2mt', {
+      method: 'POST',
+      headers: header,
+      body: `source=${languageCode}&target=ko&text=${text}`,
+    });
+
+    let result: any;
+    try {
+      result = await response.json();
+      result = result.message.result;
+    } catch {
+      result = null;
+    }
+
+    tmpResult = [result, response];
+  } catch (err) {
+    // fetch가 실패한 경우(= 서버 연결에 실패한 경우) ServerErrorOutput 타입의 객체 반환
+    tmpResult = {
+      statusCode: -1,
+      errorMsg: '서버와 연결할 수 없어요. 다시 시도해 보거나, 문의해 주세요.',
+      info: err,
+    };
+  }
+
+  // 사전 처리된 에러는 바로 반환
+  if (APIs.isServerErrorOutput(tmpResult)) {
+    return { result: tmpResult, isSuccess: false };
+  }
+
+  const [result, response] = tmpResult;
+
+  // 요청 성공 : 좋아요 여부 반환
+  if (APIs.isSuccess<translateSentenceAsyncOutput>(result, response)) {
+    return { result: result.translatedText, isSuccess: true };
+  }
+
+  // 나머지 에러
+  return {
+    result: {
+      statusCode: response.status,
+      errorMsg: '문제가 발생했어요. 다시 시도해 보거나, 문의해 주세요.',
+      info: response,
+    },
+    isSuccess: false,
+  };
+}
