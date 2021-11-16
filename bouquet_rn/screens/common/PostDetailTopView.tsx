@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import i18n from 'i18n-js';
 import * as Analytics from 'expo-firebase-analytics';
@@ -90,15 +90,23 @@ export default function PostDetailTopView({
     } else alert(serverResult.result.errorMsg);
   };
 
+  const elementArray = [
+    { name: '신고', function: () => reportPost(), isShow: true },
+    { name: '계정 차단', function: () => blockSomeone('user'), isShow: true },
+    {
+      name: '캐릭터 차단',
+      function: () => blockSomeone('character'),
+      isShow: true,
+    },
+    { name: '삭제', function: () => onDelete(), isShow: postOwner },
+  ];
+
   return (
     <View>
       <HalfModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        onReport={() => reportPost()}
-        onStop={blockSomeone}
-        onDelete={() => onDelete()}
-        isCanDelete={postOwner}
+        elementArray={elementArray}
       />
       <View style={{ paddingTop: 20 }} />
 

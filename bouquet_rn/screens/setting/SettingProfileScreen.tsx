@@ -27,7 +27,7 @@ import { getByte } from '../../logics/non-server/Calculation';
 import { checkUserAsync } from '../../logics/server/Auth';
 import { editUserAsync } from '../../logics/server/User';
 import useUser from '../../logics/hooks/useUser';
-import uploadImageAsync from '../../logics/server/UploadImage';
+import { uploadImageAsync } from '../../logics/server/UploadImage';
 
 // components
 import ConditionText from '../../components/text/ConditionText';

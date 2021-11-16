@@ -164,6 +164,21 @@ export default function CommentItem({
     } else alert(serverResult.result.errorMsg);
   };
 
+  const elementArray = [
+    { name: '신고', function: () => reportComment(), isShow: true },
+    { name: '계정 차단', function: () => blockSomeone('user'), isShow: true },
+    {
+      name: '캐릭터 차단',
+      function: () => blockSomeone('character'),
+      isShow: true,
+    },
+    {
+      name: '삭제',
+      function: () => deleteComment(commentInfo.id),
+      isShow: myCharacter.name === commentInfo.character_info.name,
+    },
+  ];
+
   return (
     <area.NoHeightArea
       marBottom={8}
@@ -174,10 +189,7 @@ export default function CommentItem({
       <HalfModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        onReport={() => reportComment()}
-        onStop={blockSomeone}
-        onDelete={() => deleteComment(commentInfo.id)}
-        isCanDelete={myCharacter.name === commentInfo.character_info.name}
+        elementArray={elementArray}
       />
       <area.RowArea style={{ alignItems: 'flex-start', marginBottom: 3 }}>
         <View style={{ flex: 2 }}>

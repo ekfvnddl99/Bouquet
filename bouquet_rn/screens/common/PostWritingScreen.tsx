@@ -24,7 +24,7 @@ import { selectTemplate } from '../../logics/atoms';
 import { uploadPostAsync } from '../../logics/server/Post';
 import useCharacter from '../../logics/hooks/useCharacter';
 import useViewPost from '../../logics/hooks/useViewPost';
-import uploadImageAsync from '../../logics/server/UploadImage';
+import { uploadImageAsync } from '../../logics/server/UploadImage';
 
 // components
 import ConditionButton from '../../components/button/ConditionButton';

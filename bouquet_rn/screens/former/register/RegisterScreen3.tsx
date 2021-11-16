@@ -22,13 +22,11 @@ import Svg from '../../../assets/Icon';
 // logics
 import { getByte } from '../../../logics/non-server/Calculation';
 import { checkUserAsync } from '../../../logics/server/Auth';
-import uploadImageAsync from '../../../logics/server/UploadImage';
 import { getImagePickerPermission } from '../../../logics/server/Post';
 
 // components
 import ConditionText from '../../../components/text/ConditionText';
 import ConditionButton from '../../../components/button/ConditionButton';
-import PrimaryTextButton from '../../../components/button/PrimaryTextButton';
 import ConditionTextInput from '../../../components/input/ConditionTextInput';
 
 type RegisterPropsThree = {

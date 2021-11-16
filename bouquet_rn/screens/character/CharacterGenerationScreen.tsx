@@ -20,7 +20,7 @@ import {
   editCharacterAsync,
 } from '../../logics/server/Character';
 import useCharacter from '../../logics/hooks/useCharacter';
-import UploadImageAsync from '../../logics/server/UploadImage';
+import { uploadImageAsync } from '../../logics/server/UploadImage';
 import useLoadCharacter from '../../logics/hooks/useLoadCharacter';
 
 // components
@@ -106,7 +106,7 @@ export default function CharacterGenerationScreen(): React.ReactElement {
 
     // 입력한 이미지가 있는 경우
     if (newCharacter.profile_img) {
-      const serverResult = await UploadImageAsync(newCharacter.profile_img);
+      const serverResult = await uploadImageAsync(newCharacter.profile_img);
       if (serverResult.isSuccess) {
         newCharacter.profile_img = serverResult.result;
       } else {

@@ -5,6 +5,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 
 // styles
+import colors from '../../styles/colors';
 import * as area from '../../styles/styled-components/area';
 import * as elses from '../../styles/styled-components/elses';
 
@@ -16,8 +17,9 @@ import type { MyCharacter } from '../../utils/types/UserTypes';
 import { getImagePickerPermission } from '../../logics/server/Post';
 
 // components
+import CharacterGenerationModal from './CharacterGenerationModal';
 import ConditionButton from '../../components/button/ConditionButton';
-import colors from '../../styles/colors';
+import HalfModal from '../../components/view/HalfModal';
 
 type CharacterGenerationScreen1Props = {
   isModifying: boolean;
@@ -44,6 +46,9 @@ export default function CharacterGenerationScreen1({
   // 이미지 선택하려고 눌렀냐
   // 여러번 누르면 여러번 갤러리가 떠서 방지하기 위해
   const [isSelectImg, setIsSelectImg] = useState(false);
+  // 모달이 보이는지 아닌지
+  const [selectModalVisible, setSelectModalVisible] = useState(false);
+  const [generationModalVisible, setGenerationModalVisible] = useState(false);
 
   // 이미지 업로드 할 때 권한이 없다면 일단 권한부터 받는다.
   useEffect(() => {
@@ -82,10 +87,32 @@ export default function CharacterGenerationScreen1({
     setIsSelectImg(false);
   }
 
+  const elementArray = [
+    { name: '갤러리에서 가져오기', function: () => setImage(), isShow: true },
+    {
+      name: '사진 합성하기',
+      function: () => setGenerationModalVisible(true),
+      isShow: true,
+    },
+  ];
+
   return (
     <area.ContainerBlank20>
+      <HalfModal
+        modalVisible={selectModalVisible}
+        setModalVisible={setSelectModalVisible}
+        elementArray={elementArray}
+      />
+      <CharacterGenerationModal
+        modalVisible={generationModalVisible}
+        setModalVisible={setGenerationModalVisible}
+        newCharacter={newCharacter}
+        setNewCharacter={setNewCharacter}
+      />
       <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-        <TouchableOpacity onPress={() => (isSelectImg ? {} : setImage())}>
+        <TouchableOpacity
+          onPress={() => (isSelectImg ? {} : setSelectModalVisible(true))}
+        >
           {newCharacter.profile_img ? (
             <elses.CircleImg
               diameter={180}
@@ -98,6 +125,7 @@ export default function CharacterGenerationScreen1({
           )}
         </TouchableOpacity>
       </View>
+
       <area.BottomArea style={{ marginBottom: 16 }}>
         <ConditionButton
           height={44}
