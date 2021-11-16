@@ -27,11 +27,17 @@ export async function uploadImageAsync(uri: string): APIs.ServerResult<string> {
     url: string;
   };
 
+  const randomIndex = uri.indexOf('?random');
+  let realUri = uri;
+  if (randomIndex !== -1) {
+    realUri = uri.slice(0, randomIndex);
+  }
+
   // 이미지의 확장자 결정
   let extension = '';
-  for (let i = uri.length - 1; i >= 0; i -= 1) {
-    if (uri.charAt(i) === '.') {
-      extension = uri.slice(i, uri.length);
+  for (let i = realUri.length - 1; i >= 0; i -= 1) {
+    if (realUri.charAt(i) === '.') {
+      extension = realUri.slice(i, realUri.length);
       break;
     }
   }
@@ -59,7 +65,7 @@ export async function uploadImageAsync(uri: string): APIs.ServerResult<string> {
   const formData = new FormData();
   formData.append('img', {
     type,
-    uri,
+    uri: realUri,
     name: `upload${extension}`,
   });
 
