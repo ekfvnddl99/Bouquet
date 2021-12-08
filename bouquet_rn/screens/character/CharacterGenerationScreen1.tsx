@@ -98,7 +98,7 @@ export default function CharacterGenerationScreen1({
 
   return (
     <area.ContainerBlank20>
-      <HalfModal
+      {/* <HalfModal
         modalVisible={selectModalVisible}
         setModalVisible={setSelectModalVisible}
         elementArray={elementArray}
@@ -108,11 +108,12 @@ export default function CharacterGenerationScreen1({
         setModalVisible={setGenerationModalVisible}
         newCharacter={newCharacter}
         setNewCharacter={setNewCharacter}
-      />
+      /> */}
       <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-        <TouchableOpacity
+        <TouchableOpacity onPress={() => (isSelectImg ? {} : setImage())}>
+          {/* <TouchableOpacity
           onPress={() => (isSelectImg ? {} : setSelectModalVisible(true))}
-        >
+        > */}
           {newCharacter.profile_img ? (
             <elses.CircleImg
               diameter={180}
