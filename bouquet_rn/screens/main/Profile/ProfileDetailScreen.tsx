@@ -42,7 +42,7 @@ type ParamList = {
 export default function ProfileDetailScreen(): React.ReactElement {
   // 상세 프로필마다 있는 하단의 탭 인덱스
   const [tabIndex, setTabIndex] = useState(0);
-  const [character] = useCharacter();
+  const [myCharacter] = useCharacter();
   const [viewCharacter, setViewCharacter] = useViewCharacter();
 
   // 해당 캐릭터의 게시글 담을 state
@@ -136,6 +136,10 @@ export default function ProfileDetailScreen(): React.ReactElement {
     index: number;
   }) => {
     const onPressItem = async (postInfo: Post<AllTemplates>) => {
+      if (myCharacter.name === '') {
+        alert('부캐가 없으면 햇님을 줄 수 없어요. 부캐를 만들어주세요!');
+        return;
+      }
       const serverResult = await likePostAsync(postInfo.id);
       if (serverResult.isSuccess) {
         const isLiked = serverResult.result;
@@ -283,8 +287,8 @@ export default function ProfileDetailScreen(): React.ReactElement {
       <HeaderItem
         isAccount={false}
         isBackButton
-        name={character.name}
-        profileImg={character.profile_img}
+        name={myCharacter.name}
+        profileImg={myCharacter.profile_img}
         routePrefix={routePrefix}
       />
       <Animated.FlatList

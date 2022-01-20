@@ -8,13 +8,9 @@ import * as area from '../../../styles/styled-components/area';
 import * as text from '../../../styles/styled-components/text';
 import * as elses from '../../../styles/styled-components/elses';
 
-// logics
-import { getPushNotificationsPermission } from '../../../logics/server/Notification';
-
 // components
 import ConditionButton from '../../../components/button/ConditionButton';
 import NameNText from '../../../components/text/NameNText';
-import { getImagePickerPermission } from '../../../logics/server/Post';
 
 type RegisterScreen4Props = {
   name: string;

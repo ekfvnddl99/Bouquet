@@ -20,7 +20,7 @@ import {
   editCharacterAsync,
 } from '../../logics/server/Character';
 import useCharacter from '../../logics/hooks/useCharacter';
-import UploadImageAsync from '../../logics/server/UploadImage';
+import { uploadImageAsync } from '../../logics/server/UploadImage';
 import useLoadCharacter from '../../logics/hooks/useLoadCharacter';
 
 // components
@@ -106,7 +106,7 @@ export default function CharacterGenerationScreen(): React.ReactElement {
 
     // 입력한 이미지가 있는 경우
     if (newCharacter.profile_img) {
-      const serverResult = await UploadImageAsync(newCharacter.profile_img);
+      const serverResult = await uploadImageAsync(newCharacter.profile_img);
       if (serverResult.isSuccess) {
         newCharacter.profile_img = serverResult.result;
       } else {
@@ -120,14 +120,15 @@ export default function CharacterGenerationScreen(): React.ReactElement {
         'https://i.pinimg.com/736x/05/79/5a/05795a16b647118ffb6629390e995adb.jpg';
     }
 
-    setNewCharacter({
+    const tmpCharacter = {
       ...newCharacter,
       birth: `${birthYear}${birthMonth}${birthDay}`,
-    });
+    };
+    setNewCharacter(tmpCharacter);
     let serverResult;
     if (isModifying) {
-      serverResult = await editCharacterAsync(newCharacter);
-    } else serverResult = await createCharacterAsync(newCharacter);
+      serverResult = await editCharacterAsync(tmpCharacter);
+    } else serverResult = await createCharacterAsync(tmpCharacter);
     if (serverResult.isSuccess) {
       if (serverResult.result !== null) {
         await storeNotificationCount(`N${newCharacter.name}`, 0);
@@ -141,7 +142,9 @@ export default function CharacterGenerationScreen(): React.ReactElement {
       else await Analytics.logEvent('create_character');
       setStep(step + 1);
     } else {
-      alert(serverResult.result.errorMsg);
+      // alert(serverResult.result.errorMsg);
+      console.log(tmpCharacter.birth);
+      console.log(serverResult.result.info);
     }
     setLoading(false);
   }

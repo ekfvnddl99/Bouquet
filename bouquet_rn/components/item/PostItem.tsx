@@ -68,7 +68,14 @@ export default function PostItem({
         case 'None':
           return <TextTemplate mode="mini" post={postInfo.text} />;
         case 'Image':
-          return <ImageTemplate mode="mini" post={postInfo.template} />;
+          return (
+            <>
+              <ImageTemplate mode="mini" post={postInfo.template} />
+              {postInfo.text ? (
+                <TextTemplate mode="mini" post={postInfo.text} />
+              ) : null}
+            </>
+          );
         case 'Diary':
           return <DiaryTemplate mode="mini" post={postInfo.template} />;
         case 'Album':

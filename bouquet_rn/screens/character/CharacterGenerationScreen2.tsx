@@ -81,8 +81,8 @@ export default function CharacterGenerationScreen2({
     '필수 입력 항목이에요.',
     '이름 규칙을 지켜야 해요.',
     '중복된 이름이에요.',
-    '4개 숫자로 채워주세요.',
-    '2개 숫자로 채워주세요.',
+    '숫자 4개로 채워주세요.',
+    '숫자 2개로 채워주세요.',
   ];
 
   /**
@@ -102,7 +102,9 @@ export default function CharacterGenerationScreen2({
           serverResult.result
             ? true
             : !serverResult.result && newCharacter.name.length > 0;
-        if (!value) setNameErr(errTextArray[2]);
+        if (!tmpArray[0]) setNameErr(errTextArray[0]);
+        else if (!tmpArray[1]) setNameErr(errTextArray[1]);
+        else if (!value) setNameErr(errTextArray[2]);
         else setNameErr('');
       }
       setNameConditionArray([arr[0], arr[1], value]);

@@ -7,65 +7,62 @@ import styled from 'styled-components/native';
 import colors from '../../styles/colors';
 import * as text from '../../styles/styled-components/text';
 
+type ModalElementType = {
+  name: string;
+  function: any;
+  isShow: boolean;
+};
+
 type HalfModalProps = {
   modalVisible: boolean;
   setModalVisible: (input: boolean) => void;
-  onReport: () => void;
-  onStop: (input: string) => void;
-  onDelete?: () => void;
-  isCanDelete?: boolean;
+  elementArray: ModalElementType[];
 };
 export default function HalfModal({
   modalVisible,
   setModalVisible,
-  onReport,
-  onStop,
-  onDelete,
-  isCanDelete,
+  elementArray,
 }: HalfModalProps): React.ReactElement {
   const insets = useSafeAreaInsets();
   return (
     <Modal
-      animationType="slide"
+      animationType="none"
       visible={modalVisible}
       transparent
       onRequestClose={() => setModalVisible(false)}
     >
-      <TouchableOpacity
+      <Container
         activeOpacity={1}
         style={{ flexGrow: 1 }}
         onPress={() => setModalVisible(false)}
-      />
-      <ModalArea activeOpacity={1} onPress={() => setModalVisible(false)}>
-        <ModalItem onPress={() => onReport()}>
-          <text.Subtitle2R textColor={colors.black}>신고</text.Subtitle2R>
-        </ModalItem>
-        <MiddleLine />
-        <ModalItem onPress={() => onStop('user')}>
-          <text.Subtitle2R textColor={colors.black}>계정 차단</text.Subtitle2R>
-        </ModalItem>
-        <MiddleLine />
-        <ModalItem onPress={() => onStop('character')}>
-          <text.Subtitle2R textColor={colors.black}>
-            캐릭터 차단
-          </text.Subtitle2R>
-        </ModalItem>
-        <MiddleLine />
+      >
+        <ModalArea>
+          {elementArray.map((obj) => (
+            <>
+              {obj.isShow ? (
+                <>
+                  <ModalItem
+                    onPress={obj.function}
+                    onPressOut={() => setModalVisible(false)}
+                  >
+                    <text.Subtitle2R textColor={colors.black}>
+                      {obj.name}
+                    </text.Subtitle2R>
+                  </ModalItem>
+                  <MiddleLine />
+                </>
+              ) : null}
+            </>
+          ))}
 
-        {isCanDelete && onDelete ? (
-          <>
-            <ModalItem onPress={() => onDelete()}>
-              <text.Subtitle2R textColor={colors.black}>삭제</text.Subtitle2R>
-            </ModalItem>
-          </>
-        ) : null}
-        <View style={{ paddingBottom: insets.bottom }} />
-      </ModalArea>
+          <View style={{ paddingBottom: insets.bottom }} />
+        </ModalArea>
+      </Container>
     </Modal>
   );
 }
 
-const ModalArea = styled.TouchableOpacity`
+const ModalArea = styled.View`
   flex-wrap: wrap;
   margin-top: auto;
   align-items: center;
@@ -85,4 +82,9 @@ const MiddleLine = styled.View`
   border-width: 0.3;
   border-color: ${colors.gray5};
   width: 100%;
+`;
+
+const Container = styled.TouchableOpacity`
+  flex-grow: 1;
+  background-color: ${'#000000B3'};
 `;

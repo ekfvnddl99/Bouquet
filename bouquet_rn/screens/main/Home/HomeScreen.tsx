@@ -151,6 +151,10 @@ export default function HomeScreen(): React.ReactElement {
     index: number;
   }) => {
     const onPressItem = async (postInfo: Post<AllTemplates>) => {
+      if (myCharacter.name === '') {
+        alert('부캐가 없으면 햇님을 줄 수 없어요. 부캐를 만들어주세요!');
+        return;
+      }
       const serverResult = await likePostAsync(postInfo.id);
       if (serverResult.isSuccess) {
         const isLiked = serverResult.result;
@@ -257,6 +261,7 @@ export default function HomeScreen(): React.ReactElement {
               await getPost(nextPageNum);
             }
           }}
+          keyboardShouldPersistTaps="handled"
           onEndReachedThreshold={0.8}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item) => `${item.id}`}

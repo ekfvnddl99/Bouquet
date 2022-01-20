@@ -22,13 +22,11 @@ import Svg from '../../../assets/Icon';
 // logics
 import { getByte } from '../../../logics/non-server/Calculation';
 import { checkUserAsync } from '../../../logics/server/Auth';
-import uploadImageAsync from '../../../logics/server/UploadImage';
 import { getImagePickerPermission } from '../../../logics/server/Post';
 
 // components
 import ConditionText from '../../../components/text/ConditionText';
 import ConditionButton from '../../../components/button/ConditionButton';
-import PrimaryTextButton from '../../../components/button/PrimaryTextButton';
 import ConditionTextInput from '../../../components/input/ConditionTextInput';
 
 type RegisterPropsThree = {
@@ -91,7 +89,9 @@ export default function RegisterScreen3({
       const serverResult = await checkUserAsync(name);
       if (serverResult.isSuccess) {
         value = !serverResult.result && name.length > 0;
-        if (!value) setNameErr(errTextArray[2]);
+        if (!tmpArray[0]) setNameErr(errTextArray[0]);
+        else if (!tmpArray[1]) setNameErr(errTextArray[1]);
+        else if (!value) setNameErr(errTextArray[2]);
         else setNameErr('');
       }
       setNameConditionArray([arr[0], arr[1], value]);
