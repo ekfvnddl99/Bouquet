@@ -3,7 +3,7 @@
     "name": "Bouquet",
     "scheme": "bouquet",
     "slug": "bouquet",
-    "version": "0.1.3",
+    "version": "0.1.5",
     "orientation": "portrait",
     "icon": "./assets/png/icon.png",
     "splash": {
@@ -37,7 +37,8 @@
         "backgroundImage": "./assets/png/adaptive-background.png"
       },
       "softwareKeyboardLayoutMode": "pan",
-      "package": "com.dot.bouquet"
+      "package": "com.dot.bouquet",
+      "versionCode": 3
     },
     "web": {
       "favicon": "./assets/png/favicon.png"

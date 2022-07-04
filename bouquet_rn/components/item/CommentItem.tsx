@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import i18n from 'i18n-js';
 import * as Analytics from 'expo-firebase-analytics';
@@ -18,7 +18,8 @@ import * as cal from '../../logics/non-server/Calculation';
 import {
   likeCommentAsync,
   reportCommentAsync,
-  deleteCommentAsync,
+  translateSentenceAsync,
+  recognizeLanguageAsync,
 } from '../../logics/server/Post';
 import useUser from '../../logics/hooks/useUser';
 import {
@@ -39,6 +40,7 @@ type CommentItemProps = {
   setTargetComment: (param: string) => void;
   setTargetCommentId: (param: number) => void;
   routePrefix: string;
+  deleteComment: (param: number) => void;
   openingCommentArray?: number[];
   setOpeningCommentArray?: (param: number[]) => void;
 };
@@ -62,6 +64,7 @@ export default function CommentItem({
   setTargetComment,
   setTargetCommentId,
   routePrefix,
+  deleteComment,
   openingCommentArray,
   setOpeningCommentArray,
 }: CommentItemProps): React.ReactElement {
@@ -71,6 +74,8 @@ export default function CommentItem({
   const [isActive, setIsActive] = useState(commentInfo.liked);
   const [sunshineNum, setSunshineNum] = useState(commentInfo.num_sunshines);
   const [modalVisible, setModalVisible] = useState(false);
+  const [comment, setComment] = useState(commentInfo.comment);
+  const [languageCode, setLanguageCode] = useState('ko');
 
   const [loading, setLoading] = useState(false);
   async function likeComment() {
@@ -102,24 +107,31 @@ export default function CommentItem({
     setLoading(false);
   }
 
+  async function recognizeComment() {
+    const serverResult = await recognizeLanguageAsync(commentInfo.comment);
+    if (serverResult.isSuccess) {
+      setLanguageCode(serverResult.result);
+    } else alert(serverResult.result.errorMsg);
+  }
+
+  async function translateComment() {
+    const serverResult = await translateSentenceAsync(
+      languageCode,
+      commentInfo.comment,
+    );
+    if (serverResult.isSuccess) {
+      setComment(serverResult.result);
+    } else alert(serverResult.result.errorMsg);
+  }
+  useEffect(() => {
+    recognizeComment();
+  }, []);
+
   async function reportComment() {
     const serverResult = await reportCommentAsync(commentInfo.id);
     if (serverResult.isSuccess) {
       alert('신고가 접수되었습니다.');
     } else alert(serverResult.result.errorMsg);
-  }
-
-  async function deleteComment() {
-    if (loading) return;
-    setLoading(true);
-
-    const serverResult = await deleteCommentAsync(commentInfo.id);
-    if (serverResult.isSuccess) {
-      await Analytics.logEvent('delete_comment');
-      // 새로고침을 위하여
-      setViewPost(viewPost.id);
-    } else alert(serverResult.result.errorMsg);
-    setLoading(false);
   }
 
   const blockSomeone = async (what: string) => {
@@ -152,6 +164,21 @@ export default function CommentItem({
     } else alert(serverResult.result.errorMsg);
   };
 
+  const elementArray = [
+    { name: '신고', function: () => reportComment(), isShow: true },
+    { name: '계정 차단', function: () => blockSomeone('user'), isShow: true },
+    {
+      name: '캐릭터 차단',
+      function: () => blockSomeone('character'),
+      isShow: true,
+    },
+    {
+      name: '삭제',
+      function: () => deleteComment(commentInfo.id),
+      isShow: myCharacter.name === commentInfo.character_info.name,
+    },
+  ];
+
   return (
     <area.NoHeightArea
       marBottom={8}
@@ -162,16 +189,11 @@ export default function CommentItem({
       <HalfModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        onReport={() => reportComment()}
-        onStop={blockSomeone}
-        onDelete={() => deleteComment()}
-        isCanDelete={myCharacter.name === commentInfo.character_info.name}
+        elementArray={elementArray}
       />
-      <area.RowArea style={{ alignItems: 'flex-start', marginBottom: 8 }}>
+      <area.RowArea style={{ alignItems: 'flex-start', marginBottom: 3 }}>
         <View style={{ flex: 2 }}>
-          <text.Body2R textColor={colors.black}>
-            {commentInfo.comment}
-          </text.Body2R>
+          <text.Body2R textColor={colors.black}>{comment}</text.Body2R>
         </View>
         <View
           style={{
@@ -185,6 +207,16 @@ export default function CommentItem({
           </text.Caption>
         </View>
       </area.RowArea>
+
+      {languageCode !== 'ko' ? (
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={() => translateComment()}
+          style={{ marginBottom: 3 }}
+        >
+          <text.Body2R textColor={colors.gray5}>번역하기</text.Body2R>
+        </TouchableOpacity>
+      ) : null}
 
       <area.RowArea>
         <ProfileButton

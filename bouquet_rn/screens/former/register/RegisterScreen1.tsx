@@ -113,7 +113,9 @@ export default function RegisterScreen1({
       if (serverResult.isSuccess) {
         // 이메일 중복 체크부터 우선순위대로 체크하고, 에러가 없으면 EmailErr를 공백으로 처리
         value = !serverResult.result && email.length > 0;
-        if (isFindPassword && value) setEmailErr(errTextArray[6]);
+        if (!arr[0]) setEmailErr(errTextArray[0]);
+        else if (!arr[1]) setEmailErr(errTextArray[1]);
+        else if (isFindPassword && value) setEmailErr(errTextArray[6]);
         else if (!isFindPassword && !value) setEmailErr(errTextArray[2]);
         else if (!arr[3]) setEmailErr(errTextArray[3]);
         else setEmailErr('');

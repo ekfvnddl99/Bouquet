@@ -15,7 +15,7 @@ import * as area from '../../../styles/styled-components/area';
 // logics
 import { registerEmailAsync } from '../../../logics/server/EmailLogin';
 import useLogin from '../../../logics/hooks/useLogin';
-import uploadImageAsync from '../../../logics/server/UploadImage';
+import { uploadImageAsync } from '../../../logics/server/UploadImage';
 
 // components
 import ProgressItem from '../../../components/item/ProgressItem';
@@ -66,7 +66,7 @@ export default function RegisterScreen(): React.ReactElement {
     );
     if (serverResult.isSuccess) {
       await SecureStore.setItemAsync('auth', serverResult.result);
-      await getPushNotificationsPermission();
+      await getPushNotificationsPermission(true);
       const getToken = await SecureStore.getItemAsync('pushToken');
       if (typeof getToken === 'string') {
         const postToken = await registerNotificationTokenAsync(getToken);
@@ -74,7 +74,7 @@ export default function RegisterScreen(): React.ReactElement {
           await login();
           setStep(step + 1);
         } else alert(postToken.result.errorMsg);
-      } else alert('오류가 발생했어요. 문의를 꼭 남겨주세요.');
+      }
     } else alert(serverResult.result.errorMsg);
     setLoading(false);
   }
